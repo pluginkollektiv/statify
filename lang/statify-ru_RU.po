@@ -1,0 +1,53 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Statify\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sergej Müller\n"
+"Language-Team: Sergej Müller\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de_DE\n"
+"X-Generator: Poedit 1.7.5\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid "Compact, easy-to-use and privacy-compliant stats plugin for WordPress."
+msgstr "Компактный и простой в использовании плагин для статистики в WordPress."
+
+msgid "No data available."
+msgstr "Данные отсутствуют."
+
+msgid "Top targets"
+msgstr "Топ цели"
+
+msgid "Top referers"
+msgstr "Топ рефереров"
+
+msgid "Period of data saving"
+msgstr "Период сохранения данных"
+
+msgid "Number of entries in top lists"
+msgstr "Количество записей в ТОП-листах"
+
+msgid "Entries in top lists only for today"
+msgstr "Записи в ТОП-листах только за сегодня"
+
+msgid "Page tracking via JavaScript"
+msgstr "Отслеживание через JavaScript"
+
+msgid "recommended if caching is in use"
+msgstr "при кэширование страниц"
+
+msgid "Pageview"
+msgstr "Просмотр"
+
+msgid "Pageviews"
+msgstr "Просмотров"
+
+msgid "days"
+msgstr "дней"
