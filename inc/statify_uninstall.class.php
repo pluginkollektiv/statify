@@ -79,7 +79,7 @@ class Statify_Uninstall
 	* Löschung der Daten
 	*
 	* @since   0.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*/
 
 	private static function _apply()

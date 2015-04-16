@@ -8,7 +8,7 @@ defined('ABSPATH') OR exit;
 /**
 * Statify_Frontend
 *
-* @since 1.3.1
+* @since 1.4.0
 */
 
 class Statify_Frontend extends Statify
@@ -19,7 +19,7 @@ class Statify_Frontend extends Statify
 	* Speicherung des Aufrufes in der DB
 	*
 	* @since   0.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*/
 
 	public static function track_visit()
@@ -101,7 +101,7 @@ class Statify_Frontend extends Statify
 	* Steuerung des Tracking-Mechanismus
 	*
 	* @since   1.2.6
-	* @change  1.3.1
+	* @change  1.4.0
 	*
 	* @hook    boolean  statify_skip_tracking
 	*
@@ -121,7 +121,7 @@ class Statify_Frontend extends Statify
 	* JavaScript-Header oder return
 	*
 	* @since   1.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*
 	* @param   boolean  $is_snippet  JavaScript-Snippte als Aufruf?
 	* @return  mixed                 Exit oder return je nach Snippet
@@ -142,7 +142,7 @@ class Statify_Frontend extends Statify
 	* Deklariert GET-Variablen für die Weiternutzung
 	*
 	* @since   1.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*
 	* @param   array  $vars  Array mit existierenden Variablen
 	* @return  array  $vars  Array mit Plugin-Variablen
@@ -160,7 +160,7 @@ class Statify_Frontend extends Statify
 	* Ausgabe des JS-Snippets
 	*
 	* @since   1.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*/
 
 	public static function wp_footer()

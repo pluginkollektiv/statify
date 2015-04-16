@@ -8,7 +8,7 @@ defined('ABSPATH') OR exit;
 /**
 * Statify_Cron
 *
-* @since 1.3.1
+* @since 1.4.0
 */
 
 class Statify_Cron extends Statify
@@ -19,7 +19,7 @@ class Statify_Cron extends Statify
 	* Cleanup obsolete DB values
 	*
 	* @since   0.3.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*/
 
 	public static function cleanup_data()
