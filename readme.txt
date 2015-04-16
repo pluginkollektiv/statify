@@ -66,7 +66,7 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 
 = 1.4.0 / 16.04.2014 =
 * WordPress 4.2 support
-* Plug-wide code refactoring
+* Plugin-wide code refactoring
 * Translations for English and Russian
 * [GitHub Repository](https://github.com/sergejmueller/statify)
 
