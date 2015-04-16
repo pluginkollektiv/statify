@@ -36,7 +36,7 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 
 = Requirements =
 * PHP 5.2.4
-* WordPress ab 3.9
+* WordPress 3.9
 
 
 = Memory Usage =
@@ -64,7 +64,8 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 
 == Changelog ==
 
-= 1.4.0 / xx.04.2014 =
+= 1.4.0 / 16.04.2014 =
+* WordPress 4.2 support
 * Plug-wide code refactoring
 * Translations for English and Russian
 * [GitHub Repository](https://github.com/sergejmueller/statify)

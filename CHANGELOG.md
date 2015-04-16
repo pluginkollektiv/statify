@@ -1,8 +1,9 @@
 # Statify changelog
 
 
-## 1.4.0 / xx.04.2014
+## 1.4.0 / 16.04.2014
 
+* Support zu WordPress 4.2
 * Plugin-weites Code-Refactoring
 * Übersetzungen für Englisch und Russisch
 * [GitHub Repository](https://github.com/sergejmueller/statify)
