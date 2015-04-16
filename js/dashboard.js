@@ -3,7 +3,12 @@
     // Grab the data
     var labels = [],
         data = [],
+        statify_chart_id = 'statify_chart',
         $statify_data_table = jQuery('#statify_chart_data');
+
+    if ( ! $statify_data_table.length ) {
+        return;
+    }
 
     jQuery('th', $statify_data_table).each(function () {
         labels.push(jQuery(this).text());
@@ -13,13 +18,13 @@
     });
 
     // Draw
-    var width = jQuery('#statify_chart').parent().width() + 8,
+    var width = jQuery('#' + statify_chart_id).parent().width() + 8,
         height = 140,
         leftgutter = 0,
         bottomgutter = 22,
         topgutter = 22,
         color = '#0074a2',
-        r = Raphael("statify_chart", width, height),
+        r = Raphael(statify_chart_id, width, height),
         txt = {font: 'bold 12px "Open Sans", sans-serif', fill: "#333"},
         X = (width - leftgutter * 2) / labels.length,
         max = Math.max.apply(Math, data),
