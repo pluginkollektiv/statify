@@ -50,5 +50,5 @@ class_exists('Statify') OR exit; ?>
 <p class="meta-links">
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=ZAQUT9RLPW8QN" target="_blank">PayPal</a> &bull;
     <a href="https://flattr.com/t/1733733" target="_blank">Flattr</a> &bull;
-    <a href="http://playground.ebiene.de/statify-wordpress-statistik/" target="_blank">Wiki</a>
+    <a href="https://github.com/sergejmueller/statify/wiki" target="_blank">Wiki</a>
 </p>
