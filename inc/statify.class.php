@@ -18,14 +18,14 @@ class Statify
 	/**
 	* Plugin options
 	*
-	* @since   1.3.1
+	* @since   1.4.0
 	*/
 
 	public static $_options;
 
 
 	/**
-	* Pseudo-Konstruktor der Klasse
+	* Class self initialize
 	*
 	* @since   0.1.0
 	* @change  0.1.0
@@ -38,10 +38,10 @@ class Statify
 
 
 	/**
-	* Konstruktor der Klasse
+	* Class constructor
 	*
 	* @since   0.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*/
 
 	public function __construct()

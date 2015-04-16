@@ -18,7 +18,7 @@ class Statify_Dashboard extends Statify
 	/**
 	* Plugin version
 	*
-	* @since   1.3.1
+	* @since   1.4.0
 	*/
 
 	protected static $_plugin_version;
@@ -28,7 +28,7 @@ class Statify_Dashboard extends Statify
 	* Dashboard widget initialize
 	*
 	* @since   0.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*
 	* @hook    boolean  statify__user_can_see_stats (https://gist.github.com/sergejmueller/1ce0482c277508d8327e)
 	*/
@@ -94,7 +94,7 @@ class Statify_Dashboard extends Statify
 	* Print CSS
 	*
 	* @since   0.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*/
 
 	public static function add_style()
@@ -119,7 +119,7 @@ class Statify_Dashboard extends Statify
 	* Print JavaScript
 	*
 	* @since   0.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*/
 
 	public static function add_js() {
@@ -171,7 +171,7 @@ class Statify_Dashboard extends Statify
 	* Print widget frontview
 	*
 	* @since   0.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*/
 
 	public static function print_frontview()
@@ -197,7 +197,7 @@ class Statify_Dashboard extends Statify
 	* Print widget backview
 	*
 	* @since   0.4.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*/
 
 	public static function print_backview()
@@ -227,13 +227,13 @@ class Statify_Dashboard extends Statify
     /**
     * Save plugin options
     *
-    * @since   1.3.1
-    * @change  1.3.1
+    * @since   1.4.0
+    * @change  1.4.0
     */
 
     private static function _save_options()
     {
-        /* New values */
+        /* Update values */
         update_option(
             'statify',
             array(
@@ -244,7 +244,7 @@ class Statify_Dashboard extends Statify
             )
         );
 
-        /* Clear Statify cache */
+        /* Delete transient */
         delete_transient('statify_data');
 
         /* Clear Cachify cache */
@@ -257,8 +257,8 @@ class Statify_Dashboard extends Statify
     /**
     * Set plugin version from plugin meta data
     *
-    * @since   1.3.1
-    * @change  1.3.1
+    * @since   1.4.0
+    * @change  1.4.0
     */
 
     private static function _get_version()
@@ -274,9 +274,9 @@ class Statify_Dashboard extends Statify
 	* Get stats from cache
 	*
 	* @since   0.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*
-	* @return  array  $data  Array mit data values
+	* @return  array  $data  Data from cache or DB
 	*/
 
 	public static function get_stats()
@@ -286,7 +286,7 @@ class Statify_Dashboard extends Statify
 			return $data;
 		}
 
-		/* get stats */
+		/* Get from DB */
 		$data = self::_select_data();
 
 		/* Prepare data */
@@ -296,7 +296,7 @@ class Statify_Dashboard extends Statify
             $data = NULL;
         }
 
-		/* Into cache */
+		/* Make cache */
 		set_transient(
 		   'statify_data',
 		   $data,
@@ -311,9 +311,9 @@ class Statify_Dashboard extends Statify
 	* Get stats from DB
 	*
 	* @since   0.1.0
-	* @change  1.3.1
+	* @change  1.4.0
 	*
-	* @return  array  Array mit ausgelesenen Daten
+	* @return  array  DB results
 	*/
 
 	private static function _select_data()

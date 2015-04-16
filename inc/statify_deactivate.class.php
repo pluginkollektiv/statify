@@ -8,7 +8,7 @@ defined('ABSPATH') OR exit;
 /**
 * Statify_Deactivate
 *
-* @since 1.3.1
+* @since 1.4.0
 */
 
 class Statify_Deactivate
@@ -18,8 +18,8 @@ class Statify_Deactivate
 	/**
 	* Plugin deactivation actions
 	*
-	* @since   1.3.1
-	* @change  1.3.1
+	* @since   1.4.0
+	* @change  1.4.0
 	*/
 
 	public static function init()
@@ -27,7 +27,7 @@ class Statify_Deactivate
 		/* Delete transients */
 		delete_transient('statify_data');
 
-		/* Clear cron event */
+		/* Delete cron event */
 		wp_clear_scheduled_hook('statify_cleanup');
 	}
 }
