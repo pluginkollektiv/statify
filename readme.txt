@@ -65,77 +65,77 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 == Changelog ==
 
 = 1.3.0 =
-* Sourcecode-Optimierung für die Plugin-Finalisierung
+* Sourcecode optimization for plugin-finalization
 
 = 1.2.8 =
-* JavaScript-Snippet: Relativer Pfad für HTTP(S)-Aufrufe
+* JavaScript-Snippet: Relative Path for HTTP(S)-calls
 
 = 1.2.7 =
-* Unterstützung zu WordPress 3.9
-* Korrektur der Dashboard-Links (wenn WordPress im Unterordner)
+* Support for WordPress 3.9
+* Correction of dashboard links (if WordPress is in subfolder)
 
 = 1.2.6 =
-* Optimierung für WordPress 3.8
-* Steuerung des Trackings via `statify_skip_tracking`
+* Optimization for WordPress 3.8
+* Control of tracking via `statify_skip_tracking`
 
 = 1.2.5 =
-* Umstellung der Diagramm-Software
+* Migration of chart-software
 
 = 1.2.4 =
-* Kompatibilität zu WordPress 3.6
+* Compatibility to WordPress 3.6
 
 = 1.2.3 =
-* Zusätzliche Absicherung der PHP-Klassen vor direkten Aufrufen
-* Ersatz für Deprecated [User Levels](http://codex.wordpress.org/Roles_and_Capabilities#User_Levels)
+* Additional protection of PHP classes against direct access
+* Replacement for Deprecated [User Levels](http://codex.wordpress.org/Roles_and_Capabilities#User_Levels)
 
 = 1.2.2 =
-* No-Cache und No-Content Header für das optionale Zähl-JavaScript
+* No-Cache and No-Content Header for optional Count JavaScript
 
 = 1.2.1 =
-* Zusätzliche Zeiträume (bis zu einem Jahr) für Statistik
-* WordPress 3.4 als Systemanforderung
+* Additional periods (up to one year) for statistics
+* WordPress 3.4 as requirement
 
 = 1.2 =
-* Speziell für Chrome-Browser entwickelte [Statify App](http://playground.ebiene.de/statify-wordpress-statistik/#chrome_app)
-* Fix für eingeführte XML-RPC-Schnittstelle
+* Spezially for Chrome Browser developped [Statify App](http://playground.ebiene.de/statify-wordpress-statistik/#chrome_app)
+* Fix for introduced XML-RPC-interface
 
 = 1.1 =
 * WordPress 3.5 Support
-* Schnittstelle via XML-RPC
-* Refactoring der Code-Basis
-* Überarbeitung der Online-Dokumentation
-* Optionales Tracking via JavaScript für Caching-Plugins
+* Interface via XML-RPC
+* Refactoring of Code Base
+* Revision of Online Documentation
+* Optional Tracking via JavaScript for Caching-Plugins
 
 = 1.0 =
 * WordPress 3.4 Support
-* [Offizielle Plugin-Website](http://statify.de "Statify WordPress Stats")
-* Unkomprimierte Version des Source Codes
+* [Official Plugin Website](http://statify.de "Statify WordPress Stats")
+* Uncompressed Version of Source Codes
 
 = 0.9 =
 * Xmas Edition
 
 = 0.8 =
-* Unterstützung für WordPress 3.3
-* Anzeige des Dashboard-Widgets auch für Autoren
-* Direkter Link zu den Einstellungen auf dem Dashboard
-* Filterung der Ziele/Referrer auf den aktuellen Tag
+* Support für WordPress 3.3
+* Display of Dashboard Widgets also for authors
+* Direct Link to settings on dashboard
+* Filtering der Targets/Referrer on the current date
 
 = 0.7 =
-* Umsortierung der Statistiktage
-* Umfärbung der Statistikmarkierung
-* Ignorierung der XMLRPC-Requests
+* Replacement of Statistic Days
+* Recolouring of Statistics Mark
+* Ignoring XML-RPC-Requests
 
 = 0.6 =
-* WordPress 3.2 Unterstützung
-* Support für WordPress Multisite
-* Bereinigung überflüssiger URL-Parameter bei Zielseiten
-* Interaktive Statistik mit weiterführenden Informationen
+* Support for WordPress 3.2
+* Support for WordPress Multisite
+* Adjustment of redundant URL parameters of target pages
+* Interaktive Statistics with further informations
 
 = 0.5 =
-* Fix: Abfrage für fehlende Referrer im Dashboard Widget
+* Fix: query for missing referrer in dashboard widget
 
 = 0.4 =
-* Statify geht online
+* Statify goes online
 
 
 
