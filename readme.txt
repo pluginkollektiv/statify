@@ -10,56 +10,54 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
 
-Besucherstatistik in WordPress mit Schwerpunkten Datenschutz, Transparenz und Übersichtlichkeit. Ideal für Dashboard.
+Visitor statistics for WordPress with focus on _data protection_, _transparancy_ and _clarity_. Perfect as a widget in your WordPress Dashboard.
 
 
 
 == Description ==
+The free and add-free plugin [Statify](http://statify.de) pursues a simple objective: to provide a straightforward and compact access to the number of site views.
 
-Das kostenlose Plugin *Statify* verfolgt ein simples Ziel: Zugriffszahlen der WordPress-Seiten blitzschnell und kompakt zugänglich machen. Ohne Schnickschnack. Ohne meterlange Datenschutzerklärungen.
+No frills. No Cookies. No third party. No storage of personal data. No endless data privacy statements.
 
+An interactive chart is followed by lists of the most common reference sources and target pages. The period of statistics and length of lists can be set directly in the dashboard widget.
 
-= Dashboard-Widget =
-Weniger ist mehr: Den aktuellen Verlauf der Seitenaufrufe präsentiert das Statistik-Plugin in Form eines interaktiven [Diagramms](https://wordpress.org/plugins/statify/screenshots/). Der Zeitskala folgen Listen mit häufigsten Verweisquellen (Referrer) und Zielseiten (Targets). Praktisch: Der Statistikzeitraum sowie die Listenlänge lassen sich direkt im Dashboard-Widget konfigurieren.
-
-
-= Datenschutz =
-In unmittelbarem Vergleich zu Statistik-Diensten wie *Google Analytics*, *WordPress.com Stats* und *Piwik* verarbeitet und speichert *Statify* keinerlei personenbezogene Daten wie z.B. IP-Adressen – *Statify* zählt Seitenaufrufe, keine Besucher. Absolute Datenschutzkonformität gepaart mit transparenter Arbeitsweise: Eine lokal in WordPress angelegte Datenbanktabelle besteht aus nur 4 Feldern (ID, Datum, Quelle, Ziel) und kann vom Administrator jederzeit eingesehen, bereinigt und geleert werden.
+> For German users: [Plugin-Beschreibung in Deutsch](https://github.com/sergejmueller/statify)
 
 
-= Filter =
-*Statify* protokolliert jeden Seitenaufruf im Frontend der WordPress-Installation. Ausgeschlossen sind Preview-, Feed-, Ressourcen-Ansichten sowie Zugriffe durch angemeldete Nutzer. Mehr Einzelheiten zu Optionen und Funktionen im [Online-Handbuch](http://playground.ebiene.de/statify-wordpress-statistik/).
+= Data Privacy =
+I direct comparison to statistics services such as *Google Analytics*, *WordPress.com Stats* and *Piwik* *Statify* doesn't process and store personal data as e.g. IP addresses – *Statify* counts site views, not visitors.
+
+Absolute privacy compliance coupled with transparent procedures: A locally in WordPress created database table consists of only 4 fields (ID, date, source, target) and can be viewed at any time, cleaned up and cleared by the administrator.
 
 
-= Caching-Plugins =
-Für die Kompatibilität mit Caching-Plugins wie [Cachify](http://wordpress.org/extend/plugins/cachify/) verfügt *Statify* über ein optional zuschaltbares Tracking via JavaScript-Snippet. Diese Methode erlaubt eine zuverlässige Zählung bei gecachten Blogseiten.
+= Compatibility =
+For compatibility with caching plugins like [Cachify](http://cachify.de) *Statify*  offers an optional switchable tracking via JavaScript. This function allows reliable count of cached blog pages.
 
 
-= Support =
-Fragen rund um das Plugin werden gern per E-Mail beantwortet. Beachtet auch die [Guidelines](https://plus.google.com/+SergejMüller/posts/Ex2vYGN8G2L).
-
-
-= Systemanforderungen =
+= Requirements =
 * PHP 5.2.4
 * WordPress ab 3.9
 
 
-= Unterstützung =
-* Per [Flattr](https://flattr.com/thing/148966/)
-* Per [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAQUT9RLPW8QN)
+= Memory Usage =
+* Backend: ~ 0,2 MB
+* Frontend: ~ 0,1 MB
 
 
-= Handbuch =
-* [Statify: Statistik für WordPress](http://playground.ebiene.de/statify-wordpress-statistik/)
+= Languages =
+* German
+* English
+* Русский
 
 
-= Website =
-* [statify.de](http://statify.de)
+= Contributors =
+* [Caspar Hübinger](http://glueckpress.com)
+* [Bego Mario Garde](https://garde-medienberatung.de)
 
 
-= Autor =
-* [Twitter](https://twitter.com/wpSEO "Sergej Müller auf Twitter")
-* [Google+](https://plus.google.com/110569673423509816572 "Sergej Müller auf Google+")
+= Author =
+* [Twitter](https://twitter.com/wpSEO)
+* [Google+](https://plus.google.com/110569673423509816572)
 * [Plugins](http://wpcoder.de "WordPress Plugins")
 
 
@@ -143,5 +141,5 @@ Fragen rund um das Plugin werden gern per E-Mail beantwortet. Beachtet auch die 
 
 == Screenshots ==
 
-1. Statify Dashboard Widget
-2. Statify Dashboard Widget Optionen
+1. Statify dashboard widget
+2. Statify dashboard widget options
