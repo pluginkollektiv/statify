@@ -6,7 +6,9 @@ Das kostenlose und werbefreie Plugin [Statify](http://statify.de) verfolgt ein s
 
 Ohne Schnickschnack. Ohne Cookies. Ohne Drittanbieter. Ohne Speicherung von personenbezogenen Daten. Ohne meterlange Datenschutzerklärungen.
 
-Dem interaktiven Diagramm folgen Listen mit häufigsten Verweisquellen (Referrer) und Zielseiten (Targets). Der Statistikzeitraum sowie die Listenlänge lassen sich direkt im Dashboard-Widget konfigurieren.
+Dem interaktiven Diagramm folgen Listen mit häufigsten Verweisquellen und Zielseiten. Der Statistikzeitraum sowie die Listenlänge lassen sich direkt im Dashboard-Widget konfigurieren.
+
+> _Statify_ im offiziellen WordPress-Pluginverzeichnis: [https://wordpress.org/plugins/statify/](https://wordpress.org/plugins/statify/)
 
 
 ## Datenschutz
@@ -18,7 +20,7 @@ Absolute Datenschutzkonformität gepaart mit transparenter Arbeitsweise: Eine lo
 
 ## Kompatibilität
 
-Für die Kompatibilität mit Caching-Plugins wie [Cachify](http://cachify.de) verfügt *Statify* über ein optional zuschaltbares Tracking via JavaScript-Snippet. Diese Funktion erlaubt zuverlässige Zählung von gecachten Blogseiten.
+Für die Kompatibilität mit Caching-Plugins wie [Cachify](http://cachify.de) verfügt *Statify* über ein optional zuschaltbares Tracking via JavaScript. Diese Funktion erlaubt zuverlässige Zählung von gecachten Blogseiten.
 
 ___
 
