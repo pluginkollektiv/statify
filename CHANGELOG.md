@@ -1,7 +1,7 @@
 # Statify changelog
 
 
-## 1.4.0 / 16.04.2014
+## 1.4.0 / 16.04.2015
 
 * Support zu WordPress 4.2
 * Plugin-weites Code-Refactoring
