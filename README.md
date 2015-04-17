@@ -1,6 +1,6 @@
 # Statify
 
-Besucherstatistik für WordPress mit Schwerpunkten _Datenschutz_, _Transparenz_ und _Übersichtlichkeit_. Ideal als Widget im WordPress-Dashboard.
+Besucherstatistik für WordPress mit Schwerpunkten _[Datenschutz](http://rechtsanwalt-schwenke.de/statify-datenschutzkonforme-besucherstatistik-in-wordpress/)_, _Transparenz_ und _Übersichtlichkeit_. Ideal als Widget im WordPress-Dashboard.
 
 Das kostenlose und werbefreie Plugin [Statify](http://statify.de) verfolgt ein simples Ziel: Anzahl der Seitenaufrufe eines WordPress-Projektes unkompliziert und kompakt zugänglich zu machen.
 
