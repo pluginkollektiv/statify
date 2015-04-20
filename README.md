@@ -51,8 +51,13 @@ ___
 
 ### Links
 
-* [Wiki](https://github.com/sergejmueller/statify/wiki)
+* [Wiki](https://github.com/sergejmueller/statify/wiki) *(Dokumentation)*
 * [Changelog](https://github.com/sergejmueller/statify/blob/master/CHANGELOG.md)
+
+
+### Lizenz
+
+GPLv2 *(oder neuer)*
 
 
 ---
@@ -64,6 +69,4 @@ ___
 
 Gustav-Strobel-Ring 90 • 25421 Pinneberg • hello ÄT wpcoder PUNKT de
 
-[Twitter](https://twitter.com/wpSEO) • [Google+](https://plus.google.com/110569673423509816572)
-
-[Flattr](https://flattr.com/thing/148966/) • [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAQUT9RLPW8QN)
+[Twitter](https://twitter.com/wpSEO) • [Google+](https://plus.google.com/110569673423509816572) / [Flattr](https://flattr.com/thing/148966/) • [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAQUT9RLPW8QN)
