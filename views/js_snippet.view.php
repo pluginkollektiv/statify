@@ -11,7 +11,7 @@ class_exists('Statify') OR exit; ?>
         var e = document.createElement('script'),
             s = document.getElementsByTagName('script')[0],
             r = encodeURIComponent(document.referrer),
-            t = encodeURIComponent(location.pathname),
+            t = encodeURIComponent(location.pathname + location.search),
             p = '?statify_referrer=' + r + '&statify_target=' + t;
 
         e.async = true;
