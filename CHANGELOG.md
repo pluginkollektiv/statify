@@ -1,6 +1,11 @@
 # Statify changelog
 
 
+## 1.4.1 / 29.04.2015
+
+* Überarbeitung des Tracking-Mechanismus
+
+
 ## 1.4.0 / 16.04.2015
 
 * Support zu WordPress 4.2

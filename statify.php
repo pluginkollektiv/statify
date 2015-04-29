@@ -8,7 +8,7 @@ Author: Sergej M&uuml;ller
 Author URI: http://wpcoder.de
 Plugin URI: http://statify.de
 License: GPLv2 or later
-Version: 1.4.0
+Version: 1.4.1
 */
 
 /*

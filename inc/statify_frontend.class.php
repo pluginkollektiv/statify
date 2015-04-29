@@ -16,75 +16,70 @@ class Statify_Frontend extends Statify
 
 
 	/**
-	* Speicherung des Aufrufes in der DB
+	* Track the page view
 	*
 	* @since   0.1.0
-	* @change  1.4.0
+	* @change  1.4.1
 	*/
 
 	public static function track_visit()
 	{
-		/* JS-Snippet? */
+		/* Init vars */
 		$use_snippet = self::$_options['snippet'];
 		$is_snippet = $use_snippet && get_query_var('statify_target');
 
-		/* Snippet? */
-		if ( $is_snippet ) {
-			$target = urldecode( get_query_var('statify_target') );
-			$referrer = urldecode( get_query_var('statify_referrer') );
-		} else if ( ! $use_snippet) {
-			$target = ( empty($_SERVER['REQUEST_URI']) ? '/' : $_SERVER['REQUEST_URI'] );
-			$referrer = ( empty($_SERVER['HTTP_REFERER']) ? '' : $_SERVER['HTTP_REFERER'] );
-		} else {
-			return;
-		}
-
-		/* Kein Ziel? */
-		if ( empty($target) OR ! filter_var( home_url($target), FILTER_VALIDATE_URL ) ) {
-			return self::_jump_out($is_snippet);
-		}
-
-		/* Bot? */
-		if ( empty($_SERVER['HTTP_USER_AGENT']) OR ! preg_match('/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $_SERVER['HTTP_USER_AGENT']) ) {
-			return self::_jump_out($is_snippet);
-		}
-
-		/* Filter */
+		/* Skip tracking */
 		if ( self::_skip_tracking() ) {
 			return self::_jump_out($is_snippet);
 		}
 
-		/* Global */
+		/* Set target & referrer */
+		if ( $is_snippet ) {
+			$target = urldecode( get_query_var('statify_target') );
+			$referrer = urldecode( get_query_var('statify_referrer') );
+		} else if ( ! $use_snippet) {
+			$target = ( filter_has_var(INPUT_SERVER, 'REQUEST_URI') ? wp_unslash($_SERVER['REQUEST_URI']) : '/' );
+			$referrer = ( filter_has_var(INPUT_SERVER, 'HTTP_REFERER') ? wp_unslash($_SERVER['HTTP_REFERER']) : '' );
+		} else {
+			return;
+		}
+
+		/* Invalid target? */
+		if ( empty($target) OR ! wp_validate_redirect($target, false) ) {
+			return self::_jump_out($is_snippet);
+		}
+
+		/* Global vars */
 		global $wpdb, $wp_rewrite;
 
-		/* Init */
+		/* Init rows */
 		$data = array(
 			'created'  => '',
 			'referrer' => '',
 			'target'   => ''
 		);
 
-		/* Timestamp */
+		/* Set request timestamp */
 		$data['created'] = strftime(
 			'%Y-%m-%d',
 			current_time('timestamp')
 		);
 
-		/* Referrer */
+		/* Sanitize referrer url */
 		if ( ! empty($referrer) && strpos( $referrer, home_url() ) === false ) {
 			$data['referrer'] = esc_url_raw( $referrer, array('http', 'https') );
 		}
 
-		/* Set request target */
+		/* Relative target url */
 		$data['target'] = home_url($target, 'relative');
 
-		/* Get url path only */
-		if ( $wp_rewrite->permalink_structure && ! is_search() ) {
+		/* Trim target url */
+		if ( $wp_rewrite->permalink_structure ) {
 			$data['target'] = parse_url($data['target'], PHP_URL_PATH);
 		}
 
-		/* Sanitize url */
-		$data['target'] = filter_var($data['target'], FILTER_SANITIZE_URL);
+		/* Sanitize target url */
+		$data['target'] = esc_url_raw($data['target']);
 
 		/* Insert */
 		$wpdb->insert(
@@ -92,39 +87,46 @@ class Statify_Frontend extends Statify
 			$data
 		);
 
-		/* Beenden */
+		/* Jump! */
 		return self::_jump_out($is_snippet);
 	}
 
 
 	/**
-	* Steuerung des Tracking-Mechanismus
+	* Rules to skip the tracking
 	*
 	* @since   1.2.6
-	* @change  1.4.0
+	* @change  1.4.1
 	*
-	* @hook    boolean  statify_skip_tracking
+	* @hook    boolean  statify_skip_tracking (https://gist.github.com/sergejmueller/7612368)
 	*
-	* @return  boolean  $skip_hook  TRUE, wenn KEIN Tracking des Seitenaufrufes erfolgen soll
+	* @return  boolean  $skip_hook  TRUE if NO tracking is desired
 	*/
 
 	private static function _skip_tracking() {
+        /* Skip tracking via Hook */
 		if ( ( $skip_hook = apply_filters('statify_skip_tracking', NULL) ) !== NULL ) {
 			return $skip_hook;
 		}
 
-		return ( is_feed() OR is_trackback() OR is_robots() OR is_preview() OR is_user_logged_in() OR is_404() );
+        /* Skip tracking via User Agent */
+		if ( ! filter_has_var(INPUT_SERVER, 'HTTP_USER_AGENT') OR ! preg_match('/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $_SERVER['HTTP_USER_AGENT']) ) {
+			return true;
+		}
+
+        /* Skip tracking via Conditional_Tags */
+		return ( is_feed() OR is_trackback() OR is_robots() OR is_preview() OR is_user_logged_in() OR is_404() OR is_search() );
 	}
 
 
 	/**
-	* JavaScript-Header oder return
+	* Send JavaScript headers or return false
 	*
 	* @since   1.1.0
-	* @change  1.4.0
+	* @change  1.3.1
 	*
-	* @param   boolean  $is_snippet  JavaScript-Snippte als Aufruf?
-	* @return  mixed                 Exit oder return je nach Snippet
+	* @param   boolean  $is_snippet  Snippet type
+	* @return  mixed                 Exit or return depending on snippet type
 	*/
 
 	private static function _jump_out($is_snippet) {
@@ -139,13 +141,13 @@ class Statify_Frontend extends Statify
 
 
 	/**
-	* Deklariert GET-Variablen für die Weiternutzung
+	* Declare GET variables for further use
 	*
 	* @since   1.1.0
-	* @change  1.4.0
+	* @change  1.3.1
 	*
-	* @param   array  $vars  Array mit existierenden Variablen
-	* @return  array  $vars  Array mit Plugin-Variablen
+	* @param   array  $vars  Input with existing variables
+	* @return  array  $vars  Output with plugin variables
 	*/
 
 	public static function query_vars($vars) {
@@ -157,16 +159,21 @@ class Statify_Frontend extends Statify
 
 
 	/**
-	* Ausgabe des JS-Snippets
+	* Print JavaScript snippet
 	*
 	* @since   1.1.0
-	* @change  1.4.0
+	* @change  1.4.1
 	*/
 
 	public static function wp_footer()
 	{
 		/* Skip by option */
 		if ( ! self::$_options['snippet'] ) {
+			return;
+		}
+
+		/* Skip by rules */
+		if ( self::_skip_tracking() ) {
 			return;
 		}
 
