@@ -19,7 +19,7 @@ class Statify_Frontend extends Statify
 	* Track the page view
 	*
 	* @since   0.1.0
-	* @change  1.4.1
+	* @change  1.4.2
 	*/
 
 	public static function track_visit()
@@ -38,8 +38,8 @@ class Statify_Frontend extends Statify
 			$target = urldecode( get_query_var('statify_target') );
 			$referrer = urldecode( get_query_var('statify_referrer') );
 		} else if ( ! $use_snippet) {
-			$target = ( filter_has_var(INPUT_SERVER, 'REQUEST_URI') ? wp_unslash($_SERVER['REQUEST_URI']) : '/' );
-			$referrer = ( filter_has_var(INPUT_SERVER, 'HTTP_REFERER') ? wp_unslash($_SERVER['HTTP_REFERER']) : '' );
+			$target = ( isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '/' );
+			$referrer = ( isset($_SERVER['HTTP_REFERER']) ? wp_unslash($_SERVER['HTTP_REFERER']) : '' );
 		} else {
 			return;
 		}
@@ -96,7 +96,7 @@ class Statify_Frontend extends Statify
 	* Rules to skip the tracking
 	*
 	* @since   1.2.6
-	* @change  1.4.1
+	* @change  1.4.2
 	*
 	* @hook    boolean  statify_skip_tracking (https://gist.github.com/sergejmueller/7612368)
 	*
@@ -110,7 +110,7 @@ class Statify_Frontend extends Statify
 		}
 
         /* Skip tracking via User Agent */
-		if ( ! filter_has_var(INPUT_SERVER, 'HTTP_USER_AGENT') OR ! preg_match('/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $_SERVER['HTTP_USER_AGENT']) ) {
+		if ( ! isset($_SERVER['HTTP_USER_AGENT']) OR ! preg_match('/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $_SERVER['HTTP_USER_AGENT']) ) {
 			return true;
 		}
 

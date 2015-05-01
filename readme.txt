@@ -64,6 +64,9 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 
 == Changelog ==
 
+= 1.4.2 / 01.05.2015 =
+* Replace `filter_has_var(INPUT_SERVER)` calls with `isset($_SERVER[])` ([why](https://github.com/wp-stream/stream/issues/254))
+
 = 1.4.1 / 29.04.2015 =
 * Renew the tracking mechanism
 
