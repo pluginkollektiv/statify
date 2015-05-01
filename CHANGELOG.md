@@ -3,7 +3,7 @@
 
 ## 1.4.2 / 01.05.2015
 
-* Ersetzung von `filter_has_var(INPUT_SERVER)` durch `isset($_SERVER[])` (Grund)[https://github.com/wp-stream/stream/issues/254]
+* Ersetzung von `filter_has_var(INPUT_SERVER)` durch `isset($_SERVER[])` [Grund](https://github.com/wp-stream/stream/issues/254)
 
 
 ## 1.4.1 / 29.04.2015
