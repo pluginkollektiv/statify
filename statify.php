@@ -7,7 +7,7 @@ Domain Path: /lang
 Author: Sergej M&uuml;ller
 Author URI: http://wpcoder.de
 Plugin URI: http://statify.de
-License: GPLv3 or later
+License: GPLv2 or later
 Version: 1.4.2
 */
 
@@ -16,7 +16,7 @@ Copyright (C)  2011-2015 Sergej Müller
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 3 of the License, or
+the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
