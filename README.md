@@ -55,11 +55,6 @@ ___
 * [Changelog](https://github.com/sergejmueller/statify/blob/master/CHANGELOG.md)
 
 
-### Lizenz
-
-GPLv2 *(oder neuer)*
-
-
 ---
 
 
