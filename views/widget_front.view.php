@@ -41,7 +41,7 @@ $stats = Statify_Dashboard::get_stats(); ?>
                             <?php echo intval($target['count']); ?>
                         </td>
                         <td class="t">
-                            <a href="<?php echo esc_url($target['url']); ?>" target="_blank">
+                            <a href="<?php echo esc_url( home_url( $target['url'] ) ); ?>" target="_blank">
                                 <?php echo esc_html($target['url']); ?>
                             </a>
                         </td>
