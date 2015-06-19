@@ -28,6 +28,10 @@ class Statify_Frontend extends Statify
 		$use_snippet = self::$_options['snippet'];
 		$is_snippet = $use_snippet && get_query_var('statify_target');
 
+    /* Init referrer blacklist */
+    $referrer_blacklist = self::$_options['blacklist'];
+    $referrer_blacklist = preg_replace(array('/;/','/\./'), array('|','\.'), $referrer_blacklist);
+
 		/* Skip tracking */
 		if ( self::_skip_tracking() ) {
 			return self::_jump_out($is_snippet);
@@ -48,6 +52,11 @@ class Statify_Frontend extends Statify
 		if ( empty($target) OR ! wp_validate_redirect($target, false) ) {
 			return self::_jump_out($is_snippet);
 		}
+
+    /* Referrer blacklisted= */
+    if (preg_match('/(?:'.$referrer_blacklist.')/', $referrer)) {
+      return self::_jump_out($is_snippet);
+    }
 
 		/* Global vars */
 		global $wpdb, $wp_rewrite;

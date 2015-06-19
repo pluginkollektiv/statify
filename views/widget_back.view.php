@@ -41,6 +41,10 @@ class_exists('Statify') OR exit; ?>
                     <?php esc_html_e('Page tracking via JavaScript', 'statify'); ?>
                     <small>(<?php esc_html_e('recommended if caching is in use', 'statify'); ?>)</small>
                 </label>
+                <label for=""statify_blacklist">
+                    <?php  esc_html_e('Referrer blacklist (;-separated: example.com;example.org)', 'statify'); ?><br>
+                    <input type="text" size="50" maxlength="500" name="statify[blacklist]" id="statify_blacklist" value="<?php print Statify::$_options['blacklist']; ?>" />
+                </label>
             </fieldset>
         </td>
     </tr>
