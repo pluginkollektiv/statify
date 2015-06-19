@@ -116,8 +116,13 @@ class Statify_Frontend extends Statify
 
 
         /* Skip tracking via Referrer Blacklist */
-    $referrer = ( isset($_SERVER['HTTP_REFERER']) ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) : '' );
-		$referrer_blacklist = explode(';', self::$_options['blacklist']);
+    $referrer = strtolower( ( isset($_SERVER['HTTP_REFERER']) ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) : '' ) );
+    $referrer = explode('.', $referrer);
+    if( count($referrer)>1 )
+    	$referrer = implode('.', array_slice($referrer, -2));
+    else
+    	$referrer = implode('.', $referrer);
+		$referrer_blacklist = explode("\r\n", self::$_options['blacklist']);
 		if ( in_array($referrer, $referrer_blacklist) ) {
 			return true;
 		}

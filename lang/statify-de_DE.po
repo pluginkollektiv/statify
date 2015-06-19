@@ -55,17 +55,24 @@ msgstr "Tage"
 msgid "recommended if caching is in use"
 msgstr "empfohlen bei aktivem Caching"
 
+msgid "Referrer blacklist:"
+msgstr "Gesperrte Quellen: (gegen Referrer-Spam)"
 msgid "pluginkollektiv"
 msgstr "pluginkollektiv"
 
 msgid "Referrer blacklist (;-separated: example.com;example.org)"
 msgstr "Referrer-Blacklist (;-getrennt: example.com;example.org)"
 
+msgid "Add one domain (without subdomains) each line, e.g. example.com"
+msgstr "Füge eine Domain (ohne Subdomains) pro Zeile ein, z.B. example.com"
+
+msgid "No data available."
+msgstr "Keine Daten verfügbar."
 msgid "http://pluginkollektiv.org"
 msgstr "http://pluginkollektiv.org"
 
 msgid "Statify"
 msgstr "Statify"
 
-msgid "https://wordpress.org/plugins/statify"
-msgstr "https://wordpress.org/plugins/statify"
+msgid "Top referers"
+msgstr "Beste Quellen"
