@@ -28,10 +28,6 @@ class Statify_Frontend extends Statify
 		$use_snippet = self::$_options['snippet'];
 		$is_snippet = $use_snippet && get_query_var('statify_target');
 
-    /* Init referrer blacklist */
-    $referrer_blacklist = self::$_options['blacklist'];
-    $referrer_blacklist = preg_replace(array('/;/','/\./'), array('|','\.'), $referrer_blacklist);
-
 		/* Skip tracking */
 		if ( self::_skip_tracking() ) {
 			return self::_jump_out($is_snippet);
@@ -52,11 +48,6 @@ class Statify_Frontend extends Statify
 		if ( empty($target) OR ! wp_validate_redirect($target, false) ) {
 			return self::_jump_out($is_snippet);
 		}
-
-    /* Referrer blacklisted= */
-    if (preg_match('/(?:'.$referrer_blacklist.')/', $referrer)) {
-      return self::_jump_out($is_snippet);
-    }
 
 		/* Global vars */
 		global $wpdb, $wp_rewrite;
@@ -122,6 +113,15 @@ class Statify_Frontend extends Statify
 		if ( ! isset($_SERVER['HTTP_USER_AGENT']) OR ! preg_match('/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $_SERVER['HTTP_USER_AGENT']) ) {
 			return true;
 		}
+
+
+        /* Skip tracking via Referrer Blacklist */
+    $referrer = ( isset($_SERVER['HTTP_REFERER']) ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) : '' );
+		$referrer_blacklist = explode(';', self::$_options['blacklist']);
+		if ( in_array($referrer, $referrer_blacklist) ) {
+			return true;
+		}
+
 
         /* Skip tracking via Conditional_Tags */
 		return ( is_feed() OR is_trackback() OR is_robots() OR is_preview() OR is_user_logged_in() OR is_404() OR is_search() );

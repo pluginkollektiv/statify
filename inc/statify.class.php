@@ -62,7 +62,7 @@ class Statify
 		        'limit'     => 3,
 		        'today'     => 0,
 		        'snippet'   => 0,
-            'blacklist' => ''
+		        'blacklist' => ''
 		    )
 		);
 
