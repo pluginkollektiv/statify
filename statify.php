@@ -4,9 +4,9 @@ Plugin Name: Statify
 Description: Compact, easy-to-use and privacy-compliant stats plugin for WordPress.
 Text Domain: statify
 Domain Path: /lang
-Author: Sergej M&uuml;ller
-Author URI: https://sergejmueller.github.io
-Plugin URI: http://statify.de
+Author: pluginkollektiv
+Author URI: https://pluginkollektiv.org
+Plugin URI: https://wordpress.org/plugins/statify
 License: GPLv3 or later
 Version: 1.4.2
 */
