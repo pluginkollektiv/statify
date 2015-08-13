@@ -1,9 +1,9 @@
 === Statify ===
-Contributors: sergej.mueller
+Contributors: pluginkollektiv
 Tags: stats, analytics, privacy, dashboard
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAQUT9RLPW8QN
+Give a little thank you to the author Sergej Müller: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAQUT9RLPW8QN
 Requires at least: 3.9
-Tested up to: 4.2.2
+Tested up to: 4.3
 Stable tag: trunk
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -21,7 +21,7 @@ No frills. No Cookies. No third party. No storage of personal data. No endless d
 
 An interactive chart is followed by lists of the most common reference sources and target pages. The period of statistics and length of lists can be set directly in the dashboard widget.
 
-> For German users: [Plugin-Beschreibung in Deutsch](https://github.com/sergejmueller/statify)
+> For German users: [Plugin-Beschreibung in Deutsch](https://github.com/pluginkollektiv/statify)
 
 
 = Data Privacy =
@@ -56,13 +56,13 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 
 
 = Author =
-* [Twitter](https://twitter.com/wpSEO)
-* [Google+](https://plus.google.com/110569673423509816572)
-* [Plugins](http://wpcoder.de "WordPress Plugins")
+- Sergej Müller (author)
+- pluginkollektiv (curators)
 
 
 
 == Changelog ==
+
 
 = 1.4.2 / 01.05.2015 =
 * Replace `filter_has_var(INPUT_SERVER)` calls with `isset($_SERVER[])` ([why](https://github.com/wp-stream/stream/issues/254))
@@ -74,7 +74,7 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 * WordPress 4.2 support
 * Plugin-wide code refactoring
 * Translations for English and Russian
-* [GitHub Repository](https://github.com/sergejmueller/statify)
+* [GitHub Repository](https://github.com/pluginkollektiv/statify)
 
 = 1.3.0 / 28.04.2014 =
 * Sourcecode optimization for plugin-finalization
@@ -108,7 +108,7 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 * WordPress 3.4 as requirement
 
 = 1.2 / 29.11.2012 =
-* Spezially for Chrome Browser developped [Statify App](http://playground.ebiene.de/statify-wordpress-statistik/#chrome_app)
+* Specially for Chrome Browser developed [Statify App](http://statify.de)
 * Fix for introduced XML-RPC-interface
 
 = 1.1 / 23.11.2012 =
