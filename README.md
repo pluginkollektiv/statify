@@ -108,7 +108,6 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 * WordPress 3.4 as requirement
 
 ### 1.2 / 29.11.2012 ###
-* Specially for Chrome Browser developed [Statify App](http://statify.de)
 * Fix for introduced XML-RPC-interface
 
 ### 1.1 / 23.11.2012 ###
