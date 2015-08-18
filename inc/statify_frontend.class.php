@@ -71,7 +71,7 @@ class Statify_Frontend extends Statify
 		}
 
 		/* Relative target url */
-		$data['target'] = home_url($target, 'relative');
+		$data['target'] = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $target ) );
 
 		/* Trim target url */
 		if ( $wp_rewrite->permalink_structure ) {
