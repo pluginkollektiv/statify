@@ -1,12 +1,12 @@
 # Statify #
-* Contributors: pluginkollektiv
-* Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ
-* Tags: stats, analytics, privacy, dashboard
+* Contributors:      pluginkollektiv
+* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ
+* Tags:              stats, analytics, privacy, dashboard
 * Requires at least: 3.9
-* Tested up to: 4.3
-* Stable tag: trunk
-* License: GPLv3 or later
-* License URI: https://www.gnu.org/licenses/gpl-3.0.html
+* Tested up to:      4.3
+* Stable tag:        trunk
+* License:           GPLv3 or later
+* License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
 
 Visitor statistics for WordPress with focus on _data protection_, _transparancy_ and _clarity_. Perfect as a widget in your WordPress Dashboard.
@@ -24,18 +24,20 @@ An interactive chart is followed by lists of the most common reference sources a
 In direct comparison to statistics services such as *Google Analytics*, *WordPress.com Stats* and *Piwik* *Statify* doesn't process and store personal data as e.g. IP addresses – *Statify* counts site views, not visitors.
 Absolute privacy compliance coupled with transparent procedures: A locally in WordPress created database table consists of only 4 fields (ID, date, source, target) and can be viewed at any time, cleaned up and cleared by the administrator.
 
+
 > ### Deutsch ###
-Datenschutzkonformes, anonymes und kompaktes Statistik-Plugin für WordPress.
+> Datenschutzkonformes, anonymes und kompaktes Statistik-Plugin für WordPress.
 Statify kommt ohne jegliche Cookies und versteckte Zähl-Pixel aus. Die Dashboard-Statistik greift auf momentane Daten der Datenbanktabelle zu (4 Minuten Zwischenspeicherung) und liefert somit den Live-Zustand der Seitenzugriffe aus. Einsatzbereit auch in WordPress-Multisite.
-For German users: [Plugin-Wiki in Deutsch](https://github.com/pluginkollektiv/statify)
+> For German users: [Plugin-Wiki in Deutsch](https://github.com/pluginkollektiv/statify)
+
 
 ### Compatibility ###
 For compatibility with caching plugins like [Cachify](http://cachify.de) *Statify*  offers an optional switchable tracking via JavaScript. This function allows reliable count of cached blog pages.
 
 
 ### Memory Usage ###
-* Backend: ~ 0,2 MB
-* Frontend: ~ 0,1 MB
+* Backend: ~ 0.2 MB
+* Frontend: ~ 0.1 MB
 
 
 ### Languages ###
@@ -47,11 +49,7 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
 * Maintainers: [pluginkollektiv](http://pluginkollektiv.org/)
-
-
-### Contributors ###
-* [Caspar Hübinger](http://glueckpress.com)
-* [Bego Mario Garde](https://garde-medienberatung.de)
+* Contributor: [Bego Mario Garde](https://garde-medienberatung.de)
 
 
 ## Installation ##
@@ -108,6 +106,7 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 * WordPress 3.4 as requirement
 
 ### 1.2 / 29.11.2012 ###
+* Specially for Chrome Browser developed Statify App (discontinued)
 * Fix for introduced XML-RPC-interface
 
 ### 1.1 / 23.11.2012 ###
