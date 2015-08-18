@@ -1,4 +1,14 @@
-# Statify changelog
+# Statify Changelog
+
+
+## 1.4.3 / 2015-08-18
+
+* corrected tracking and display in multisite
+* added German formal translation
+* added POT file
+* removed deprecated links and updated URLs for donate and wiki links
+* administrative updates to plugin header and README
+* updated [plugin authors](https://gist.github.com/glueckpress/f058c0ab973d45a72720)
 
 
 ## 1.4.2 / 01.05.2015
