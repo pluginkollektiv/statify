@@ -48,9 +48,8 @@ class_exists('Statify') OR exit; ?>
 
 
 <p class="meta-links">
-    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=ZAQUT9RLPW8QN" target="_blank">PayPal</a> &bull;
-    <a href="https://flattr.com/t/1733733" target="_blank">Flattr</a>
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ" target="_blank">PayPal</a>
     <?php if ( strpos(get_locale(), 'de') !== false ) { ?>
-        &bull; <a href="https://github.com/sergejmueller/statify/wiki" target="_blank">Wiki</a>
+        &bull; <a href="https://github.com/pluginkollektiv/statify/wiki" target="_blank">Wiki</a>
     <?php } ?>
 </p>
