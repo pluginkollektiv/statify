@@ -3,7 +3,7 @@
   
 **Tags:** stats, analytics, privacy, dashboard
   
-Give a little thank you to the author Sergej Müller: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZAQUT9RLPW8QN
+**Donate link:** https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8CH5FPR88QYML
 **Requires at least:** 3.9
   
 **Tested up to:** 4.3
