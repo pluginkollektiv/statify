@@ -91,14 +91,14 @@ class Statify
 				'wpmu_new_blog',
 				array(
 					'Statify_Install',
-					'init'
+					'init_site'
 				)
 			);
 			add_action(
 				'delete_blog',
 				array(
 					'Statify_Uninstall',
-					'init'
+					'init_site'
 				)
 			);
 			add_action(

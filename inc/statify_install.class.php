@@ -1,97 +1,73 @@
 <?php
 
-
 /* Quit */
-defined('ABSPATH') OR exit;
-
+defined( 'ABSPATH' ) OR exit;
 
 /**
-* Statify_Install
-*
-* @since 0.1
-*/
-
-class Statify_Install
-{
-
-
+ * Statify_Install
+ *
+ * @since 0.1
+ */
+class Statify_Install {
 	/**
-	* Installation auch für MU-Blog
-	*
-	* @since   0.1.0
-	* @change  0.1.0
-	*
-	* @param   integer  ID des Blogs [optional]
-	*/
-
-	public static function init($id)
-	{
-		/* Global */
+	 * Plugin activaton handler.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param bool $network_wide Whether the plugin was activated network-wide or not.
+	 */
+	public static function init( $network_wide = false ) {
 		global $wpdb;
 
-		/* Neuer MU-Blog */
-		if ( ! empty($id) ) {
-			/* Im Netzwerk? */
-			if ( ! is_plugin_active_for_network(STATIFY_BASE) ) {
-				return;
-			}
+		// Create tables for each site in a network.
+		if ( is_multisite() && $network_wide ) {
+			// Todo: Use get_sites() in WordPress 4.6+
+			$ids = $wpdb->get_col( "SELECT blog_id FROM `$wpdb->blogs`" );
 
-			/* Wechsel */
-			switch_to_blog( (int)$id );
-
-			/* Installieren */
-			self::_apply();
-
-			/* Wechsel zurück */
-			restore_current_blog();
-
-			/* Raus */
-			return;
-		}
-
-		/* Multisite & Network */
-		if ( is_multisite() && ! empty($_GET['networkwide']) ) {
-			/* Blog-IDs */
-			$ids = $wpdb->get_col("SELECT blog_id FROM `$wpdb->blogs`");
-
-			/* Loopen */
-			foreach ($ids as $id) {
-				switch_to_blog($id);
+			foreach ( $ids as $site_id ) {
+				switch_to_blog( $site_id );
 				self::_apply();
 			}
 
-			/* Wechsel zurück */
 			restore_current_blog();
-
-			/* Raus */
-			return;
+		} else {
+			self::_apply();
 		}
-
-		/* Single-Blog */
-		self::_apply();
 	}
 
+	/**
+	 * Sets up the plugin for a newly created site on Multisite.
+	 *
+	 * @since 1.4.4
+	 *
+	 * @param int $site_id Site ID.
+	 */
+	public function init_site( $site_id ) {
+		switch_to_blog( (int) $site_id );
+
+		self::_apply();
+
+		restore_current_blog();
+	}
 
 	/**
-	* Anlegen der Daten
-	*
-	* @since   0.1.0
-	* @change  1.4.0
-	*/
-
-	private static function _apply()
-	{
-		/* Options */
+	 * Creates the database tables needed for the plugin.
+	 *
+	 * @since  0.1.0
+	 * @change 1.4.0
+	 */
+	private static function _apply() {
+		// Todo: Remove. Use sane defaults instead.
 		add_option(
 			'statify',
 			array()
 		);
 
-		/* Transients */
-		delete_transient('statify_data');
+		// Cleanup any leftover transients
+		delete_transient( 'statify_data' );
 
-		/* Cron */
-		if ( ! wp_next_scheduled('statify_cleanup') ) {
+		// Set up the cron event.
+		if ( ! wp_next_scheduled( 'statify_cleanup' ) ) {
 			wp_schedule_event(
 				time(),
 				'daily',
@@ -99,10 +75,8 @@ class Statify_Install
 			);
 		}
 
-		/* Tabelle setzen */
+		// Create the actual tables.
 		Statify_Table::init();
-
-		/* Tabelle anlegen */
 		Statify_Table::create();
 	}
 }
