@@ -237,10 +237,11 @@ class Statify_Dashboard extends Statify
         update_option(
             'statify',
             array(
-                'days'    => (int)@$_POST['statify']['days'],
-                'limit'   => (int)@$_POST['statify']['limit'],
-                'today'   => (int)@$_POST['statify']['today'],
-                'snippet' => (int)@$_POST['statify']['snippet']
+                'days'      => (int)@$_POST['statify']['days'],
+                'limit'     => (int)@$_POST['statify']['limit'],
+                'today'     => (int)@$_POST['statify']['today'],
+                'snippet'   => (int)@$_POST['statify']['snippet'],
+                'blacklist' => preg_replace('/[^\r\nA-Za-z0-9\.;-]/','',trim($_POST['statify']['blacklist']))
             )
         );
 
