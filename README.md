@@ -4,7 +4,7 @@
 * Tags:              stats, analytics, privacy, dashboard
 * Requires at least: 3.9
 * Tested up to:      4.6
-* Stable tag:        trunk
+* Stable tag:        1.4.3
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
