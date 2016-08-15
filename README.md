@@ -33,11 +33,6 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 * Backend: ~ 0.2 MB
 * Frontend: ~ 0.1 MB
 
-### Languages ###
-* German
-* English
-* Русский
-
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
 * Maintainers: [pluginkollektiv](http://pluginkollektiv.org/)
