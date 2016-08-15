@@ -16,7 +16,6 @@
     padding-bottom: 0;
     overflow: hidden;
     position: relative;
-    white-space: nowrap;
 }
 
 #statify_dashboard .table {
