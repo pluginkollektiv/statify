@@ -1,138 +1,93 @@
-# Statify Changelog
+# Changelog
 
+### 1.4.3 / 2016-08-15 ###
+* Corrected tracking and display in Multisite
+* Minor CSS fixes in the dashboard widget
+* Removed deprecated links and updated URLs for donate and wiki links
+* Administrative updates to plugin header and README
+* Updated [plugin authors](https://gist.github.com/glueckpress/f058c0ab973d45a72720)
 
-## 1.4.3 / 2015-08-18
+### 1.4.2 / 01.05.2015 ###
+* Replace `filter_has_var(INPUT_SERVER)` calls with `isset($_SERVER[])` ([why](https://github.com/wp-stream/stream/issues/254))
 
-* corrected tracking and display in multisite
-* added German formal translation
-* added POT file
-* removed deprecated links and updated URLs for donate and wiki links
-* administrative updates to plugin header and README
-* updated [plugin authors](https://gist.github.com/glueckpress/f058c0ab973d45a72720)
+### 1.4.1 / 29.04.2015 ###
+* Renew the tracking mechanism
 
+### 1.4.0 / 16.04.2015 ###
+* WordPress 4.2 support
+* Plugin-wide code refactoring
+* Translations for English and Russian
+* [GitHub Repository](https://github.com/pluginkollektiv/statify)
 
-## 1.4.2 / 01.05.2015
+### 1.3.0 / 28.04.2014 ###
+* Sourcecode optimization for plugin-finalization
 
-* Ersetzung von `filter_has_var(INPUT_SERVER)` durch `isset($_SERVER[])` ([Grund](https://github.com/wp-stream/stream/issues/254))
+### 1.2.8 / 19.04.2014 ###
+* JavaScript-Snippet: Relative Path for HTTP(S)-calls
 
+### 1.2.7 / 09.04.2014 ###
+* Support for WordPress 3.9
+* Correction of dashboard links (if WordPress is in subfolder)
 
-## 1.4.1 / 29.04.2015
+### 1.2.6 / 12.12.2013 ###
+* Optimization for WordPress 3.8
+* Control of tracking via `statify_skip_tracking`
 
-* Überarbeitung des Tracking-Mechanismus
+### 1.2.5 / 22.08.2013 ###
+* Migration of chart-software
 
+### 1.2.4 / 06.08.2013 ###
+* Compatibility to WordPress 3.6
 
-## 1.4.0 / 16.04.2015
+### 1.2.3 / 06.06.2013 ###
+* Additional protection of PHP classes against direct access
+* Replacement for Deprecated [User Levels](http://codex.wordpress.org/Roles_and_Capabilities#User_Levels)
 
-* Support zu WordPress 4.2
-* Plugin-weites Code-Refactoring
-* Übersetzungen für Englisch und Russisch
-* [GitHub Repository](https://github.com/sergejmueller/statify)
+### 1.2.2 / 14.03.2013 ###
+* No-Cache and No-Content Header for optional Count JavaScript
 
+### 1.2.1 / 18.12.2012 ###
+* Additional periods (up to one year) for statistics
+* WordPress 3.4 as requirement
 
-## 1.3.0 / 28.04.2014
+### 1.2 / 29.11.2012 ###
+* Specially for Chrome Browser developed Statify App (discontinued)
+* Fix for introduced XML-RPC-interface
 
-* Sourcecode-Optimierung für die Plugin-Finalisierung
-
-
-## 1.2.8 / 19.04.2014
-
-* JavaScript-Snippet: Relativer Pfad für HTTP(S)-Aufrufe
-
-
-## 1.2.7 / 09.04.2014
-
-* Unterstützung zu WordPress 3.9
-* Korrektur der Dashboard-Links (wenn WordPress im Unterordner)
-
-
-## 1.2.6 / 12.12.2013
-
-* Optimierung für WordPress 3.8
-* Steuerung des Trackings via `statify_skip_tracking`
-
-
-## 1.2.5 / 22.08.2013
-
-* Umstellung der Diagramm-Software
-
-
-## 1.2.4 / 06.08.2013
-
-* Kompatibilität zu WordPress 3.6
-
-
-## 1.2.3 / 06.06.2013
-
-* Zusätzliche Absicherung der PHP-Klassen vor direkten Aufrufen
-* Ersatz für Deprecated [User Levels](http://codex.wordpress.org/Roles_and_Capabilities#User_Levels)
-
-
-## 1.2.2 / 14.03.2013
-
-* No-Cache und No-Content Header für das optionale Zähl-JavaScript
-
-
-## 1.2.1 / 18.12.2012
-
-* Zusätzliche Zeiträume (bis zu einem Jahr) für Statistik
-* WordPress 3.4 als Systemanforderung
-
-
-## 1.2 / 29.11.2012
-
-* Speziell für Chrome-Browser entwickelte [Statify App](http://playground.ebiene.de/statify-wordpress-statistik/#chrome_app)
-* Fix für eingeführte XML-RPC-Schnittstelle
-
-
-## 1.1 / 23.11.2012
-
+### 1.1 / 23.11.2012 ###
 * WordPress 3.5 Support
-* Schnittstelle via XML-RPC
-* Refactoring der Code-Basis
-* Überarbeitung der Online-Dokumentation
-* Optionales Tracking via JavaScript für Caching-Plugins
+* Interface via XML-RPC
+* Refactoring of Code Base
+* Revision of Online Documentation
+* Optional Tracking via JavaScript for Caching-Plugins
 
-
-## 1.0 / 12.06.2012
-
+### 1.0 / 12.06.2012 ###
 * WordPress 3.4 Support
-* [Offizielle Plugin-Website](http://statify.de "Statify WordPress Stats")
-* Unkomprimierte Version des Source Codes
+* [Official Plugin Website](http://statify.de "Statify WordPress Stats")
+* Uncompressed Version of Source Codes
 
-
-## 0.9 / 23.12.2011
-
+### 0.9 / 23.12.2011 ###
 * Xmas Edition
 
+### 0.8 / 14.12.2011 ###
+* Support für WordPress 3.3
+* Display of Dashboard Widgets also for authors
+* Direct Link to settings on dashboard
+* Filtering der Targets/Referrer on the current date
 
-## 0.8 / 14.12.2011
+### 0.7 / 05.07.2011 ###
+* Replacement of Statistic Days
+* Recolouring of Statistics Mark
+* Ignoring XML-RPC-Requests
 
-* Unterstützung für WordPress 3.3
-* Anzeige des Dashboard-Widgets auch für Autoren
-* Direkter Link zu den Einstellungen auf dem Dashboard
-* Filterung der Ziele/Referrer auf den aktuellen Tag
+### 0.6 / 22.06.2011 ###
+* Support for WordPress 3.2
+* Support for WordPress Multisite
+* Adjustment of redundant URL parameters of target pages
+* Interaktive Statistics with further informations
 
+### 0.5 / 15.05.2011 ###
+* Fix: query for missing referrer in dashboard widget
 
-## 0.7 / 05.07.2011
-
-* Umsortierung der Statistiktage
-* Umfärbung der Statistikmarkierung
-* Ignorierung der XMLRPC-Requests
-
-
-## 0.6 / 22.06.2011
-
-* WordPress 3.2 Unterstützung
-* Support für WordPress Multisite
-* Bereinigung überflüssiger URL-Parameter bei Zielseiten
-* Interaktive Statistik mit weiterführenden Informationen
-
-
-## 0.5 / 15.05.2011
-
-* Fix: Abfrage für fehlende Referrer im Dashboard Widget
-
-
-## 0.4 / 16.03.2011
-
-* Statify geht online
+### 0.4 / 16.03.2011 ###
+* Statify goes online
