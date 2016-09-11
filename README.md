@@ -8,7 +8,7 @@
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
-Visitor statistics for WordPress with focus on _data protection_, _transparancy_ and _clarity_. Perfect as a widget in your WordPress Dashboard.
+Visitor statistics for WordPress with focus on *data protection*, *transparancy* and *clarity*. Perfect as a widget in your WordPress Dashboard.
 
 ## Description ##
 The free and add-free plugin [Statify](https://pluginkollektiv.github.io/statify/) pursues a simple objective: to provide a straightforward and compact access to the number of site views.
