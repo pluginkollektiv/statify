@@ -11,7 +11,7 @@
 Visitor statistics for WordPress with focus on _data protection_, _transparancy_ and _clarity_. Perfect as a widget in your WordPress Dashboard.
 
 ## Description ##
-The free and add-free plugin [Statify](http://statify.de) pursues a simple objective: to provide a straightforward and compact access to the number of site views.
+The free and add-free plugin [Statify](https://pluginkollektiv.github.io/statify/) pursues a simple objective: to provide a straightforward and compact access to the number of site views.
 
 No frills. No Cookies. No third party. No storage of personal data. No endless data privacy statements.
 
@@ -27,7 +27,7 @@ Statify kommt ohne jegliche Cookies und versteckte Zähl-Pixel aus. Die Dashboar
 > For German users: [Plugin-Wiki in Deutsch](https://github.com/pluginkollektiv/statify)
 
 ### Compatibility ###
-For compatibility with caching plugins like [Cachify](http://cachify.de) *Statify*  offers an optional switchable tracking via JavaScript. This function allows reliable count of cached blog pages.
+For compatibility with caching plugins like [Cachify](http://pluginkollektiv.github.io/cachify/) *Statify*  offers an optional switchable tracking via JavaScript. This function allows reliable count of cached blog pages.
 
 ### Memory Usage ###
 * Backend: ~ 0.2 MB
