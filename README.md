@@ -27,7 +27,7 @@ Statify kommt ohne jegliche Cookies und versteckte Zähl-Pixel aus. Die Dashboar
 > For German users: [Plugin-Wiki in Deutsch](https://github.com/pluginkollektiv/statify)
 
 ### Compatibility ###
-For compatibility with caching plugins like [Cachify](http://pluginkollektiv.github.io/cachify/) *Statify*  offers an optional switchable tracking via JavaScript. This function allows reliable count of cached blog pages.
+For compatibility with caching plugins like [Cachify](https://pluginkollektiv.github.io/cachify/) *Statify*  offers an optional switchable tracking via JavaScript. This function allows reliable count of cached blog pages.
 
 ### Memory Usage ###
 * Backend: ~ 0.2 MB
@@ -49,7 +49,7 @@ For compatibility with caching plugins like [Cachify](http://pluginkollektiv.git
 * Contributor: [Bego Mario Garde](https://garde-medienberatung.de)
 
 ## Installation ##
-* If you don’t know how to install a plugin for WordPress, [here’s how](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
+* If you don’t know how to install a plugin for WordPress, [here’s how](https://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
 ### Requirements ###
 * PHP 5.2.4 or greater
