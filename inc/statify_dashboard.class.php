@@ -125,7 +125,7 @@ class Statify_Dashboard extends Statify
 	public static function add_js() {
 		/* Register JS */
 		wp_register_script(
-			'sm_raphael_js',
+			'raphael',
 			plugins_url(
 				'js/raphael.min.js',
 				STATIFY_FILE
@@ -140,7 +140,7 @@ class Statify_Dashboard extends Statify
 				'js/raphael.helper.min.js',
 				STATIFY_FILE
 			),
-			array(),
+			array( 'raphael' ),
 			self::$_plugin_version,
 			true
 		);
@@ -150,7 +150,7 @@ class Statify_Dashboard extends Statify
 				'js/dashboard.min.js',
 				STATIFY_FILE
 			),
-			array('jquery'),
+			array('jquery','sm_raphael_helper'),
 			self::$_plugin_version,
 			true
 		);
