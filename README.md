@@ -47,6 +47,9 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 
 ## Changelog ##
 
+### master ###
+* Renamed the handle of the Raphael JS library. This fixed a bug, where raphael couldn't work properly when also loaded with Antispam Bee.
+
 ### 1.4.3 / 2016-08-15 ###
 * Corrected tracking and display in Multisite
 * Minor CSS fixes in the dashboard widget
