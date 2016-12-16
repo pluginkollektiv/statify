@@ -72,10 +72,19 @@ add_filter(
 
 has to be added to the theme's `functions.php`. The condition has modified such that the method returns true if and only if the view should be ignored.
 
-
 ### Memory Usage ###
 * Backend: ~ 0.2 MB
 * Frontend: ~ 0.1 MB
+
+### Support ###
+* Community support via the [support forums on wordpress.org](https://wordpress.org/support/plugin/statify)
+* We don’t handle support via e-mail, Twitter, GitHub issues etc.
+
+### Contribute ###
+* Active development of this plugin is handled [on GitHub](https://github.com/pluginkollektiv/statify).
+* Pull requests for documented bugs are highly appreciated.
+* If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/statify) first.
+* If you want to help us translate this plugin you can do so [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/statify).
 
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
@@ -86,8 +95,8 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 * If you don’t know how to install a plugin for WordPress, [here’s how](https://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
 ### Requirements ###
-* PHP 5.2.4
-* WordPress 3.9
+* PHP 5.2.4 or greater
+* WordPress 3.9 or greater
 
 
 ## Frequently Asked Questions
