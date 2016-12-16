@@ -5,7 +5,7 @@ Description: Compact, easy-to-use and privacy-compliant stats plugin for WordPre
 Text Domain: statify
 Domain Path: /lang
 Author:      pluginkollektiv
-Author URI:  https://pluginkollektiv.org
+Author URI:  http://pluginkollektiv.org
 Plugin URI:  https://wordpress.org/plugins/statify
 License:     GPLv3 or later
 Version:     1.4.3
