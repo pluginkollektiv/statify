@@ -8,10 +8,10 @@
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
-Visitor statistics for WordPress with focus on _data protection_, _transparancy_ and _clarity_. Perfect as a widget in your WordPress Dashboard.
+Visitor statistics for WordPress with focus on *data protection*, *transparancy* and *clarity*. Perfect as a widget in your WordPress Dashboard.
 
 ## Description ##
-The free and add-free plugin [Statify](http://statify.de) pursues a simple objective: to provide a straightforward and compact access to the number of site views.
+The free and add-free plugin [Statify](https://pluginkollektiv.github.io/statify/) pursues a simple objective: to provide a straightforward and compact access to the number of site views.
 
 No frills. No Cookies. No third party. No storage of personal data. No endless data privacy statements.
 
@@ -27,11 +27,21 @@ Statify kommt ohne jegliche Cookies und versteckte Zähl-Pixel aus. Die Dashboar
 > For German users: [Plugin-Wiki in Deutsch](https://github.com/pluginkollektiv/statify)
 
 ### Compatibility ###
-For compatibility with caching plugins like [Cachify](http://cachify.de) *Statify*  offers an optional switchable tracking via JavaScript. This function allows reliable count of cached blog pages.
+For compatibility with caching plugins like [Cachify](https://pluginkollektiv.github.io/cachify/) *Statify*  offers an optional switchable tracking via JavaScript. This function allows reliable count of cached blog pages.
 
 ### Memory Usage ###
 * Backend: ~ 0.2 MB
 * Frontend: ~ 0.1 MB
+
+### Support ###
+* Community support via the [support forums on wordpress.org](https://wordpress.org/support/plugin/statify)
+* We don’t handle support via e-mail, Twitter, GitHub issues etc.
+
+### Contribute ###
+* Active development of this plugin is handled [on GitHub](https://github.com/pluginkollektiv/statify).
+* Pull requests for documented bugs are highly appreciated.
+* If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/statify) first.
+* If you want to help us translate this plugin you can do so [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/statify).
 
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
@@ -39,11 +49,11 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 * Contributor: [Bego Mario Garde](https://garde-medienberatung.de)
 
 ## Installation ##
-* If you don’t know how to install a plugin for WordPress, [here’s how](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
+* If you don’t know how to install a plugin for WordPress, [here’s how](https://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
 ### Requirements ###
-* PHP 5.2.4
-* WordPress 3.9
+* PHP 5.2.4 or greater
+* WordPress 3.9 or greater
 
 ## Changelog ##
 
