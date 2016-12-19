@@ -1,37 +1,30 @@
 <?php
-
-
-/* Quit */
-defined('ABSPATH') OR exit;
-
+/** Quit */
+defined( 'ABSPATH' ) || exit;
 
 /**
-* Statify_Cron
-*
-* @since 1.4.0
-*/
-
-class Statify_Cron extends Statify
-{
-
+ * Statify_Cron
+ *
+ * @since 1.4.0
+ */
+class Statify_Cron extends Statify {
 
 	/**
-	* Cleanup obsolete DB values
-	*
-	* @since   0.3.0
-	* @change  1.4.0
-	*/
+	 * Cleanup obsolete DB values
+	 *
+	 * @since    0.3.0
+	 * @version  1.4.0
+	 */
+	public static function cleanup_data() {
 
-	public static function cleanup_data()
-	{
-		/* Global */
+		/** Global */
 		global $wpdb;
 
 		/* Remove items */
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM `$wpdb->statify` WHERE created <= SUBDATE(CURDATE(), %d)",
-				(int)self::$_options['days']
+				(int) self::$_options[ 'days' ]
 			)
 		);
 
