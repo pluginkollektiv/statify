@@ -1,33 +1,26 @@
 <?php
-
-
-/* Quit */
-defined('ABSPATH') OR exit;
-
+/** Quit */
+defined( 'ABSPATH' ) || exit;
 
 /**
-* Statify_Deactivate
-*
-* @since 1.4.0
-*/
-
-class Statify_Deactivate
-{
-
+ * Statify_Deactivate
+ *
+ * @since 1.4.0
+ */
+class Statify_Deactivate {
 
 	/**
-	* Plugin deactivation actions
-	*
-	* @since   1.4.0
-	* @change  1.4.0
-	*/
+	 * Plugin deactivation actions
+	 *
+	 * @since    1.4.0
+	 * @version  1.4.0
+	 */
+	public static function init() {
 
-	public static function init()
-	{
-		/* Delete transients */
-		delete_transient('statify_data');
+		/** Delete transients */
+		delete_transient( 'statify_data' );
 
-		/* Delete cron event */
-		wp_clear_scheduled_hook('statify_cleanup');
+		/** Delete cron event */
+		wp_clear_scheduled_hook( 'statify_cleanup' );
 	}
 }
