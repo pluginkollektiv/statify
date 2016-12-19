@@ -1,145 +1,102 @@
 <?php
-
-
-/* Quit */
-defined('ABSPATH') OR exit;
-
+/** Quit */
+defined( 'ABSPATH' ) || exit;
 
 /**
-* Statify_Dashboard
-*
-* @since 1.1
-*/
-
-class Statify_Dashboard extends Statify
-{
-
+ * Statify_Dashboard
+ *
+ * @since 1.1
+ */
+class Statify_Dashboard extends Statify {
 
 	/**
-	* Plugin version
-	*
-	* @since   1.4.0
-	*/
-
+	 * Plugin version.
+	 *
+	 * @since  1.4.0
+	 * @var    string
+	 */
 	protected static $_plugin_version;
 
-
 	/**
-	* Dashboard widget initialize
-	*
-	* @since   0.1.0
-	* @change  1.4.0
-	*
-	* @hook    boolean  statify__user_can_see_stats (https://gist.github.com/sergejmueller/1ce0482c277508d8327e)
-	*/
+	 * Dashboard widget initialize
+	 *
+	 * @since   0.1.0
+	 * @change  1.4.0
+	 *
+	 * @wp-hook boolean  statify__user_can_see_stats
+	 * @see     https://gist.github.com/sergejmueller/1ce0482c277508d8327e
+	 */
+	public static function init() {
 
-	public static function init()
-	{
-		/* Filter user_can_see_stats */
-		if ( ! apply_filters('statify__user_can_see_stats', current_user_can('edit_dashboard')) ) {
+		/** Filter user_can_see_stats */
+		if ( ! apply_filters( 'statify__user_can_see_stats', current_user_can( 'edit_dashboard' ) ) ) {
 			return;
 		}
 
-		/* Load textdomain */
+		/** Load textdomain */
 		load_plugin_textdomain(
 			'statify',
 			false,
-			wp_normalize_path(
-				sprintf(
-					'%s/lang',
-					STATIFY_DIR
-				)
-			)
+			wp_normalize_path( sprintf( '%s/lang', STATIFY_DIR ) )
 		);
 
-		/* Plugin version */
+		/** Plugin version */
 		self::_get_version();
 
-
-		/* Add dashboard widget */
+		/** Add dashboard widget */
 		wp_add_dashboard_widget(
 			'statify_dashboard',
 			'Statify',
-			array(
-				__CLASS__,
-				'print_frontview'
-			),
-			array(
-				__CLASS__,
-				'print_backview'
-			)
+			array( __CLASS__, 'print_frontview' ),
+			array( __CLASS__, 'print_backview' )
 		);
 
-		/* Init CSS */
-		add_action(
-			'admin_print_styles',
-			array(
-				__CLASS__,
-				'add_style'
-			)
-		);
+		/** Init CSS */
+		add_action( 'admin_print_styles', array( __CLASS__, 'add_style' ) );
 
-		/* Init JS */
-		add_action(
-			'admin_print_scripts',
-			array(
-				__CLASS__,
-				'add_js'
-			)
-		);
+		/** Init JS */
+		add_action( 'admin_print_scripts', array( __CLASS__, 'add_js' ) );
 	}
 
-
 	/**
-	* Print CSS
-	*
-	* @since   0.1.0
-	* @change  1.4.0
-	*/
+	 * Print CSS
+	 *
+	 * @since   0.1.0
+	 * @change  1.4.0
+	 */
+	public static function add_style() {
 
-	public static function add_style()
-	{
-		/* Register CSS */
+		/** Register CSS */
 		wp_register_style(
 			'statify',
-			plugins_url(
-				'/css/dashboard.min.css',
-				STATIFY_FILE
-			),
+			plugins_url( '/css/dashboard.min.css', STATIFY_FILE ),
 			array(),
 			self::$_plugin_version
 		);
 
-		/* Load CSS */
-		wp_enqueue_style('statify');
+		/** Load CSS */
+		wp_enqueue_style( 'statify' );
 	}
 
-
 	/**
-	* Print JavaScript
-	*
-	* @since   0.1.0
-	* @change  1.4.0
-	*/
-
+	 * Print JavaScript
+	 *
+	 * @since    0.1.0
+	 * @version  1.4.0
+	 */
 	public static function add_js() {
-		/* Register JS */
+
+		/** Register JS */
 		wp_register_script(
 			'raphael',
-			plugins_url(
-				'js/raphael.min.js',
-				STATIFY_FILE
-			),
+			plugins_url( 'js/raphael.min.js', STATIFY_FILE ),
 			array(),
 			self::$_plugin_version,
 			true
 		);
 		wp_register_script(
 			'sm_raphael_helper',
-			plugins_url(
-				'js/raphael.helper.min.js',
-				STATIFY_FILE
-			),
+			plugins_url( 'js/raphael.helper.min.js', STATIFY_FILE ),
 			array( 'raphael' ),
 			self::$_plugin_version,
 			true
@@ -150,157 +107,143 @@ class Statify_Dashboard extends Statify
 				'js/dashboard.min.js',
 				STATIFY_FILE
 			),
-			array('jquery','sm_raphael_helper'),
+			array( 'jquery', 'sm_raphael_helper' ),
 			self::$_plugin_version,
 			true
 		);
 
-		/* Localize strings */
+		/** Localize strings */
 		wp_localize_script(
 			'statify_chart_js',
 			'statify_translations',
 			array(
-				'pageview' => strip_tags( __('Pageview', 'statify') ),
-				'pageviews' => strip_tags( __('Pageviews', 'statify') )
+				'pageview'  => strip_tags( esc_html__( 'Pageview', 'statify' ) ),
+				'pageviews' => strip_tags( esc_html__( 'Pageviews', 'statify' ) ),
 			)
 		);
 	}
 
 
 	/**
-	* Print widget frontview
-	*
-	* @since   0.1.0
-	* @change  1.4.0
-	*/
+	 * Print widget frontview.
+	 *
+	 * @since    0.1.0
+	 * @version  1.4.0
+	 */
+	public static function print_frontview() {
 
-	public static function print_frontview()
-	{
 		/* Load JS */
-		wp_enqueue_script('sm_raphael_js');
-		wp_enqueue_script('sm_raphael_helper');
-		wp_enqueue_script('statify_chart_js');
+		wp_enqueue_script( 'sm_raphael_js' );
+		wp_enqueue_script( 'sm_raphael_helper' );
+		wp_enqueue_script( 'statify_chart_js' );
 
 		/* Load template */
-        load_template(
-        	wp_normalize_path(
-        		sprintf(
-        			'%s/views/widget_front.view.php',
-        			STATIFY_DIR
-        		)
-        	)
-        );
+		load_template(
+			wp_normalize_path( sprintf( '%s/views/widget_front.view.php', STATIFY_DIR ) )
+		);
 	}
 
 
 	/**
-	* Print widget backview
-	*
-	* @since   0.4.0
-	* @change  1.4.0
-	*/
+	 * Print widget backview
+	 *
+	 * @since    0.4.0
+	 * @version  1.4.0
+	 */
+	public static function print_backview() {
 
-	public static function print_backview()
-	{
 		/* Capability check */
-		if ( ! current_user_can('edit_dashboard') ) {
+		if ( ! current_user_can( 'edit_dashboard' ) ) {
 			return;
 		}
 
-		/* Update plugin options */
-		if ( ! empty($_POST['statify']) ) {
-            self::_save_options();
+		/** Update plugin options */
+		if ( ! empty( $_POST[ 'statify' ] ) ) {
+			self::_save_options();
 		}
 
 		/* Load view */
 		load_template(
-			wp_normalize_path(
-				sprintf(
-					'%s/views/widget_back.view.php',
-					STATIFY_DIR
-				)
-			)
+			wp_normalize_path( sprintf( '%s/views/widget_back.view.php', STATIFY_DIR ) )
 		);
 	}
 
 
-    /**
-    * Save plugin options
-    *
-    * @since   1.4.0
-    * @change  1.4.0
-    */
+	/**
+	 * Save plugin options
+	 *
+	 * @since    1.4.0
+	 * @version  1.4.0
+	 */
+	private static function _save_options() {
 
-    private static function _save_options()
-    {
-        /* Update values */
-        update_option(
-            'statify',
-            array(
-                'days'    => (int)@$_POST['statify']['days'],
-                'limit'   => (int)@$_POST['statify']['limit'],
-                'today'   => (int)@$_POST['statify']['today'],
-                'snippet' => (int)@$_POST['statify']['snippet']
-            )
-        );
+		/** Update values */
+		update_option(
+			'statify',
+			// @ToDO Remove @ error control operator, needs error handling.
+			array(
+				'days'    => (int) @$_POST[ 'statify' ][ 'days' ],
+				'limit'   => (int) @$_POST[ 'statify' ][ 'limit' ],
+				'today'   => (int) @$_POST[ 'statify' ][ 'today' ],
+				'snippet' => (int) @$_POST[ 'statify' ][ 'snippet' ],
+			)
+		);
 
-        /* Delete transient */
-        delete_transient('statify_data');
+		/** Delete transient */
+		delete_transient( 'statify_data' );
 
-        /* Clear Cachify cache */
-        if ( has_action('cachify_flush_cache') ) {
-            do_action('cachify_flush_cache');
-        }
-    }
-
-
-    /**
-    * Set plugin version from plugin meta data
-    *
-    * @since   1.4.0
-    * @change  1.4.0
-    */
-
-    private static function _get_version()
-    {
-        /* Get plugin meta */
-        $meta = get_plugin_data(STATIFY_FILE);
-
-        self::$_plugin_version = $meta['Version'];
-    }
+		/** Clear Cachify cache */
+		if ( has_action( 'cachify_flush_cache' ) ) {
+			do_action( 'cachify_flush_cache' );
+		}
+	}
 
 
 	/**
-	* Get stats from cache
-	*
-	* @since   0.1.0
-	* @change  1.4.0
-	*
-	* @return  array  $data  Data from cache or DB
-	*/
+	 * Set plugin version from plugin meta data
+	 *
+	 * @since    1.4.0
+	 * @version  1.4.0
+	 */
+	private static function _get_version() {
 
-	public static function get_stats()
-	{
-		/* Get from cache */
-		if ( $data = get_transient('statify_data') ) {
+		/* Get plugin meta */
+		$meta = get_plugin_data( STATIFY_FILE );
+
+		self::$_plugin_version = $meta['Version'];
+	}
+
+
+	/**
+	 * Get stats from cache
+	 *
+	 * @since   0.1.0
+	 * @change  1.4.0
+	 *
+	 * @return  array  $data  Data from cache or DB
+	 */
+	public static function get_stats() {
+
+		/** Get from cache */
+		if ( $data = get_transient( 'statify_data' ) ) {
 			return $data;
 		}
 
-		/* Get from DB */
+		/** Get from DB */
 		$data = self::_select_data();
 
-		/* Prepare data */
-		if ( ! empty($data['visits']) ) {
-			$data['visits'] = array_reverse($data['visits']);
+		/** Prepare data */
+		if ( ! empty( $data['visits'] ) ) {
+			$data['visits'] = array_reverse( $data['visits'] );
 		} else {
-            $data = NULL;
-        }
+			$data = null;
+		}
 
-		/* Make cache */
+		/** Make cache */
 		set_transient(
-		   'statify_data',
-		   $data,
-		   MINUTE_IN_SECONDS * 4
+			'statify_data',
+			$data,
+			MINUTE_IN_SECONDS * 4
 		);
 
 		return $data;
@@ -308,42 +251,41 @@ class Statify_Dashboard extends Statify
 
 
 	/**
-	* Get stats from DB
-	*
-	* @since   0.1.0
-	* @change  1.4.0
-	*
-	* @return  array  DB results
-	*/
+	 * Get stats from DB
+	 *
+	 * @since    0.1.0
+	 * @version  1.4.0
+	 *
+	 * @return  array  DB results
+	 */
+	private static function _select_data() {
 
-	private static function _select_data()
-	{
-		/* Global */
+		/** Global */
 		global $wpdb;
 
-		/* Init values */
-		$days  = (int)self::$_options['days'];
-		$limit = (int)self::$_options['limit'];
-		$today = (int)self::$_options['today'];
+		/** Init values */
+		$days  = (int) self::$_options['days'];
+		$limit = (int) self::$_options['limit'];
+		$today = (int) self::$_options['today'];
 
 		return array(
-			'visits' => $wpdb->get_results(
+			'visits'   => $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT `created` as `date`, COUNT(`created`) as `count` FROM `$wpdb->statify` GROUP BY `created` ORDER BY `created` DESC LIMIT %d",
 					$days
 				),
 				ARRAY_A
 			),
-			'target' => $wpdb->get_results(
+			'target'   => $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` " .( $today ? 'WHERE created = DATE(NOW())' : '' ). " GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` " . ( $today ? 'WHERE created = DATE(NOW())' : '' ) . " GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
 					$limit
 				),
 				ARRAY_A
 			),
 			'referrer' => $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`referrer`) as `count`, `referrer` as `url`, SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) as `host` FROM `$wpdb->statify` WHERE `referrer` != '' " .( $today ? 'AND created = DATE(NOW())' : '' ). " GROUP BY `host` ORDER BY `count` DESC LIMIT %d",
+					"SELECT COUNT(`referrer`) as `count`, `referrer` as `url`, SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) as `host` FROM `$wpdb->statify` WHERE `referrer` != '' " . ( $today ? 'AND created = DATE(NOW())' : '' ) . " GROUP BY `host` ORDER BY `count` DESC LIMIT %d",
 					$limit
 				),
 				ARRAY_A
