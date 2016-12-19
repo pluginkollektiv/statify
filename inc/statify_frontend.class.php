@@ -1,52 +1,48 @@
 <?php
-
-
-/* Quit */
-defined('ABSPATH') OR exit;
-
+/** Quit */
+defined( 'ABSPATH' ) || exit;
 
 /**
-* Statify_Frontend
-*
-* @since 1.4.0
-*/
-
-class Statify_Frontend extends Statify
-{
+ * Statify_Frontend
+ *
+ * @since 1.4.0
+ */
+class Statify_Frontend extends Statify {
 
 
 	/**
-	* Track the page view
-	*
-	* @since   0.1.0
-	* @change  1.4.2
-	*/
+	 * Track the page view
+	 *
+	 * @since    0.1.0
+	 * @version  1.4.2
+	 *
+	 * @return   bool
+	 */
+	public static function track_visit() {
 
-	public static function track_visit()
-	{
 		/* Init vars */
 		$use_snippet = self::$_options['snippet'];
-		$is_snippet = $use_snippet && get_query_var('statify_target');
+		$is_snippet  = $use_snippet && get_query_var( 'statify_target' );
 
 		/* Skip tracking */
 		if ( self::_skip_tracking() ) {
-			return self::_jump_out($is_snippet);
+			return self::_jump_out( $is_snippet );
 		}
 
 		/* Set target & referrer */
 		if ( $is_snippet ) {
-			$target = urldecode( get_query_var('statify_target') );
-			$referrer = urldecode( get_query_var('statify_referrer') );
-		} else if ( ! $use_snippet) {
-			$target = ( isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '/' );
-			$referrer = ( isset($_SERVER['HTTP_REFERER']) ? wp_unslash($_SERVER['HTTP_REFERER']) : '' );
+			$target   = urldecode( get_query_var( 'statify_target' ) );
+			$referrer = urldecode( get_query_var( 'statify_referrer' ) );
+		} elseif ( ! $use_snippet ) {
+			$target   = ( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/' );
+			$referrer = ( isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '' );
 		} else {
-			return;
+			return false;
 		}
 
 		/* Invalid target? */
-		if ( empty($target) OR ! wp_validate_redirect($target, false) ) {
-			return self::_jump_out($is_snippet);
+		if ( empty( $target ) || ! wp_validate_redirect( $target, false ) ) {
+			return self::_jump_out( $is_snippet );
 		}
 
 		/* Global vars */
@@ -56,18 +52,15 @@ class Statify_Frontend extends Statify
 		$data = array(
 			'created'  => '',
 			'referrer' => '',
-			'target'   => ''
+			'target'   => '',
 		);
 
 		/* Set request timestamp */
-		$data['created'] = strftime(
-			'%Y-%m-%d',
-			current_time('timestamp')
-		);
+		$data['created'] = strftime( '%Y-%m-%d', current_time( 'timestamp' ) );
 
 		/* Sanitize referrer url */
-		if ( ! empty($referrer) && strpos( $referrer, home_url() ) === false ) {
-			$data['referrer'] = esc_url_raw( $referrer, array('http', 'https') );
+		if ( ! empty( $referrer ) && strpos( $referrer, home_url() ) === false ) {
+			$data['referrer'] = esc_url_raw( $referrer, array( 'http', 'https' ) );
 		}
 
 		/* Relative target url */
@@ -75,64 +68,64 @@ class Statify_Frontend extends Statify
 
 		/* Trim target url */
 		if ( $wp_rewrite->permalink_structure ) {
-			$data['target'] = parse_url($data['target'], PHP_URL_PATH);
+			$data['target'] = wp_parse_url( $data['target'], PHP_URL_PATH );
 		}
 
 		/* Sanitize target url */
-		$data['target'] = esc_url_raw($data['target']);
+		$data['target'] = esc_url_raw( $data['target'] );
 
 		/* Insert */
-		$wpdb->insert(
-			$wpdb->statify,
-			$data
-		);
+		$wpdb->insert( $wpdb->statify, $data );
 
 		/* Jump! */
-		return self::_jump_out($is_snippet);
+
+		return self::_jump_out( $is_snippet );
 	}
 
 
 	/**
-	* Rules to skip the tracking
-	*
-	* @since   1.2.6
-	* @change  1.4.2
-	*
-	* @hook    boolean  statify_skip_tracking (https://gist.github.com/sergejmueller/7612368)
-	*
-	* @return  boolean  $skip_hook  TRUE if NO tracking is desired
-	*/
-
+	 * Rules to skip the tracking
+	 *
+	 * @since    1.2.6
+	 * @version  1.4.2
+	 *
+	 * @hook     boolean  statify_skip_tracking (https://gist.github.com/sergejmueller/7612368)
+	 *
+	 * @return  boolean  $skip_hook  TRUE if NO tracking is desired
+	 */
 	private static function _skip_tracking() {
-        /* Skip tracking via Hook */
-		if ( ( $skip_hook = apply_filters('statify_skip_tracking', NULL) ) !== NULL ) {
+
+		/* Skip tracking via Hook */
+		if ( ( $skip_hook = apply_filters( 'statify_skip_tracking', null ) ) !== null ) {
 			return $skip_hook;
 		}
 
-        /* Skip tracking via User Agent */
-		if ( ! isset($_SERVER['HTTP_USER_AGENT']) OR ! preg_match('/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $_SERVER['HTTP_USER_AGENT']) ) {
+		/* Skip tracking via User Agent */
+		if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) 
+		     || ! preg_match( '/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $_SERVER['HTTP_USER_AGENT'] ) ) {
 			return true;
 		}
 
-        /* Skip tracking via Conditional_Tags */
-		return ( is_feed() OR is_trackback() OR is_robots() OR is_preview() OR is_user_logged_in() OR is_404() OR is_search() );
+		/* Skip tracking via Conditional_Tags */
+		return ( is_feed() || is_trackback() || is_robots() || is_preview() || is_user_logged_in() || is_404() || is_search() );
 	}
 
 
 	/**
-	* Send JavaScript headers or return false
-	*
-	* @since   1.1.0
-	* @change  1.3.1
-	*
-	* @param   boolean  $is_snippet  Snippet type
-	* @return  mixed                 Exit or return depending on snippet type
-	*/
+	 * Send JavaScript headers or return false
+	 *
+	 * @since    1.1.0
+	 * @version  1.3.1
+	 *
+	 * @param   boolean $is_snippet Snippet type.
+	 *
+	 * @return  mixed  Exit or return depending on snippet type.
+	 */
+	private static function _jump_out( $is_snippet ) {
 
-	private static function _jump_out($is_snippet) {
 		if ( $is_snippet ) {
 			nocache_headers();
-			header('Content-type: text/javascript', true, 204);
+			header( 'Content-type: text/javascript', true, 204 );
 			exit;
 		}
 
@@ -141,16 +134,17 @@ class Statify_Frontend extends Statify
 
 
 	/**
-	* Declare GET variables for further use
-	*
-	* @since   1.1.0
-	* @change  1.3.1
-	*
-	* @param   array  $vars  Input with existing variables
-	* @return  array  $vars  Output with plugin variables
-	*/
+	 * Declare GET variables for further use
+	 *
+	 * @since    1.1.0
+	 * @version  1.3.1
+	 *
+	 * @param   array $vars Input with existing variables.
+	 *
+	 * @return  array  $vars  Output with plugin variables
+	 */
+	public static function query_vars( $vars ) {
 
-	public static function query_vars($vars) {
 		$vars[] = 'statify_referrer';
 		$vars[] = 'statify_target';
 
@@ -159,14 +153,13 @@ class Statify_Frontend extends Statify
 
 
 	/**
-	* Print JavaScript snippet
-	*
-	* @since   1.1.0
-	* @change  1.4.1
-	*/
+	 * Print JavaScript snippet
+	 *
+	 * @since    1.1.0
+	 * @version  1.4.1
+	 */
+	public static function wp_footer() {
 
-	public static function wp_footer()
-	{
 		/* Skip by option */
 		if ( ! self::$_options['snippet'] ) {
 			return;
@@ -178,13 +171,13 @@ class Statify_Frontend extends Statify
 		}
 
 		/* Load template */
-        load_template(
-        	wp_normalize_path(
-        		sprintf(
-        			'%s/views/js_snippet.view.php',
-        			STATIFY_DIR
-        		)
-        	)
-        );
+		load_template(
+			wp_normalize_path(
+				sprintf(
+					'%s/views/js_snippet.view.php',
+					STATIFY_DIR
+				)
+			)
+		);
 	}
 }
