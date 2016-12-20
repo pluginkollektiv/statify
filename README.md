@@ -1,27 +1,19 @@
-# Statify #
-* Contributors:      pluginkollektiv
-* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ
-* Tags:              stats, analytics, privacy, dashboard
-* Requires at least: 3.9
-* Tested up to:      4.6.1
-* Stable tag:        1.4.3
-* License:           GPLv3 or later
-* License URI:       https://www.gnu.org/licenses/gpl-3.0.html
+# Statify
 
 Visitor statistics for WordPress with focus on data protection, transparency and clarity. Perfect as a widget in your WordPress Dashboard.
 
-## Description ##
+## Description
 The free and ad-free plugin Statify pursues a simple objective: to provide a straightforward and compact access to the number of site views.
 
 No frills. No Cookies. No third party. No storage of personal data. No endless data privacy statements.
 
 An interactive chart is followed by lists of the most common reference sources and target pages. The period of statistics and length of lists can be set directly in the dashboard widget.
 
-### Data Privacy ###
+### Data Privacy
 In direct comparison to statistics services such as *Google Analytics*, *WordPress.com Stats* and *Piwik* *Statify* doesn't process and store personal data as e.g. IP addresses – *Statify* counts site views, not visitors.
 Absolute privacy compliance coupled with transparent procedures: A locally in WordPress created database table consists of only 4 fields (ID, date, source, target) and can be viewed at any time, cleaned up and cleared by the administrator.
 
-### Settings and Hooks ###
+### Settings and Hooks
 The plugin configuration can be changed directly in the *Statify* Widget on the dashboard by clicking the *Configure* link.
 
 #### Period of data saving
@@ -36,7 +28,7 @@ Per default only administrators can see the widget. This can be changed with the
 
 Example:
 
-```
+```php
 add_filter(
     'statify__user_can_see_stats',
     '__return_true'
@@ -57,7 +49,7 @@ The conditions for tracking views can be customized according to page type and u
 
 Example:
 
-```
+```php
 add_filter(
     'statify_skip_tracking',
     function() {
