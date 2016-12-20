@@ -113,45 +113,10 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 
 This behavior can be modified with the `statify_skip_tracking` hook.
 
+
 ## Can you add browser or screen size tracking?
 *Statify* only tracks page views, not visitors. Therefore this feature will not be added.
 
 
-## Changelog ##
-
-### 1.4.4 ###
-* Renamed the handle of the Raphael JS library. This fixed a bug, where raphael couldn't work properly when also loaded with Antispam Bee.
-
-### 1.4.3 / 2016-08-15 ###
-* Corrected tracking and display in Multisite
-* Minor CSS fixes in the dashboard widget
-* Removed deprecated links and updated URLs for donate and wiki links
-* Administrative updates to plugin header and README
-* Updated [plugin authors](https://gist.github.com/glueckpress/f058c0ab973d45a72720)
-
-### 1.4.2 / 01.05.2015 ###
-* Replace `filter_has_var(INPUT_SERVER)` calls with `isset($_SERVER[])` ([why](https://github.com/wp-stream/stream/issues/254))
-
-### 1.4.1 / 29.04.2015 ###
-* Renew the tracking mechanism
-
-### 1.4.0 / 16.04.2015 ###
-* WordPress 4.2 support
-* Plugin-wide code refactoring
-* Translations for English and Russian
-* [GitHub Repository](https://github.com/pluginkollektiv/statify)
-
-### 1.3.0 / 28.04.2014 ###
-* Sourcecode optimization for plugin-finalization
-
-For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/statify).
-
-## Upgrade Notice ##
-
-### 1.4.3 ###
-
-This is mainly a maintenance release ensuring compatibility with the latest version of WordPress. Works well with Multisite too!
-
-## Screenshots ##
-1. Statify dashboard widget
-2. Statify dashboard widget options
+## Changelog
+[Changelog](CHANGELOG.md)
