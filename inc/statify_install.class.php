@@ -5,12 +5,13 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Statify_Install
  *
- * @since 0.1
+ * @since   0.1
+ * @version 2016-12-20
  */
 class Statify_Install {
 
 	/**
-	 * Plugin activaton handler.
+	 * Plugin activation handler.
 	 *
 	 * @since 0.1.0
 	 *
