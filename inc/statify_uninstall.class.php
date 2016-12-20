@@ -1,7 +1,6 @@
 <?php
-
-/* Quit */
-defined( 'ABSPATH' ) OR exit;
+/** Quit */
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Statify_Uninstall
@@ -9,23 +8,32 @@ defined( 'ABSPATH' ) OR exit;
  * @since 0.1
  */
 class Statify_Uninstall {
+
 	/**
 	 * Plugin uninstall handler.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @change 0.1.0
 	 */
 	public static function init() {
-		global $wpdb;
 
 		if ( is_multisite() ) {
 			$old = get_current_blog_id();
+			// @ToDo: leave only get_sites, after decision which versions of WP will we supporting.
+			// @ToDo Redundant with Statify_Install class. We should reduce the maintenance.
+			if ( function_exists( 'get_sites' ) ) {
+				$sites = get_sites();
+			} elseif ( function_exists( 'wp_get_sites' ) ) {
+				$sites = wp_get_sites();
+			} else {
+				return;
+			}
 
-			// Todo: Use get_sites() in WordPress 4.6+
-			$ids = $wpdb->get_col( "SELECT blog_id FROM `$wpdb->blogs`" );
+			foreach ( $sites as $site ) {
+				// Convert object to array.
+				$site = (array) $site;
 
-			foreach ( $ids as $id ) {
-				switch_to_blog( $id );
+				switch_to_blog( $site['blog_id'] );
 				self::_apply();
 			}
 
@@ -43,6 +51,7 @@ class Statify_Uninstall {
 	 * @param int $site_id Site ID.
 	 */
 	public function init_site( $site_id ) {
+
 		switch_to_blog( $site_id );
 
 		self::_apply();
@@ -53,17 +62,18 @@ class Statify_Uninstall {
 	/**
 	 * Deletes all plugin data.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @change 1.4.0
 	 */
 	private static function _apply() {
-		/* Delete options */
+
+		/** Delete options */
 		delete_option( 'statify' );
 
-		/* Init table */
+		/** Init table */
 		Statify_Table::init();
 
-		/* Delete table */
+		/** Delete table */
 		Statify_Table::drop();
 	}
 }
