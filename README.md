@@ -72,10 +72,6 @@ add_filter(
 
 has to be added to the theme's `functions.php`. The condition has modified such that the method returns true if and only if the view should be ignored.
 
-### Memory Usage ###
-* Backend: ~ 0.2 MB
-* Frontend: ~ 0.1 MB
-
 ### Support ###
 * Community support via the [support forums on wordpress.org](https://wordpress.org/support/plugin/statify)
 * We don’t handle support via e-mail, Twitter, GitHub issues etc.
