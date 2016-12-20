@@ -79,7 +79,8 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 * Maintainers: [pluginkollektiv](http://pluginkollektiv.org/)
 * Contributor: [Bego Mario Garde](https://garde-medienberatung.de)
 
-## Installation ##
+
+## Installation
 * If you don’t know how to install a plugin for WordPress, [here’s how](https://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
 ### Requirements ###
@@ -101,8 +102,7 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 
 This behavior can be modified with the `statify_skip_tracking` hook.
 
-
-## Can you add browser or screen size tracking?
+### Can you add browser or screen size tracking?
 *Statify* only tracks page views, not visitors. Therefore this feature will not be added.
 
 
