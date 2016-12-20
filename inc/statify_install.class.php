@@ -1,7 +1,6 @@
 <?php
-
-/* Quit */
-defined( 'ABSPATH' ) OR exit;
+/** Quit */
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Statify_Install
@@ -9,6 +8,7 @@ defined( 'ABSPATH' ) OR exit;
  * @since 0.1
  */
 class Statify_Install {
+
 	/**
 	 * Plugin activaton handler.
 	 *
@@ -17,15 +17,22 @@ class Statify_Install {
 	 * @param bool $network_wide Whether the plugin was activated network-wide or not.
 	 */
 	public static function init( $network_wide = false ) {
-		global $wpdb;
 
-		// Create tables for each site in a network.
-		if ( is_multisite() && $network_wide ) {
-			// Todo: Use get_sites() in WordPress 4.6+
-			$ids = $wpdb->get_col( "SELECT blog_id FROM `$wpdb->blogs`" );
+		if ( $network_wide && is_multisite() ) {
+			// @ToDo: leave only get_sites, after decision which versions of WP will we supporting.
+			if ( function_exists( 'get_sites' ) ) {
+				$sites = get_sites();
+			} elseif ( function_exists( 'wp_get_sites' ) ) {
+				$sites = wp_get_sites();
+			} else {
+				return;
+			}
+			// Create tables for each site in a network.
+			foreach ( $sites as $site ) {
+				// Convert object to array.
+				$site = (array) $site;
 
-			foreach ( $ids as $site_id ) {
-				switch_to_blog( $site_id );
+				switch_to_blog( $site['blog_id'] );
 				self::_apply();
 			}
 
@@ -43,6 +50,7 @@ class Statify_Install {
 	 * @param int $site_id Site ID.
 	 */
 	public function init_site( $site_id ) {
+
 		switch_to_blog( (int) $site_id );
 
 		self::_apply();
@@ -57,13 +65,8 @@ class Statify_Install {
 	 * @change 1.4.0
 	 */
 	private static function _apply() {
-		// Todo: Remove. Use sane defaults instead.
-		add_option(
-			'statify',
-			array()
-		);
 
-		// Cleanup any leftover transients
+		// Cleanup any leftover transients.
 		delete_transient( 'statify_data' );
 
 		// Set up the cron event.
