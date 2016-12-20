@@ -1,64 +1,55 @@
 <?php
-
-
-/* Quit */
-defined('ABSPATH') OR exit;
-
+/** Quit */
+defined( 'ABSPATH' ) || exit;
 
 /**
-* Statify Table
-*
-* @since 0.6
-*/
-
-class Statify_Table
-{
-
+ * Statify Table
+ *
+ * @since 0.6
+ */
+class Statify_Table {
 
 	/**
-	* Definition der Tabelle
-	*
-	* @since   0.6.0
-	* @change  1.2.4
-	*/
+	 * Definition of the custom table.
+	 *
+	 * @since   0.6.0
+	 * @change  1.2.4
+	 */
+	public static function init() {
 
-	public static function init()
-	{
-		/* Global */
+		/** Global */
 		global $wpdb;
 
-		/* Name */
+		/** Name */
 		$table = 'statify';
 
-		/* Als Array */
+		/** Als Array */
 		$wpdb->tables[] = $table;
 
-		/* Mit Prefix */
+		/** Mit Prefix */
 		$wpdb->$table = $wpdb->get_blog_prefix() . $table;
 	}
 
 
 	/**
-	* Anlegen der Tabelle
-	*
-	* @since   0.6.0
-	* @change  1.2.4
-	*/
+	 * Create the table.
+	 *
+	 * @since   0.6.0
+	 * @change  1.2.4
+	 */
+	public static function create() {
 
-	public static function create()
-	{
-		/* Global */
 		global $wpdb;
 
-		/* Existenz prüfen */
-		if ( $wpdb->get_var("SHOW TABLES LIKE '$wpdb->statify'") == $wpdb->statify ) {
+		/** If existent. */
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '$wpdb->statify'" ) === $wpdb->statify ) {
 			return;
 		}
 
-		/* Einbinden */
-		require_once(ABSPATH. 'wp-admin/includes/upgrade.php');
+		/** Include */
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-		/* Anlegen */
+		/** Create. */
 		dbDelta(
 			"CREATE TABLE `$wpdb->statify` (
 			`id` bigint(20) unsigned NOT NULL auto_increment,
@@ -75,18 +66,16 @@ class Statify_Table
 
 
 	/**
-	* Löschung der Tabelle
-	*
-	* @since   0.6.0
-	* @change  1.2.4
-	*/
+	 * Remove the custom table.
+	 *
+	 * @since   0.6.0
+	 * @change  1.2.4
+	 */
+	public static function drop() {
 
-	public static function drop()
-	{
-		/* Global */
 		global $wpdb;
 
-		/* Remove */
-		$wpdb->query("DROP TABLE IF EXISTS `$wpdb->statify`");
+		/** Remove */
+		$wpdb->query( "DROP TABLE IF EXISTS `$wpdb->statify`" );
 	}
 }
