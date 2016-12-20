@@ -58,8 +58,10 @@ class Statify_Frontend extends Statify {
 		/* Set request timestamp */
 		$data['created'] = strftime( '%Y-%m-%d', current_time( 'timestamp' ) );
 
+		$needles = array( home_url(), network_admin_url() );
+
 		/* Sanitize referrer url */
-		if ( ! empty( $referrer ) && strpos( $referrer, home_url() ) === false ) {
+		if ( ! empty( $referrer ) && self::strposa( $referrer, $needles ) === false ) {
 			$data['referrer'] = esc_url_raw( $referrer, array( 'http', 'https' ) );
 		}
 
@@ -78,10 +80,32 @@ class Statify_Frontend extends Statify {
 		$wpdb->insert( $wpdb->statify, $data );
 
 		/* Jump! */
-
 		return self::_jump_out( $is_snippet );
 	}
 
+	/**
+	 * Find the position of the first occurrence of a substring in a string about a array.
+	 *
+	 * @param string $haystack The string to search in.
+	 * @param string $needle   The string to search for.
+	 * @param int    $offset   Search will start this number of characters counted from the beginning of the string.
+	 *
+	 * @return bool
+	 */
+	private static function strposa( $haystack, $needle, $offset = 0 ) {
+
+		if ( ! is_array( $needle ) ) {
+			$needle = array( $needle );
+		}
+
+		foreach ( (array) $needle as $query ) {
+			if ( strpos( $haystack, $query, $offset ) !== false ) {
+				return true;
+			} // stop on first true result
+		}
+
+		return false;
+	}
 
 	/**
 	 * Rules to skip the tracking
