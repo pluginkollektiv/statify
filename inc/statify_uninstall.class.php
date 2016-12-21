@@ -12,8 +12,8 @@ class Statify_Uninstall {
 	/**
 	 * Plugin uninstall handler.
 	 *
-	 * @since  0.1.0
-	 * @change 0.1.0
+	 * @since   0.1.0
+	 * @version 0.1.0
 	 */
 	public static function init() {
 
@@ -62,8 +62,8 @@ class Statify_Uninstall {
 	/**
 	 * Deletes all plugin data.
 	 *
-	 * @since  0.1.0
-	 * @change 1.4.0
+	 * @since   0.1.0
+	 * @version 1.4.0
 	 */
 	private static function _apply() {
 

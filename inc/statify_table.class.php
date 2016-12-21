@@ -13,7 +13,7 @@ class Statify_Table {
 	 * Definition of the custom table.
 	 *
 	 * @since   0.6.0
-	 * @change  1.2.4
+	 * @version 1.2.4
 	 */
 	public static function init() {
 
@@ -35,7 +35,7 @@ class Statify_Table {
 	 * Create the table.
 	 *
 	 * @since   0.6.0
-	 * @change  1.2.4
+	 * @version 1.2.4
 	 */
 	public static function create() {
 
@@ -69,7 +69,7 @@ class Statify_Table {
 	 * Remove the custom table.
 	 *
 	 * @since   0.6.0
-	 * @change  1.2.4
+	 * @version 1.2.4
 	 */
 	public static function drop() {
 

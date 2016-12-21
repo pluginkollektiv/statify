@@ -39,7 +39,7 @@ class Statify_Backend {
 	 * Add plugin action links
 	 *
 	 * @since   0.1.0
-	 * @change  1.4.0
+	 * @version 1.4.0
 	 *
 	 * @param   array $input Registered links.
 	 *

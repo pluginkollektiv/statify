@@ -62,8 +62,8 @@ class Statify_Install {
 	/**
 	 * Creates the database tables needed for the plugin.
 	 *
-	 * @since  0.1.0
-	 * @change 1.4.0
+	 * @since   0.1.0
+	 * @version 1.4.0
 	 */
 	private static function _apply() {
 

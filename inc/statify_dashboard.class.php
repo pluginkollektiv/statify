@@ -21,10 +21,10 @@ class Statify_Dashboard extends Statify {
 	 * Dashboard widget initialize
 	 *
 	 * @since   0.1.0
-	 * @change  1.4.0
+	 * @version 2016-12-21
 	 *
 	 * @wp-hook boolean  statify__user_can_see_stats
-	 * @see     https://gist.github.com/sergejmueller/1ce0482c277508d8327e
+	 * @see     https://github.com/pluginkollektiv/statify/wiki/Hooks#statify__user_can_see_stats
 	 */
 	public static function init() {
 
@@ -62,7 +62,7 @@ class Statify_Dashboard extends Statify {
 	 * Print CSS
 	 *
 	 * @since   0.1.0
-	 * @change  1.4.0
+	 * @version 1.4.0
 	 */
 	public static function add_style() {
 
@@ -218,7 +218,7 @@ class Statify_Dashboard extends Statify {
 	 * Get stats from cache
 	 *
 	 * @since   0.1.0
-	 * @change  1.4.0
+	 * @version 1.4.0
 	 *
 	 * @return  array  $data  Data from cache or DB
 	 */
