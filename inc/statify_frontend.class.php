@@ -161,10 +161,6 @@ class Statify_Frontend extends Statify {
 			return true;
 		}
 
-		if ( in_array( $referrer, $blacklist, true ) ) {
-			return true;
-		}
-
 		return false;
 	}
 
