@@ -34,8 +34,10 @@ class Statify_Frontend extends Statify {
 			$target   = urldecode( get_query_var( 'statify_target' ) );
 			$referrer = urldecode( get_query_var( 'statify_referrer' ) );
 		} elseif ( ! $use_snippet ) {
+			// @codingStandardsIgnoreStart The globals are checked.
 			$target   = ( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/' );
 			$referrer = ( isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '' );
+			// @codingStandardsIgnoreEnd
 		} else {
 			return false;
 		}
@@ -124,9 +126,12 @@ class Statify_Frontend extends Statify {
 			return $skip_hook;
 		}
 
-		/* Skip tracking via User Agent */
+
+		// Skip tracking via User Agent
+		// @codingStandardsIgnoreStart The globals are checked.
 		if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) 
 		     || ! preg_match( '/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $_SERVER['HTTP_USER_AGENT'] ) ) {
+		// @codingStandardsIgnoreEnd
 			return true;
 		}
 
