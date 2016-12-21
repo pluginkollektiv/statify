@@ -157,6 +157,10 @@ class Statify_Frontend extends Statify {
 		// @codingStandardsIgnoreEnd
 
 		$blacklist = self::get_blacklist_keys();
+		if ( array_key_exists( $referrer, $blacklist ) ) {
+			return true;
+		}
+
 		if ( in_array( $referrer, $blacklist, true ) ) {
 			return true;
 		}
@@ -179,8 +183,7 @@ class Statify_Frontend extends Statify {
 			return array();
 		}
 
-		$blacklist_keys = explode( "\n", $blacklist );
-		return (array) $blacklist_keys;
+		return array_flip( explode( "\n", $blacklist ) );
 	}
 
 	/**
