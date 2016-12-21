@@ -156,15 +156,15 @@ class Statify_Frontend extends Statify {
 		$referrer  = ( isset( $_SERVER['HTTP_REFERER'] ) ? wp_parse_url( $_SERVER['HTTP_REFERER'], PHP_URL_HOST ) : '' );
 		// @codingStandardsIgnoreEnd
 
+		if ( empty( $referrer ) ) {
+			return true;
+		}
+
 		$blacklist = self::get_blacklist_keys();
 		foreach ( $blacklist as $item ) {
 			if ( strpos( $referrer, $item ) !== false ) {
 				return true;
 			}
-		}
-
-		if ( in_array( $referrer, $blacklist, true ) ) {
-			return true;
 		}
 
 		return false;
