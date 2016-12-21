@@ -45,13 +45,13 @@ For compatibility with caching plugins like [Cachify](http://cachify.de) *Statif
 For this to work correctly, the active theme has to call `wp_footer()`.
 
 #### Skip tracking for defined users or pages
-The conditions for tracking views can be customized according to page type and user capabilities by using the hook `statify_skip_tracking`.
+The conditions for tracking views can be customized according to page type and user capabilities by using the hook `statify__skip_tracking`.
 
 Example:
 
 ```php
 add_filter(
-    'statify_skip_tracking',
+    'statify__skip_tracking',
     function() {
         if ( condition ) {
             return true;
@@ -100,7 +100,7 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 * views by logged in users
 * error pages
 
-This behavior can be modified with the `statify_skip_tracking` hook.
+This behavior can be modified with the `statify__skip_tracking` hook.
 
 ### Can you add browser or screen size tracking?
 *Statify* only tracks page views, not visitors. Therefore this feature will not be added.
