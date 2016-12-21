@@ -160,6 +160,14 @@ class Statify_Frontend extends Statify {
 			return true;
 		}
 
+		if ( is_array( $referrer ) && isset( $referrer['host'] ) ) {
+			$referrer = $referrer['host'];
+		}
+
+		if ( ! is_string( $referrer ) ) {
+			return false;
+		}
+
 		$blacklist = self::get_blacklist_keys();
 		foreach ( $blacklist as $item ) {
 			if ( strpos( $referrer, $item ) !== false ) {
