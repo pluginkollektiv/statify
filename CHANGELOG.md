@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. This projec
 * Add referrer spam protection.
 * Change of code style, now it is WP Codex fit.
 * Multisite fix to don't track network admin url.
+* Change hook name `statify_skip_tracking` to `statify__skip_tracking`.
 
 ## 1.4.3 / 2016-08-15
 * Corrected tracking and display in Multisite
