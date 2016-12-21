@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.5.0 / ToDo
+* Add referrer spam protection.
+* Change of code style, now it is WP Codex fit.
+* Multisite fix to don't track network admin url.
+
 ## 1.4.3 / 2016-08-15
 * Corrected tracking and display in Multisite
 * Minor CSS fixes in the dashboard widget
