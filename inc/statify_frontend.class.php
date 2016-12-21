@@ -115,15 +115,16 @@ class Statify_Frontend extends Statify {
 	 * @since    1.2.6
 	 * @version  2016-12-21
 	 *
-	 * @hook     boolean  statify_skip_tracking
-	 * @see      https://github.com/pluginkollektiv/statify/wiki/Hooks#statify_skip_tracking
+	 * @hook     boolean  statify__skip_tracking
+	 * @see      https://github.com/pluginkollektiv/statify/wiki/Hooks#statify__skip_tracking
 	 *
 	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
 	 */
 	private static function _skip_tracking() {
 
+		apply_filters_deprecated( 'statify_skip_tracking', array(), '1.5.0', 'statify__skip_tracking' );
 		/* Skip tracking via Hook */
-		if ( ( $skip_hook = apply_filters( 'statify_skip_tracking', null ) ) !== null ) {
+		if ( ( $skip_hook = apply_filters( 'statify__skip_tracking', null ) ) !== null ) {
 			return $skip_hook;
 		}
 
