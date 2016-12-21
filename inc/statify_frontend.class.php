@@ -122,7 +122,9 @@ class Statify_Frontend extends Statify {
 	 */
 	private static function _skip_tracking() {
 
-		apply_filters_deprecated( 'statify_skip_tracking', array( '' ), '1.5.0', 'statify__skip_tracking' );
+		if ( function_exists( 'apply_filters_deprecated' ) ) {
+			apply_filters_deprecated( 'statify_skip_tracking', array( '' ), '1.5.0', 'statify__skip_tracking' );
+		}
 		/* Skip tracking via Hook */
 		if ( ( $skip_hook = apply_filters( 'statify__skip_tracking', null ) ) !== null ) {
 			return $skip_hook;
