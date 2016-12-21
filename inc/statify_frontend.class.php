@@ -157,6 +157,12 @@ class Statify_Frontend extends Statify {
 		// @codingStandardsIgnoreEnd
 
 		$blacklist = self::get_blacklist_keys();
+		foreach ( $blacklist as $item ) {
+			if ( strpos( $referrer, $item ) !== false ) {
+				return true;
+			}
+		}
+
 		if ( in_array( $referrer, $blacklist, true ) ) {
 			return true;
 		}
