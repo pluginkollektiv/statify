@@ -111,7 +111,7 @@ class Statify_Frontend extends Statify {
 	 * Rules to skip the tracking
 	 *
 	 * @since    1.2.6
-	 * @version  1.4.2
+	 * @version  2016-12-21
 	 *
 	 * @hook     boolean  statify_skip_tracking (https://gist.github.com/sergejmueller/7612368)
 	 *
@@ -130,10 +130,51 @@ class Statify_Frontend extends Statify {
 			return true;
 		}
 
-		/* Skip tracking via Conditional_Tags */
-		return ( is_feed() || is_trackback() || is_robots() || is_preview() || is_user_logged_in() || is_404() || is_search() );
+		/** Skip tracking via Referrer check and Conditional_Tags. */
+		return ( self::check_referrer() || is_feed() || is_trackback() || is_robots()
+		         || is_preview() || is_user_logged_in() || is_404() || is_search()
+		);
 	}
 
+	/**
+	 * Compare the referrer url to the blacklist data.
+	 *
+	 * @since  2016-12-21
+	 *
+	 * @return bool
+	 */
+	private static function check_referrer() {
+
+		// @codingStandardsIgnoreStart The globals are checked.
+		$referrer  = ( isset( $_SERVER['HTTP_REFERER'] ) ? wp_parse_url( $_SERVER['HTTP_REFERER'], PHP_URL_HOST ) : '' );
+		// @codingStandardsIgnoreEnd
+
+		$blacklist = self::get_blacklist_keys();
+		if ( in_array( $referrer, $blacklist, true ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get a array from the blacklist option of 'Settings' - 'Discussion' - 'Comment Blacklist'.
+	 *
+	 * @since  2016-12-21
+	 *
+	 * @return array
+	 */
+	private static function get_blacklist_keys() {
+
+		$blacklist = trim( get_option( 'blacklist_keys' ) );
+
+		if ( empty( $blacklist ) ) {
+			return array();
+		}
+
+		$blacklist_keys = explode( "\n", $blacklist );
+		return (array) $blacklist_keys;
+	}
 
 	/**
 	 * Send JavaScript headers or return false
