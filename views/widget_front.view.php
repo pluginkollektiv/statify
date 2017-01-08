@@ -37,7 +37,7 @@ $stats = Statify_Dashboard::get_stats(); ?>
 							<?php echo (int) $target['count']; ?>
 						</td>
 						<td class="t">
-							<a href="<?php echo esc_url( home_url( $target['url'] ) ); ?>" target="_blank">
+							<a href="<?php echo esc_url( home_url( $target['url'] ) ); ?>" target="_blank" rel="noopener noreferrer">
 								<?php echo esc_html( $target['url'] ); ?>
 							</a>
 						</td>
@@ -63,7 +63,7 @@ $stats = Statify_Dashboard::get_stats(); ?>
 							<?php echo (int) $referrer['count']; ?>
 						</td>
 						<td class="t">
-							<a href="<?php echo esc_url( $referrer['url'] ); ?>" target="_blank">
+							<a href="<?php echo esc_url( $referrer['url'] ); ?>" target="_blank"  rel="noopener noreferrer">
 								<?php echo esc_html( $referrer['host'] ); ?>
 							</a>
 						</td>
