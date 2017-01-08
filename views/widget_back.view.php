@@ -49,7 +49,7 @@ class_exists( 'Statify' ) || exit; ?>
 
 <p class="meta-links">
 	<a href="<?php esc_html_e( 'https://wordpress.org/plugins/statify/faq/', 'statify' ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'FAQ', 'statify' ); ?></a>
-	&bull; <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'PayPal', 'statify' ); ?></a>
+	&bull; <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Donate', 'statify' ); ?></a>
 	&bull; <a href="https://wordpress.org/support/plugin/statify" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Support', 'statify' ); ?></a>
 	<?php if ( strpos( get_locale(), 'de' ) !== false ) { ?>
 		&bull; <a href="https://github.com/pluginkollektiv/statify/wiki" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Wiki', 'statify' ); ?></a>
