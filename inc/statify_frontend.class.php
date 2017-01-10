@@ -24,11 +24,11 @@ class Statify_Frontend extends Statify {
 		$use_snippet = self::$_options['snippet'];
 		$is_snippet  = $use_snippet && get_query_var( 'statify_target' );
 
-		/* Skip tracking */
+		/* Skip tracking
 		if ( self::_skip_tracking() ) {
 			return self::_jump_out( $is_snippet );
 		}
-
+*/
 		/* Set target & referrer */
 		if ( $is_snippet ) {
 			$target   = urldecode( get_query_var( 'statify_target' ) );
@@ -89,18 +89,14 @@ class Statify_Frontend extends Statify {
 	 * Find the position of the first occurrence of a substring in a string about a array.
 	 *
 	 * @param string $haystack The string to search in.
-	 * @param string $needle   The string to search for.
+	 * @param array  $needle   The string to search for.
 	 * @param int    $offset   Search will start this number of characters counted from the beginning of the string.
 	 *
 	 * @return bool
 	 */
-	private static function strposa( $haystack, $needle, $offset = 0 ) {
+	private static function strposa( $haystack, array $needle, $offset = 0 ) {
 
-		if ( ! is_array( $needle ) ) {
-			$needle = array( $needle );
-		}
-
-		foreach ( (array) $needle as $query ) {
+		foreach ( $needle as $query ) {
 			if ( strpos( $haystack, $query, $offset ) !== false ) {
 				return true;
 			} // stop on first true result
@@ -147,12 +143,22 @@ class Statify_Frontend extends Statify {
 
 	/**
 	 * Compare the referrer url to the blacklist data.
+	 * De/activate this feature via settings in the Dashboard widget.
 	 *
-	 * @since  2016-12-21
+	 * @since   2016-12-21
+	 * @version 2017-01-10
 	 *
-	 * @return bool
+	 * @return  bool
 	 */
 	private static function check_referrer() {
+
+
+		// Return false if the blacklist filter is inactive.
+		$is_filter_reffer = get_option( 'statify' );
+
+		if ( ! $is_filter_reffer['blacklist'] ) {
+			return false;
+		}
 
 		// @codingStandardsIgnoreStart The globals are checked.
 		$referrer  = ( isset( $_SERVER['HTTP_REFERER'] ) ? wp_parse_url( $_SERVER['HTTP_REFERER'], PHP_URL_HOST ) : '' );

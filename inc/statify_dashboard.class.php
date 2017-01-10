@@ -173,19 +173,20 @@ class Statify_Dashboard extends Statify {
 	 * Save plugin options
 	 *
 	 * @since    1.4.0
-	 * @version  1.4.0
+	 * @version  2017-01-10
 	 */
 	private static function _save_options() {
 
 		/** Update values */
 		update_option(
 			'statify',
-			// @ToDO Remove @ error control operator, needs error handling.
+			// @ToDo Remove @ error control operator, needs error handling.
 			array(
-				'days'    => (int) @$_POST[ 'statify' ][ 'days' ],
-				'limit'   => (int) @$_POST[ 'statify' ][ 'limit' ],
-				'today'   => (int) @$_POST[ 'statify' ][ 'today' ],
-				'snippet' => (int) @$_POST[ 'statify' ][ 'snippet' ],
+				'days'      => (int) @$_POST[ 'statify' ][ 'days' ],
+				'limit'     => (int) @$_POST[ 'statify' ][ 'limit' ],
+				'today'     => (int) @$_POST[ 'statify' ][ 'today' ],
+				'snippet'   => (int) @$_POST[ 'statify' ][ 'snippet' ],
+				'blacklist' => (int) @$_POST[ 'statify' ][ 'blacklist' ],
 			)
 		);
 

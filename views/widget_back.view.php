@@ -41,6 +41,11 @@ class_exists( 'Statify' ) || exit; ?>
 					<?php esc_html_e( 'Page tracking via JavaScript', 'statify' ); ?>
 					<small>(<?php esc_html_e( 'recommended if caching is in use', 'statify' ); ?>)</small>
 				</label>
+
+				<label for="statify_blacklist">
+					<input type="checkbox" name="statify[blacklist]" id="statify_blacklist" value="1" <?php checked( Statify::$_options['blacklist'], 1 ); ?> />
+					<?php esc_html_e( 'Use the \'Comment Blacklist\' to filter referrer.', 'statify' ); ?>
+				</label>
 			</fieldset>
 		</td>
 	</tr>

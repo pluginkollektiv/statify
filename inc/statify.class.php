@@ -35,7 +35,7 @@ class Statify {
 	 * Class constructor
 	 *
 	 * @since    0.1.0
-	 * @version  1.4.0
+	 * @version  2017-01-10
 	 */
 	public function __construct() {
 
@@ -51,10 +51,11 @@ class Statify {
 		self::$_options = wp_parse_args(
 			get_option( 'statify' ),
 			array(
-				'days'    => 14,
-				'limit'   => 3,
-				'today'   => 0,
-				'snippet' => 0,
+				'days'      => 14,
+				'limit'     => 3,
+				'today'     => 0,
+				'snippet'   => 0,
+				'blacklist' => 0,
 			)
 		);
 
