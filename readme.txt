@@ -1,7 +1,7 @@
 === Statify ===
 * Contributors:      pluginkollektiv
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ
-* Tags:              stats, analytics, privacy, dashboard
+* Tags:              analytics, dashboard, pageviews, privacy, statistics, stats, visits, web stats, widget
 * Requires at least: 3.9
 * Tested up to:      4.7
 * Stable tag:        1.4.3
