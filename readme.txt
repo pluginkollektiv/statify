@@ -111,6 +111,8 @@ This behavior can be modified with the `statify__skip_tracking` hook.
 = Can you add browser or screen size tracking? =
 *Statify* only tracks page views, not visitors. Therefore this feature will not be added.
 
+A complete documentation is available in the [GitHub repository Wiki](https://github.com/pluginkollektiv/statify/wiki).
+
 
 == Changelog ==
 
