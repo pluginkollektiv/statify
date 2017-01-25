@@ -95,7 +95,7 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 
 ## Frequently Asked Questions ##
 
-### Which views are not tracked? ###
+### Which areas are excluded from counting? ###
 *Statify* does not count the following views:
 
 * feeds
