@@ -74,6 +74,9 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 * If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/statify) first.
 * If you want to help us translate this plugin you can do so [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/statify).
 
+### Donate
+[Donate for us via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ)
+
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
 * Maintainers: [pluginkollektiv](http://pluginkollektiv.org/)
@@ -89,21 +92,9 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 
 
 ## Frequently Asked Questions
+Please have a look [in the FAQ pages](https://github.com/pluginkollektiv/statify/wiki/en-FAQ).
 
-### Which views are not tracked?
-*Statify* does not count the following views:
-
-* feeds
-* trackbacks
-* searches
-* previews
-* views by logged in users
-* error pages
-
-This behavior can be modified with the `statify__skip_tracking` hook.
-
-### Can you add browser or screen size tracking?
-*Statify* only tracks page views, not visitors. Therefore this feature will not be added.
+A complete documentation is available in the [GitHub repository Wiki](https://github.com/pluginkollektiv/statify/wiki).
 
 
 ## Changelog
