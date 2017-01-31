@@ -75,7 +75,7 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 * If you want to help us translate this plugin you can do so [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/statify).
 
 ### Donate
-[Donate for us via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG5VC9KXMAYXJ)
+[Donate for us via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8CH5FPR88QYML)
 
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
