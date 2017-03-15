@@ -44,7 +44,7 @@ class_exists( 'Statify' ) || exit; ?>
 
 				<label for="statify_blacklist">
 					<input type="checkbox" name="statify[blacklist]" id="statify_blacklist" value="1" <?php checked( Statify::$_options['blacklist'], 1 ); ?> />
-					<?php esc_html_e( 'Use the \'Comment Blacklist\' to filter referrer.', 'statify' ); ?>
+					<?php esc_html_e( 'Skip tracking for referrers listed in the comment blacklist', 'statify' ); ?>
 				</label>
 			</fieldset>
 		</td>

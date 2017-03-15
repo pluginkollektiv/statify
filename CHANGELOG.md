@@ -2,10 +2,10 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.5.0 / ToDo
-* Add referrer spam protection, optional, activate is t via Statify settings.
-* Change of code style, now it is WP Codex fit.
-* Multisite fix to don't track network admin url.
-* Change hook name `statify_skip_tracking` to `statify__skip_tracking`.
+* Added optional referrer spam protection (can be activated via the Statify settings).
+* Improved conformance to the WordPress coding guidelines
+* Bugfix for multi-site installations: Don't track network admin url.
+* Changed hook name `statify_skip_tracking` to `statify__skip_tracking`.
 
 ## 1.4.3 / 2016-08-15
 * Corrected tracking and display in Multisite

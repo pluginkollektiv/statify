@@ -35,7 +35,7 @@ add_filter(
 );
 ```
 
-has to be your theme's `functions.php` and adapted to your needs. This example would allow all users to see the widget.
+has to be added to the theme's `functions.php` and adapted to your needs. This example would allow all users to see the widget.
 
 Editing the configuration is still limited to users with `edit_dashboard` capability.
 
@@ -43,6 +43,9 @@ Editing the configuration is still limited to users with `edit_dashboard` capabi
 For compatibility with caching plugins like [Cachify](http://cachify.de) *Statify* offers an optional switchable tracking via JavaScript. This function allows reliable count of cached blog pages.
 
 For this to work correctly, the active theme has to call `wp_footer()`.
+
+#### Skip tracking for spam referrers
+The comment blacklist can be enabled to skip tracking for views with a referrer URL listed in comment blacklist, i. e. which considered as spam.
 
 #### Skip tracking for defined users or pages
 The conditions for tracking views can be customized according to page type and user capabilities by using the hook `statify__skip_tracking`.
