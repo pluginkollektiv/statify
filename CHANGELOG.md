@@ -2,12 +2,13 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.5.0 / ToDo
+* Moved documentation to [wordpress.org](https://wordpress.org/plugins/statify/).
 * Added optional referrer spam protection (can be activated via the Statify settings).
 * Improved conformance to the WordPress coding guidelines
 * Bugfix for multi-site installations: Don't track network admin url.
 * Changed hook name `statify_skip_tracking` to `statify__skip_tracking`.
 
-## 1.4.3 / 2016-08-15
+## 1.4.3 / 15.08.2016
 * Corrected tracking and display in Multisite
 * Minor CSS fixes in the dashboard widget
 * Removed deprecated links and updated URLs for donate and wiki links
