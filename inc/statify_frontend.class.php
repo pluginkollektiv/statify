@@ -107,7 +107,7 @@ class Statify_Frontend extends Statify {
 	 * @version  2016-12-21
 	 *
 	 * @hook     boolean  statify__skip_tracking
-	 * @see      https://github.com/pluginkollektiv/statify/wiki/en-Hooks#statify__skip_tracking
+	 * @see      https://wordpress.org/plugins/statify/
 	 *
 	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
 	 */
