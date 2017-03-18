@@ -24,7 +24,7 @@ class Statify_Dashboard extends Statify {
 	 * @version 2016-12-21
 	 *
 	 * @wp-hook boolean  statify__user_can_see_stats
-	 * @see     https://github.com/pluginkollektiv/statify/wiki/en-Hooks#statify__user_can_see_stats
+	 * @see     https://wordpress.org/plugins/statify/
 	 */
 	public static function init() {
 

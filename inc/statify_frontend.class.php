@@ -24,11 +24,6 @@ class Statify_Frontend extends Statify {
 		$use_snippet = self::$_options['snippet'];
 		$is_snippet  = $use_snippet && get_query_var( 'statify_target' );
 
-		/* Skip tracking
-		if ( self::_skip_tracking() ) {
-			return self::_jump_out( $is_snippet );
-		}
-*/
 		/* Set target & referrer */
 		if ( $is_snippet ) {
 			$target   = urldecode( get_query_var( 'statify_target' ) );
@@ -112,7 +107,7 @@ class Statify_Frontend extends Statify {
 	 * @version  2016-12-21
 	 *
 	 * @hook     boolean  statify__skip_tracking
-	 * @see      https://github.com/pluginkollektiv/statify/wiki/en-Hooks#statify__skip_tracking
+	 * @see      https://wordpress.org/plugins/statify/
 	 *
 	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
 	 */
@@ -151,8 +146,6 @@ class Statify_Frontend extends Statify {
 	 * @return  bool
 	 */
 	private static function check_referrer() {
-
-
 		// Return false if the blacklist filter is inactive.
 		$is_filter_reffer = get_option( 'statify' );
 
