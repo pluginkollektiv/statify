@@ -36,6 +36,8 @@ class_exists( 'Statify' ) || exit; ?>
 					<?php esc_html_e( 'Use the \'Comment Blacklist\' to filter referrer.', 'statify' ); ?>
 				</label>
 			</fieldset>
+
+			<?php wp_nonce_field( 'statify-dashboard' ); ?>
 		</td>
 	</tr>
 </table>

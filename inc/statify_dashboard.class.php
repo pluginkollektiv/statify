@@ -176,6 +176,11 @@ class Statify_Dashboard extends Statify {
 	 * @version  2017-01-10
 	 */
 	private static function _save_options() {
+		/** Check the nonce field from the dashboard form. */
+		if ( ! check_admin_referer( 'statify-dashboard' ) ) {
+			return;
+		}
+
 		/** Get numeric values from POST variables */
 		$options = array();
 		foreach ( array( 'days', 'limit' ) as $option_name ) {
