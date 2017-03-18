@@ -60,7 +60,7 @@
 #statify_dashboard .dashboard-widget-control-form {
     padding: 0 0 18px;
 }
-#statify_dashboard .dashboard-widget-control-form select {
+#statify_dashboard .dashboard-widget-control-form input[type="number"] {
     width: 100px;
 }
 

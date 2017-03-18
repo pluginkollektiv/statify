@@ -8,26 +8,15 @@ class_exists( 'Statify' ) || exit; ?>
 		<td>
 			<fieldset>
 				<label for="statify_days">
-					<select name="statify[days]" id="statify_days">
-						<?php foreach ( array( 7, 14, 21, 30, 84, 183, 365 ) as $days ) { ?>
-							<option value="<?php echo (int) $days ?>" <?php selected(
-								Statify::$_options['days'], (int) $days
-							); ?>>
-								<?php echo sprintf( '%d %s', (int) $days, esc_html__( 'days', 'statify' ) ); ?>
-							</option>
-						<?php } ?>
-					</select>
+					<input name="statify[days]" id="statify_days" type="number" min="1"
+                           value="<?php echo esc_attr( Statify::$_options['days'] ); ?>">
+					<?php esc_html_e( 'days', 'statify' ); ?> -
 					<?php esc_html_e( 'Period of data saving', 'statify' ); ?>
 				</label>
 
 				<label for="statify_limit">
-					<select name="statify[limit]" id="statify_limit">
-						<?php foreach ( range( 0, 12 ) as $amount ) { ?>
-							<option <?php selected( Statify::$_options['limit'], (int) $amount ); ?>>
-								<?php echo (int) $amount; ?>
-							</option>
-						<?php } ?>
-					</select>
+                    <input name="statify[limit]" id="statify_limit" type="number" min="1" max="100"
+                           value="<?php echo esc_attr( Statify::$_options['limit'] ); ?>">
 					<?php esc_html_e( 'Number of entries in top lists', 'statify' ); ?>
 				</label>
 
