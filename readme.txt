@@ -10,6 +10,7 @@
 
 Visitor statistics for WordPress with focus on data protection, transparency and clarity. Perfect as a widget in your WordPress Dashboard.
 
+
 ## Description ##
 The free and ad-free plugin Statify pursues a simple objective: to provide a straightforward and compact access to the number of site views.
 
@@ -19,16 +20,19 @@ An interactive chart is followed by lists of the most common reference sources a
 
 ### Data Privacy ###
 In direct comparison to statistics services such as *Google Analytics*, *WordPress.com Stats* and *Piwik* *Statify* doesn't process and store personal data as e.g. IP addresses – *Statify* counts site views, not visitors.
-Absolute privacy compliance coupled with transparent procedures: A locally in WordPress created database table consists of only 4 fields (ID, date, source, target) and can be viewed at any time, cleaned up and cleared by the administrator.
+Absolute privacy compliance coupled with transparent procedures: A locally in WordPress created database table consists of only four fields (ID, date, source, target) and can be viewed at any time, cleaned up and cleared by the administrator.
 
 ### Settings and Hooks ###
 The plugin configuration can be changed directly in the *Statify* Widget on the dashboard by clicking the *Configure* link.
 
 *Period of data saving
-*Statify* stores the data only for a limited period (default: 2 weeks), longer intervals can be selected as option in the widget. Data which is older than the period set is deleted by a daily cron job.
+*Statify* stores the data only for a limited period (default: two weeks), longer intervals can be selected as option in the widget.
+Data which is older than the selected period is deleted by a daily cron job.
+An increase in the database volume can be expected because all statistic values are collected and managed in the local WordPress database (expecially if you increase the period of data saving).
 
 *Display of the widget
-The amount of links shown in the *Statify* Widget can be set as well as the option to only count views from today. Of course, older entries are not deleted when changing this setting.
+The amount of links shown in the *Statify* Widget can be set as well as the option to only count views from today.
+Of course, older entries are not deleted when changing this setting.
 
 The statistics for the dashboard widget are cached for four minutes.
 
@@ -42,14 +46,18 @@ add_filter(
 );
 </pre>`
 
-has to be your theme's `functions.php` and adapted to your needs. This example would allow all users to see the widget.
+has to be added to the theme's `functions.php` and adapted to your needs. This example would allow all users to see the widget.
 
 Editing the configuration is still limited to users with `edit_dashboard` capability.
 
 *JavaScript tracking for caching compatibility
-For compatibility with caching plugins like [Cachify](http://cachify.de) *Statify* offers an optional switchable tracking via JavaScript. This function allows reliable count of cached blog pages.
+For compatibility with caching plugins like [Cachify](http://cachify.de) *Statify* offers an optional switchable tracking via JavaScript.
+This function allows reliable count of cached blog pages.
 
-For this to work correctly, the active theme has to call `wp_footer()`.
+For this to work correctly, the active theme has to call `wp_footer()`, typically in a file named `footer.php`.
+
+*Skip tracking for spam referrers
+The comment blacklist can be enabled to skip tracking for views with a referrer URL listed in comment blacklist, i. e. which considered as spam.
 
 *Skip tracking for defined users or pages
 The conditions for tracking views can be customized according to page type and user capabilities by using the hook `statify__skip_tracking`.
@@ -85,6 +93,7 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 * Maintainers: [pluginkollektiv](http://pluginkollektiv.org/)
 * Contributor: [Bego Mario Garde](https://garde-medienberatung.de)
 
+
 ## Installation ##
 * If you don’t know how to install a plugin for WordPress, [here’s how](https://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
@@ -108,12 +117,13 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 This behavior can be modified with the `statify__skip_tracking` hook.
 
 ### Can further visitor data be recorded? ###
-Some plugin users want to capture additional visitor data, e.g. Devicename and resolution. *Statify* counts exclusively page views and no visitors, the desired data acquisition is not a question.
-
-A complete documentation is available in the [GitHub repository Wiki](https://github.com/pluginkollektiv/statify/wiki).
+Some plugin users want to capture additional visitor data, e.g. name of the device and resolution.
+*Statify* counts exclusively page views and no visitors, the desired data acquisition is not a question.
 
 
 ## Changelog ##
+
+You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
 ### 1.4.4 ###
 * Renamed the handle of the Raphael JS library. This fixed a bug, where raphael couldn't work properly when also loaded with Antispam Bee.
