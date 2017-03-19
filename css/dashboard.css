@@ -57,10 +57,10 @@
 
 /* @group Back stage */
 
-#statify_dashboard .dashboard-widget-control-form {
-    padding: 0 0 18px;
+#statify_dashboard form {
+    padding: 18px 0;
 }
-#statify_dashboard .dashboard-widget-control-form input[type="number"] {
+#statify_dashboard input[type="number"] {
     width: 100px;
 }
 

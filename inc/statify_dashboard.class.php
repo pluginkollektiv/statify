@@ -184,10 +184,9 @@ class Statify_Dashboard extends Statify {
 		/** Get numeric values from POST variables */
 		$options = array();
 		foreach ( array( 'days', 'limit' ) as $option_name ) {
+			$options[ $option_name ] = Statify::$_options[ $option_name ];
 			if ( isset( $_POST['statify'][ $option_name ] ) && intval( $_POST['statify'][ $option_name ] ) > 0 ) {
 				$options[ $option_name ] = intval( $_POST['statify'][ $option_name ] );
-			} else {
-				$options[ $option_name ] = Statify::$_options[ $option_name ];
 			}
 		}
 		if ( intval( $options['limit'] ) > 100 ) {
