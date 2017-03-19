@@ -2,7 +2,9 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.5.0 / ToDo
-* Moved documentation to [wordpress.org](https://wordpress.org/plugins/statify/).
+* Added more flexible settings for period of data saving and the number of entries shown in top lists
+* Added validation of form data before saving settings
+* Moved all documentation to [wordpress.org](https://wordpress.org/plugins/statify/).
 * Added optional referrer spam protection (can be activated via the Statify settings).
 * Improved conformance to the WordPress coding guidelines
 * Bugfix for multi-site installations: Don't track network admin url.

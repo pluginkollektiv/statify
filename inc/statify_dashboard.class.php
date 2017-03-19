@@ -176,19 +176,34 @@ class Statify_Dashboard extends Statify {
 	 * @version  2017-01-10
 	 */
 	private static function _save_options() {
+		/** Check the nonce field from the dashboard form. */
+		if ( ! check_admin_referer( 'statify-dashboard' ) ) {
+			return;
+		}
+
+		/** Get numeric values from POST variables */
+		$options = array();
+		foreach ( array( 'days', 'limit' ) as $option_name ) {
+			$options[ $option_name ] = Statify::$_options[ $option_name ];
+			if ( isset( $_POST['statify'][ $option_name ] ) && intval( $_POST['statify'][ $option_name ] ) > 0 ) {
+				$options[ $option_name ] = intval( $_POST['statify'][ $option_name ] );
+			}
+		}
+		if ( intval( $options['limit'] ) > 100 ) {
+			$options['limit'] = 100;
+		}
+		
+		/** Get checkbox values from POST variables */
+		foreach ( array( 'today', 'snippet', 'blacklist' ) as $option_name ) {
+			if ( isset( $_POST['statify'][ $option_name ] ) && intval( $_POST['statify'][ $option_name ] ) === 1 ) {
+				$options[ $option_name ] = 1;
+			} else {
+				$options[ $option_name ] = 0;
+			}
+		}
 
 		/** Update values */
-		update_option(
-			'statify',
-			// @ToDo Remove @ error control operator, needs error handling.
-			array(
-				'days'      => (int) @$_POST[ 'statify' ][ 'days' ],
-				'limit'     => (int) @$_POST[ 'statify' ][ 'limit' ],
-				'today'     => (int) @$_POST[ 'statify' ][ 'today' ],
-				'snippet'   => (int) @$_POST[ 'statify' ][ 'snippet' ],
-				'blacklist' => (int) @$_POST[ 'statify' ][ 'blacklist' ],
-			)
-		);
+		update_option( 'statify', $options );
 
 		/** Delete transient */
 		delete_transient( 'statify_data' );
