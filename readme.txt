@@ -3,8 +3,8 @@
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8CH5FPR88QYML
 * Tags:              analytics, dashboard, pageviews, privacy, statistics, stats, visits, web stats, widget
 * Requires at least: 3.9
-* Tested up to:      4.7
-* Stable tag:        1.4.3
+* Tested up to:      4.7.3
+* Stable tag:        1.5
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -91,14 +91,13 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ### Credits ###
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
 * Maintainers: [pluginkollektiv](http://pluginkollektiv.org/)
-* Contributor: [Bego Mario Garde](https://garde-medienberatung.de)
 
 
 ## Installation ##
 * If you don’t know how to install a plugin for WordPress, [here’s how](https://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
 ### Requirements ###
-* PHP 5.2.4 or greater
+* PHP 5.3 or greater
 * WordPress 3.9 or greater
 
 
@@ -124,6 +123,16 @@ Some plugin users want to capture additional visitor data, e.g. name of the devi
 ## Changelog ##
 
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
+
+### 1.5.0 (2017-03-23) ###
+* Switched to minimal PHP version 5.3
+* Added more flexible settings for period of data saving and the number of entries shown in top lists
+* Added validation of form data before saving settings
+* Moved all documentation to [wordpress.org](https://wordpress.org/plugins/statify/).
+* Added optional referrer spam protection (can be activated via the Statify settings).
+* Improved conformance to the WordPress coding guidelines
+* Bugfix for multi-site installations: Don't track network admin url.
+* Changed hook name `statify_skip_tracking` to `statify__skip_tracking`.
 
 ### 1.4.4 ###
 * Renamed the handle of the Raphael JS library. This fixed a bug, where raphael couldn't work properly when also loaded with Antispam Bee.

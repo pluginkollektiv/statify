@@ -12,7 +12,7 @@ $stats = Statify_Dashboard::get_stats(); ?>
 			</p>
 		<?php } else { ?>
 			<table id="statify_chart_data">
-				<?php foreach ( $stats['visits'] as $visit ) { ?>
+				<?php foreach ( (array) $stats['visits'] as $visit ) { ?>
 					<tr>
 						<th><?php echo date_i18n( get_option( 'date_format' ), strtotime( $visit['date'] ) ); ?></th>
 						<td><?php echo (int) $visit['count']; ?></td>
@@ -31,7 +31,7 @@ $stats = Statify_Dashboard::get_stats(); ?>
 
 		<div>
 			<table>
-				<?php foreach ( $stats['target'] as $target ) { ?>
+				<?php foreach ( (array) $stats['target'] as $target ) { ?>
 					<tr>
 						<td class="b">
 							<?php echo (int) $target['count']; ?>
@@ -57,7 +57,7 @@ $stats = Statify_Dashboard::get_stats(); ?>
 
 		<div>
 			<table>
-				<?php foreach ( $stats['referrer'] as $referrer ) { ?>
+				<?php foreach ( (array) $stats['referrer'] as $referrer ) { ?>
 					<tr>
 						<td class="b">
 							<?php echo (int) $referrer['count']; ?>

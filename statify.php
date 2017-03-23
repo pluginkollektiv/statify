@@ -8,11 +8,14 @@
  * Author URI:  http://pluginkollektiv.org
  * Plugin URI:  https://wordpress.org/plugins/statify
  * License:     GPLv3 or later
- * Version:     1.5.0-dev
+ * Version:     1.5.0
  *
- * Copyright (C)  2011-2016 Sergej Müller, pluginkollektiv
+ * Copyright (C)  2011-2017 Sergej Müller, pluginkollektiv
+ *
+ * Php Version 5.6
+ *
+ * @package WordPress
  */
-
 
 /* Quit */
 defined( 'ABSPATH' ) || exit;
@@ -20,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
 
 /*  Constants */
 define( 'STATIFY_FILE', __FILE__ );
-define( 'STATIFY_DIR', dirname( __FILE__ ) );
+define( 'STATIFY_DIR', __DIR__ );
 define( 'STATIFY_BASE', plugin_basename( __FILE__ ) );
 
 

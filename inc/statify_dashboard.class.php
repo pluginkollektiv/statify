@@ -158,7 +158,7 @@ class Statify_Dashboard extends Statify {
 		}
 
 		/** Update plugin options */
-		if ( ! empty( $_POST[ 'statify' ] ) ) {
+		if ( ! empty( $_POST['statify'] ) ) {
 			self::_save_options();
 		}
 
@@ -185,17 +185,17 @@ class Statify_Dashboard extends Statify {
 		$options = array();
 		foreach ( array( 'days', 'limit' ) as $option_name ) {
 			$options[ $option_name ] = Statify::$_options[ $option_name ];
-			if ( isset( $_POST['statify'][ $option_name ] ) && intval( $_POST['statify'][ $option_name ] ) > 0 ) {
-				$options[ $option_name ] = intval( $_POST['statify'][ $option_name ] );
+			if ( isset( $_POST['statify'][ $option_name ] ) && (int) $_POST['statify'][ $option_name ] > 0 ) {
+				$options[ $option_name ] = (int) $_POST['statify'][ $option_name ];
 			}
 		}
-		if ( intval( $options['limit'] ) > 100 ) {
+		if ( (int) $options['limit'] > 100 ) {
 			$options['limit'] = 100;
 		}
-		
+
 		/** Get checkbox values from POST variables */
 		foreach ( array( 'today', 'snippet', 'blacklist' ) as $option_name ) {
-			if ( isset( $_POST['statify'][ $option_name ] ) && intval( $_POST['statify'][ $option_name ] ) === 1 ) {
+			if ( isset( $_POST['statify'][ $option_name ] ) && (int) $_POST['statify'][ $option_name ] === 1 ) {
 				$options[ $option_name ] = 1;
 			} else {
 				$options[ $option_name ] = 0;

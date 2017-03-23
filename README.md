@@ -20,7 +20,6 @@ You can leave a donation
 ## Credits
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
 * Maintainers: [pluginkollektiv](http://pluginkollektiv.org/)
-* Contributor: [Bego Mario Garde](https://garde-medienberatung.de)
 
 ## Changelog
 [Changelog](CHANGELOG.md)

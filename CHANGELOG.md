@@ -1,7 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.5.0 / ToDo
+## 1.5.0 / 2017-03-23
+* Switched to minimal PHP version 5.3
 * Added more flexible settings for period of data saving and the number of entries shown in top lists
 * Added validation of form data before saving settings
 * Moved all documentation to [wordpress.org](https://wordpress.org/plugins/statify/).
