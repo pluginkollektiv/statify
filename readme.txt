@@ -4,7 +4,7 @@
 * Tags:              analytics, dashboard, pageviews, privacy, statistics, stats, visits, web stats, widget
 * Requires at least: 3.9
 * Tested up to:      4.7.3
-* Stable tag:        1.5
+* Stable tag:        1.5.0
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
