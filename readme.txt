@@ -1,6 +1,6 @@
 # Statify #
 * Contributors:      pluginkollektiv
-* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8CH5FPR88QYML
+* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              analytics, dashboard, pageviews, privacy, statistics, stats, visits, web stats, widget
 * Requires at least: 3.9
 * Tested up to:      4.7.3
@@ -39,12 +39,12 @@ The statistics for the dashboard widget are cached for four minutes.
 Per default only administrators can see the widget. This can be changed with the `statify__user_can_see_stats` hook.
 
 Example:
-`<pre>
+`
 add_filter(
     'statify__user_can_see_stats',
     '__return_true'
 );
-</pre>`
+`
 
 has to be added to the theme's `functions.php` and adapted to your needs. This example would allow all users to see the widget.
 
@@ -63,7 +63,7 @@ The comment blacklist can be enabled to skip tracking for views with a referrer 
 The conditions for tracking views can be customized according to page type and user capabilities by using the hook `statify__skip_tracking`.
 
 Example:
-`<pre>
+`
 add_filter(
     'statify__skip_tracking',
     function() {
@@ -74,7 +74,7 @@ add_filter(
         return false;
     }
 );
-</pre>`
+`
 
 has to be added to the theme's `functions.php`. The condition has modified such that the method returns true if and only if the view should be ignored.
 
