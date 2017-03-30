@@ -25,12 +25,12 @@ Absolute privacy compliance coupled with transparent procedures: A locally in Wo
 ### Settings and Hooks ###
 The plugin configuration can be changed directly in the *Statify* Widget on the dashboard by clicking the *Configure* link.
 
-*Period of data saving
+#### Period of data saving ####
 *Statify* stores the data only for a limited period (default: two weeks), longer intervals can be selected as option in the widget.
 Data which is older than the selected period is deleted by a daily cron job.
 An increase in the database volume can be expected because all statistic values are collected and managed in the local WordPress database (expecially if you increase the period of data saving).
 
-*Display of the widget
+#### Display of the widget ####
 The amount of links shown in the *Statify* Widget can be set as well as the option to only count views from today.
 Of course, older entries are not deleted when changing this setting.
 
@@ -50,16 +50,16 @@ has to be added to the theme's `functions.php` and adapted to your needs. This e
 
 Editing the configuration is still limited to users with `edit_dashboard` capability.
 
-*JavaScript tracking for caching compatibility
+#### JavaScript tracking for caching compatibility ####
 For compatibility with caching plugins like [Cachify](http://cachify.de) *Statify* offers an optional switchable tracking via JavaScript.
 This function allows reliable count of cached blog pages.
 
 For this to work correctly, the active theme has to call `wp_footer()`, typically in a file named `footer.php`.
 
-*Skip tracking for spam referrers
+#### Skip tracking for spam referrers ####
 The comment blacklist can be enabled to skip tracking for views with a referrer URL listed in comment blacklist, i. e. which considered as spam.
 
-*Skip tracking for defined users or pages
+#### Skip tracking for defined users or pages ####
 The conditions for tracking views can be customized according to page type and user capabilities by using the hook `statify__skip_tracking`.
 
 Example:
