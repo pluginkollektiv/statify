@@ -1,0 +1,68 @@
+# Loco Gettext template
+msgid ""
+msgstr ""
+"Project-Id-Version: Statify\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"POT-Revision-Date: Tue Aug 18 2015 17:43:25 GMT+0200 (CEST)\n"
+"PO-Revision-Date: 2015-10-06 12:22+0200\n"
+"Last-Translator: Manuel Schmalstieg @16kbit\n"
+"Language-Team: pluginkollektiv\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 1.8.5\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid "Compact, easy-to-use and privacy-compliant stats plugin for WordPress."
+msgstr "Un plugin de statistique facile à utiliser et respectueux de la sphère privée, pour WordPress."
+
+msgid "Entries in top lists only for today"
+msgstr "Limiter la liste à aujourd'hui"
+
+msgid "No data available."
+msgstr "Pas de données disponibles."
+
+msgid "Number of entries in top lists"
+msgstr "Nombre d’entrées dans la liste"
+
+msgid "Page tracking via JavaScript"
+msgstr "Tracer les pages vues par JavaScript"
+
+msgid "Pageview"
+msgstr "Page vue"
+
+msgid "Pageviews"
+msgstr "Pages vues"
+
+msgid "Period of data saving"
+msgstr "Période de sauvegarde des données"
+
+msgid "Top referers"
+msgstr "Meilleurs référents"
+
+msgid "Top targets"
+msgstr "Meilleurs contenus"
+
+msgid "days"
+msgstr "jours"
+
+msgid "recommended if caching is in use"
+msgstr "recommandé si vous utilisez un plugin de cache"
+
+msgid "pluginkollektiv"
+msgstr "pluginkollektiv"
+
+msgid "http://pluginkollektiv.org"
+msgstr "http://pluginkollektiv.org"
+
+msgid "Statify"
+msgstr "Statify"
+
+msgid "https://wordpress.org/plugins/statify"
+msgstr "https://wordpress.org/plugins/statify"
