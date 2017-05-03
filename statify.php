@@ -3,12 +3,11 @@
  * Plugin Name: Statify
  * Description: Compact, easy-to-use and privacy-compliant stats plugin for WordPress.
  * Text Domain: statify
- * Domain Path: /lang
  * Author:      pluginkollektiv
  * Author URI:  http://pluginkollektiv.org
- * Plugin URI:  https://wordpress.org/plugins/statify
+ * Plugin URI:  https://wordpress.org/plugins/statify/
  * License:     GPLv3 or later
- * Version:     1.5.0
+ * Version:     1.5.1
  *
  * Copyright (C)  2011-2017 Sergej Müller, pluginkollektiv
  *

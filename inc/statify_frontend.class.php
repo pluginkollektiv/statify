@@ -42,6 +42,11 @@ class Statify_Frontend extends Statify {
 			return self::_jump_out( $is_snippet );
 		}
 
+		/* Check whether tracking should be skipped for this view. */
+		if ( self::_skip_tracking() ) {
+			return false;
+		}
+
 		/* Global vars */
 		global $wpdb, $wp_rewrite;
 
