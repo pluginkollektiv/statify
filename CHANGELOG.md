@@ -1,8 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.5.1 / TODO
+## 1.5.1 / 2017-05-04
 * Bugfix: Consider filter for skipping tracking correctly if JavaScript tracking is disabled.
+* Bugfix: PHP Notice for empty blacklist value.
 
 ## 1.5.0 / 2017-03-23
 * Switched to minimal PHP version 5.3
