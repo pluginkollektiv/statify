@@ -151,10 +151,9 @@ class Statify_Frontend extends Statify {
 	 * @return  bool
 	 */
 	private static function check_referrer() {
-		// Return false if the blacklist filter is inactive.
-		$is_filter_reffer = get_option( 'statify' );
 
-		if ( ! $is_filter_reffer['blacklist'] ) {
+		// Return false if the blacklist filter is inactive.
+		if ( ! self::$_options['blacklist'] ) {
 			return false;
 		}
 
