@@ -16,18 +16,9 @@ class Statify_Uninstall {
 	 * @version 0.1.0
 	 */
 	public static function init() {
-
 		if ( is_multisite() ) {
 			$old = get_current_blog_id();
-			// @ToDo: leave only get_sites, after decision which versions of WP will we supporting.
-			// @ToDo Redundant with Statify_Install class. We should reduce the maintenance.
-			if ( function_exists( 'get_sites' ) ) {
-				$sites = get_sites();
-			} elseif ( function_exists( 'wp_get_sites' ) ) {
-				$sites = wp_get_sites();
-			} else {
-				return;
-			}
+			$sites = get_sites();
 
 			foreach ( $sites as $site ) {
 				// Convert object to array.

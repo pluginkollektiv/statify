@@ -20,14 +20,8 @@ class Statify_Install {
 	public static function init( $network_wide = false ) {
 
 		if ( $network_wide && is_multisite() ) {
-			// @ToDo: leave only get_sites, after decision which versions of WP will we supporting.
-			if ( function_exists( 'get_sites' ) ) {
-				$sites = get_sites();
-			} elseif ( function_exists( 'wp_get_sites' ) ) {
-				$sites = wp_get_sites();
-			} else {
-				return;
-			}
+			$sites = get_sites();
+
 			// Create tables for each site in a network.
 			foreach ( $sites as $site ) {
 				// Convert object to array.
