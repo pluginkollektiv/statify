@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.5.2 / 2017-08-15
+* Switched to minimal WordPress version 4.7, removed fallback code not needed anymore
+
 ## 1.5.1 / 2017-05-04
 * Bugfix: Consider filter for skipping tracking correctly if JavaScript tracking is disabled.
 * Bugfix: PHP Notice for empty blacklist value.

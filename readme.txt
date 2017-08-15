@@ -116,6 +116,9 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+### 1.5.2 (2017-08-15) ###
+* Switched to minimal WordPress version 4.7, removed fallback code not needed anymore
+
 ### 1.5.1 (2017-05-04) ###
 * Bugfix: Consider filter for skipping tracking correctly if JavaScript tracking is disabled.
 * Bugfix: PHP Notice for empty blacklist value.
@@ -130,38 +133,13 @@ You can find the full changelog in [our GitHub repository](https://github.com/pl
 * Bugfix for multi-site installations: Don't track network admin url.
 * Changed hook name `statify_skip_tracking` to `statify__skip_tracking`.
 
-### 1.4.4 ###
-* Renamed the handle of the Raphael JS library. This fixed a bug, where raphael couldn't work properly when also loaded with Antispam Bee.
-
-### 1.4.3 ###
-* Corrected tracking and display in Multisite
-* Minor CSS fixes in the dashboard widget
-* Removed deprecated links and updated URLs for donate and wiki links
-* Administrative updates to plugin header and README
-* Updated [plugin authors](https://gist.github.com/glueckpress/f058c0ab973d45a72720)
-
-### 1.4.2 ###
-* Replace `filter_has_var(INPUT_SERVER)` calls with `isset($_SERVER[])` ([why](https://github.com/wp-stream/stream/issues/254))
-
-### 1.4.1 ###
-* Renew the tracking mechanism
-
-### 1.4.0 ###
-* WordPress 4.2 support
-* Plugin-wide code refactoring
-* Translations for English and Russian
-* [GitHub Repository](https://github.com/pluginkollektiv/statify)
-
-### 1.3.0 / 28.04.2014 ###
-* Sourcecode optimization for plugin-finalization
-
 For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/statify).
 
 
 ## Upgrade Notice ##
 
-### 1.5.1 ###
-Bugfix release. It is recommended for all users.
+### 1.5.2 ###
+Compatibility release. It is recommended for all users. Note that versions prior to WordPress 4.7 are not supported anymore.
 
 
 ## Screenshots ##
