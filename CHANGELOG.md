@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.5.3 / 2017-11-28
+* Replace javascript library to fixed several problems. #52
+
 ## 1.5.2 / 2017-08-15
 * Switched to minimal WordPress version 4.7, removed fallback code not needed anymore
 

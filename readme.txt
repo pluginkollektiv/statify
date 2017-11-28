@@ -5,7 +5,7 @@
 * Requires at least: 4.7
 * Tested up to:      4.9
 * Requires PHP:      5.6
-* Stable tag:        1.5.2
+* Stable tag:        1.5.3
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -116,6 +116,9 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
+
+### 1.5.3 (2017-11-28) ##
+* Replace javascript library to fixed several problems.
 
 ### 1.5.2 (2017-08-15) ###
 * Switched to minimal WordPress version 4.7, removed fallback code not needed anymore
