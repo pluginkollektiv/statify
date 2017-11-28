@@ -15,7 +15,7 @@ Visitor statistics for WordPress with focus on data protection, transparency and
 
 ## Donations
 You can leave a donation 
-[via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8CH5FPR88QYML).
+[via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW).
 
 ## Credits
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
