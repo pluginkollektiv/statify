@@ -195,7 +195,7 @@ class Statify_Dashboard extends Statify {
 
 		/** Get checkbox values from POST variables */
 		foreach ( array( 'today', 'snippet', 'blacklist' ) as $option_name ) {
-			if ( isset( $_POST['statify'][ $option_name ] ) && (int) $_POST['statify'][ $option_name ] === 1 ) {
+			if ( isset( $_POST['statify'][ $option_name ] ) && 1 === (int) $_POST['statify'][ $option_name ] ) {
 				$options[ $option_name ] = 1;
 			} else {
 				$options[ $option_name ] = 0;
