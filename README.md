@@ -9,6 +9,14 @@ Visitor statistics for WordPress with focus on data protection, transparency and
 * Community support via the [support forums on wordpress.org](https://wordpress.org/support/plugin/statify).
     We don’t handle support via e-mail, Twitter, GitHub issues etc.
 
+## Installation
+* Use the stable release from [wordpress.org repository](https://wordpress.org/plugins/statify/)
+* Alternativ is the plugin available as [Composer package](https://packagist.org/packages/pluginkollektiv/statify) and can be installed via Composer, like:
+
+    `composer create-project pluginkollektiv/statify --no-dev`
+
+  It is necessary to use `composer build` id you don't use the public version to get the minified versions of the css and js files. This files are important for the usage.
+
 ## Contributions
 * Active development of this plugin is handled [on GitHub](https://github.com/pluginkollektiv/statify).
 * Pull requests for documented bugs are highly appreciated.
