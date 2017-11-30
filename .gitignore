@@ -1,26 +1,5 @@
-# General
-.DS_Store
-
-# npm
-/node_modules
-
-# Release task
-/release
-
-# Build files
-/js/*.js
-/js/*.map
-/css/*.css
-/css/*.map
-
-# Sass
-.sass-cache
-
-# Vendor (e.g. Composer)
-vendor/*
-!vendor/.gitkeep
-
-# IDE PhpStorm
+css/dashboard.min.css
+js/dashboard.min.js
+js/raphael.helper.min.js
 .idea/
-*.ipr
-*.iws
+vendor/

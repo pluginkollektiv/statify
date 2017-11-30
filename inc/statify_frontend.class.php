@@ -126,7 +126,6 @@ class Statify_Frontend extends Statify {
 			return $skip_hook;
 		}
 
-
 		// Skip tracking via User Agent
 		// @codingStandardsIgnoreStart The globals are checked.
 		if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) 
@@ -137,7 +136,7 @@ class Statify_Frontend extends Statify {
 
 		/** Skip tracking via Referrer check and Conditional_Tags. */
 		return ( self::check_referrer() || is_feed() || is_trackback() || is_robots()
-		         || is_preview() || is_user_logged_in() || is_404() || is_search()
+				 || is_preview() || is_user_logged_in() || is_404() || is_search()
 		);
 	}
 
