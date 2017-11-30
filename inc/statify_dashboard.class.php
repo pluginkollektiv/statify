@@ -195,7 +195,7 @@ class Statify_Dashboard extends Statify {
 
 		/** Get checkbox values from POST variables */
 		foreach ( array( 'today', 'snippet', 'blacklist' ) as $option_name ) {
-			if ( isset( $_POST['statify'][ $option_name ] ) && (int) $_POST['statify'][ $option_name ] === 1 ) {
+			if ( isset( $_POST['statify'][ $option_name ] ) && 1 === (int) $_POST['statify'][ $option_name ] ) {
 				$options[ $option_name ] = 1;
 			} else {
 				$options[ $option_name ] = 0;
@@ -294,18 +294,18 @@ class Statify_Dashboard extends Statify {
 			),
 			'target'   => $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` " . ( $today ? 'WHERE created = DATE(NOW())' : '' ) . " GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` " . ( $today ? 'WHERE created = DATE(NOW())' : '' ) . ' GROUP BY `target` ORDER BY `count` DESC LIMIT %d',
 					$limit
 				),
 				ARRAY_A
 			),
 			'referrer' => $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`referrer`) as `count`, `referrer` as `url`, SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) as `host` FROM `$wpdb->statify` WHERE `referrer` != '' " . ( $today ? 'AND created = DATE(NOW())' : '' ) . " GROUP BY `host` ORDER BY `count` DESC LIMIT %d",
+					"SELECT COUNT(`referrer`) as `count`, `referrer` as `url`, SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) as `host` FROM `$wpdb->statify` WHERE `referrer` != '' " . ( $today ? 'AND created = DATE(NOW())' : '' ) . ' GROUP BY `host` ORDER BY `count` DESC LIMIT %d',
 					$limit
 				),
 				ARRAY_A
-			)
+			),
 		);
 	}
 }

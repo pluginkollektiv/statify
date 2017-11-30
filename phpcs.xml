@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<ruleset name="Coding standard">
+    <description>Coding standard for WordPress plugins</description>
+
+    <!-- Pass some flags to PHPCS:
+		 p flag: Show progress of the run.
+		 s flag: Show sniff codes in all reports.
+		 v flag: Print verbose output.
+		 n flag: Do not print warnings.
+	-->
+    <arg value="psvn"/>
+
+    <!-- use colors in output -->
+    <arg name="colors"/>
+
+    <!-- ignore vendor files-->
+    <file>inc</file>
+    <file>views</file>
+    <file>statify.php</file>
+    <exclude-pattern>vendor/*</exclude-pattern>
+
+    <!-- Exclude minified Javascript files. -->
+    <exclude-pattern>*.min.js</exclude-pattern>
+
+    <!-- WordPress coding standards -->
+    <config name="minimum_supported_wp_version" value="4.7" />
+    <rule ref="WordPress">
+        <exclude name="Generic.Commenting.DocComment.MissingShort" />
+        <exclude name="Squiz.Commenting.FileComment.SpacingAfterComment" />
+        <exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
+        <exclude name="Squiz.PHP.DisallowMultipleAssignments.Found" />
+        <exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+        <exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog_switch_to_blog" />
+        <exclude name="WordPress.VIP.DirectDatabaseQuery.NoCaching" />
+        <exclude name="WordPress.VIP.DirectDatabaseQuery.SchemaChange" />
+        <exclude name="WordPress.WP.PreparedSQL.NotPrepared" />
+        <exclude name="WordPress.XSS.EscapeOutput.OutputNotEscaped" />
+    </rule>
+
+    <!-- Include sniffs for PHP cross-version compatibility. -->
+    <config name="testVersion" value="5.6-"/>
+    <rule ref="PHPCompatibility"/>
+</ruleset>
