@@ -1,6 +1,7 @@
 {
   "name": "pluginkollektiv/statify",
   "description": "Compact, easy-to-use and privacy-compliant stats plugin for WordPress.",
+  "license": "GPL-3.0",
   "keywords": [
     "wordpress",
     "plugin",
