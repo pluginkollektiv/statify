@@ -15,7 +15,7 @@ Visitor statistics for WordPress with focus on data protection, transparency and
 
     `composer create-project pluginkollektiv/statify --no-dev`
 
-  It is necessary to use `composer build` id you don't use the public version to get the minified versions of the css and js files. This files are important for the usage.
+  It is necessary to use `composer build` if you don't use the public version to get the minified versions of the css and js files. This files are important for the usage.
 
 ## Contributions
 * Active development of this plugin is handled [on GitHub](https://github.com/pluginkollektiv/statify).
