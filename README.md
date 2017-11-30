@@ -1,5 +1,7 @@
 # Statify
 
+[![Build Status](https://travis-ci.org/pluginkollektiv/statify.svg?branch=travis-support-with-code-style-checks)](https://travis-ci.org/pluginkollektiv/statify)
+
 Visitor statistics for WordPress with focus on data protection, transparency and clarity. Perfect as a widget in your WordPress Dashboard.
 
 ## Documentation and Support
