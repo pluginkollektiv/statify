@@ -2,22 +2,16 @@
 /** Quit */
 class_exists( 'Statify' ) || exit; ?>
 
-
 	<!-- Stats by http://statify.de -->
 	<script type="text/javascript">
-		(function () {
-			var e = document.createElement('script'),
-				s = document.getElementsByTagName('script')[0],
-				r = encodeURIComponent(document.referrer),
-				t = encodeURIComponent(location.pathname + location.search),
-				p = '?statify_referrer=' + r + '&statify_target=' + t;
-
-			e.async = true;
-			e.type = 'text/javascript';
-			e.src = "<?php echo esc_url( home_url( '/', 'relative' ) ); ?>" + p;
-
-			s.parentNode.insertBefore(e, s);
-		})();
+		const statifyReq = new XMLHttpRequest();
+		statifyReq.open(
+			'GET',
+			'<?php echo esc_url( home_url( '/', 'relative' ) ); ?>'
+			+ '?statify_referrer=' + encodeURIComponent(document.referrer)
+			+ '&statify_target=' + encodeURIComponent(location.pathname + location.search)
+		);
+		statifyReq.send( null );
 	</script>
 
 <?php /** Markup space */ ?>
