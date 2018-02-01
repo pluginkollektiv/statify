@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e738c07b3bc35e7d244a136b2748919",
+    "content-hash": "6a1f05fb68337bb5d00e4ccf7abfa59c",
     "packages": [],
     "packages-dev": [
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
-            "version": "v0.4.3",
+            "version": "v0.4.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/DealerDirect/phpcodesniffer-composer-installer.git",
-                "reference": "63c0ec0ac286d31651d3c70e5bf76ad87db3ba23"
+                "url": "https://github.com/Dealerdirect/phpcodesniffer-composer-installer.git",
+                "reference": "2e41850d5f7797cbb1af7b030d245b3b24e63a08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DealerDirect/phpcodesniffer-composer-installer/zipball/63c0ec0ac286d31651d3c70e5bf76ad87db3ba23",
-                "reference": "63c0ec0ac286d31651d3c70e5bf76ad87db3ba23",
+                "url": "https://api.github.com/repos/Dealerdirect/phpcodesniffer-composer-installer/zipball/2e41850d5f7797cbb1af7b030d245b3b24e63a08",
+                "reference": "2e41850d5f7797cbb1af7b030d245b3b24e63a08",
                 "shasum": ""
             },
             "require": {
@@ -73,20 +73,20 @@
                 "stylecheck",
                 "tests"
             ],
-            "time": "2017-09-18T07:49:36+00:00"
+            "time": "2017-12-06T16:27:17+00:00"
         },
         {
             "name": "matthiasmullie/minify",
-            "version": "1.3.56",
+            "version": "1.3.58",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasmullie/minify.git",
-                "reference": "86e4a4e4e7eae2d0cd74871735f18bbb132da4b7"
+                "reference": "aee56fe6c706662c5991bb1f88cabe19430c60fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/86e4a4e4e7eae2d0cd74871735f18bbb132da4b7",
-                "reference": "86e4a4e4e7eae2d0cd74871735f18bbb132da4b7",
+                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/aee56fe6c706662c5991bb1f88cabe19430c60fe",
+                "reference": "aee56fe6c706662c5991bb1f88cabe19430c60fe",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
                 "minifier",
                 "minify"
             ],
-            "time": "2017-11-24T12:51:16+00:00"
+            "time": "2018-01-08T10:01:42+00:00"
         },
         {
             "name": "matthiasmullie/path-converter",
@@ -186,16 +186,16 @@
         },
         {
             "name": "slowprog/composer-copy-file",
-            "version": "0.2.0",
+            "version": "0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slowprog/CopyFile.git",
-                "reference": "c76bcc6f54abb6fca379d2bfbe1963f215f93450"
+                "reference": "400c2b7c9f9f8ed8195217ae143ffbf3fec84c31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slowprog/CopyFile/zipball/c76bcc6f54abb6fca379d2bfbe1963f215f93450",
-                "reference": "c76bcc6f54abb6fca379d2bfbe1963f215f93450",
+                "url": "https://api.github.com/repos/slowprog/CopyFile/zipball/400c2b7c9f9f8ed8195217ae143ffbf3fec84c31",
+                "reference": "400c2b7c9f9f8ed8195217ae143ffbf3fec84c31",
                 "shasum": ""
             },
             "require": {
@@ -229,20 +229,20 @@
             "keywords": [
                 "copy file"
             ],
-            "time": "2017-03-26T15:42:45+00:00"
+            "time": "2017-12-07T13:18:47+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.1.1",
+            "version": "3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "d667e245d5dcd4d7bf80f26f2c947d476b66213e"
+                "reference": "d7c00c3000ac0ce79c96fcbfef86b49a71158cd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d667e245d5dcd4d7bf80f26f2c947d476b66213e",
-                "reference": "d667e245d5dcd4d7bf80f26f2c947d476b66213e",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d7c00c3000ac0ce79c96fcbfef86b49a71158cd1",
+                "reference": "d7c00c3000ac0ce79c96fcbfef86b49a71158cd1",
                 "shasum": ""
             },
             "require": {
@@ -280,20 +280,20 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-10-16T22:40:25+00:00"
+            "time": "2017-12-19T21:44:46+00:00"
         },
         {
             "name": "wimg/php-compatibility",
-            "version": "8.0.1",
+            "version": "8.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wimg/PHPCompatibility.git",
-                "reference": "4c4385fb891dff0501009670f988d4fe36785249"
+                "reference": "4ac01e4fe8faaa4f8d3b3cd06ea92e5418ce472e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wimg/PHPCompatibility/zipball/4c4385fb891dff0501009670f988d4fe36785249",
-                "reference": "4c4385fb891dff0501009670f988d4fe36785249",
+                "url": "https://api.github.com/repos/wimg/PHPCompatibility/zipball/4ac01e4fe8faaa4f8d3b3cd06ea92e5418ce472e",
+                "reference": "4ac01e4fe8faaa4f8d3b3cd06ea92e5418ce472e",
                 "shasum": ""
             },
             "require": {
@@ -307,7 +307,7 @@
                 "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0"
             },
             "suggest": {
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.1"
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3"
             },
             "type": "phpcodesniffer-standard",
             "autoload": {
@@ -332,7 +332,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-08-07T19:39:05+00:00"
+            "time": "2017-12-27T21:58:38+00:00"
         },
         {
             "name": "wp-coding-standards/wpcs",
