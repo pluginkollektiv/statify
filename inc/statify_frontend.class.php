@@ -81,6 +81,14 @@ class Statify_Frontend extends Statify {
 		/* Insert */
 		$wpdb->insert( $wpdb->statify, $data );
 
+		/**
+		 * Fires after a visit was stored in the database
+		 *
+		 * @param array $data
+		 * @param int $wpdb->insert_id
+		 */
+		do_action( 'statify__visit_saved', $data, $wpdb->insert_id );
+
 		/* Jump! */
 		return self::_jump_out( $is_snippet );
 	}
