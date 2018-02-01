@@ -84,6 +84,8 @@ class Statify_Frontend extends Statify {
 		/**
 		 * Fires after a visit was stored in the database
 		 *
+		 * @since 1.5.5
+		 *
 		 * @param array $data
 		 * @param int $wpdb->insert_id
 		 */
