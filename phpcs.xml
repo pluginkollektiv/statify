@@ -33,7 +33,6 @@
         <exclude name="WordPress.VIP.DirectDatabaseQuery.NoCaching" />
         <exclude name="WordPress.VIP.DirectDatabaseQuery.SchemaChange" />
         <exclude name="WordPress.WP.PreparedSQL.NotPrepared" />
-        <exclude name="WordPress.XSS.EscapeOutput.OutputNotEscaped" />
     </rule>
 
     <!-- Include sniffs for PHP cross-version compatibility. -->

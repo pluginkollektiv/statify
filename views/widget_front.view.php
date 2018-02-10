@@ -22,7 +22,7 @@ $stats = Statify_Dashboard::get_stats(); ?>
 			<table id="statify_chart_data">
 				<?php foreach ( (array) $stats['visits'] as $visit ) { ?>
 					<tr>
-						<th><?php echo date_i18n( get_option( 'date_format' ), strtotime( $visit['date'] ) ); ?></th>
+						<th><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $visit['date'] ) ) ); ?></th>
 						<td><?php echo (int) $visit['count']; ?></td>
 					</tr>
 				<?php } ?>
