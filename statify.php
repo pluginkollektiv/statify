@@ -81,7 +81,7 @@ function statify_autoload( $class ) {
 			sprintf(
 				'%s/inc/%s.class.php',
 				STATIFY_DIR,
-				strtolower( $class )
+				strtolower( str_replace( '_', '-', $class ) )
 			)
 		);
 	}

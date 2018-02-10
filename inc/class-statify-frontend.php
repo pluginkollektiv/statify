@@ -292,7 +292,7 @@ class Statify_Frontend extends Statify {
 		load_template(
 			wp_normalize_path(
 				sprintf(
-					'%s/views/js_snippet.view.php',
+					'%s/views/js-snippet.php',
 					STATIFY_DIR
 				)
 			)

@@ -161,7 +161,7 @@ class Statify_Dashboard extends Statify {
 
 		// Load template.
 		load_template(
-			wp_normalize_path( sprintf( '%s/views/widget_front.view.php', STATIFY_DIR ) )
+			wp_normalize_path( sprintf( '%s/views/widget-front.php', STATIFY_DIR ) )
 		);
 	}
 
@@ -186,7 +186,7 @@ class Statify_Dashboard extends Statify {
 
 		// Load view.
 		load_template(
-			wp_normalize_path( sprintf( '%s/views/widget_back.view.php', STATIFY_DIR ) )
+			wp_normalize_path( sprintf( '%s/views/widget-back.php', STATIFY_DIR ) )
 		);
 	}
 
