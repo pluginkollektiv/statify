@@ -1,5 +1,14 @@
 <?php
-/** Quit */
+/**
+ * Statify: Statify_Cron class
+ *
+ * This file contains the derived class for the plugin's cron features.
+ *
+ * @package   Statify
+ * @since     1.4.0
+ */
+
+// Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -17,10 +26,10 @@ class Statify_Cron extends Statify {
 	 */
 	public static function cleanup_data() {
 
-		/** Global */
+		// Global.
 		global $wpdb;
 
-		/* Remove items */
+		// Remove items.
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM `$wpdb->statify` WHERE created <= SUBDATE(CURDATE(), %d)",
@@ -28,7 +37,7 @@ class Statify_Cron extends Statify {
 			)
 		);
 
-		/* Optimize DB */
+		// Optimize DB.
 		$wpdb->query(
 			"OPTIMIZE TABLE `$wpdb->statify`"
 		);

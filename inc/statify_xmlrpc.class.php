@@ -1,5 +1,14 @@
 <?php
-/** Quit */
+/**
+ * Statify: Statify_XMLRPC class
+ *
+ * This file contains the derived class for the plugin's XMLRPC features.
+ *
+ * @package   Statify
+ * @since     1.1
+ */
+
+// Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -42,25 +51,25 @@ class Statify_XMLRPC {
 	 */
 	public static function xmlrpc_callback( $args ) {
 
-		/** No access data? */
+		// No access data?
 		if ( empty( $args[0] ) || empty( $args[1] ) ) {
 			return '{"error": "Empty login data"}';
 		}
 
-		/** Login */
+		// Login.
 		$user = wp_authenticate( $args[0], $args[1] );
 
-		/** Wrong access data */
+		// Wrong access data.
 		if ( ! $user || is_wp_error( $user ) ) {
 			return '{"error": "Incorrect login"}';
 		}
 
-		/** Check access rights. */
+		// Check access rights.
 		if ( ! user_can( $user, 'edit_dashboard' ) ) {
 			return '{"error": "User can check failed"}';
 		}
 
-		/** Empty? */
+		// Empty?
 		if ( ! $data = Statify_Dashboard::get_stats() ) {
 			return '{"error": "No data"}';
 		}

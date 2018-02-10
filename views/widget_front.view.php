@@ -1,8 +1,16 @@
 <?php
-/** Quit */
+/**
+ * Statify: Widget Frontend View
+ *
+ * This file contains the viewmodel for the plugin's widget frontend.
+ *
+ * @package   Statify
+ */
+
+// Quit if accessed outside WP context.
 class_exists( 'Statify' ) || exit;
 
-/** Get stats */
+// Get stats.
 $stats = Statify_Dashboard::get_stats(); ?>
 
 	<div id="statify_chart">

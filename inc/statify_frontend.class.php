@@ -1,5 +1,14 @@
 <?php
-/** Quit */
+/**
+ * Statify: Statify_Frontend class
+ *
+ * This file contains the derived class for the plugin's frontend features.
+ *
+ * @package   Statify
+ * @since     1.4.0
+ */
+
+// Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -8,7 +17,6 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.4.0
  */
 class Statify_Frontend extends Statify {
-
 
 	/**
 	 * Track the page view
@@ -57,12 +65,12 @@ class Statify_Frontend extends Statify {
 			'target'   => '',
 		);
 
-		/* Set request timestamp */
+		// Set request timestamp.
 		$data['created'] = strftime( '%Y-%m-%d', current_time( 'timestamp' ) );
 
 		$needles = array( home_url(), network_admin_url() );
 
-		/* Sanitize referrer url */
+		// Sanitize referrer url.
 		if ( ! empty( $referrer ) && self::strposa( $referrer, $needles ) === false ) {
 			$data['referrer'] = esc_url_raw( $referrer, array( 'http', 'https' ) );
 		}
@@ -70,15 +78,15 @@ class Statify_Frontend extends Statify {
 		/* Relative target url */
 		$data['target'] = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $target ) );
 
-		/* Trim target url */
+		// Trim target url.
 		if ( $wp_rewrite->permalink_structure ) {
 			$data['target'] = wp_parse_url( $data['target'], PHP_URL_PATH );
 		}
 
-		/* Sanitize target url */
+		// Sanitize target url.
 		$data['target'] = esc_url_raw( $data['target'] );
 
-		/* Insert */
+		// Insert.
 		$wpdb->insert( $wpdb->statify, $data );
 
 		/**
@@ -91,7 +99,7 @@ class Statify_Frontend extends Statify {
 		 */
 		do_action( 'statify__visit_saved', $data, $wpdb->insert_id );
 
-		/* Jump! */
+		// Jump!
 		return self::_jump_out( $is_snippet );
 	}
 
@@ -109,7 +117,7 @@ class Statify_Frontend extends Statify {
 		foreach ( $needle as $query ) {
 			if ( strpos( $haystack, $query, $offset ) !== false ) {
 				return true;
-			} // stop on first true result
+			} // Stop on first true result.
 		}
 
 		return false;
@@ -144,7 +152,7 @@ class Statify_Frontend extends Statify {
 			return true;
 		}
 
-		/** Skip tracking via Referrer check and Conditional_Tags. */
+		// Skip tracking via Referrer check and Conditional_Tags.
 		return ( self::check_referrer() || is_trackback() || is_robots() || is_user_logged_in()
 			|| self::_is_internal()
 		);

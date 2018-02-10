@@ -1,5 +1,12 @@
 <?php
-/** Quit */
+/**
+ * Statify: JavaScript Snippet View
+ *
+ * This file contains the template for the plugin's JS snippet.
+ *
+ * @package   Statify
+ */
+
 class_exists( 'Statify' ) || exit; ?>
 
 	<!-- Stats by http://statify.de -->
@@ -10,4 +17,4 @@ class_exists( 'Statify' ) || exit; ?>
 		src="<?php echo plugins_url( 'js/snippet.js', STATIFY_FILE ); ?>">
 	</script>
 
-<?php /** Markup space */ ?>
+<?php /* Markup space */ ?>
