@@ -32,8 +32,7 @@
     ],
     "minify": [
       "minifycss css/dashboard.css > css/dashboard.min.css",
-      "minifyjs js/dashboard.js > js/dashboard.min.js",
-      "minifyjs js/raphael.helper.js > js/raphael.helper.min.js"
+      "minifyjs js/dashboard.js > js/dashboard.min.js"
     ]
   }
 }

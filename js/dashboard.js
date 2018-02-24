@@ -1,115 +1,70 @@
 (function () {
+	// Initialize.
+	var labels = [];
+	var data = [];
+	var $statify_data_table = jQuery('#statify_chart_data');
 
-    // Grab the data
-    var labels = [],
-        data = [],
-        statify_chart_id = 'statify_chart',
-        $statify_data_table = jQuery('#statify_chart_data');
+	// Abort if no data is present.
+	if (!$statify_data_table.length) {
+		return;
+	}
 
-    if ( ! $statify_data_table.length ) {
-        return;
-    }
+	// Collect data from hidden table.
+	jQuery('th', $statify_data_table).each(function () {
+		labels.push(jQuery(this).text());
+	});
 
-    jQuery('th', $statify_data_table).each(function () {
-        labels.push(jQuery(this).text());
-    });
-    jQuery('td', $statify_data_table).each(function () {
-        data.push(jQuery(this).text());
-    });
+	jQuery('td', $statify_data_table).each(function () {
+		data.push(jQuery(this).text());
+	});
 
-    // Draw
-    var width = jQuery('#' + statify_chart_id).parent().width() + 8,
-        height = 140,
-        leftgutter = 0,
-        bottomgutter = 22,
-        topgutter = 22,
-        color = '#0074a2',
-        r = Raphael(statify_chart_id, width, height),
-        txt = {font: 'bold 12px "Open Sans", sans-serif', fill: "#333"},
-        X = (width - leftgutter * 2) / labels.length,
-        max = Math.max.apply(Math, data),
-        Y = (height - bottomgutter - topgutter) / max;
+	// Determine maximum value for scaling.
+	var maxValue = Math.max.apply(Math, data);
 
-    /* Max Wert */
-    r
-    .text(16, 16, max)
-    .attr(
-        {
-            'font': 'normal 10px "Open Sans", sans-serif',
-            fill: "#bbb"
-        }
-    );
+	// Draw chart.
+	var chart = new Chartist.Line('#statify_chart', {
+		labels: labels,
+		series: [
+			data
+		]
+	}, {
+		low      : 0,
+		showArea : true,
+		fullWidth: true,
+		axisX    : {
+			showGrid : false,
+			showLabel: false,
+			offset   : 0
+		},
+		axisY    : {
+			showGrid : false,
+			showLabel: true,
+			type     : Chartist.FixedScaleAxis,
+			low      : 0,
+			high     : maxValue + 1,
+			ticks    : [maxValue],
+			offset   : 15
+		},
+		plugins  : [
+			Chartist.plugins.tooltip({
+				appendToBody: true,
+				class       : 'statify-chartist-tooltip'
+			})
+		]
+	});
 
-    var path = r.path().attr({stroke: color, "stroke-width": 2, "stroke-linejoin": "round"}),
-        bgp = r.path().attr({stroke: "none", opacity: .3, fill: color}),
-        label = r.set(),
-        lx = 0, ly = 0,
-        is_label_visible = false,
-        leave_timer,
-        blanket = r.set();
-    label.push(r.text(60, 12, "7777 Pageviews").attr(txt));
-    label.push(r.text(60, 27, "23.12.2013").attr(txt).attr({fill: color}));
-    label.hide();
-    var frame = r.popup(100, 100, label, "right").attr({fill: "#fff", stroke: "#444", "stroke-width": 1}).hide();
+	// Replace default points with hollow circles, add "pageview(s) to value and append date (label) as meta data.
+	chart.on('draw', function (data) {
+		if ('point' === data.type) {
+			var circle = new Chartist.Svg('circle', {
+				cx: [data.x],
+				cy: [data.y],
+				r: [4],
+				'ct:value': data.value.y + ' ' + (data.value.y > 1 ? statify_translations.pageviews : statify_translations.pageview),
+				'ct:meta': labels[data.index]
+			}, 'ct-point');
+			data.element.replace(circle);
+		}
+	});
 
-    var p, bgpp;
-    for (var i = 0, ii = labels.length; i < ii; i++) {
-        var y = Math.round(height - bottomgutter - Y * data[i]),
-            x = Math.round(leftgutter + X * (i + .5));
-        if (!i) {
-            p = ["M", x, y, "C", x, y];
-            bgpp = ["M", leftgutter + X * .5, height - bottomgutter, "L", x, y, "C", x, y];
-        }
-        if (i && i < ii - 1) {
-            var Y0 = Math.round(height - bottomgutter - Y * data[i - 1]),
-                X0 = Math.round(leftgutter + X * (i - .5)),
-                Y2 = Math.round(height - bottomgutter - Y * data[i + 1]),
-                X2 = Math.round(leftgutter + X * (i + 1.5));
-            var a = getAnchors(X0, Y0, x, y, X2, Y2);
-            p = p.concat([a.x1, a.y1, x, y, a.x2, a.y2]);
-            bgpp = bgpp.concat([a.x1, a.y1, x, y, a.x2, a.y2]);
-        }
-        var dot = r.circle(x, y, 4).attr({fill: "#fff", stroke: color, "stroke-width": 1});
-        blanket.push(r.rect(leftgutter + X * i, 0, X, height - bottomgutter).attr({stroke: "none", fill: '#fff', opacity: .2}));
-        var rect = blanket[blanket.length - 1];
-        (function (x, y, data, lbl, dot) {
-            var timer, i = 0;
-            rect.hover(function () {
-                clearTimeout(leave_timer);
-                var side = "right";
-                if (x + frame.getBBox().width > width) {
-                    side = "left";
-                }
-                var ppp = r.popup(x, y, label, side, 1),
-                    anim = Raphael.animation({
-                        path: ppp.path,
-                        transform: ["t", ppp.dx, ppp.dy]
-                    }, 200 * is_label_visible);
-                lx = label[0].transform()[0][1] + ppp.dx;
-                ly = label[0].transform()[0][2] + ppp.dy;
-                frame.show().stop().animate(anim);
-
-                label[0].attr({text: data + " " + ( data > 1 ? statify_translations.pageviews : statify_translations.pageview )}).show().stop().animateWith(frame, anim, {transform: ["t", lx, ly]}, 200 * is_label_visible);
-                label[1].attr({text: lbl }).show().stop().animateWith(frame, anim, {transform: ["t", lx, ly]}, 200 * is_label_visible);
-                dot.attr("r", 6);
-                is_label_visible = true;
-            }, function () {
-                dot.attr("r", 4);
-                leave_timer = setTimeout(function () {
-                    frame.hide();
-                    label[0].hide();
-                    label[1].hide();
-                    is_label_visible = false;
-                }, 1);
-            });
-        })(x, y, data[i], labels[i], dot);
-    }
-    p = p.concat([x, y, x, y]);
-    bgpp = bgpp.concat([x, y, x, y, "L", x, height - bottomgutter, "z"]);
-    path.attr({path: p});
-    bgp.attr({path: bgpp});
-    frame.toFront();
-    label[0].toFront();
-    label[1].toFront();
-    blanket.toFront();
 })();
