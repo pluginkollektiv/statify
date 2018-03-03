@@ -75,7 +75,7 @@ class Statify_Dashboard extends Statify {
 		);
 		wp_register_style(
 			'chartist_tooltip_css',
-			plugins_url( '/css/chartist-plugin-tooltip.css', STATIFY_FILE ),
+			plugins_url( '/css/chartist-plugin-tooltip.min.css', STATIFY_FILE ),
 			array(),
 			self::$_plugin_version
 		);
