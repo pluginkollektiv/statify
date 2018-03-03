@@ -2,19 +2,19 @@
 	// Initialize.
 	var labels = [];
 	var data = [];
-	var $statify_data_table = jQuery('#statify_chart_data');
+	var statify_data_table = jQuery('#statify_chart_data');
 
 	// Abort if no data is present.
-	if (!$statify_data_table.length) {
+	if (!statify_data_table.length) {
 		return;
 	}
 
 	// Collect data from hidden table.
-	jQuery('th', $statify_data_table).each(function () {
+	jQuery('th', statify_data_table).each(function () {
 		labels.push(jQuery(this).text());
 	});
 
-	jQuery('td', $statify_data_table).each(function () {
+	jQuery('td', statify_data_table).each(function () {
 		data.push(jQuery(this).text());
 	});
 
