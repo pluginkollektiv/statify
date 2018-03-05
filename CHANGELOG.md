@@ -1,8 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.5.5
-* statify__visit_saved hook was added. This hook gets fired after a visit was stored in the database.
+## 1.6.0
+* Added hook statify__visit_saved which is fired after a visit was stored in the database.
+* Migrated dashboard chart to Chartist.
+* Fixed JavaScript tracking not working in some environment which have X-Content-Type: nosniff environment enabled.
 
 ## 1.5.3 / 2017-11-28
 * Replace javascript library to fixed several problems. #52

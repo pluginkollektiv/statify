@@ -7,11 +7,7 @@
  * Author URI:  http://pluginkollektiv.org
  * Plugin URI:  https://wordpress.org/plugins/statify/
  * License:     GPLv3 or later
- * Version:     1.5.4
- *
- * Copyright (C)  2011-2017 Sergej Müller, pluginkollektiv
- *
- * Php Version 5.6
+ * Version:     1.6.0
  *
  * @package WordPress
  */
