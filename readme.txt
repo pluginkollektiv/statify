@@ -5,7 +5,7 @@
 * Requires at least: 4.7
 * Tested up to:      4.9
 * Requires PHP:      5.6
-* Stable tag:        1.5.4
+* Stable tag:        1.6.0
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -117,37 +117,22 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
-### 1.5.4 (2017-11-30)
+### 1.6.0
+* Added hook statify__visit_saved which is fired after a visit was stored in the database.
+* Migrated dashboard chart to Chartist.
+* Fixed JavaScript tracking not working in some environment which have X-Content-Type: nosniff environment enabled.
+
+### 1.5.4
 * Use minified version of javascripts and stylesheets.
 * Different updates on the development repository.
-
-### 1.5.3 (2017-11-28) ##
-* Replace javascript library to fixed several problems.
-
-### 1.5.2 (2017-08-15) ###
-* Switched to minimal WordPress version 4.7, removed fallback code not needed anymore
-
-### 1.5.1 (2017-05-04) ###
-* Bugfix: Consider filter for skipping tracking correctly if JavaScript tracking is disabled.
-* Bugfix: PHP Notice for empty blacklist value.
-
-### 1.5.0 (2017-03-23) ###
-* Switched to minimal PHP version 5.3
-* Added more flexible settings for period of data saving and the number of entries shown in top lists
-* Added validation of form data before saving settings
-* Moved all documentation to [wordpress.org](https://wordpress.org/plugins/statify/).
-* Added optional referrer spam protection (can be activated via the Statify settings).
-* Improved conformance to the WordPress coding guidelines
-* Bugfix for multi-site installations: Don't track network admin url.
-* Changed hook name `statify_skip_tracking` to `statify__skip_tracking`.
 
 For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/statify).
 
 
 ## Upgrade Notice ##
 
-### 1.5.2 ###
-Compatibility release. It is recommended for all users. Note that versions prior to WordPress 4.7 are not supported anymore.
+### 1.6.0 ###
+This update is recommended for all users.
 
 
 ## Screenshots ##
