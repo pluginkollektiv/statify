@@ -1,5 +1,4 @@
-css/dashboard.min.css
-js/dashboard.min.js
-js/raphael.helper.min.js
 .idea/
+css/*.min.css
+js/*.min.js
 vendor/

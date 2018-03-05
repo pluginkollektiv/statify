@@ -68,6 +68,18 @@ class Statify_Dashboard extends Statify {
 
 		/** Register CSS */
 		wp_register_style(
+			'chartist_css',
+			plugins_url( '/css/chartist.min.css', STATIFY_FILE ),
+			array(),
+			self::$_plugin_version
+		);
+		wp_register_style(
+			'chartist_tooltip_css',
+			plugins_url( '/css/chartist-plugin-tooltip.min.css', STATIFY_FILE ),
+			array(),
+			self::$_plugin_version
+		);
+		wp_register_style(
 			'statify',
 			plugins_url( '/css/dashboard.min.css', STATIFY_FILE ),
 			array(),
@@ -75,6 +87,8 @@ class Statify_Dashboard extends Statify {
 		);
 
 		/** Load CSS */
+		wp_enqueue_style( 'chartist_css' );
+		wp_enqueue_style( 'chartist_tooltip_css' );
 		wp_enqueue_style( 'statify' );
 	}
 
@@ -88,16 +102,16 @@ class Statify_Dashboard extends Statify {
 
 		/** Register JS */
 		wp_register_script(
-			'raphael',
-			plugins_url( 'js/raphael.min.js', STATIFY_FILE ),
+			'chartist_js',
+			plugins_url( 'js/chartist.min.js', STATIFY_FILE ),
 			array(),
 			self::$_plugin_version,
 			true
 		);
 		wp_register_script(
-			'sm_raphael_helper',
-			plugins_url( 'js/raphael.helper.min.js', STATIFY_FILE ),
-			array( 'raphael' ),
+			'chartist_tooltip_js',
+			plugins_url( 'js/chartist-plugin-tooltip.min.js', STATIFY_FILE ),
+			array( 'chartist_js' ),
 			self::$_plugin_version,
 			true
 		);
@@ -107,7 +121,7 @@ class Statify_Dashboard extends Statify {
 				'js/dashboard.min.js',
 				STATIFY_FILE
 			),
-			array( 'jquery', 'sm_raphael_helper' ),
+			array( 'jquery', 'chartist_tooltip_js' ),
 			self::$_plugin_version,
 			true
 		);
@@ -133,8 +147,7 @@ class Statify_Dashboard extends Statify {
 	public static function print_frontview() {
 
 		/* Load JS */
-		wp_enqueue_script( 'sm_raphael_js' );
-		wp_enqueue_script( 'sm_raphael_helper' );
+		wp_enqueue_script( 'chartist_js' );
 		wp_enqueue_script( 'statify_chart_js' );
 
 		/* Load template */

@@ -10,6 +10,36 @@
     display: none;
 }
 
+#statify_chart .ct-line {
+    stroke: #0074a2;
+    stroke-width: 2px;
+}
+
+#statify_chart .ct-point {
+    fill: #ffffff;
+    stroke: #0074a2;
+    stroke-width: 1.5px;
+}
+
+#statify_chart .ct-area {
+    fill: #0074a2;
+}
+
+.statify-chartist-tooltip {
+    border: 1px solid #000000;
+    background-color: #ffffff;
+    border-radius: 0.2em;
+    padding: 0.1em 0.5em;
+}
+
+.statify-chartist-tooltip:before {
+    border-top-color: #00000099;
+}
+
+.statify-chartist-tooltip .chartist-tooltip-meta {
+    color: #0074a2;
+}
+
 #statify_dashboard .inside {
     height: 1%;
     margin: 0;
