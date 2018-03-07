@@ -297,6 +297,8 @@ class Statify_Dashboard extends Statify {
 		$limit      = (int) self::$_options['limit'];
 		$today      = (int) self::$_options['today'];
 
+		$limit_args = ( $today ) ? $limit : array( $days_show, $limit );
+
 		return array(
 			'visits'   => $wpdb->get_results(
 				$wpdb->prepare(
@@ -307,15 +309,15 @@ class Statify_Dashboard extends Statify {
 			),
 			'target'   => $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` " . ( $today ? 'WHERE created = DATE(NOW())' : '' ) . ' GROUP BY `target` ORDER BY `count` DESC LIMIT %d',
-					$limit
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created " . ( $today ? '= DATE(NOW())' : '>= DATE_SUB(NOW(), INTERVAL %d DAY)' ) . ' GROUP BY `target` ORDER BY `count` DESC LIMIT %d',
+					$limit_args
 				),
 				ARRAY_A
 			),
 			'referrer' => $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`referrer`) as `count`, `referrer` as `url`, SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) as `host` FROM `$wpdb->statify` WHERE `referrer` != '' " . ( $today ? 'AND created = DATE(NOW())' : '' ) . ' GROUP BY `host` ORDER BY `count` DESC LIMIT %d',
-					$limit
+					"SELECT COUNT(`referrer`) as `count`, `referrer` as `url`, SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) as `host` FROM `$wpdb->statify` WHERE `referrer` != '' AND created " . ( $today ? '= DATE(NOW())' : '>= DATE_SUB(NOW(), INTERVAL %d DAY)' ) . ' GROUP BY `host` ORDER BY `count` DESC LIMIT %d',
+					$limit_args
 				),
 				ARRAY_A
 			),
