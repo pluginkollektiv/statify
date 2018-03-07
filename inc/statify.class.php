@@ -52,6 +52,7 @@ class Statify {
 			get_option( 'statify' ),
 			array(
 				'days'      => 14,
+				'days_show' => 14,
 				'limit'     => 3,
 				'today'     => 0,
 				'snippet'   => 0,

@@ -196,7 +196,7 @@ class Statify_Dashboard extends Statify {
 
 		/** Get numeric values from POST variables */
 		$options = array();
-		foreach ( array( 'days', 'limit' ) as $option_name ) {
+		foreach ( array( 'days', 'days_show', 'limit' ) as $option_name ) {
 			$options[ $option_name ] = Statify::$_options[ $option_name ];
 			if ( isset( $_POST['statify'][ $option_name ] ) && (int) $_POST['statify'][ $option_name ] > 0 ) {
 				$options[ $option_name ] = (int) $_POST['statify'][ $option_name ];
@@ -293,15 +293,15 @@ class Statify_Dashboard extends Statify {
 		global $wpdb;
 
 		/** Init values */
-		$days  = (int) self::$_options['days'];
-		$limit = (int) self::$_options['limit'];
-		$today = (int) self::$_options['today'];
+		$days_show  = (int) self::$_options['days_show'];
+		$limit      = (int) self::$_options['limit'];
+		$today      = (int) self::$_options['today'];
 
 		return array(
 			'visits'   => $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT `created` as `date`, COUNT(`created`) as `count` FROM `$wpdb->statify` GROUP BY `created` ORDER BY `created` DESC LIMIT %d",
-					$days
+					$days_show
 				),
 				ARRAY_A
 			),

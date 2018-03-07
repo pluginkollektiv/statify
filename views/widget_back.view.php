@@ -9,6 +9,12 @@ class_exists( 'Statify' ) || exit; ?>
 		<?php esc_html_e( 'days', 'statify' ); ?> -
 		<?php esc_html_e( 'Period of data saving', 'statify' ); ?>
 	</label>
+	<label for="statify_days_show">
+		<input name="statify[days_show]" id="statify_days_show" type="number" min="1"
+			   value="<?php echo esc_attr( Statify::$_options['days_show'] ); ?>">
+		<?php esc_html_e( 'days', 'statify' ); ?> -
+		<?php esc_html_e( 'Period of data display in Dashboard', 'statify' ); ?>
+	</label>
 	<label for="statify_limit">
 		<input name="statify[limit]" id="statify_limit" type="number" min="1" max="100"
 			   value="<?php echo esc_attr( Statify::$_options['limit'] ); ?>">
