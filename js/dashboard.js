@@ -53,13 +53,18 @@
 		]
 	});
 
+	var pointRadius = 4;
+	if (data.length > 365) pointRadius = 0;
+	else if (data.length > 180) pointRadius = 1;
+	else if (data.length > 90) pointRadius = 2;
+
 	// Replace default points with hollow circles, add "pageview(s) to value and append date (label) as meta data.
 	chart.on('draw', function (data) {
 		if ('point' === data.type) {
 			var circle = new Chartist.Svg('circle', {
 				cx: [data.x],
 				cy: [data.y],
-				r: [4],
+				r: [pointRadius],
 				'ct:value': data.value.y + ' ' + (data.value.y > 1 ? statify_translations.pageviews : statify_translations.pageview),
 				'ct:meta': labels[data.index]
 			}, 'ct-point');
