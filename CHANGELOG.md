@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## unreleased
+* Scaled datapoint size to number of records in dashboard widget to improve legibility 
+
 ## 1.6.0
 * Added hook statify__visit_saved which is fired after a visit was stored in the database.
 * Migrated dashboard chart to Chartist.
