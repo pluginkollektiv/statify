@@ -53,10 +53,6 @@ If you've problems or think you’ve found a bug (e.g. you’re experiencing une
 
 ## Frequently Asked Questions ##
 
-### What are the minimum requirements? ###
-* PHP 5.3 or greater
-* WordPress 3.9 or greater
-
 ### Which areas are excluded from counting? ###
 *Statify* does not count the following views:
 
