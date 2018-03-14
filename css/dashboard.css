@@ -10,6 +10,13 @@
     display: none;
 }
 
+#statify_chart .ct-label.ct-vertical.ct-start {
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    text-anchor: start;
+}
+
 #statify_chart .ct-line {
     stroke: #0074a2;
     stroke-width: 2px;
