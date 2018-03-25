@@ -37,10 +37,17 @@ class Statify_Frontend extends Statify {
 			$target   = urldecode( get_query_var( 'statify_target' ) );
 			$referrer = urldecode( get_query_var( 'statify_referrer' ) );
 		} elseif ( ! $use_snippet ) {
-			// @codingStandardsIgnoreStart The globals are checked.
-			$target   = ( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/' );
-			$referrer = ( isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '' );
-			// @codingStandardsIgnoreEnd
+			$target = filter_input( INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL );
+			if ( is_null( $target ) || false === $target ) {
+				$target = '/';
+			} else {
+				$target = wp_unslash( $target );
+			}
+
+			$referrer = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL );
+			if ( is_null( $referrer ) || false === $referrer ) {
+				$target = '';
+			}
 		} else {
 			return false;
 		}
@@ -144,11 +151,11 @@ class Statify_Frontend extends Statify {
 			return $skip_hook;
 		}
 
-		// Skip tracking via User Agent
-		// @codingStandardsIgnoreStart The globals are checked.
-		if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) 
-		     || ! preg_match( '/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $_SERVER['HTTP_USER_AGENT'] ) ) {
-		// @codingStandardsIgnoreEnd
+		// Skip tracking via User Agent.
+		$user_agent = filter_input( INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_STRING );
+		if ( is_null( $user_agent )
+			|| false === $user_agent
+			|| ! preg_match( '/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $user_agent ) ) {
 			return true;
 		}
 
@@ -185,9 +192,12 @@ class Statify_Frontend extends Statify {
 			return false;
 		}
 
-		// @codingStandardsIgnoreStart The globals are checked.
-		$referrer  = ( isset( $_SERVER['HTTP_REFERER'] ) ? wp_parse_url( $_SERVER['HTTP_REFERER'], PHP_URL_HOST ) : '' );
-		// @codingStandardsIgnoreEnd
+		$referrer = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL );
+		if ( ! is_null( $referrer ) && false !== $referrer ) {
+			$referrer = wp_parse_url( $referrer, PHP_URL_HOST );
+		} else {
+			$referrer = '';
+		}
 
 		if ( empty( $referrer ) ) {
 			return true;
