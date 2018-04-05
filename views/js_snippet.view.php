@@ -3,15 +3,11 @@
 class_exists( 'Statify' ) || exit; ?>
 
 	<!-- Stats by http://statify.de -->
-	<script type="text/javascript">
-		const statifyReq = new XMLHttpRequest();
-		statifyReq.open(
-			'GET',
-			'<?php echo esc_url( home_url( '/', 'relative' ) ); ?>'
-			+ '?statify_referrer=' + encodeURIComponent(document.referrer)
-			+ '&statify_target=' + encodeURIComponent(location.pathname + location.search)
-		);
-		statifyReq.send( null );
+	<script
+		id="statify-js-snippet"
+		data-home-url="<?php echo esc_url( home_url( '/', 'relative' ) ); ?>"
+		type="text/javascript"
+		src="<?php echo plugins_url( 'js/snippet.js', STATIFY_FILE ); ?>">
 	</script>
 
 <?php /** Markup space */ ?>
