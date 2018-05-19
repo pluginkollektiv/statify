@@ -1,4 +1,5 @@
 .idea/
 css/*.min.css
 js/*.min.js
+js/*.min.js.map
 vendor/
