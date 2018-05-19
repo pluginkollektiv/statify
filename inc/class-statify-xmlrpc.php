@@ -70,7 +70,8 @@ class Statify_XMLRPC {
 		}
 
 		// Empty?
-		if ( ! $data = Statify_Dashboard::get_stats() ) {
+		$data = Statify_Dashboard::get_stats();
+		if ( ! $data ) {
 			return '{"error": "No data"}';
 		}
 

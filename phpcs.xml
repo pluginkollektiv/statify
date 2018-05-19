@@ -25,7 +25,6 @@
     <!-- WordPress coding standards -->
     <config name="minimum_supported_wp_version" value="4.7" />
     <rule ref="WordPress">
-        <exclude name="Squiz.PHP.DisallowMultipleAssignments.Found" />
         <exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
         <exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog_switch_to_blog" />
         <exclude name="WordPress.VIP.DirectDatabaseQuery.NoCaching" />

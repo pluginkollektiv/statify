@@ -263,7 +263,8 @@ class Statify_Dashboard extends Statify {
 	public static function get_stats() {
 
 		// Get from cache.
-		if ( $data = get_transient( 'statify_data' ) ) {
+		$data = get_transient( 'statify_data' );
+		if ( $data ) {
 			return $data;
 		}
 

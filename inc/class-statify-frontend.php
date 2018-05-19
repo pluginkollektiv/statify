@@ -146,8 +146,9 @@ class Statify_Frontend extends Statify {
 		if ( function_exists( 'apply_filters_deprecated' ) ) {
 			apply_filters_deprecated( 'statify_skip_tracking', array( '' ), '1.5.0', 'statify__skip_tracking' );
 		}
-		/* Skip tracking via Hook */
-		if ( ( $skip_hook = apply_filters( 'statify__skip_tracking', null ) ) !== null ) {
+		// Skip tracking via Hook.
+		$skip_hook = apply_filters( 'statify__skip_tracking', null );
+		if ( null !== $skip_hook ) {
 			return $skip_hook;
 		}
 
