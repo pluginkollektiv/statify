@@ -181,6 +181,8 @@ class Statify_Dashboard extends Statify {
 
 		// Update plugin options.
 		if ( ! empty( $_POST['statify'] ) ) {
+			check_admin_referer( 'statify-dashboard' );
+
 			self::_save_options();
 		}
 
