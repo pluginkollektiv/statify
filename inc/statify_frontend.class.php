@@ -145,9 +145,20 @@ class Statify_Frontend extends Statify {
 		}
 
 		/** Skip tracking via Referrer check and Conditional_Tags. */
-		return ( self::check_referrer() || is_feed() || is_trackback() || is_robots()
-				 || is_preview() || is_user_logged_in() || is_404() || is_search()
+		return ( self::check_referrer() || is_trackback() || is_robots() || is_user_logged_in()
+			|| self::_is_internal()
 		);
+	}
+
+	/**
+	 * Rules to detect internal calls to skip tracking and not print code snippet.
+	 *
+	 * @since    1.7.0
+	 *
+	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
+	 */
+	private static function _is_internal() {
+		return is_feed() || is_preview() || is_404() || is_search();
 	}
 
 	/**
@@ -264,8 +275,8 @@ class Statify_Frontend extends Statify {
 			return;
 		}
 
-		/* Skip by rules */
-		if ( self::_skip_tracking() ) {
+		/* Skip by internal rules (#84) */
+		if ( self::_is_internal() ) {
 			return;
 		}
 
