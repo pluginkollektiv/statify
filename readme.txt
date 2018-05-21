@@ -18,9 +18,11 @@ Statify provides a straightforward and compact access to the number of site view
 An interactive chart is followed by lists of the most common reference sources and target pages. The period of statistics and length of lists can be set directly in the dashboard widget.
 
 ### Data Privacy ###
-In direct comparison to statistics services such as *Google Analytics*, *WordPress.com Stats* and *Piwik* *Statify* doesn't process and store personal data as e.g. IP addresses – *Statify* counts site views, not visitors.
+In direct comparison to statistics services such as *Google Analytics*, *WordPress.com Stats* and *Matomo (Piwik)* *Statify* doesn't process and store personal data as e.g. IP addresses – *Statify* counts site views, not visitors.
 
 Absolute privacy compliance coupled with transparent procedures: A locally in WordPress created database table consists of only four fields (ID, date, source, target) and can be viewed at any time, cleaned up and cleared by the administrator.
+
+Due to this tracking approach, Statify is 100% compliant with GDPR and serves as an lightweight alternative to other tracking services.
 
 ### Display of the widget ###
 The plugin configuration can be changed directly in the *Statify* Widget on the dashboard by clicking the *Configure* link.
