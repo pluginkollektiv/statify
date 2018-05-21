@@ -1,8 +1,16 @@
 <?php
-/** Quit */
+/**
+ * Statify: Widget Frontend View
+ *
+ * This file contains the viewmodel for the plugin's widget frontend.
+ *
+ * @package   Statify
+ */
+
+// Quit if accessed outside WP context.
 class_exists( 'Statify' ) || exit;
 
-/** Get stats */
+// Get stats.
 $stats = Statify_Dashboard::get_stats(); ?>
 
 	<div id="statify_chart">
@@ -14,7 +22,7 @@ $stats = Statify_Dashboard::get_stats(); ?>
 			<table id="statify_chart_data">
 				<?php foreach ( (array) $stats['visits'] as $visit ) { ?>
 					<tr>
-						<th><?php echo date_i18n( get_option( 'date_format' ), strtotime( $visit['date'] ) ); ?></th>
+						<th><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $visit['date'] ) ) ); ?></th>
 						<td><?php echo (int) $visit['count']; ?></td>
 					</tr>
 				<?php } ?>

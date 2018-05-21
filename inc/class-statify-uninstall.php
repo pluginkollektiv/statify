@@ -1,5 +1,14 @@
 <?php
-/** Quit */
+/**
+ * Statify: Statify_Uninstall class
+ *
+ * This file contains the derived class for the plugin's uninstallation features.
+ *
+ * @package   Statify
+ * @since     0.1
+ */
+
+// Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -58,13 +67,13 @@ class Statify_Uninstall {
 	 */
 	private static function _apply() {
 
-		/** Delete options */
+		// Delete options.
 		delete_option( 'statify' );
 
-		/** Init table */
+		// Init table.
 		Statify_Table::init();
 
-		/** Delete table */
+		// Delete table.
 		Statify_Table::drop();
 	}
 }

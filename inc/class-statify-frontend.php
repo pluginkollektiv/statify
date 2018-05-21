@@ -1,5 +1,14 @@
 <?php
-/** Quit */
+/**
+ * Statify: Statify_Frontend class
+ *
+ * This file contains the derived class for the plugin's frontend features.
+ *
+ * @package   Statify
+ * @since     1.4.0
+ */
+
+// Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -8,7 +17,6 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.4.0
  */
 class Statify_Frontend extends Statify {
-
 
 	/**
 	 * Track the page view
@@ -29,10 +37,17 @@ class Statify_Frontend extends Statify {
 			$target   = urldecode( get_query_var( 'statify_target' ) );
 			$referrer = urldecode( get_query_var( 'statify_referrer' ) );
 		} elseif ( ! $use_snippet ) {
-			// @codingStandardsIgnoreStart The globals are checked.
-			$target   = ( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/' );
-			$referrer = ( isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '' );
-			// @codingStandardsIgnoreEnd
+			$target = filter_input( INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL );
+			if ( is_null( $target ) || false === $target ) {
+				$target = '/';
+			} else {
+				$target = wp_unslash( $target );
+			}
+
+			$referrer = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL );
+			if ( is_null( $referrer ) || false === $referrer ) {
+				$target = '';
+			}
 		} else {
 			return false;
 		}
@@ -57,12 +72,12 @@ class Statify_Frontend extends Statify {
 			'target'   => '',
 		);
 
-		/* Set request timestamp */
+		// Set request timestamp.
 		$data['created'] = strftime( '%Y-%m-%d', current_time( 'timestamp' ) );
 
 		$needles = array( home_url(), network_admin_url() );
 
-		/* Sanitize referrer url */
+		// Sanitize referrer url.
 		if ( ! empty( $referrer ) && self::strposa( $referrer, $needles ) === false ) {
 			$data['referrer'] = esc_url_raw( $referrer, array( 'http', 'https' ) );
 		}
@@ -70,15 +85,15 @@ class Statify_Frontend extends Statify {
 		/* Relative target url */
 		$data['target'] = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $target ) );
 
-		/* Trim target url */
+		// Trim target url.
 		if ( $wp_rewrite->permalink_structure ) {
 			$data['target'] = wp_parse_url( $data['target'], PHP_URL_PATH );
 		}
 
-		/* Sanitize target url */
+		// Sanitize target url.
 		$data['target'] = esc_url_raw( $data['target'] );
 
-		/* Insert */
+		// Insert.
 		$wpdb->insert( $wpdb->statify, $data );
 
 		/**
@@ -91,7 +106,7 @@ class Statify_Frontend extends Statify {
 		 */
 		do_action( 'statify__visit_saved', $data, $wpdb->insert_id );
 
-		/* Jump! */
+		// Jump!
 		return self::_jump_out( $is_snippet );
 	}
 
@@ -109,7 +124,7 @@ class Statify_Frontend extends Statify {
 		foreach ( $needle as $query ) {
 			if ( strpos( $haystack, $query, $offset ) !== false ) {
 				return true;
-			} // stop on first true result
+			} // Stop on first true result.
 		}
 
 		return false;
@@ -131,20 +146,21 @@ class Statify_Frontend extends Statify {
 		if ( function_exists( 'apply_filters_deprecated' ) ) {
 			apply_filters_deprecated( 'statify_skip_tracking', array( '' ), '1.5.0', 'statify__skip_tracking' );
 		}
-		/* Skip tracking via Hook */
-		if ( ( $skip_hook = apply_filters( 'statify__skip_tracking', null ) ) !== null ) {
+		// Skip tracking via Hook.
+		$skip_hook = apply_filters( 'statify__skip_tracking', null );
+		if ( null !== $skip_hook ) {
 			return $skip_hook;
 		}
 
-		// Skip tracking via User Agent
-		// @codingStandardsIgnoreStart The globals are checked.
-		if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) 
-		     || ! preg_match( '/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $_SERVER['HTTP_USER_AGENT'] ) ) {
-		// @codingStandardsIgnoreEnd
+		// Skip tracking via User Agent.
+		$user_agent = filter_input( INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_STRING );
+		if ( is_null( $user_agent )
+			|| false === $user_agent
+			|| ! preg_match( '/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $user_agent ) ) {
 			return true;
 		}
 
-		/** Skip tracking via Referrer check and Conditional_Tags. */
+		// Skip tracking via Referrer check and Conditional_Tags.
 		return ( self::check_referrer() || is_trackback() || is_robots() || is_user_logged_in()
 			|| self::_is_internal()
 		);
@@ -177,9 +193,12 @@ class Statify_Frontend extends Statify {
 			return false;
 		}
 
-		// @codingStandardsIgnoreStart The globals are checked.
-		$referrer  = ( isset( $_SERVER['HTTP_REFERER'] ) ? wp_parse_url( $_SERVER['HTTP_REFERER'], PHP_URL_HOST ) : '' );
-		// @codingStandardsIgnoreEnd
+		$referrer = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL );
+		if ( ! is_null( $referrer ) && false !== $referrer ) {
+			$referrer = wp_parse_url( $referrer, PHP_URL_HOST );
+		} else {
+			$referrer = '';
+		}
 
 		if ( empty( $referrer ) ) {
 			return true;
@@ -284,7 +303,7 @@ class Statify_Frontend extends Statify {
 		load_template(
 			wp_normalize_path(
 				sprintf(
-					'%s/views/js_snippet.view.php',
+					'%s/views/js-snippet.php',
 					STATIFY_DIR
 				)
 			)
