@@ -1,5 +1,14 @@
 <?php
-/** Quit */
+/**
+ * Statify: Statify_Dashboard class
+ *
+ * This file contains the derived class for the plugin's dashboard features.
+ *
+ * @package   Statify
+ * @since     1.1
+ */
+
+// Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -28,22 +37,22 @@ class Statify_Dashboard extends Statify {
 	 */
 	public static function init() {
 
-		/** Filter user_can_see_stats */
+		// Filter user_can_see_stats.
 		if ( ! apply_filters( 'statify__user_can_see_stats', current_user_can( 'edit_dashboard' ) ) ) {
 			return;
 		}
 
-		/** Load textdomain */
+		// Load textdomain.
 		load_plugin_textdomain(
 			'statify',
 			false,
 			wp_normalize_path( sprintf( '%s/lang', STATIFY_DIR ) )
 		);
 
-		/** Plugin version */
+		// Plugin version.
 		self::_get_version();
 
-		/** Add dashboard widget */
+		// Add dashboard widget.
 		wp_add_dashboard_widget(
 			'statify_dashboard',
 			'Statify',
@@ -51,10 +60,10 @@ class Statify_Dashboard extends Statify {
 			array( __CLASS__, 'print_backview' )
 		);
 
-		/** Init CSS */
+		// Init CSS.
 		add_action( 'admin_print_styles', array( __CLASS__, 'add_style' ) );
 
-		/** Init JS */
+		// Init JS.
 		add_action( 'admin_print_scripts', array( __CLASS__, 'add_js' ) );
 	}
 
@@ -66,7 +75,7 @@ class Statify_Dashboard extends Statify {
 	 */
 	public static function add_style() {
 
-		/** Register CSS */
+		// Register CSS.
 		wp_register_style(
 			'chartist_css',
 			plugins_url( '/css/chartist.min.css', STATIFY_FILE ),
@@ -86,7 +95,7 @@ class Statify_Dashboard extends Statify {
 			self::$_plugin_version
 		);
 
-		/** Load CSS */
+		// Load CSS.
 		wp_enqueue_style( 'chartist_css' );
 		wp_enqueue_style( 'chartist_tooltip_css' );
 		wp_enqueue_style( 'statify' );
@@ -100,7 +109,7 @@ class Statify_Dashboard extends Statify {
 	 */
 	public static function add_js() {
 
-		/** Register JS */
+		// Register JS.
 		wp_register_script(
 			'chartist_js',
 			plugins_url( 'js/chartist.min.js', STATIFY_FILE ),
@@ -126,7 +135,7 @@ class Statify_Dashboard extends Statify {
 			true
 		);
 
-		/** Localize strings */
+		// Localize strings.
 		wp_localize_script(
 			'statify_chart_js',
 			'statify_translations',
@@ -146,13 +155,13 @@ class Statify_Dashboard extends Statify {
 	 */
 	public static function print_frontview() {
 
-		/* Load JS */
+		// Load JS.
 		wp_enqueue_script( 'chartist_js' );
 		wp_enqueue_script( 'statify_chart_js' );
 
-		/* Load template */
+		// Load template.
 		load_template(
-			wp_normalize_path( sprintf( '%s/views/widget_front.view.php', STATIFY_DIR ) )
+			wp_normalize_path( sprintf( '%s/views/widget-front.php', STATIFY_DIR ) )
 		);
 	}
 
@@ -165,19 +174,21 @@ class Statify_Dashboard extends Statify {
 	 */
 	public static function print_backview() {
 
-		/* Capability check */
+		// Capability check.
 		if ( ! current_user_can( 'edit_dashboard' ) ) {
 			return;
 		}
 
-		/** Update plugin options */
+		// Update plugin options.
 		if ( ! empty( $_POST['statify'] ) ) {
+			check_admin_referer( 'statify-dashboard' );
+
 			self::_save_options();
 		}
 
-		/* Load view */
+		// Load view.
 		load_template(
-			wp_normalize_path( sprintf( '%s/views/widget_back.view.php', STATIFY_DIR ) )
+			wp_normalize_path( sprintf( '%s/views/widget-back.php', STATIFY_DIR ) )
 		);
 	}
 
@@ -189,12 +200,12 @@ class Statify_Dashboard extends Statify {
 	 * @version  2017-01-10
 	 */
 	private static function _save_options() {
-		/** Check the nonce field from the dashboard form. */
+		// Check the nonce field from the dashboard form.
 		if ( ! check_admin_referer( 'statify-dashboard' ) ) {
 			return;
 		}
 
-		/** Get numeric values from POST variables */
+		// Get numeric values from POST variables.
 		$options = array();
 		foreach ( array( 'days', 'limit' ) as $option_name ) {
 			$options[ $option_name ] = Statify::$_options[ $option_name ];
@@ -206,7 +217,7 @@ class Statify_Dashboard extends Statify {
 			$options['limit'] = 100;
 		}
 
-		/** Get checkbox values from POST variables */
+		// Get checkbox values from POST variables.
 		foreach ( array( 'today', 'snippet', 'blacklist' ) as $option_name ) {
 			if ( isset( $_POST['statify'][ $option_name ] ) && 1 === (int) $_POST['statify'][ $option_name ] ) {
 				$options[ $option_name ] = 1;
@@ -215,13 +226,13 @@ class Statify_Dashboard extends Statify {
 			}
 		}
 
-		/** Update values */
+		// Update values.
 		update_option( 'statify', $options );
 
-		/** Delete transient */
+		// Delete transient.
 		delete_transient( 'statify_data' );
 
-		/** Clear Cachify cache */
+		// Clear Cachify cache.
 		if ( has_action( 'cachify_flush_cache' ) ) {
 			do_action( 'cachify_flush_cache' );
 		}
@@ -236,7 +247,7 @@ class Statify_Dashboard extends Statify {
 	 */
 	private static function _get_version() {
 
-		/* Get plugin meta */
+		// Get plugin meta.
 		$meta = get_plugin_data( STATIFY_FILE );
 
 		self::$_plugin_version = $meta['Version'];
@@ -253,22 +264,23 @@ class Statify_Dashboard extends Statify {
 	 */
 	public static function get_stats() {
 
-		/** Get from cache */
-		if ( $data = get_transient( 'statify_data' ) ) {
+		// Get from cache.
+		$data = get_transient( 'statify_data' );
+		if ( $data ) {
 			return $data;
 		}
 
-		/** Get from DB */
+		// Get from DB.
 		$data = self::_select_data();
 
-		/** Prepare data */
+		// Prepare data.
 		if ( ! empty( $data['visits'] ) ) {
 			$data['visits'] = array_reverse( $data['visits'] );
 		} else {
 			$data = null;
 		}
 
-		/** Make cache */
+		// Make cache.
 		set_transient(
 			'statify_data',
 			$data,
@@ -289,10 +301,10 @@ class Statify_Dashboard extends Statify {
 	 */
 	private static function _select_data() {
 
-		/** Global */
+		// Global.
 		global $wpdb;
 
-		/** Init values */
+		// Init values.
 		$days  = (int) self::$_options['days'];
 		$limit = (int) self::$_options['limit'];
 		$today = (int) self::$_options['today'];

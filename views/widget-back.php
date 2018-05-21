@@ -1,5 +1,13 @@
 <?php
-/** Quit */
+/**
+ * Statify: Widget Backend View
+ *
+ * This file contains the viewmodel for the plugin's widget backend.
+ *
+ * @package   Statify
+ */
+
+// Quit if accessed outside WP context.
 class_exists( 'Statify' ) || exit; ?>
 
 <fieldset>

@@ -1,5 +1,14 @@
 <?php
-/** Quit */
+/**
+ * Statify: Statify_Backend class
+ *
+ * This file contains the derived class for the plugin's backend features.
+ *
+ * @package   Statify
+ * @since     1.4.0
+ */
+
+// Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -22,7 +31,7 @@ class Statify_Backend {
 	 */
 	public static function add_meta_link( $input, $file ) {
 
-		/* Restliche Plugins? */
+		// Other plugins?
 		if ( STATIFY_BASE !== $file ) {
 			return $input;
 		}
@@ -48,17 +57,17 @@ class Statify_Backend {
 	 */
 	public static function add_action_link( $input ) {
 
-		/* Rechte? */
+		// Rights?
 		if ( ! current_user_can( 'edit_dashboard' ) ) {
 			return $input;
 		}
 
-		/** Zusammenführen */
+		// Merge.
 		return array_merge(
 			$input,
 			array(
 				sprintf(
-					/** @lang  Disable language injection for Url query argument. */
+					/* @lang  Disable language injection for Url query argument. */
 					'<a href="%s">%s</a>',
 					add_query_arg(
 						array( 'edit' => 'statify_dashboard#statify_dashboard' ),
