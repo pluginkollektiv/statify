@@ -30,7 +30,7 @@ You can leave a donation
 
 ## Credits
 * Author: [Sergej Müller](https://sergejmueller.github.io/)
-* Maintainers: [pluginkollektiv](http://pluginkollektiv.org/)
+* Maintainers: [pluginkollektiv](https://pluginkollektiv.org/)
 
 ## Changelog
 [Changelog](CHANGELOG.md)
