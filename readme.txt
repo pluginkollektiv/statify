@@ -5,7 +5,7 @@
 * Requires at least: 4.7
 * Tested up to:      4.9
 * Requires PHP:      5.6
-* Stable tag:        1.6.0
+* Stable tag:        1.6.1
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -115,22 +115,27 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+### 1.6.1
+* Scaled datapoint size to number of records in dashboard widget to improve legibility
+* Fix display of larger numbers in the y-axis
+* Added JS source maps to avoid warnings with developer tools
+* Move JS snippet to separate file
+* Add JS snippet to output even if tracking is skipped to avoid caching problems
+* Improve code style
+* Enable nonce-verification in dashboard widget to prevent CSRF
+
 ### 1.6.0
 * Added hook statify__visit_saved which is fired after a visit was stored in the database.
 * Migrated dashboard chart to Chartist.
 * Fixed JavaScript tracking not working in some environment which have X-Content-Type: nosniff environment enabled.
-
-### 1.5.4
-* Use minified version of javascripts and stylesheets.
-* Different updates on the development repository.
 
 For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/statify).
 
 
 ## Upgrade Notice ##
 
-### 1.6.0 ###
-This update is recommended for all users.
+### 1.6.1 ###
+This bugfix release is recommended for all users.
 
 
 ## Screenshots ##

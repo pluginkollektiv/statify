@@ -1,10 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## unreleased
-* Scaled datapoint size to number of records in dashboard widget to improve legibility 
+## 1.6.1
+* Scaled datapoint size to number of records in dashboard widget to improve legibility
+* Fix display of larger numbers in the y-axis
 * Added JS source maps to avoid warnings with developer tools
+* Move JS snippet to separate file
 * Add JS snippet to output even if tracking is skipped to avoid caching problems
+* Improve code style
 * Enable nonce-verification in dashboard widget to prevent CSRF
 
 ## 1.6.0
