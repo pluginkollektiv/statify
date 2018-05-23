@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.6.2
+* Fix compatibility issues with JavaScript optimization plugins
+* Fix tracking issue if JavaScript tracking is disabled
+
 ## 1.6.1
 * Scaled datapoint size to number of records in dashboard widget to improve legibility
 * Fix display of larger numbers in the y-axis
