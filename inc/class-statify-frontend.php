@@ -46,7 +46,7 @@ class Statify_Frontend extends Statify {
 
 			$referrer = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL );
 			if ( is_null( $referrer ) || false === $referrer ) {
-				$target = '';
+				$referrer = '';
 			}
 		} else {
 			return false;
