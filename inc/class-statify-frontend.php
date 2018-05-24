@@ -59,7 +59,7 @@ class Statify_Frontend extends Statify {
 
 		/* Check whether tracking should be skipped for this view. */
 		if ( self::_skip_tracking() ) {
-			return false;
+			return self::_jump_out( $is_snippet );
 		}
 
 		/* Global vars */
