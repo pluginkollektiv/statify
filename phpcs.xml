@@ -29,6 +29,8 @@
         <exclude name="WordPress.VIP.DirectDatabaseQuery.NoCaching" />
         <exclude name="WordPress.VIP.DirectDatabaseQuery.SchemaChange" />
         <exclude name="WordPress.WP.PreparedSQL.NotPrepared" />
+        <!-- Sanitization of $_SERVER causes problems with some PHP implementations -->
+        <exclude name="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized"/>
     </rule>
 
     <!-- Include sniffs for PHP cross-version compatibility. -->
