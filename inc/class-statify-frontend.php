@@ -37,14 +37,20 @@ class Statify_Frontend extends Statify {
 			$target   = urldecode( get_query_var( 'statify_target' ) );
 			$referrer = urldecode( get_query_var( 'statify_referrer' ) );
 		} elseif ( ! $use_snippet ) {
-			$target = filter_input( INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL );
+			$target   = filter_var(
+				( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/' ),
+				FILTER_SANITIZE_URL
+			);
 			if ( is_null( $target ) || false === $target ) {
 				$target = '/';
 			} else {
 				$target = wp_unslash( $target );
 			}
 
-			$referrer = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL );
+			$referrer = filter_var(
+				( isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '' ),
+				FILTER_SANITIZE_URL
+			);
 			if ( is_null( $referrer ) || false === $referrer ) {
 				$referrer = '';
 			}
@@ -153,7 +159,10 @@ class Statify_Frontend extends Statify {
 		}
 
 		// Skip tracking via User Agent.
-		$user_agent = filter_input( INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_STRING );
+		$user_agent = filter_var(
+			( isset( $_SERVER['HTTP_USER_AGENT'] ) ? wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) : '' ),
+			FILTER_SANITIZE_STRING
+		);
 		if ( is_null( $user_agent )
 			|| false === $user_agent
 			|| ! preg_match( '/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $user_agent ) ) {
@@ -193,7 +202,10 @@ class Statify_Frontend extends Statify {
 			return false;
 		}
 
-		$referrer = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL );
+		$referrer = filter_var(
+			( isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '' ),
+			FILTER_SANITIZE_URL
+		);
 		if ( ! is_null( $referrer ) && false !== $referrer ) {
 			$referrer = wp_parse_url( $referrer, PHP_URL_HOST );
 		} else {
