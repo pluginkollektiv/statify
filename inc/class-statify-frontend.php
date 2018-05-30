@@ -208,8 +208,6 @@ class Statify_Frontend extends Statify {
 		);
 		if ( ! is_null( $referrer ) && false !== $referrer ) {
 			$referrer = wp_parse_url( $referrer, PHP_URL_HOST );
-		} else {
-			$referrer = '';
 		}
 
 		// Return false if there is no referrer to check.
