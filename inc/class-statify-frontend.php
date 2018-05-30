@@ -193,7 +193,7 @@ class Statify_Frontend extends Statify {
 	 * @since   2016-12-21
 	 * @version 2017-01-10
 	 *
-	 * @return  bool
+	 * @return  boolean TRUE of referrer matches blacklist entry and should thus be excluded.
 	 */
 	private static function check_referrer() {
 
@@ -212,18 +212,22 @@ class Statify_Frontend extends Statify {
 			$referrer = '';
 		}
 
+		// Return false if there is no referrer to check.
 		if ( empty( $referrer ) ) {
-			return true;
+			return false;
 		}
 
+		// Fallback for wp_parse_url() returning array instead of host only.
 		if ( is_array( $referrer ) && isset( $referrer['host'] ) ) {
 			$referrer = $referrer['host'];
 		}
 
+		// Return false if there still is no referrer to checj.
 		if ( ! is_string( $referrer ) ) {
 			return false;
 		}
 
+		// Finally compare referrer against the blacklist.
 		$blacklist = self::get_blacklist_keys();
 		foreach ( $blacklist as $item ) {
 			if ( strpos( $referrer, $item ) !== false ) {
