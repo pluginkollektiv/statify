@@ -210,11 +210,6 @@ class Statify_Frontend extends Statify {
 			$referrer = wp_parse_url( $referrer, PHP_URL_HOST );
 		}
 
-		// Return false if there is no referrer to check.
-		if ( empty( $referrer ) ) {
-			return false;
-		}
-
 		// Fallback for wp_parse_url() returning array instead of host only.
 		if ( is_array( $referrer ) && isset( $referrer['host'] ) ) {
 			$referrer = $referrer['host'];
