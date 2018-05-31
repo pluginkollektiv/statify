@@ -115,6 +115,11 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+### 1.6.3
+* Fix compatibility issue with some PHP implementations not populating `INPUT_SERVER`
+* Fix failing blacklist check for empty referrers
+* JS snippet call properly breaks page generation when tracking is skipped
+
 ### 1.6.2
 * Fix compatibility issues with JavaScript optimization plugins
 * Fix tracking issue if JavaScript tracking is disabled
@@ -137,6 +142,13 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 
 ## Upgrade Notice ##
+
+### 1.6.3 ###
+This bugfix release is recommended for all users.
+It fixes completely broken tracking with some PHP implementations. Sorry for that, we might owe you a couple of visitors.
+
+### 1.6.2 ###
+This bugfix release is recommended for all users.
 
 ### 1.6.1 ###
 This bugfix release is recommended for all users.

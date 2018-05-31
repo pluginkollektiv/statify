@@ -140,7 +140,7 @@ class Statify_Frontend extends Statify {
 	 * Rules to skip the tracking
 	 *
 	 * @since    1.2.6
-	 * @version  2016-12-21
+	 * @version  1.6.3
 	 *
 	 * @hook     boolean  statify__skip_tracking
 	 * @see      https://wordpress.org/plugins/statify/
@@ -178,7 +178,7 @@ class Statify_Frontend extends Statify {
 	/**
 	 * Rules to detect internal calls to skip tracking and not print code snippet.
 	 *
-	 * @since    1.7.0
+	 * @since    1.6.1
 	 *
 	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
 	 */
@@ -190,8 +190,8 @@ class Statify_Frontend extends Statify {
 	 * Compare the referrer url to the blacklist data.
 	 * De/activate this feature via settings in the Dashboard widget.
 	 *
-	 * @since   2016-12-21
-	 * @version 2017-01-10
+	 * @since   1.5.0
+	 * @version 1.6.3
 	 *
 	 * @return  boolean TRUE of referrer matches blacklist entry and should thus be excluded.
 	 */

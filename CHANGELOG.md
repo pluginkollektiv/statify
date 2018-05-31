@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.6.3
+* Fix compatibility issue with some PHP implementations not populating `INPUT_SERVER`
+* Fix failing blacklist check for empty referrers
+* JS snippet call properly breaks page generation when tracking is skipped
+
 ## 1.6.2
 * Fix compatibility issues with JavaScript optimization plugins
 * Fix tracking issue if JavaScript tracking is disabled
