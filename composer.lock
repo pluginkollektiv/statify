@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "32413376f0785130657c0ae8482f5558",
-    "content-hash": "42b9efd959e1988cc61b4d90a32eac14",
+    "hash": "4fe6d7ea043ff6014c56a8a1145239c4",
+    "content-hash": "775564b6fe2fe58ba36196c59667e99c",
     "packages": [
         {
             "name": "npm-asset/chartist",
@@ -416,7 +416,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.3|^7"
+        "php": "^5.2|^7"
     },
     "platform-dev": []
 }
