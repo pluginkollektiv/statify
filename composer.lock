@@ -1,10 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "72294a3fff49e315b96a0abc3c5bc323",
+    "hash": "32413376f0785130657c0ae8482f5558",
+    "content-hash": "42b9efd959e1988cc61b4d90a32eac14",
     "packages": [
         {
             "name": "npm-asset/chartist",
@@ -107,7 +108,7 @@
                 "stylecheck",
                 "tests"
             ],
-            "time": "2017-12-06T16:27:17+00:00"
+            "time": "2017-12-06 16:27:17"
         },
         {
             "name": "matthiasmullie/minify",
@@ -167,7 +168,7 @@
                 "minifier",
                 "minify"
             ],
-            "time": "2018-04-18T08:50:35+00:00"
+            "time": "2018-04-18 08:50:35"
         },
         {
             "name": "matthiasmullie/path-converter",
@@ -216,7 +217,7 @@
                 "paths",
                 "relative"
             ],
-            "time": "2018-02-02T11:30:10+00:00"
+            "time": "2018-02-02 11:30:10"
         },
         {
             "name": "slowprog/composer-copy-file",
@@ -263,7 +264,7 @@
             "keywords": [
                 "copy file"
             ],
-            "time": "2017-12-07T13:18:47+00:00"
+            "time": "2017-12-07 13:18:47"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -314,7 +315,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-02-20T21:35:23+00:00"
+            "time": "2018-02-20 21:35:23"
         },
         {
             "name": "wimg/php-compatibility",
@@ -366,7 +367,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-12-27T21:58:38+00:00"
+            "time": "2017-12-27 21:58:38"
         },
         {
             "name": "wp-coding-standards/wpcs",
@@ -406,7 +407,7 @@
                 "standards",
                 "wordpress"
             ],
-            "time": "2018-02-16T01:57:48+00:00"
+            "time": "2018-02-16 01:57:48"
         }
     ],
     "aliases": [],
@@ -415,7 +416,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.6|^7"
+        "php": "^5.3|^7"
     },
     "platform-dev": []
 }
