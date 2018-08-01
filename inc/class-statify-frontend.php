@@ -22,20 +22,32 @@ class Statify_Frontend extends Statify {
 	 * Track the page view
 	 *
 	 * @since    0.1.0
-	 * @version  1.4.2
+	 * @since    1.7.0 $is_snippet parameter added.
+	 * @version  1.7.0
 	 *
-	 * @return   bool
+	 * @param boolean $is_snippet Is tracking triggered via JS (default: false).
+	 *
+	 * @return   boolean
 	 */
-	public static function track_visit() {
+	public static function track_visit( $is_snippet = false ) {
 
 		/* Init vars */
 		$use_snippet = self::$_options['snippet'];
-		$is_snippet  = $use_snippet && get_query_var( 'statify_target' );
 
 		/* Set target & referrer */
-		if ( $is_snippet ) {
-			$target   = urldecode( get_query_var( 'statify_target' ) );
-			$referrer = urldecode( get_query_var( 'statify_referrer' ) );
+		if ( $use_snippet && $is_snippet ) {
+			$target   = urldecode(
+				filter_var(
+					( isset( $_REQUEST['statify_target'] ) ? wp_unslash( $_REQUEST['statify_target'] ) : '/' ),
+					FILTER_SANITIZE_URL
+				)
+			);
+			$referrer = urldecode(
+				filter_var(
+					( isset( $_REQUEST['statify_referrer'] ) ? wp_unslash( $_REQUEST['statify_referrer'] ) : '' ),
+					FILTER_SANITIZE_URL
+				)
+			);
 		} elseif ( ! $use_snippet ) {
 			$target   = filter_var(
 				( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/' ),
@@ -114,6 +126,20 @@ class Statify_Frontend extends Statify {
 
 		// Jump!
 		return self::_jump_out( $is_snippet );
+	}
+
+	/**
+	 * Track the page view via AJAX.
+	 *
+	 * @return void
+	 */
+	public static function track_visit_ajax() {
+		// Check AJAX referrer.
+		check_ajax_referer( 'statify_track' );
+		// Only do something if snippet use is actually configured.
+		if ( self::$_options['snippet'] ) {
+			self::track_visit( true );
+		}
 	}
 
 	/**
@@ -298,23 +324,31 @@ class Statify_Frontend extends Statify {
 	 */
 	public static function wp_footer() {
 
-		/* Skip by option */
+		// Skip by option.
 		if ( ! self::$_options['snippet'] ) {
 			return;
 		}
 
-		/* Skip by internal rules (#84) */
+		// Skip by internal rules (#84).
 		if ( self::_is_internal() ) {
 			return;
 		}
 
-		/* Load template */
-		load_template(
-			wp_normalize_path(
-				sprintf(
-					'%s/views/js-snippet.php',
-					STATIFY_DIR
-				)
+		wp_enqueue_script(
+			'statify-js',
+			plugins_url( 'js/snippet.js', STATIFY_FILE ),
+			array(),
+			STATIFY_VERSION,
+			true
+		);
+
+		// Add endpoint to script.
+		wp_localize_script(
+			'statify-js',
+			'statify_ajax',
+			array(
+				'url'   => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'statify_track' ),
 			)
 		);
 	}

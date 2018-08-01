@@ -1,11 +1,13 @@
 try {
-	const statifyReq = new XMLHttpRequest();
-	statifyReq.open(
-		'GET',
-		document.getElementById('statify-js-snippet').getAttribute('data-home-url')
-		+ '?statify_referrer=' + encodeURIComponent(document.referrer)
-		+ '&statify_target=' + encodeURIComponent(location.pathname + location.search)
-	);
-	statifyReq.send(null);
-} catch (e) {
+	jQuery.ajax( {
+		type: 'POST',
+		url : statify_ajax.url,
+		data: {
+			_ajax_nonce     : statify_ajax.nonce,
+			action          : 'statify_track',
+			statify_referrer: encodeURIComponent( document.referrer ),
+			statify_target  : encodeURIComponent( location.pathname + location.search )
+		}
+	} );
+} catch ( e ) {
 }
