@@ -31,43 +31,31 @@ class Statify_Frontend extends Statify {
 	 */
 	public static function track_visit( $is_snippet = false ) {
 
-		/* Init vars */
+		// Check of JS snippet is configured.
 		$use_snippet = self::$_options['snippet'];
 
-		/* Set target & referrer */
+		// Set target & referrer.
 		if ( $use_snippet && $is_snippet ) {
-			$target   = urldecode(
-				filter_var(
-					( isset( $_REQUEST['statify_target'] ) ? wp_unslash( $_REQUEST['statify_target'] ) : '/' ),
-					FILTER_SANITIZE_URL
-				)
-			);
-			$referrer = urldecode(
-				filter_var(
-					( isset( $_REQUEST['statify_referrer'] ) ? wp_unslash( $_REQUEST['statify_referrer'] ) : '' ),
-					FILTER_SANITIZE_URL
-				)
-			);
+			$target   = urldecode( isset( $_REQUEST['statify_target'] ) ? wp_unslash( $_REQUEST['statify_target'] ) : '/' );
+			$referrer = urldecode( isset( $_REQUEST['statify_referrer'] ) ? wp_unslash( $_REQUEST['statify_referrer'] ) : '' );
 		} elseif ( ! $use_snippet ) {
-			$target   = filter_var(
-				( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/' ),
-				FILTER_SANITIZE_URL
-			);
-			if ( is_null( $target ) || false === $target ) {
-				$target = '/';
-			} else {
-				$target = wp_unslash( $target );
-			}
-
-			$referrer = filter_var(
-				( isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '' ),
-				FILTER_SANITIZE_URL
-			);
-			if ( is_null( $referrer ) || false === $referrer ) {
-				$referrer = '';
-			}
+			$target   = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/';
+			$referrer = isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '';
 		} else {
 			return false;
+		}
+
+		// Sanitize.
+		$target = filter_var( $target, FILTER_SANITIZE_URL );
+		if ( is_null( $target ) || false === $target ) {
+			$target = '/';
+		} else {
+			$target = wp_unslash( $target );
+		}
+
+		$referrer = filter_var( $referrer, FILTER_SANITIZE_URL );
+		if ( is_null( $referrer ) || false === $referrer ) {
+			$referrer = '';
 		}
 
 		/* Invalid target? */
