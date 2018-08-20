@@ -12,7 +12,7 @@ Visitor statistics for WordPress with focus on data protection, transparency and
 
 ## Installation
 * Use the stable release from [wordpress.org repository](https://wordpress.org/plugins/statify/)
-* Alternativ is the plugin available as [Composer package](https://packagist.org/packages/pluginkollektiv/statify) and can be installed via Composer, like:
+* Alternatively, the plugin is available as [Composer package](https://packagist.org/packages/pluginkollektiv/statify) and can be installed via Composer:
 
     `composer create-project pluginkollektiv/statify --no-dev`
 
