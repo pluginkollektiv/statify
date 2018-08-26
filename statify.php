@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 
 /*  Constants */
 define( 'STATIFY_FILE', __FILE__ );
-define( 'STATIFY_DIR', __DIR__ );
+define( 'STATIFY_DIR', dirname( __FILE__ ) );
 define( 'STATIFY_BASE', plugin_basename( __FILE__ ) );
 
 
