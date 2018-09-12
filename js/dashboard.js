@@ -30,20 +30,29 @@
 	}, {
 		low      : 0,
 		showArea : true,
-		fullWidth: true,
+		width    : 5*data.length,
 		axisX    : {
-			showGrid : false,
+			showGrid : true,
 			showLabel: false,
 			offset   : 0
 		},
 		axisY    : {
-			showGrid : false,
+			showGrid : true,
 			showLabel: true,
 			type     : Chartist.FixedScaleAxis,
 			low      : 0,
 			high     : maxValue + 1,
-			ticks    : [maxValue],
-			offset   : 15
+			ticks    : [
+				0,
+				Math.round(maxValue*1/7),
+				Math.round(maxValue*2/7),
+				Math.round(maxValue*3/7),
+				Math.round(maxValue*4/7),
+				Math.round(maxValue*5/7),
+				Math.round(maxValue*6/7),
+				maxValue,
+			],
+			offset   : 30
 		},
 		plugins  : [
 			Chartist.plugins.tooltip({
@@ -53,10 +62,7 @@
 		]
 	});
 
-	var pointRadius = 4;
-	if (data.length > 365) pointRadius = 0;
-	else if (data.length > 180) pointRadius = 1;
-	else if (data.length > 90) pointRadius = 2;
+	var pointRadius = 2;
 
 	// Replace default points with hollow circles, add "pageview(s) to value and append date (label) as meta data.
 	chart.on('draw', function (data) {

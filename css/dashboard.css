@@ -3,6 +3,10 @@
 #statify_chart {
     color: #aaa;
     height: 140px;
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    direction: rtl;
     margin: 0 -4px;
     text-align: center;
 }
