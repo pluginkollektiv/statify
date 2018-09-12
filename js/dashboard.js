@@ -30,9 +30,10 @@
 	}, {
 		low      : 0,
 		showArea : true,
-		width    : 5*data.length,
+		fullWidth: (data.length < 90),
+		width    : (data.length < 90 ? null : 5*data.length),
 		axisX    : {
-			showGrid : true,
+			showGrid : false,
 			showLabel: false,
 			offset   : 0
 		},
@@ -44,12 +45,9 @@
 			high     : maxValue + 1,
 			ticks    : [
 				0,
-				Math.round(maxValue*1/7),
-				Math.round(maxValue*2/7),
-				Math.round(maxValue*3/7),
-				Math.round(maxValue*4/7),
-				Math.round(maxValue*5/7),
-				Math.round(maxValue*6/7),
+				Math.round(maxValue*1/4),
+				Math.round(maxValue*2/4),
+				Math.round(maxValue*3/4),
 				maxValue,
 			],
 			offset   : 30

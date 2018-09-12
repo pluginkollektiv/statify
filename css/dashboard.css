@@ -4,7 +4,7 @@
     color: #aaa;
     height: 140px;
     width: 100%;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     direction: rtl;
     margin: 0 -4px;
