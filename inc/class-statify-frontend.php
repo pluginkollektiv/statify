@@ -152,8 +152,10 @@ class Statify_Frontend extends Statify {
 		if ( function_exists( 'apply_filters_deprecated' ) ) {
 			apply_filters_deprecated( 'statify_skip_tracking', array( '' ), '1.5.0', 'statify__skip_tracking' );
 		}
+
 		// Skip tracking via Hook.
 		$skip_hook = apply_filters( 'statify__skip_tracking', null );
+
 		if ( null !== $skip_hook ) {
 			return $skip_hook;
 		}
@@ -163,27 +165,45 @@ class Statify_Frontend extends Statify {
 			( isset( $_SERVER['HTTP_USER_AGENT'] ) ? wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) : '' ),
 			FILTER_SANITIZE_STRING
 		);
-		if ( is_null( $user_agent )
-			|| false === $user_agent
-			|| ! preg_match( '/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $user_agent ) ) {
+
+		if ( is_null( $user_agent ) || false === $user_agent ) {
+			$user_agents_regex = '/(?:Windows|Macintosh|Linux|iPhone|iPad)/';
+			return apply_filters( 'statify__skip_tracking_user_agents_regex', ! preg_match( $user_agents_regex, $user_agent ), $user_agents_regex );
+		}
+
+		if ( apply_filters( 'statify__skip_tracking_check_referrer', self::check_referrer() ) ) {
 			return true;
 		}
 
-		// Skip tracking via Referrer check and Conditional_Tags.
-		return ( self::check_referrer() || is_trackback() || is_robots() || is_user_logged_in()
-			|| self::_is_internal()
-		);
-	}
+		if ( apply_filters( 'statify__skip_tracking_is_trackback', is_trackback() ) ) {
+			return true;
+		}
 
-	/**
-	 * Rules to detect internal calls to skip tracking and not print code snippet.
-	 *
-	 * @since    1.6.1
-	 *
-	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
-	 */
-	private static function _is_internal() {
-		return is_feed() || is_preview() || is_404() || is_search();
+		if ( apply_filters( 'statify__skip_tracking_is_robots', is_robots() ) ) {
+			return true;
+		}
+
+		if ( apply_filters( 'statify__skip_tracking_is_user_logged_in', is_user_logged_in() ) ) {
+			return true;
+		}
+
+		if ( apply_filters( 'statify__skip_tracking_is_feed', is_feed() ) ) {
+			return true;
+		}
+
+		if ( apply_filters( 'statify__skip_tracking_is_preview', is_preview() ) ) {
+			return true;
+		}
+
+		if ( apply_filters( 'statify__skip_tracking_is_404', is_404() ) ) {
+			return true;
+		}
+
+		if ( apply_filters( 'statify__skip_tracking_is_search', is_search() ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
