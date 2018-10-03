@@ -74,6 +74,8 @@ class Statify {
 			add_action( 'wp_dashboard_setup', array( 'Statify_Dashboard', 'init' ) );
 			add_filter( 'plugin_row_meta', array( 'Statify_Backend', 'add_meta_link' ), 10, 2 );
 			add_filter( 'plugin_action_links_' . STATIFY_BASE, array( 'Statify_Backend', 'add_action_link' ) );
+			add_action( 'admin_init', array( 'Statify_Settings', 'register_settings' ) );
+			add_action( 'admin_menu', array( 'Statify_Settings', 'add_admin_menu' ) );
 		} else {    // Frontend.
 			add_action( 'template_redirect', array( 'Statify_Frontend', 'track_visit' ) );
 			add_filter( 'query_vars', array( 'Statify_Frontend', 'query_vars' ) );

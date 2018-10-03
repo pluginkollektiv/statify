@@ -70,8 +70,8 @@ class Statify_Backend {
 					/* @lang  Disable language injection for Url query argument. */
 					'<a href="%s">%s</a>',
 					add_query_arg(
-						array( 'edit' => 'statify_dashboard#statify_dashboard' ),
-						admin_url( '/' )
+						array( 'page' => 'statify-settings' ),
+						admin_url( '/options-general.php' )
 					),
 					esc_html__( 'Settings', 'statify' )
 				),

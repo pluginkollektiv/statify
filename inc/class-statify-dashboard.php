@@ -183,7 +183,7 @@ class Statify_Dashboard extends Statify {
 		if ( ! empty( $_POST['statify'] ) ) {
 			check_admin_referer( 'statify-dashboard' );
 
-			self::_save_options();
+			self::_save_widget_options();
 		}
 
 		// Load view.
@@ -194,36 +194,35 @@ class Statify_Dashboard extends Statify {
 
 
 	/**
-	 * Save plugin options
+	 * Save dashboard widget options.
 	 *
 	 * @since    1.4.0
-	 * @version  2017-01-10
+	 * @sicnce   1.7.0 Renamed to _save_widget_options()
+	 *
+	 * @return void
 	 */
-	private static function _save_options() {
+	private static function _save_widget_options() {
 		// Check the nonce field from the dashboard form.
 		if ( ! check_admin_referer( 'statify-dashboard' ) ) {
 			return;
 		}
 
-		// Get numeric values from POST variables.
-		$options = array();
-		foreach ( array( 'days', 'limit' ) as $option_name ) {
-			$options[ $option_name ] = Statify::$_options[ $option_name ];
-			if ( isset( $_POST['statify'][ $option_name ] ) && (int) $_POST['statify'][ $option_name ] > 0 ) {
-				$options[ $option_name ] = (int) $_POST['statify'][ $option_name ];
-			}
+		// We only do a partial update, so initialize with current values.
+		$options = Statify::$_options;
+
+		// Parse numeric "limit" value.
+		if ( isset( $_POST['statify']['limit'] ) && (int) $_POST['statify']['limit'] > 0 ) {
+			$options['limit'] = (int) $_POST['statify']['limit'];
 		}
-		if ( (int) $options['limit'] > 100 ) {
+		if ( $options['limit'] > 100 ) {
 			$options['limit'] = 100;
 		}
 
-		// Get checkbox values from POST variables.
-		foreach ( array( 'today', 'snippet', 'blacklist' ) as $option_name ) {
-			if ( isset( $_POST['statify'][ $option_name ] ) && 1 === (int) $_POST['statify'][ $option_name ] ) {
-				$options[ $option_name ] = 1;
-			} else {
-				$options[ $option_name ] = 0;
-			}
+		// Parse "today" checkbox.
+		if ( isset( $_POST['statify']['today'] ) && 1 === (int) $_POST['statify']['today'] ) {
+			$options['today'] = 1;
+		} else {
+			$options['today'] = 0;
 		}
 
 		// Update values.
