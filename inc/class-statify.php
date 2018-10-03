@@ -61,6 +61,11 @@ class Statify {
 				'today'     => 0,
 				'snippet'   => 0,
 				'blacklist' => 0,
+				'skip'      => array(
+					'logged_in' => 1,
+					'feed'      => 1,
+					'search'    => 1,
+				),
 			)
 		);
 

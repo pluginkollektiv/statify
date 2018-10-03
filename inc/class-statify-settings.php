@@ -84,6 +84,27 @@ class Statify_Settings {
 			'statify',
 			'statify-skip'
 		);
+		add_settings_field(
+			'statify-skip-logged_in',
+			__( 'Logged in users', 'statify' ),
+			array( __CLASS__, 'options_skip_logged_in' ),
+			'statify',
+			'statify-skip'
+		);
+		add_settings_field(
+			'statify-skip-feed',
+			__( 'Feed access', 'statify' ),
+			array( __CLASS__, 'options_skip_feed' ),
+			'statify',
+			'statify-skip'
+		);
+		add_settings_field(
+			'statify-skip-search',
+			__( 'Search requests', 'statify' ),
+			array( __CLASS__, 'options_skip_search' ),
+			'statify',
+			'statify-skip'
+		);
 	}
 
 	/**
@@ -163,6 +184,7 @@ class Statify_Settings {
 		<p>
 			<?php
 			echo wp_kses( __( 'The following options define cases in which a visit will <strong>not</strong> be tracked.', 'statify' ), array( 'strong' => array() ) );
+			esc_html_e( 'The conditions are otherwise process in the given order.', 'statify' );
 			?>
 
 		</p>
@@ -181,6 +203,51 @@ class Statify_Settings {
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No' ); ?>)
 		<br>
 		<p class="description"><?php esc_html_e( 'Skip tracking for referrers listed in the comment blacklist', 'statify' ); ?>.</p>
+		<?php
+	}
+
+	/**
+	 * Option to skip tracking for logged in uses.
+	 *
+	 * @return void
+	 */
+	public static function options_skip_logged_in() {
+		?>
+		<input type="checkbox" name="statify[skip][logged_in]" value="1"<?php checked( Statify::$_options['skip']['logged_in'] ); ?>
+			title="<?php esc_attr_e( 'Skip tracking for logged in users', 'statify' ); ?>">
+		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes' ); ?>)
+		<br>
+		<p class="description"><?php esc_html_e( 'This option affects registered users that are currently logged in.', 'statify' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Option to skip tracking for feed access.
+	 *
+	 * @return void
+	 */
+	public static function options_skip_feed() {
+		?>
+		<input type="checkbox" name="statify[skip][feed]" value="1"<?php checked( Statify::$_options['skip']['feed'] ); ?>
+			title="<?php esc_attr_e( 'Skip tracking for feed access', 'statify' ); ?>">
+		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes' ); ?>)
+		<br>
+		<p class="description"><?php esc_html_e( 'If selected, requests to feed (RSS, Atom, etc.) are not tracked.', 'statify' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Option to skip tracking for search requests.
+	 *
+	 * @return void
+	 */
+	public static function options_skip_search() {
+		?>
+		<input type="checkbox" name="statify[skip][search]" value="1"<?php checked( Statify::$_options['skip']['search'] ); ?>
+			title="<?php esc_attr_e( 'Skip tracking for search requests', 'statify' ); ?>">
+		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes' ); ?>)
+		<br>
+		<p class="description"><?php esc_html_e( 'Define if visits on search pages should be excluded.', 'statify' ); ?></p>
 		<?php
 	}
 
@@ -205,13 +272,12 @@ class Statify_Settings {
 			$res['limit'] = 100;
 		}
 
-		// Get checkbox values from POST variables.
+		// Get checkbox values.
 		foreach ( array( 'today', 'snippet', 'blacklist' ) as $o ) {
-			if ( isset( $options[ $o ] ) && 1 === (int) $options[ $o ] ) {
-				$res[ $o ] = 1;
-			} else {
-				$res[ $o ] = 0;
-			}
+			$res[ $o ] = isset( $options[ $o ] ) && 1 === (int) $options[ $o ] ? 1 : 0;
+		}
+		foreach ( array( 'logged_in', 'feed', 'search' ) as $o ) {
+			$res['skip'][ $o ] = isset( $options['skip'][ $o ] ) && 1 === (int) $options['skip'][ $o ] ? 1 : 0;
 		}
 
 		return $res;
