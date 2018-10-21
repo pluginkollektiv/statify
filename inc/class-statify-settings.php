@@ -29,7 +29,7 @@ class Statify_Settings {
 		// Global settings.
 		add_settings_section(
 			'statify-global',
-			__( 'Global settings', 'statif' ),
+			__( 'Global settings', 'statify' ),
 			null,
 			'statify'
 		);
@@ -51,7 +51,7 @@ class Statify_Settings {
 		// Dashboard widget settings.
 		add_settings_section(
 			'statify-dashboard',
-			__( 'Dashboard Widget', 'statif' ),
+			__( 'Dashboard Widget', 'statify' ),
 			array( __CLASS__, 'header_dashboard' ),
 			'statify'
 		);
@@ -93,7 +93,7 @@ class Statify_Settings {
 		);
 		add_settings_field(
 			'statify-skip-feed',
-			__( 'Feed access', 'statify' ),
+			__( 'Feed', 'statify' ),
 			array( __CLASS__, 'options_skip_feed' ),
 			'statify',
 			'statify-skip'
@@ -131,7 +131,7 @@ class Statify_Settings {
 			title="<?php esc_attr_e( 'Tracking via JavaScript', 'statify' ); ?>">
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No' ); ?>)
 		<br>
-		<p class="description"><?php esc_html_e( 'This option is recommended if caching is in use.', 'statify' ); ?></p>
+		<p class="description"><?php esc_html_e( 'This option is strongly recommended if caching is in use.', 'statify' ); ?></p>
 		<?php
 	}
 
@@ -143,7 +143,7 @@ class Statify_Settings {
 	public static function header_dashboard() {
 		?>
 		<p>
-			<?php esc_html_e( 'The following options affect the admin dashboard widget.', 'statif' ); ?>
+			<?php esc_html_e( 'The following options affect the admin dashboard widget.', 'statify' ); ?>
 		</p>
 		<?php
 	}
@@ -182,11 +182,7 @@ class Statify_Settings {
 	public static function header_skip() {
 		?>
 		<p>
-			<?php
-			echo wp_kses( __( 'The following options define cases in which a visit will <strong>not</strong> be tracked.', 'statify' ), array( 'strong' => array() ) );
-			esc_html_e( 'The conditions are otherwise process in the given order.', 'statify' );
-			?>
-
+			<?php echo wp_kses( __( 'The following options define cases in which a view will <strong>not</strong> be tracked.', 'statify' ), array( 'strong' => array() ) ); ?>
 		</p>
 		<?php
 	}
@@ -202,7 +198,7 @@ class Statify_Settings {
 			title="<?php esc_attr_e( 'Skip tracking for referrers listed in the comment blacklist', 'statify' ); ?>">
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No' ); ?>)
 		<br>
-		<p class="description"><?php esc_html_e( 'Skip tracking for referrers listed in the comment blacklist', 'statify' ); ?>.</p>
+		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views with referrers listed in the comment blacklist', 'statify' ); ?>.</p>
 		<?php
 	}
 
@@ -217,7 +213,7 @@ class Statify_Settings {
 			title="<?php esc_attr_e( 'Skip tracking for logged in users', 'statify' ); ?>">
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes' ); ?>)
 		<br>
-		<p class="description"><?php esc_html_e( 'This option affects registered users that are currently logged in.', 'statify' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views of logged-in users from tracking.', 'statify' ); ?></p>
 		<?php
 	}
 
@@ -232,7 +228,7 @@ class Statify_Settings {
 			title="<?php esc_attr_e( 'Skip tracking for feed access', 'statify' ); ?>">
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes' ); ?>)
 		<br>
-		<p class="description"><?php esc_html_e( 'If selected, requests to feed (RSS, Atom, etc.) are not tracked.', 'statify' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Enabling this option excludes all requests to feeds (RSS, Atom, etc.) from tracking.', 'statify' ); ?></p>
 		<?php
 	}
 
@@ -247,7 +243,7 @@ class Statify_Settings {
 			title="<?php esc_attr_e( 'Skip tracking for search requests', 'statify' ); ?>">
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes' ); ?>)
 		<br>
-		<p class="description"><?php esc_html_e( 'Define if visits on search pages should be excluded.', 'statify' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Enabling this option excludes search result pages from tracking.', 'statify' ); ?></p>
 		<?php
 	}
 
@@ -290,8 +286,8 @@ class Statify_Settings {
 	 */
 	public static function add_admin_menu() {
 		add_options_page(
-			__( 'Statify', 'wp-calendar' ),
-			__( 'Statify', 'wp-calendar' ),
+			__( 'Statify', 'statify' ),
+			__( 'Statify', 'statify' ),
 			'manage_options',
 			'statify-settings',
 			array( __CLASS__, 'create_settings_page' )
@@ -306,10 +302,10 @@ class Statify_Settings {
 	public static function create_settings_page() {
 		?>
 
-		<div class="wrap" id="cachify_settings">
-			<h1><?php esc_html_e( 'Statify Settings', 'wp-calendar' ); ?></h1>
+		<div class="wrap">
+			<h1><?php esc_html_e( 'Statify Settings', 'statify' ); ?></h1>
 
-			<form id="staify-settings" method="post" action="options.php">
+			<form id="statify-settings" method="post" action="options.php">
 				<?php
 				settings_fields( 'statify' );
 				do_settings_sections( 'statify' );
