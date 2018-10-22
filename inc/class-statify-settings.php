@@ -38,14 +38,16 @@ class Statify_Settings {
 			__( 'Period of data saving', 'statify' ),
 			array( __CLASS__, 'options_days' ),
 			'statify',
-			'statify-global'
+			'statify-global',
+			array( 'label_for' => 'statify-days' )
 		);
 		add_settings_field(
 			'statify-snippet',
 			__( 'Tracking via JavaScript', 'statify' ),
 			array( __CLASS__, 'options_snippet' ),
 			'statify',
-			'statify-global'
+			'statify-global',
+			array( 'label_for' => 'statify-snippet' )
 		);
 
 		// Dashboard widget settings.
@@ -60,14 +62,16 @@ class Statify_Settings {
 			__( 'Number of entries in top lists', 'statify' ),
 			array( __CLASS__, 'options_limit' ),
 			'statify',
-			'statify-dashboard'
+			'statify-dashboard',
+			array( 'label_for' => 'statify-limit' )
 		);
 		add_settings_field(
 			'statify-today',
 			__( 'Top lists only for today', 'statify' ),
 			array( __CLASS__, 'options_today' ),
 			'statify',
-			'statify-dashboard'
+			'statify-dashboard',
+			array( 'label_for' => 'statify-today' )
 		);
 
 		// Exclusion settings.
@@ -82,28 +86,32 @@ class Statify_Settings {
 			__( 'Blacklisted referrers', 'statify' ),
 			array( __CLASS__, 'options_skip_blacklist' ),
 			'statify',
-			'statify-skip'
+			'statify-skip',
+			array( 'label_for' => 'statify-skip-referrer' )
 		);
 		add_settings_field(
 			'statify-skip-logged_in',
 			__( 'Logged in users', 'statify' ),
 			array( __CLASS__, 'options_skip_logged_in' ),
 			'statify',
-			'statify-skip'
+			'statify-skip',
+			array( 'label_for' => 'statify-skip-logged_in' )
 		);
 		add_settings_field(
 			'statify-skip-feed',
 			__( 'Feed', 'statify' ),
 			array( __CLASS__, 'options_skip_feed' ),
 			'statify',
-			'statify-skip'
+			'statify-skip',
+			array( 'label_for' => 'statify-skip-feed' )
 		);
 		add_settings_field(
 			'statify-skip-search',
 			__( 'Search requests', 'statify' ),
 			array( __CLASS__, 'options_skip_search' ),
 			'statify',
-			'statify-skip'
+			'statify-skip',
+			array( 'label_for' => 'statify-skip-search' )
 		);
 	}
 
@@ -115,7 +123,7 @@ class Statify_Settings {
 	public static function options_days() {
 		?>
 		<input id="statify-days" name="statify[days]" type="number" min="1" value="<?php echo esc_attr( Statify::$_options['days'] ); ?>">
-		<label for="statify-days"><?php esc_html_e( 'days', 'statify' ); ?></label>
+		<?php esc_html_e( 'days', 'statify' ); ?>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: 14)
 		<?php
 	}
@@ -127,8 +135,7 @@ class Statify_Settings {
 	 */
 	public static function options_snippet() {
 		?>
-		<input type="checkbox" name="statify[snippet]" id="statify_snippet" value="1" <?php checked( Statify::$_options['snippet'], 1 ); ?>
-			title="<?php esc_attr_e( 'Tracking via JavaScript', 'statify' ); ?>">
+		<input id="statify-snippet" type="checkbox" name="statify[snippet]" value="1" <?php checked( Statify::$_options['snippet'], 1 ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No' ); ?>)
 		<br>
 		<p class="description"><?php esc_html_e( 'This option is strongly recommended if caching is in use.', 'statify' ); ?></p>
@@ -155,8 +162,7 @@ class Statify_Settings {
 	 */
 	public static function options_limit() {
 		?>
-		<input id="statify-limit" name="statify[limit]" type="number" min="1" max="100" value="<?php echo esc_attr( Statify::$_options['limit'] ); ?>"
-			title="<?php esc_attr_e( 'Number of entries in top lists', 'statify' ); ?>">
+		<input id="statify-limit" name="statify[limit]" type="number" min="1" max="100" value="<?php echo esc_attr( Statify::$_options['limit'] ); ?>">
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: 3)
 		<?php
 	}
@@ -168,8 +174,7 @@ class Statify_Settings {
 	 */
 	public static function options_today() {
 		?>
-		<input  id="statify-today" type="checkbox" name="statify[today]" value="1" <?php checked( Statify::$_options['today'], 1 ); ?>
-			title="<?php esc_attr_e( 'Entries in top lists only for today', 'statify' ); ?>">
+		<input  id="statify-today" type="checkbox" name="statify[today]" value="1" <?php checked( Statify::$_options['today'], 1 ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No' ); ?>)
 		<?php
 	}
@@ -194,8 +199,7 @@ class Statify_Settings {
 	 */
 	public static function options_skip_blacklist() {
 		?>
-		<input type="checkbox" name="statify[blacklist]" value="1"<?php checked( Statify::$_options['blacklist'] ); ?>
-			title="<?php esc_attr_e( 'Skip tracking for referrers listed in the comment blacklist', 'statify' ); ?>">
+		<input id="statify-skip-referrer" type="checkbox" name="statify[blacklist]" value="1"<?php checked( Statify::$_options['blacklist'] ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No' ); ?>)
 		<br>
 		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views with referrers listed in the comment blacklist', 'statify' ); ?>.</p>
@@ -209,8 +213,7 @@ class Statify_Settings {
 	 */
 	public static function options_skip_logged_in() {
 		?>
-		<input type="checkbox" name="statify[skip][logged_in]" value="1"<?php checked( Statify::$_options['skip']['logged_in'] ); ?>
-			title="<?php esc_attr_e( 'Skip tracking for logged in users', 'statify' ); ?>">
+		<input id="statify-skip-logged_in" type="checkbox" name="statify[skip][logged_in]" value="1"<?php checked( Statify::$_options['skip']['logged_in'] ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes' ); ?>)
 		<br>
 		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views of logged-in users from tracking.', 'statify' ); ?></p>
@@ -224,8 +227,7 @@ class Statify_Settings {
 	 */
 	public static function options_skip_feed() {
 		?>
-		<input type="checkbox" name="statify[skip][feed]" value="1"<?php checked( Statify::$_options['skip']['feed'] ); ?>
-			title="<?php esc_attr_e( 'Skip tracking for feed access', 'statify' ); ?>">
+		<input id="statify-skip-feed" type="checkbox" name="statify[skip][feed]" value="1"<?php checked( Statify::$_options['skip']['feed'] ); ?>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes' ); ?>)
 		<br>
 		<p class="description"><?php esc_html_e( 'Enabling this option excludes all requests to feeds (RSS, Atom, etc.) from tracking.', 'statify' ); ?></p>
@@ -239,8 +241,7 @@ class Statify_Settings {
 	 */
 	public static function options_skip_search() {
 		?>
-		<input type="checkbox" name="statify[skip][search]" value="1"<?php checked( Statify::$_options['skip']['search'] ); ?>
-			title="<?php esc_attr_e( 'Skip tracking for search requests', 'statify' ); ?>">
+		<input id="statify-skip-search" type="checkbox" name="statify[skip][search]" value="1"<?php checked( Statify::$_options['skip']['search'] ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes' ); ?>)
 		<br>
 		<p class="description"><?php esc_html_e( 'Enabling this option excludes search result pages from tracking.', 'statify' ); ?></p>
