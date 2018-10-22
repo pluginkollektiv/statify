@@ -227,7 +227,7 @@ class Statify_Settings {
 	 */
 	public static function options_skip_feed() {
 		?>
-		<input id="statify-skip-feed" type="checkbox" name="statify[skip][feed]" value="1"<?php checked( Statify::$_options['skip']['feed'] ); ?>
+		<input id="statify-skip-feed" type="checkbox" name="statify[skip][feed]" value="1"<?php checked( Statify::$_options['skip']['feed'] ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes' ); ?>)
 		<br>
 		<p class="description"><?php esc_html_e( 'Enabling this option excludes all requests to feeds (RSS, Atom, etc.) from tracking.', 'statify' ); ?></p>
