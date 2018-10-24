@@ -78,6 +78,9 @@ class Statify {
 			add_action( 'template_redirect', array( 'Statify_Frontend', 'track_visit' ) );
 			add_filter( 'query_vars', array( 'Statify_Frontend', 'query_vars' ) );
 			add_action( 'wp_footer', array( 'Statify_Frontend', 'wp_footer' ) );
+			if ( function_exists( 'is_amp_endpoint' ) ) { // Automattic AMP plugin present
+				add_filter( 'amp_post_template_analytics', array( 'Statify_Frontend', 'amp_post_template_analytics' )  );
+			}
 		}
 	}
 }
