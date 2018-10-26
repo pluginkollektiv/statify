@@ -10,6 +10,7 @@
 // Quit if accessed outside WP context.
 class_exists( 'Statify' ) || exit; ?>
 
+<?php if ( current_user_can( 'manage_options' ) ) : ?>
 <p class="meta-links">
 	<a href="<?php echo esc_attr( add_query_arg( array( 'page' => 'statify-settings' ), admin_url( '/options-general.php' ) ) ); ?>"
 		title="<?php esc_attr_e( 'Open full settings page', 'statify' ); ?>">
@@ -18,6 +19,7 @@ class_exists( 'Statify' ) || exit; ?>
 </p>
 
 <br>
+<?php endif; ?>
 
 <h3><?php esc_html_e( 'Widget Settings', 'statify' ); ?></h3>
 <fieldset>

@@ -58,7 +58,7 @@ class Statify_Backend {
 	public static function add_action_link( $input ) {
 
 		// Rights?
-		if ( ! current_user_can( 'edit_dashboard' ) ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			return $input;
 		}
 
