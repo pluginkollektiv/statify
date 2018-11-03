@@ -32,7 +32,7 @@ class Statify_Cron extends Statify {
 		// Remove items.
 		$wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM `$wpdb->statify` WHERE created <= SUBDATE(CURDATE(), %d)",
+				"DELETE FROM `$wpdb->statify` WHERE created <= SUBDATE(" . strftime( '%Y-%m-%d', current_time( 'timestamp' ) ) . ", %d)",
 				(int) self::$_options['days']
 			)
 		);
