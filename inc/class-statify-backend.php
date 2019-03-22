@@ -40,7 +40,7 @@ class Statify_Backend {
 			$input,
 			array(
 				'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Donate', 'statify' ) . '</a>',
-				'<a href="https://wordpress.org/support/plugin/statify" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Support', 'statify' ) . '</a>',
+				'<a href="' . esc_html_e( 'https://wordpress.org/support/plugin/statify', 'statify' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Support', 'statify' ) . '</a>',
 			)
 		);
 	}
