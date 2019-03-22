@@ -283,7 +283,7 @@ class Statify_Dashboard extends Statify {
 		}
 
 		if ( ! empty( $data['target'] ) ) {
-			foreach( $data['target'] AS $key => $target ) {
+			foreach ( $data['target'] as $key => $target ) {
 				$title = self::get_title_by_url( $target['url'] );
 				$data['target'][ $key ]['title'] = $title;
 			}
@@ -301,11 +301,11 @@ class Statify_Dashboard extends Statify {
 
 	/**
 	 * Getting title by title.
-	 * 
+	 *
 	 * @since 1.7.0
-	 * 
+	 *
 	 * @param string $url URL to get title from.
-	 * 
+	 *
 	 * @return string $title Totle of the given url.
 	 */
 	private static function get_title_by_url( $url ) {
