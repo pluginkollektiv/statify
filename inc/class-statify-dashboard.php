@@ -282,6 +282,13 @@ class Statify_Dashboard extends Statify {
 			$data = null;
 		}
 
+		if ( ! empty( $data['target'] ) ) {
+			foreach( $data['target'] AS $key => $target ) {
+				$title = self::get_title_by_url( $target['url'] );
+				$data['target'][ $key ]['title'] = $title;
+			}
+		}
+
 		// Make cache.
 		set_transient(
 			'statify_data',
@@ -292,6 +299,28 @@ class Statify_Dashboard extends Statify {
 		return $data;
 	}
 
+	/**
+	 * Getting title by title.
+	 * 
+	 * @since 1.7.0
+	 * 
+	 * @param string $url URL to get title from.
+	 * 
+	 * @return string $title Totle of the given url.
+	 */
+	private static function get_title_by_url( $url ) {
+		if ( '/' === $url ) {
+			return __( 'Home Page', 'statify' );
+		}
+
+		$post_id = url_to_postid( $url );
+
+		if ( 0 !== $post_id ) {
+			return get_the_title( $post_id );
+		}
+
+		return esc_url( $url );
+	}
 
 	/**
 	 * Get stats from DB
