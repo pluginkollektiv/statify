@@ -319,6 +319,12 @@ class Statify_Dashboard extends Statify {
 			return get_the_title( $post_id );
 		}
 
+		$category = get_category_by_path( $url, false );
+
+		if ( ! is_null( $category ) ) {
+			return $category->name;
+		}
+
 		return esc_url( $url );
 	}
 
