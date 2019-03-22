@@ -190,12 +190,12 @@ class Statify_Frontend extends Statify {
 
 	/**
 	 * Checks if user agent is a bot.
-	 * 
+	 *
 	 * @since 1.7.0
-	 * 
-	 * @param  string  $user_agent Server user agent string.
-	 * 
-	 * @return boolean $is_bot 	   TRUE if user agent is a bot, FALSE if not.
+	 *
+	 * @param  string $user_agent Server user agent string.
+	 *
+	 * @return boolean $is_bot     TRUE if user agent is a bot, FALSE if not.
 	 */
 	private static function is_bot( $user_agent ) {
 		$user_agent = strtolower( $user_agent );
