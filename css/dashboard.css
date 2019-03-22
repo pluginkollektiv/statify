@@ -32,6 +32,14 @@
     fill: #0074a2;
 }
 
+#statify_chart .ct-series-a .ct-area {
+    fill-opacity: .2;
+}
+
+#statify_chart .ct-series-b .ct-area {
+    fill-opacity: .3;
+}
+
 .statify-chartist-tooltip {
     border: 1px solid #000000;
     background-color: #ffffff;
@@ -45,6 +53,34 @@
 
 .statify-chartist-tooltip .chartist-tooltip-meta {
     color: #0074a2;
+}
+
+#statify_dashboard .legend {
+    margin-left: 22px;
+}
+
+#statify_dashboard .legend li {
+    display: inline;
+}
+
+#statify_dashboard .legend li + li {
+    margin-left: 1.5em;
+}
+
+#statify_dashboard .legend .total::before,
+#statify_dashboard .legend .mobile::before {
+    background-color: #cce3ec;
+    content: '';
+    display: inline-block;
+    height: 1em;
+    margin-right: .4em;
+    position: relative;
+    top: .125em;
+    width: 1em;
+}
+
+#statify_dashboard .legend .mobile::before {
+    background-color: #8fc2d6;
 }
 
 #statify_dashboard .inside {

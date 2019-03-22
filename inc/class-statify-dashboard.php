@@ -145,6 +145,7 @@ class Statify_Dashboard extends Statify {
 			array(
 				'pageview'  => strip_tags( esc_html__( 'Pageview', 'statify' ) ),
 				'pageviews' => strip_tags( esc_html__( 'Pageviews', 'statify' ) ),
+				'mobile_user' => strip_tags( esc_html__( 'Mobile', 'statify' ) ),
 			)
 		);
 	}
@@ -314,7 +315,7 @@ class Statify_Dashboard extends Statify {
 		return array(
 			'visits'   => $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT `created` as `date`, COUNT(`created`) as `count` FROM `$wpdb->statify` GROUP BY `created` ORDER BY `created` DESC LIMIT %d",
+					"SELECT `created` as `date`, COUNT(`created`) as `count`, sum(`ismobile` = 1) as `mobile` FROM `$wpdb->statify` GROUP BY `created` ORDER BY `created` DESC LIMIT %d",
 					$days
 				),
 				ARRAY_A

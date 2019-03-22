@@ -23,12 +23,18 @@ $stats = Statify_Dashboard::get_stats(); ?>
 				<?php foreach ( (array) $stats['visits'] as $visit ) { ?>
 					<tr>
 						<th><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $visit['date'] ) ) ); ?></th>
-						<td><?php echo (int) $visit['count']; ?></td>
+						<td class="total"><?php echo (int) $visit['count']; ?></td>
+						<td class="mobile"><?php echo (int) $visit['mobile']; ?></td>
 					</tr>
 				<?php } ?>
 			</table>
 		<?php } ?>
 	</div>
+
+	<ul class="legend">
+		<li class="total">Total</li>
+		<li class="mobile">Mobile</li>
+	</ul>
 
 
 <?php if ( ! empty( $stats['target'] ) ) { ?>
