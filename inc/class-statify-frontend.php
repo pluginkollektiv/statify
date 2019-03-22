@@ -169,10 +169,23 @@ class Statify_Frontend extends Statify {
 			return true;
 		}
 
-		// Skip tracking via Referrer check and Conditional_Tags.
-		return ( self::check_referrer() || is_trackback() || is_robots() || is_user_logged_in()
-			|| self::_is_internal()
-		);
+		// Skip tracking via Referrer check.
+		if ( self::check_referrer() ) {
+			return true;
+		}
+
+		// Skip for trackbacks and robots.
+		if ( is_trackback() || is_robots() ) {
+			return true;
+		}
+
+		// Skip logged in users, if enabled.
+		if ( self::$_options['skip']['logged_in'] && is_user_logged_in() ) {
+			return true;
+		}
+
+		// Skip for "internal" requests.
+		return self::_is_internal();
 	}
 
 	/**
@@ -214,7 +227,18 @@ class Statify_Frontend extends Statify {
 	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
 	 */
 	private static function _is_internal() {
-		return is_feed() || is_preview() || is_404() || is_search();
+		// Skip for feed access, if enabled.
+		if ( self::$_options['skip']['feed'] && is_feed() ) {
+			return true;
+		}
+
+		// Skip for preview and 404 calls.
+		if ( is_preview() || is_404() ) {
+			return true;
+		}
+
+		// Skip for seach requests, if enabled.
+		return self::$_options['skip']['search'] && is_search();
 	}
 
 	/**
