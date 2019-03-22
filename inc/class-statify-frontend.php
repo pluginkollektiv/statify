@@ -165,7 +165,7 @@ class Statify_Frontend extends Statify {
 		);
 		if ( is_null( $user_agent )
 			|| false === $user_agent
-			|| ! preg_match( '/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $user_agent ) ) {
+			|| self::is_bot( $user_agent ) ) {
 			return true;
 		}
 
@@ -173,6 +173,37 @@ class Statify_Frontend extends Statify {
 		return ( self::check_referrer() || is_trackback() || is_robots() || is_user_logged_in()
 			|| self::_is_internal()
 		);
+	}
+
+	/**
+	 * Checks if user agent is a bot.
+	 * 
+	 * @since 1.7.0
+	 * 
+	 * @param  string  $user_agent Server user agent string.
+	 * 
+	 * @return boolean $is_bot 	   TRUE if user agent is a bot, FALSE if not.
+	 */
+	private static function is_bot( $user_agent ) {
+		$user_agent = strtolower( $user_agent );
+
+		$identifiers = array(
+			'bot',
+			'slurp',
+			'crawler',
+			'spider',
+			'curl',
+			'facebook',
+			'fetch',
+		);
+
+		foreach ( $identifiers as $identifier ) {
+			if ( strpos( $user_agent, $identifier ) !== true ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
