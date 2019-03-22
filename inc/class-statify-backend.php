@@ -40,7 +40,7 @@ class Statify_Backend {
 			$input,
 			array(
 				'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Donate', 'statify' ) . '</a>',
-				'<a href="https://wordpress.org/support/plugin/statify" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Support', 'statify' ) . '</a>',
+				'<a href="' . esc_url( __( 'https://wordpress.org/support/plugin/statify', 'statify' ) ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Support', 'statify' ) . '</a>',
 			)
 		);
 	}
@@ -58,7 +58,7 @@ class Statify_Backend {
 	public static function add_action_link( $input ) {
 
 		// Rights?
-		if ( ! current_user_can( 'edit_dashboard' ) ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			return $input;
 		}
 
@@ -70,8 +70,8 @@ class Statify_Backend {
 					/* @lang  Disable language injection for Url query argument. */
 					'<a href="%s">%s</a>',
 					add_query_arg(
-						array( 'edit' => 'statify_dashboard#statify_dashboard' ),
-						admin_url( '/' )
+						array( 'page' => 'statify-settings' ),
+						admin_url( '/options-general.php' )
 					),
 					esc_html__( 'Settings', 'statify' )
 				),
