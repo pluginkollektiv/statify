@@ -211,7 +211,7 @@ class Statify_Frontend extends Statify {
 		);
 
 		foreach ( $identifiers as $identifier ) {
-			if ( strpos( $user_agent, $identifier ) !== true ) {
+			if ( strpos( $user_agent, $identifier ) !== false ) {
 				return true;
 			}
 		}
