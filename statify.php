@@ -72,6 +72,7 @@ function statify_autoload( $class ) {
 		'Statify_Install',
 		'Statify_Uninstall',
 		'Statify_Deactivate',
+		'Statify_Settings',
 		'Statify_Table',
 		'Statify_XMLRPC',
 		'Statify_Cron',

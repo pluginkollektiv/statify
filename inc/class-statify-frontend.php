@@ -179,14 +179,58 @@ class Statify_Frontend extends Statify {
 		);
 		if ( is_null( $user_agent )
 			|| false === $user_agent
-			|| ! preg_match( '/(?:Windows|Macintosh|Linux|iPhone|iPad)/', $user_agent ) ) {
+			|| self::is_bot( $user_agent ) ) {
 			return true;
 		}
 
-		// Skip tracking via Referrer check and Conditional_Tags.
-		return ( self::check_referrer() || is_trackback() || is_robots() || is_user_logged_in()
-			|| self::_is_internal()
+		// Skip tracking via Referrer check.
+		if ( self::check_referrer() ) {
+			return true;
+		}
+
+		// Skip for trackbacks and robots.
+		if ( is_trackback() || is_robots() ) {
+			return true;
+		}
+
+		// Skip logged in users, if enabled.
+		if ( self::$_options['skip']['logged_in'] && is_user_logged_in() ) {
+			return true;
+		}
+
+		// Skip for "internal" requests.
+		return self::_is_internal();
+	}
+
+	/**
+	 * Checks if user agent is a bot.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param  string $user_agent Server user agent string.
+	 *
+	 * @return boolean $is_bot     TRUE if user agent is a bot, FALSE if not.
+	 */
+	private static function is_bot( $user_agent ) {
+		$user_agent = strtolower( $user_agent );
+
+		$identifiers = array(
+			'bot',
+			'slurp',
+			'crawler',
+			'spider',
+			'curl',
+			'facebook',
+			'fetch',
 		);
+
+		foreach ( $identifiers as $identifier ) {
+			if ( strpos( $user_agent, $identifier ) !== false ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -197,7 +241,18 @@ class Statify_Frontend extends Statify {
 	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
 	 */
 	private static function _is_internal() {
-		return is_feed() || is_preview() || is_404() || is_search();
+		// Skip for feed access, if enabled.
+		if ( self::$_options['skip']['feed'] && is_feed() ) {
+			return true;
+		}
+
+		// Skip for preview and 404 calls.
+		if ( is_preview() || is_404() ) {
+			return true;
+		}
+
+		// Skip for seach requests, if enabled.
+		return self::$_options['skip']['search'] && is_search();
 	}
 
 	/**
