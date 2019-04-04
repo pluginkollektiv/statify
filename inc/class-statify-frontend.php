@@ -49,8 +49,6 @@ class Statify_Frontend extends Statify {
 		$target = filter_var( $target, FILTER_SANITIZE_URL );
 		if ( is_null( $target ) || false === $target ) {
 			$target = '/';
-		} else {
-			$target = wp_unslash( $target );
 		}
 
 		$referrer = filter_var( $referrer, FILTER_SANITIZE_URL );
