@@ -373,34 +373,39 @@ class Statify_Frontend extends Statify {
 			)
 		);
 	}
-	
+
 	/**
-	* Add amp-analytics, see https://github.com/Automattic/amp-wp/wiki/Analytics
-	*/
+	 * Add amp-analytics.
+	 *
+	 * @see https://amp-wp.org/documentation/playbooks/analytics/
+	 *
+	 * @param array $analytics Analytics.
+	 */
 	public static function amp_post_template_analytics( $analytics ) {
-		
+
 		if ( ! is_array( $analytics ) ) {
 			$analytics = array();
 		}
 
 		$analytics['statify'] = array(
-			'type' => 'statify',
-			'attributes' => array(),
+			'type'        => 'statify',
+			'attributes'  => array(),
 			'config_data' => array(
 				'requests' => array(
-					'event' => get_site_url() . '/?statify_referrer=${documentReferrer}&statify_target=${canonicalPath}amp/'
+					'event' => get_site_url() . '/?statify_referrer=${documentReferrer}&statify_target=${canonicalPath}amp/',
 				),
 				'triggers' => array(
 					'trackPageview' => array(
-						'on' => 'visible',
+						'on'      => 'visible',
 						'request' => 'event',
-						'vars' => array(
-							'eventId' => 'pageview'
+						'vars'    => array(
+							'eventId' => 'pageview',
 						),
 					),
 				),
 			),
 		);
+
 		return $analytics;
 	}
 }
