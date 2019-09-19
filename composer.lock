@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4fe6d7ea043ff6014c56a8a1145239c4",
-    "content-hash": "775564b6fe2fe58ba36196c59667e99c",
+    "hash": "23066083607bff1fa45bd9c4ba84a282",
+    "content-hash": "4e0089604046190775a716c9eb90ef80",
     "packages": [
         {
             "name": "npm-asset/chartist",
-            "version": "0.11.0",
+            "version": "0.11.4",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/chartist/-/chartist-0.11.0.tgz",
+                "url": "https://registry.npmjs.org/chartist/-/chartist-0.11.4.tgz",
                 "reference": null,
                 "shasum": null
             },
@@ -22,18 +22,16 @@
             ]
         },
         {
-            "name": "npm-asset/chartist-plugin-tooltips",
-            "version": "v0.0.18",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tmmdata/chartist-plugin-tooltip.git",
-                "reference": "9917bad5e271b9e7cad289ca2ff0f07a8f8f5231"
-            },
+            "name": "npm-asset/chartist-plugin-tooltips-updated",
+            "version": "0.1.1",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tmmdata/chartist-plugin-tooltip/zipball/9917bad5e271b9e7cad289ca2ff0f07a8f8f5231",
-                "reference": "9917bad5e271b9e7cad289ca2ff0f07a8f8f5231",
+                "type": "tar",
+                "url": "https://registry.npmjs.org/chartist-plugin-tooltips-updated/-/chartist-plugin-tooltips-updated-0.1.1.tgz",
+                "reference": null,
                 "shasum": null
+            },
+            "require": {
+                "npm-asset/chartist": "~0.11.3"
             },
             "type": "npm-asset",
             "license": [
@@ -112,16 +110,16 @@
         },
         {
             "name": "matthiasmullie/minify",
-            "version": "1.3.60",
+            "version": "1.3.61",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasmullie/minify.git",
-                "reference": "ab7fea80ce5ce6549baaf272bc8bd926a7e08f90"
+                "reference": "d5acb8ce5b6acb7d11bafe97cecc533f6e4fd751"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/ab7fea80ce5ce6549baaf272bc8bd926a7e08f90",
-                "reference": "ab7fea80ce5ce6549baaf272bc8bd926a7e08f90",
+                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/d5acb8ce5b6acb7d11bafe97cecc533f6e4fd751",
+                "reference": "d5acb8ce5b6acb7d11bafe97cecc533f6e4fd751",
                 "shasum": ""
             },
             "require": {
@@ -168,20 +166,20 @@
                 "minifier",
                 "minify"
             ],
-            "time": "2018-04-18 08:50:35"
+            "time": "2018-11-26 23:10:39"
         },
         {
             "name": "matthiasmullie/path-converter",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasmullie/path-converter.git",
-                "reference": "3082a6838be02b930239a97d38b5c9da4d693aca"
+                "reference": "5e4b121c8b9f97c80835c1d878b0812ba1d607c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasmullie/path-converter/zipball/3082a6838be02b930239a97d38b5c9da4d693aca",
-                "reference": "3082a6838be02b930239a97d38b5c9da4d693aca",
+                "url": "https://api.github.com/repos/matthiasmullie/path-converter/zipball/5e4b121c8b9f97c80835c1d878b0812ba1d607c9",
+                "reference": "5e4b121c8b9f97c80835c1d878b0812ba1d607c9",
                 "shasum": ""
             },
             "require": {
@@ -204,9 +202,9 @@
             "authors": [
                 {
                     "name": "Matthias Mullie",
+                    "role": "Developer",
                     "email": "pathconverter@mullie.eu",
-                    "homepage": "http://www.mullie.eu",
-                    "role": "Developer"
+                    "homepage": "http://www.mullie.eu"
                 }
             ],
             "description": "Relative path converter",
@@ -217,7 +215,7 @@
                 "paths",
                 "relative"
             ],
-            "time": "2018-02-02 11:30:10"
+            "time": "2018-10-25 15:19:41"
         },
         {
             "name": "slowprog/composer-copy-file",
@@ -268,16 +266,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.2.3",
+            "version": "3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "4842476c434e375f9d3182ff7b89059583aa8b27"
+                "reference": "b8a7362af1cc1aadb5bd36c3defc4dda2cf5f0a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/4842476c434e375f9d3182ff7b89059583aa8b27",
-                "reference": "4842476c434e375f9d3182ff7b89059583aa8b27",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/b8a7362af1cc1aadb5bd36c3defc4dda2cf5f0a8",
+                "reference": "b8a7362af1cc1aadb5bd36c3defc4dda2cf5f0a8",
                 "shasum": ""
             },
             "require": {
@@ -310,39 +308,40 @@
                 }
             ],
             "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
-            "homepage": "http://www.squizlabs.com/php-codesniffer",
+            "homepage": "https://github.com/squizlabs/PHP_CodeSniffer",
             "keywords": [
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-02-20 21:35:23"
+            "time": "2019-04-10 23:49:02"
         },
         {
             "name": "wimg/php-compatibility",
-            "version": "8.1.0",
+            "version": "8.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/wimg/PHPCompatibility.git",
-                "reference": "4ac01e4fe8faaa4f8d3b3cd06ea92e5418ce472e"
+                "url": "https://github.com/PHPCompatibility/PHPCompatibility.git",
+                "reference": "eaf613c1a8265bcfd7b0ab690783f2aef519f78a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wimg/PHPCompatibility/zipball/4ac01e4fe8faaa4f8d3b3cd06ea92e5418ce472e",
-                "reference": "4ac01e4fe8faaa4f8d3b3cd06ea92e5418ce472e",
+                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/eaf613c1a8265bcfd7b0ab690783f2aef519f78a",
+                "reference": "eaf613c1a8265bcfd7b0ab690783f2aef519f78a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3",
-                "squizlabs/php_codesniffer": "^2.2 || ^3.0.2"
+                "squizlabs/php_codesniffer": "^2.3 || ^3.0.2"
             },
             "conflict": {
                 "squizlabs/php_codesniffer": "2.6.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0"
+                "phpunit/phpunit": "~4.5 || ^5.0 || ^6.0 || ^7.0"
             },
             "suggest": {
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3"
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically.",
+                "roave/security-advisories": "dev-master || Helps prevent installing dependencies with known security issues."
             },
             "type": "phpcodesniffer-standard",
             "autoload": {
@@ -352,7 +351,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-3.0"
+                "LGPL-3.0-or-later"
             ],
             "authors": [
                 {
@@ -367,19 +366,20 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-12-27 21:58:38"
+            "abandoned": "phpcompatibility/php-compatibility",
+            "time": "2018-07-17 13:42:26"
         },
         {
             "name": "wp-coding-standards/wpcs",
             "version": "0.14.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git",
+                "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
                 "reference": "cf6b310caad735816caef7573295f8a534374706"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress-Coding-Standards/WordPress-Coding-Standards/zipball/cf6b310caad735816caef7573295f8a534374706",
+                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/cf6b310caad735816caef7573295f8a534374706",
                 "reference": "cf6b310caad735816caef7573295f8a534374706",
                 "shasum": ""
             },
