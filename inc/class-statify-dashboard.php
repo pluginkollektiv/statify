@@ -228,6 +228,13 @@ class Statify_Dashboard extends Statify {
 			$options['today'] = 0;
 		}
 
+		// Parse "show totals" checkbox.
+		if ( isset( $_POST['statify']['show_totals'] ) && 1 === (int) $_POST['statify']['show_totals'] ) {
+			$options['show_totals'] = 1;
+		} else {
+			$options['show_totals'] = 0;
+		}
+
 		// Update values.
 		update_option( 'statify', $options );
 
@@ -307,11 +314,12 @@ class Statify_Dashboard extends Statify {
 		global $wpdb;
 
 		// Init values.
-		$days  = (int) self::$_options['days'];
-		$limit = (int) self::$_options['limit'];
-		$today = (int) self::$_options['today'];
+		$days        = (int) self::$_options['days'];
+		$limit       = (int) self::$_options['limit'];
+		$today       = (int) self::$_options['today'];
+		$show_totals = (int) self::$_options['show_totals'];
 
-		return array(
+		$data = array(
 			'visits'   => $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT `created` as `date`, COUNT(`created`) as `count` FROM `$wpdb->statify` GROUP BY `created` ORDER BY `created` DESC LIMIT %d",
@@ -334,5 +342,18 @@ class Statify_Dashboard extends Statify {
 				ARRAY_A
 			),
 		);
+
+		if ( $show_totals ) {
+			$data['visit_totals'] = array(
+				'today' => $wpdb->get_var(
+					"SELECT COUNT(`created`) FROM `$wpdb->statify` WHERE created = DATE(NOW())"
+				),
+				'all_time' => $wpdb->get_var(
+					"SELECT COUNT(`created`) FROM `$wpdb->statify`"
+				),
+			);
+		}
+
+		return $data;
 	}
 }
