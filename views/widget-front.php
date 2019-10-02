@@ -101,10 +101,11 @@ $stats = Statify_Dashboard::get_stats(); ?>
 				</tr>
 				<tr>
 					<td class="b">
-						<?php echo (int) $stats['visit_totals']['all_time']; ?>
+						<?php echo (int) $stats['visit_totals']['since_beginning']; ?>
 					</td>
 					<td class="t">
-						<?php esc_html_e( 'all time', 'statify' ); ?>
+						<?php esc_html_e( 'since', 'statify' ); ?>
+						<?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $stats['visits'][0]['date'] ) ) ); ?>
 					</td>
 				</tr>
 			</table>
