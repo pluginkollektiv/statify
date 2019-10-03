@@ -74,6 +74,11 @@
     float: right;
     width: 55%;
 }
+#statify_dashboard .table.total {
+    clear: both;
+    float: left;
+    width: 45%;
+}
 
 #statify_dashboard td {
     padding: 8px 0 0;
