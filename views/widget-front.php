@@ -81,3 +81,34 @@ $stats = Statify_Dashboard::get_stats(); ?>
 		</div>
 	</div>
 <?php } ?>
+
+
+
+<?php if ( ! empty( $stats['visit_totals'] ) ) { ?>
+	<div class="table total">
+		<p class="sub">
+			<?php esc_html_e( 'Totals', 'statify' ); ?>
+		</p>
+		<div>
+			<table>
+				<tr>
+					<td class="b">
+						<?php echo (int) $stats['visit_totals']['today']; ?>
+					</td>
+					<td class="t">
+						<?php esc_html_e( 'today', 'statify' ); ?>
+					</td>
+				</tr>
+				<tr>
+					<td class="b">
+						<?php echo (int) $stats['visit_totals']['since_beginning']; ?>
+					</td>
+					<td class="t">
+						<?php esc_html_e( 'since', 'statify' ); ?>
+						<?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $stats['visits'][0]['date'] ) ) ); ?>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<?php } ?>
