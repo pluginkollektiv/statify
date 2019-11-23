@@ -73,6 +73,14 @@ class Statify_Settings {
 			'statify-dashboard',
 			array( 'label_for' => 'statify-today' )
 		);
+		add_settings_field(
+			'statify-show-totals',
+			__( 'Show totals', 'statify' ),
+			array( __CLASS__, 'options_show_totals' ),
+			'statify',
+			'statify-dashboard',
+			array( 'label_for' => 'statify-show-totals' )
+		);
 
 		// Exclusion settings.
 		add_settings_section(
@@ -180,6 +188,18 @@ class Statify_Settings {
 	}
 
 	/**
+	 * Option for showing visit totals.
+	 *
+	 * @return void
+	 */
+	public static function options_show_totals() {
+		?>
+		<input  id="statify-show-totals" type="checkbox" name="statify[show_totals]" value="1" <?php checked( Statify::$_options['show_totals'], 1 ); ?>>
+		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
+		<?php
+	}
+
+	/**
 	 * Section header for "Skip tracking for..." section.
 	 *
 	 * @return void
@@ -270,7 +290,7 @@ class Statify_Settings {
 		}
 
 		// Get checkbox values.
-		foreach ( array( 'today', 'snippet', 'blacklist' ) as $o ) {
+		foreach ( array( 'today', 'snippet', 'blacklist', 'show_totals' ) as $o ) {
 			$res[ $o ] = isset( $options[ $o ] ) && 1 === (int) $options[ $o ] ? 1 : 0;
 		}
 		foreach ( array( 'logged_in', 'feed', 'search' ) as $o ) {
