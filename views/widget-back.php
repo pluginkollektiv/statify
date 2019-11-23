@@ -32,6 +32,10 @@ class_exists( 'Statify' ) || exit; ?>
 		<input type="checkbox" name="statify[today]" id="statify_today" value="1" <?php checked( Statify::$_options['today'], 1 ); ?> />
 		<?php esc_html_e( 'Entries in top lists only for today', 'statify' ); ?>
 	</label>
+	<label for="statify_show_totals">
+		<input type="checkbox" name="statify[show_totals]" id="statify_show_totals" value="1" <?php checked( Statify::$_options['show_totals'], 1 ); ?> />
+		<?php esc_html_e( 'Show totals', 'statify' ); ?>
+	</label>
 </fieldset>
 <?php wp_nonce_field( 'statify-dashboard' ); ?>
 
