@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. This projec
 * Introduced separate settinge page and reduced widget backview to widget settings only
 * Add options to track logged in users, feeds and search requests
 * Add option to show total visits
+* Dashboard widget is now scrollable to keep long-term statistics readable
 
 ## 1.6.3
 * Fix compatibility issue with some PHP implementations not populating `INPUT_SERVER`
