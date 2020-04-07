@@ -56,11 +56,12 @@ class Statify {
 		self::$_options = wp_parse_args(
 			get_option( 'statify' ),
 			array(
-				'days'      => 14,
-				'limit'     => 3,
-				'today'     => 0,
-				'snippet'   => 0,
-				'blacklist' => 0,
+				'days'        => 14,
+				'limit'       => 3,
+				'today'       => 0,
+				'snippet'     => 0,
+				'blacklist'   => 0,
+				'show_totals' => 0,
 				'skip'      => array(
 					'logged_in' => 1,
 					'feed'      => 1,
