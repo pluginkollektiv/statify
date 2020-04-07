@@ -319,7 +319,7 @@ class Statify_Dashboard extends Statify {
 		$today       = (int) self::$_options['today'];
 		$show_totals = (int) self::$_options['show_totals'];
 
-		$current_date = strftime( '%Y-%m-%d', current_time( 'timestamp' ) );
+		$current_date = current_time( 'Y-m-d' );
 
 		$data = array(
 			'visits'   => $wpdb->get_results(
