@@ -1,5 +1,14 @@
 <?php
-/** Quit */
+/**
+ * Statify: Statify_Table class
+ *
+ * This file contains class for the plugin's DB table handling.
+ *
+ * @package   Statify
+ * @since     0.6
+ */
+
+// Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -17,16 +26,16 @@ class Statify_Table {
 	 */
 	public static function init() {
 
-		/** Global */
+		// Global.
 		global $wpdb;
 
-		/** Name */
+		// Name.
 		$table = 'statify';
 
-		/** Als Array */
+		// As array.
 		$wpdb->tables[] = $table;
 
-		/** Mit Prefix */
+		// With prefix.
 		$wpdb->$table = $wpdb->get_blog_prefix() . $table;
 	}
 
@@ -41,15 +50,15 @@ class Statify_Table {
 
 		global $wpdb;
 
-		/** If existent. */
+		// If existent.
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '$wpdb->statify'" ) === $wpdb->statify ) {
 			return;
 		}
 
-		/** Include */
+		// Include.
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-		/** Create. */
+		// Create.
 		dbDelta(
 			"CREATE TABLE `$wpdb->statify` (
 			`id` bigint(20) unsigned NOT NULL auto_increment,
@@ -75,7 +84,7 @@ class Statify_Table {
 
 		global $wpdb;
 
-		/** Remove */
+		// Remove.
 		$wpdb->query( "DROP TABLE IF EXISTS `$wpdb->statify`" );
 	}
 }

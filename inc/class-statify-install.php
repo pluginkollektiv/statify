@@ -1,5 +1,14 @@
 <?php
-/** Quit */
+/**
+ * Statify: Statify_Install class
+ *
+ * This file contains the derived class for the plugin's installation features.
+ *
+ * @package   Statify
+ * @since     0.1
+ */
+
+// Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**

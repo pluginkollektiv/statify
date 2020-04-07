@@ -4,10 +4,10 @@
  * Description: Compact, easy-to-use and privacy-compliant stats plugin for WordPress.
  * Text Domain: statify
  * Author:      pluginkollektiv
- * Author URI:  http://pluginkollektiv.org
+ * Author URI:  https://pluginkollektiv.org
  * Plugin URI:  https://wordpress.org/plugins/statify/
  * License:     GPLv3 or later
- * Version:     1.6.0
+ * Version:     1.6.3
  *
  * @package WordPress
  */
@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 
 /*  Constants */
 define( 'STATIFY_FILE', __FILE__ );
-define( 'STATIFY_DIR', __DIR__ );
+define( 'STATIFY_DIR', dirname( __FILE__ ) );
 define( 'STATIFY_BASE', plugin_basename( __FILE__ ) );
 
 
@@ -71,6 +71,7 @@ function statify_autoload( $class ) {
 		'Statify_Install',
 		'Statify_Uninstall',
 		'Statify_Deactivate',
+		'Statify_Settings',
 		'Statify_Table',
 		'Statify_XMLRPC',
 		'Statify_Cron',
@@ -79,9 +80,9 @@ function statify_autoload( $class ) {
 	if ( in_array( $class, $plugin_classes, true ) ) {
 		require_once(
 			sprintf(
-				'%s/inc/%s.class.php',
+				'%s/inc/class-%s.php',
 				STATIFY_DIR,
-				strtolower( $class )
+				strtolower( str_replace( '_', '-', $class ) )
 			)
 		);
 	}

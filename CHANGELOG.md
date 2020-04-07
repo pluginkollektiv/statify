@@ -1,10 +1,29 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## unreleased
-* Scaled datapoint size to number of records in dashboard widget to improve legibility 
-* Added JS source maps to avoid warnings with developer tools 
+## Unreleased
+* Introduced separate settinge page and reduced widget backview to widget settings only
+* Add options to track logged in users, feeds and search requests
+* Add option to show total visits
 * Introduced new option to separate display from storage range 
+
+## 1.6.3
+* Fix compatibility issue with some PHP implementations not populating `INPUT_SERVER`
+* Fix failing blacklist check for empty referrers
+* JS snippet call properly breaks page generation when tracking is skipped
+
+## 1.6.2
+* Fix compatibility issues with JavaScript optimization plugins
+* Fix tracking issue if JavaScript tracking is disabled
+
+## 1.6.1
+* Scaled datapoint size to number of records in dashboard widget to improve legibility
+* Fix display of larger numbers in the y-axis
+* Added JS source maps to avoid warnings with developer tools
+* Move JS snippet to separate file
+* Add JS snippet to output even if tracking is skipped to avoid caching problems
+* Improve code style
+* Enable nonce-verification in dashboard widget to prevent CSRF
 
 ## 1.6.0
 * Added hook statify__visit_saved which is fired after a visit was stored in the database.

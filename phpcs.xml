@@ -25,21 +25,15 @@
     <!-- WordPress coding standards -->
     <config name="minimum_supported_wp_version" value="4.7" />
     <rule ref="WordPress">
-        <exclude name="Generic.Commenting.DocComment.MissingShort" />
-        <exclude name="Squiz.Commenting.FileComment.SpacingAfterComment" />
-        <exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
-        <exclude name="Squiz.PHP.DisallowMultipleAssignments.Found" />
-        <exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
-        <exclude name="WordPress.Files.FileName.InvalidClassFileName" />
-        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
         <exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog_switch_to_blog" />
         <exclude name="WordPress.VIP.DirectDatabaseQuery.NoCaching" />
         <exclude name="WordPress.VIP.DirectDatabaseQuery.SchemaChange" />
         <exclude name="WordPress.WP.PreparedSQL.NotPrepared" />
-        <exclude name="WordPress.XSS.EscapeOutput.OutputNotEscaped" />
+        <!-- Sanitization of $_SERVER causes problems with some PHP implementations -->
+        <exclude name="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized"/>
     </rule>
 
     <!-- Include sniffs for PHP cross-version compatibility. -->
-    <config name="testVersion" value="5.6-"/>
+    <config name="testVersion" value="5.2-"/>
     <rule ref="PHPCompatibility"/>
 </ruleset>

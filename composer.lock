@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d4f9fc896af1e5534053cf88fbe4f65",
+    "hash": "4fe6d7ea043ff6014c56a8a1145239c4",
+    "content-hash": "775564b6fe2fe58ba36196c59667e99c",
     "packages": [
         {
             "name": "npm-asset/chartist",
@@ -107,20 +108,20 @@
                 "stylecheck",
                 "tests"
             ],
-            "time": "2017-12-06T16:27:17+00:00"
+            "time": "2017-12-06 16:27:17"
         },
         {
             "name": "matthiasmullie/minify",
-            "version": "1.3.59",
+            "version": "1.3.60",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasmullie/minify.git",
-                "reference": "62dac3bce06de66f0d71fe6490cf1c508d3c3ff7"
+                "reference": "ab7fea80ce5ce6549baaf272bc8bd926a7e08f90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/62dac3bce06de66f0d71fe6490cf1c508d3c3ff7",
-                "reference": "62dac3bce06de66f0d71fe6490cf1c508d3c3ff7",
+                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/ab7fea80ce5ce6549baaf272bc8bd926a7e08f90",
+                "reference": "ab7fea80ce5ce6549baaf272bc8bd926a7e08f90",
                 "shasum": ""
             },
             "require": {
@@ -167,7 +168,7 @@
                 "minifier",
                 "minify"
             ],
-            "time": "2018-02-02T12:44:18+00:00"
+            "time": "2018-04-18 08:50:35"
         },
         {
             "name": "matthiasmullie/path-converter",
@@ -216,7 +217,7 @@
                 "paths",
                 "relative"
             ],
-            "time": "2018-02-02T11:30:10+00:00"
+            "time": "2018-02-02 11:30:10"
         },
         {
             "name": "slowprog/composer-copy-file",
@@ -263,7 +264,7 @@
             "keywords": [
                 "copy file"
             ],
-            "time": "2017-12-07T13:18:47+00:00"
+            "time": "2017-12-07 13:18:47"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -314,7 +315,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-02-20T21:35:23+00:00"
+            "time": "2018-02-20 21:35:23"
         },
         {
             "name": "wimg/php-compatibility",
@@ -366,7 +367,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-12-27T21:58:38+00:00"
+            "time": "2017-12-27 21:58:38"
         },
         {
             "name": "wp-coding-standards/wpcs",
@@ -406,7 +407,7 @@
                 "standards",
                 "wordpress"
             ],
-            "time": "2018-02-16T01:57:48+00:00"
+            "time": "2018-02-16 01:57:48"
         }
     ],
     "aliases": [],
@@ -415,7 +416,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.6|^7"
+        "php": "^5.2|^7"
     },
     "platform-dev": []
 }
