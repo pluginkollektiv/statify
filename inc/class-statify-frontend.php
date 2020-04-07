@@ -389,7 +389,7 @@ class Statify_Frontend extends Statify {
 		// Analytics script is only relevant, if "JS" tracking is enabled, to prevent double tracking.
 		if ( self::$_options['snippet'] ) {
 			$analytics['statify'] = array(
-				'type'        => 'statify',
+				'type'        => '',
 				'attributes'  => array(),
 				'config_data' => array(
 					'requests' => array(
