@@ -31,6 +31,8 @@
         <exclude name="WordPress.DB.PreparedSQL.NotPrepared" />
         <!-- Sanitization of $_SERVER causes problems with some PHP implementations -->
         <exclude name="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized"/>
+        <!-- Precision alignment is used in HTML views -->
+        <exclude name="WordPress.WhiteSpace.PrecisionAlignment.Found" />
     </rule>
 
     <!-- Include sniffs for PHP cross-version compatibility. -->
