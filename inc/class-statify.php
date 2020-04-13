@@ -44,8 +44,8 @@ class Statify {
 	 * @version  2017-01-10
 	 */
 	public function __construct() {
-		// Skip me!
-		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+		// Nothing to do on autosave.
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
 
@@ -71,7 +71,9 @@ class Statify {
 			)
 		);
 
-		if ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {  // XMLRPC.
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			add_action( 'wp_ajax_nopriv_statify_track', array( 'Statify_Frontend', 'track_visit_ajax' ) );
+		} elseif ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {  // XMLRPC.
 			add_filter( 'xmlrpc_methods', array( 'Statify_XMLRPC', 'xmlrpc_methods' ) );
 		} elseif ( defined( 'DOING_CRON' ) && DOING_CRON ) {    // Cron.
 			add_action( 'statify_cleanup', array( 'Statify_Cron', 'cleanup_data' ) );
