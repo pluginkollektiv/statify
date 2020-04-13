@@ -10,8 +10,8 @@
   ],
   "require": {
     "php": "^5.2|^7",
-    "npm-asset/chartist": "^0.11.0",
-    "npm-asset/chartist-plugin-tooltips": "^0.0.18"
+    "npm-asset/chartist": "^0.11.4",
+    "npm-asset/chartist-plugin-tooltips-updated": "^0.1.1"
   },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^0.4",
@@ -51,7 +51,7 @@
     "minify": [
       "minifycss css/dashboard.css > css/dashboard.min.css",
       "minifyjs js/dashboard.js > js/dashboard.min.js",
-      "minifycss vendor/npm-asset/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css > css/chartist-plugin-tooltip.min.css"
+      "minifycss vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.css > css/chartist-plugin-tooltip.min.css"
     ]
   },
   "extra": {
@@ -59,8 +59,8 @@
       "vendor/npm-asset/chartist/dist/chartist.min.css": "css/",
       "vendor/npm-asset/chartist/dist/chartist.min.js": "js/",
       "vendor/npm-asset/chartist/dist/chartist.min.js.map": "js/",
-      "vendor/npm-asset/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js": "js/",
-      "vendor/npm-asset/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js.map": "js/"
+      "vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.min.js": "js/",
+      "vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.min.js.map": "js/"
     }
   }
 }
