@@ -35,34 +35,37 @@
       "@build"
     ],
     "build": [
-      "@lint-php",
       "@copy-assets",
       "@minify"
     ],
     "copy-assets": [
       "SlowProg\\CopyFile\\ScriptHandler::copy"
     ],
+    "cs": [
+      "@lint-php"
+    ],
+    "csfix": [
+      "phpcbf --standard=phpcs.xml"
+    ],
     "lint-all": [
       "@lint-php",
       "@lint-js",
       "@lint-css"
     ],
-    "lint-php": [
-      "phpcs --standard=phpcs.xml -s"
-    ],
-    "csfix": [
-      "phpcbf --standard=phpcs.xml"
+    "lint-css": [
+      "npx stylelint css/dashboard.css"
     ],
     "lint-js": [
       "npx eslint js/dashboard.js",
       "npx eslint js/snippet.js"
     ],
-    "lint-css": [
-      "npx stylelint css/dashboard.css"
+    "lint-php": [
+      "phpcs --standard=phpcs.xml -s"
     ],
     "minify": [
       "minifycss css/dashboard.css > css/dashboard.min.css",
       "minifyjs js/dashboard.js > js/dashboard.min.js",
+      "minifyjs js/snippet.js > js/snippet.min.js",
       "minifycss vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.css > css/chartist-plugin-tooltip.min.css"
     ]
   },

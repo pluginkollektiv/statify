@@ -1,14 +1,5 @@
 {
-  "name": "@pluginkollektiv/statify",
-  "version": "1.7.0-alpha",
-  "description": "Compact, easy-to-use and privacy-compliant stats plugin for WordPress.",
-  "author": "Pluginkollektiv",
-  "license": "GPL-3.0-or-later",
-  "keywords": [
-    "wordpress",
-    "plugin",
-    "statistics"
-  ],
+  "private": true,
   "devDependencies": {
     "@wordpress/eslint-plugin": "^3",
     "eslint": "^6",
