@@ -10,7 +10,7 @@
     "statistics"
   ],
   "devDependencies": {
-    "@wordpress/eslint-plugin": "^4",
+    "@wordpress/eslint-plugin": "^3",
     "eslint": "^6",
     "stylelint": "^13.3.2",
     "stylelint-config-wordpress": "^16"
