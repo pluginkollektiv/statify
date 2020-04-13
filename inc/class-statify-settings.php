@@ -58,6 +58,14 @@ class Statify_Settings {
 			'statify'
 		);
 		add_settings_field(
+			'statify-days_show',
+			__( 'Period of data display in Dashboard', 'statify' ),
+			array( __CLASS__, 'options_days_show' ),
+			'statify',
+			'statify-dashboard',
+			array( 'label_for' => 'statify-days-show' )
+		);
+		add_settings_field(
 			'statify-limit',
 			__( 'Number of entries in top lists', 'statify' ),
 			array( __CLASS__, 'options_limit' ),
@@ -160,6 +168,19 @@ class Statify_Settings {
 		<p>
 			<?php esc_html_e( 'The following options affect the admin dashboard widget.', 'statify' ); ?>
 		</p>
+		<?php
+	}
+
+	/**
+	 * Option for data display period.
+	 *
+	 * @return void
+	 */
+	public static function options_days_show() {
+		?>
+		<input id="statify-days-show" name="statify[days_show]" type="number" min="1" value="<?php echo esc_attr( Statify::$_options['days_show'] ); ?>">
+		<?php esc_html_e( 'days', 'statify' ); ?>
+		(<?php esc_html_e( 'Default', 'statify' ); ?>: 14)
 		<?php
 	}
 
