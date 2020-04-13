@@ -279,7 +279,7 @@ class Statify_Settings {
 
 		// Sanitize numeric values.
 		$res = array();
-		foreach ( array( 'days', 'limit' ) as $o ) {
+		foreach ( array( 'days', 'days_show', 'limit' ) as $o ) {
 			$res[ $o ] = Statify::$_options[ $o ];
 			if ( isset( $options[ $o ] ) && (int) $options[ $o ] > 0 ) {
 				$res[ $o ] = (int) $options[ $o ];
