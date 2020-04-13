@@ -35,23 +35,30 @@ class Statify_Frontend extends Statify {
 		$use_snippet = self::$_options['snippet'];
 
 		// Set target & referrer.
+		$target = null;
+		$referrer = null;
 		if ( $use_snippet && $is_snippet ) {
-			$target   = urldecode( isset( $_REQUEST['statify_target'] ) ? wp_unslash( $_REQUEST['statify_target'] ) : '/' );
-			$referrer = urldecode( isset( $_REQUEST['statify_referrer'] ) ? wp_unslash( $_REQUEST['statify_referrer'] ) : '' );
+			if ( isset( $_REQUEST['statify_target'] ) ) {
+				$target = filter_var( wp_unslash( $_REQUEST['statify_target'] ), FILTER_SANITIZE_URL );
+			}
+			if ( isset( $_REQUEST['statify_referrer'] ) ) {
+				$referrer = filter_var( wp_unslash( $_REQUEST['statify_referrer'] ), FILTER_SANITIZE_URL );
+			}
 		} elseif ( ! $use_snippet ) {
-			$target   = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/';
-			$referrer = isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '';
+			if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+				$target = filter_var( wp_unslash( $_SERVER['REQUEST_URI'] ), FILTER_SANITIZE_URL );
+			}
+			if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
+				$referrer = filter_var( wp_unslash( $_SERVER['HTTP_REFERER'] ), FILTER_SANITIZE_URL );
+			}
 		} else {
 			return false;
 		}
 
-		// Sanitize.
-		$target = filter_var( $target, FILTER_SANITIZE_URL );
+		// Fallbacks for uninitialized or omitted target and referrer values.
 		if ( is_null( $target ) || false === $target ) {
 			$target = '/';
 		}
-
-		$referrer = filter_var( $referrer, FILTER_SANITIZE_URL );
 		if ( is_null( $referrer ) || false === $referrer ) {
 			$referrer = '';
 		}
