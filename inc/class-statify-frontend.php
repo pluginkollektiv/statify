@@ -37,7 +37,7 @@ class Statify_Frontend extends Statify {
 			$target   = urldecode( get_query_var( 'statify_target' ) );
 			$referrer = urldecode( get_query_var( 'statify_referrer' ) );
 		} elseif ( ! $use_snippet ) {
-			$target   = filter_var(
+			$target = filter_var(
 				( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/' ),
 				FILTER_SANITIZE_URL
 			);

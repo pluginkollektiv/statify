@@ -56,7 +56,7 @@ class Statify_Table {
 		}
 
 		// Include.
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		// Create.
 		dbDelta(
