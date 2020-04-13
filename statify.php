@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 define( 'STATIFY_FILE', __FILE__ );
 define( 'STATIFY_DIR', dirname( __FILE__ ) );
 define( 'STATIFY_BASE', plugin_basename( __FILE__ ) );
-define( 'STATIFY_VERSION', '1.6.3' );
+define( 'STATIFY_VERSION', '1.7.0' );
 
 
 /* Hooks */

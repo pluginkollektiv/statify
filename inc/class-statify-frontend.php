@@ -384,7 +384,7 @@ class Statify_Frontend extends Statify {
 
 		wp_enqueue_script(
 			'statify-js',
-			plugins_url( 'js/snippet.js', STATIFY_FILE ),
+			plugins_url( 'js/snippet.min.js', STATIFY_FILE ),
 			array(),
 			STATIFY_VERSION,
 			true
