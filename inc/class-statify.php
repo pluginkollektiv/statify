@@ -62,7 +62,7 @@ class Statify {
 				'snippet'     => 0,
 				'blacklist'   => 0,
 				'show_totals' => 0,
-				'skip'      => array(
+				'skip'        => array(
 					'logged_in' => 1,
 					'feed'      => 1,
 					'search'    => 1,

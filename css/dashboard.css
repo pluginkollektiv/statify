@@ -1,97 +1,104 @@
 /* @group Front page */
 
 #statify_chart {
-    color: #aaa;
-    height: 140px;
-    margin: 0 -4px;
-    text-align: center;
+	color: #aaa;
+	height: 140px;
+	margin: 0 -4px;
+	text-align: center;
 }
+
 #statify_chart_data {
-    display: none;
+	display: none;
 }
 
 #statify_chart .ct-label.ct-vertical.ct-start {
-    -webkit-justify-content: flex-start;
-    justify-content: flex-start;
-    text-align: left;
-    text-anchor: start;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
+	text-align: left;
+	text-anchor: start;
 }
 
 #statify_chart .ct-line {
-    stroke: #0074a2;
-    stroke-width: 2px;
+	stroke: #0074a2;
+	stroke-width: 2px;
 }
 
 #statify_chart .ct-point {
-    fill: #ffffff;
-    stroke: #0074a2;
-    stroke-width: 1.5px;
+	fill: #fff;
+	stroke: #0074a2;
+	stroke-width: 1.5px;
 }
 
 #statify_chart .ct-area {
-    fill: #0074a2;
+	fill: #0074a2;
 }
 
 .statify-chartist-tooltip {
-    border: 1px solid #000000;
-    background-color: #ffffff;
-    border-radius: 0.2em;
-    padding: 0.1em 0.5em;
+	border: 1px solid #000;
+	background-color: #fff;
+	border-radius: 0.2em;
+	padding: 0.1em 0.5em;
 }
 
-.statify-chartist-tooltip:before {
-    border-top-color: #00000099;
+.statify-chartist-tooltip::before {
+	border-top-color: #0009;
 }
 
 .statify-chartist-tooltip .chartist-tooltip-meta {
-    color: #0074a2;
+	color: #0074a2;
 }
 
 #statify_dashboard .inside {
-    height: 1%;
-    margin: 0;
-    padding-bottom: 0;
-    overflow: hidden;
-    position: relative;
+	height: 1%;
+	margin: 0;
+	padding-bottom: 0;
+	overflow: hidden;
+	position: relative;
 }
 
 #statify_dashboard .table {
-    padding-bottom: 12px;
+	padding-bottom: 12px;
 }
+
 #statify_dashboard .table p.sub {
-    color: #BBB;
-    margin: 0 0 -4px;
+	color: #bbb;
+	margin: 0 0 -4px;
 }
+
 #statify_dashboard .table div {
-    overflow: hidden;
+	overflow: hidden;
 }
 
 #statify_dashboard .table.referrer {
-    float: left;
-    width: 45%;
+	float: left;
+	width: 45%;
 }
+
 #statify_dashboard .table.target {
-    float: right;
-    width: 55%;
+	float: right;
+	width: 55%;
 }
+
 #statify_dashboard .table.total {
-    clear: both;
-    float: left;
-    width: 45%;
+	clear: both;
+	float: left;
+	width: 45%;
 }
 
 #statify_dashboard td {
-    padding: 8px 0 0;
-    line-height: 1.4em;
+	padding: 8px 0 0;
+	line-height: 1.4;
 }
+
 #statify_dashboard td.b {
-    text-align: right;
-    padding-right: 4px;
-    color: #777;
+	text-align: right;
+	padding-right: 4px;
+	color: #777;
 }
+
 #statify_dashboard label {
-    display: block;
-    margin-bottom: 1.1em !important;
+	display: block;
+	margin-bottom: 1.1em !important;
 }
 
 /* @end group */
@@ -100,16 +107,17 @@
 /* @group Back stage */
 
 #statify_dashboard form {
-    padding: 18px 0;
+	padding: 18px 0;
 }
+
 #statify_dashboard input[type="number"] {
-    width: 100px;
+	width: 100px;
 }
 
 #statify_dashboard .meta-links {
-    float: right;
-    margin: 0;
-    line-height: 28px;
+	float: right;
+	margin: 0;
+	line-height: 28px;
 }
 
 /* @end group */

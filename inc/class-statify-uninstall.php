@@ -26,7 +26,7 @@ class Statify_Uninstall {
 	 */
 	public static function init() {
 		if ( is_multisite() ) {
-			$old = get_current_blog_id();
+			$old   = get_current_blog_id();
 			$sites = get_sites();
 
 			foreach ( $sites as $site ) {

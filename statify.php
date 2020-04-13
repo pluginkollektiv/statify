@@ -79,12 +79,10 @@ function statify_autoload( $class ) {
 	);
 
 	if ( in_array( $class, $plugin_classes, true ) ) {
-		require_once(
-			sprintf(
-				'%s/inc/class-%s.php',
-				STATIFY_DIR,
-				strtolower( str_replace( '_', '-', $class ) )
-			)
+		require_once sprintf(
+			'%s/inc/class-%s.php',
+			STATIFY_DIR,
+			strtolower( str_replace( '_', '-', $class ) )
 		);
 	}
 }
