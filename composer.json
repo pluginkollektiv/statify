@@ -35,18 +35,30 @@
       "@build"
     ],
     "build": [
-      "@cs",
+      "@lint-php",
       "@copy-assets",
       "@minify"
     ],
     "copy-assets": [
       "SlowProg\\CopyFile\\ScriptHandler::copy"
     ],
-    "cs": [
+    "lint-all": [
+      "@lint-php",
+      "@lint-js",
+      "@lint-css"
+    ],
+    "lint-php": [
       "phpcs --standard=phpcs.xml -s"
     ],
     "csfix": [
       "phpcbf --standard=phpcs.xml"
+    ],
+    "lint-js": [
+      "npx eslint js/dashboard.js",
+      "npx eslint js/snippet.js"
+    ],
+    "lint-css": [
+      "npx stylelint css/dashboard.css"
     ],
     "minify": [
       "minifycss css/dashboard.css > css/dashboard.min.css",

@@ -15,9 +15,11 @@ matrix:
 
 before_script:
   - composer install
+  - npm install
 
 script:
   - composer build
+  - composer lint-all
 
 notifications:
   email: false
