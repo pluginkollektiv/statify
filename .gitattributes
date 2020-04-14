@@ -1,6 +1,8 @@
 # Directories
 /.github export-ignore
 /.wordpress-org export-ignore
+/node_modules export-ignore
+/vendor export-ignore
 
 # Files
 /.eslintrc.json export-ignore
