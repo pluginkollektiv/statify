@@ -20,6 +20,7 @@ defined( 'ABSPATH' ) || exit;
 define( 'STATIFY_FILE', __FILE__ );
 define( 'STATIFY_DIR', dirname( __FILE__ ) );
 define( 'STATIFY_BASE', plugin_basename( __FILE__ ) );
+define( 'STATIFY_VERSION', '1.7.0' );
 
 
 /* Hooks */
@@ -78,12 +79,10 @@ function statify_autoload( $class ) {
 	);
 
 	if ( in_array( $class, $plugin_classes, true ) ) {
-		require_once(
-			sprintf(
-				'%s/inc/class-%s.php',
-				STATIFY_DIR,
-				strtolower( str_replace( '_', '-', $class ) )
-			)
+		require_once sprintf(
+			'%s/inc/class-%s.php',
+			STATIFY_DIR,
+			strtolower( str_replace( '_', '-', $class ) )
 		);
 	}
 }

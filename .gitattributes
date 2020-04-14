@@ -6,3 +6,5 @@
 .git                         export-ignore
 .gitignore                   export-ignore
 .gitattributes               export-ignore
+.eslintrc.json               export-ignore
+.stylelintrc.json            export-ignore
