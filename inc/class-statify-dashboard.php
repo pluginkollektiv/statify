@@ -213,9 +213,12 @@ class Statify_Dashboard extends Statify {
 		// We only do a partial update, so initialize with current values.
 		$options = Statify::$_options;
 
-		// Parse numeric "limit" value.
-		if ( isset( $_POST['statify']['limit'] ) && (int) $_POST['statify']['limit'] > 0 ) {
-			$options['limit'] = (int) $_POST['statify']['limit'];
+		// Parse numeric values.
+		foreach ( array( 'days', 'days_show', 'limit' ) as $option_name ) {
+			$options[ $option_name ] = Statify::$_options[ $option_name ];
+			if ( isset( $_POST['statify'][ $option_name ] ) && (int) $_POST['statify'][ $option_name ] > 0 ) {
+				$options[ $option_name ] = (int) $_POST['statify'][ $option_name ];
+			}
 		}
 		if ( $options['limit'] > 100 ) {
 			$options['limit'] = 100;
@@ -314,30 +317,32 @@ class Statify_Dashboard extends Statify {
 		global $wpdb;
 
 		// Init values.
-		$days        = (int) self::$_options['days'];
+		$days_show   = (int) self::$_options['days_show'];
 		$limit       = (int) self::$_options['limit'];
 		$today       = (int) self::$_options['today'];
 		$show_totals = (int) self::$_options['show_totals'];
+
+		$limit_args = ( $today ) ? $limit : array( $days_show, $limit );
 
 		$data = array(
 			'visits'   => $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT `created` as `date`, COUNT(`created`) as `count` FROM `$wpdb->statify` GROUP BY `created` ORDER BY `created` DESC LIMIT %d",
-					$days
+					$days_show
 				),
 				ARRAY_A
 			),
 			'target'   => $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` " . ( $today ? 'WHERE created = DATE(NOW())' : '' ) . ' GROUP BY `target` ORDER BY `count` DESC LIMIT %d',
-					$limit
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created " . ( $today ? '= DATE(NOW())' : '>= DATE_SUB(NOW(), INTERVAL %d DAY)' ) . ' GROUP BY `target` ORDER BY `count` DESC LIMIT %d',
+					$limit_args
 				),
 				ARRAY_A
 			),
 			'referrer' => $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`referrer`) as `count`, `referrer` as `url`, SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) as `host` FROM `$wpdb->statify` WHERE `referrer` != '' " . ( $today ? 'AND created = DATE(NOW())' : '' ) . ' GROUP BY `host` ORDER BY `count` DESC LIMIT %d',
-					$limit
+					"SELECT COUNT(`referrer`) as `count`, `referrer` as `url`, SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) as `host` FROM `$wpdb->statify` WHERE `referrer` != '' AND created " . ( $today ? '= DATE(NOW())' : '>= DATE_SUB(NOW(), INTERVAL %d DAY)' ) . ' GROUP BY `host` ORDER BY `count` DESC LIMIT %d',
+					$limit_args
 				),
 				ARRAY_A
 			),
@@ -345,7 +350,7 @@ class Statify_Dashboard extends Statify {
 
 		if ( $show_totals ) {
 			$data['visit_totals'] = array(
-				'today' => $wpdb->get_var(
+				'today'           => $wpdb->get_var(
 					"SELECT COUNT(`created`) FROM `$wpdb->statify` WHERE created = DATE(NOW())"
 				),
 				'since_beginning' => $wpdb->get_var(
