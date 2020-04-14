@@ -58,6 +58,14 @@ class Statify_Settings {
 			'statify'
 		);
 		add_settings_field(
+			'statify-days_show',
+			__( 'Period of data display in Dashboard', 'statify' ),
+			array( __CLASS__, 'options_days_show' ),
+			'statify',
+			'statify-dashboard',
+			array( 'label_for' => 'statify-days-show' )
+		);
+		add_settings_field(
 			'statify-limit',
 			__( 'Number of entries in top lists', 'statify' ),
 			array( __CLASS__, 'options_limit' ),
@@ -72,6 +80,14 @@ class Statify_Settings {
 			'statify',
 			'statify-dashboard',
 			array( 'label_for' => 'statify-today' )
+		);
+		add_settings_field(
+			'statify-show-totals',
+			__( 'Show totals', 'statify' ),
+			array( __CLASS__, 'options_show_totals' ),
+			'statify',
+			'statify-dashboard',
+			array( 'label_for' => 'statify-show-totals' )
 		);
 
 		// Exclusion settings.
@@ -156,6 +172,19 @@ class Statify_Settings {
 	}
 
 	/**
+	 * Option for data display period.
+	 *
+	 * @return void
+	 */
+	public static function options_days_show() {
+		?>
+		<input id="statify-days-show" name="statify[days_show]" type="number" min="1" value="<?php echo esc_attr( Statify::$_options['days_show'] ); ?>">
+		<?php esc_html_e( 'days', 'statify' ); ?>
+		(<?php esc_html_e( 'Default', 'statify' ); ?>: 14)
+		<?php
+	}
+
+	/**
 	 * Option for number of entries in top lists.
 	 *
 	 * @return void
@@ -175,6 +204,18 @@ class Statify_Settings {
 	public static function options_today() {
 		?>
 		<input  id="statify-today" type="checkbox" name="statify[today]" value="1" <?php checked( Statify::$_options['today'], 1 ); ?>>
+		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
+		<?php
+	}
+
+	/**
+	 * Option for showing visit totals.
+	 *
+	 * @return void
+	 */
+	public static function options_show_totals() {
+		?>
+		<input  id="statify-show-totals" type="checkbox" name="statify[show_totals]" value="1" <?php checked( Statify::$_options['show_totals'], 1 ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
 		<?php
 	}
@@ -259,7 +300,7 @@ class Statify_Settings {
 
 		// Sanitize numeric values.
 		$res = array();
-		foreach ( array( 'days', 'limit' ) as $o ) {
+		foreach ( array( 'days', 'days_show', 'limit' ) as $o ) {
 			$res[ $o ] = Statify::$_options[ $o ];
 			if ( isset( $options[ $o ] ) && (int) $options[ $o ] > 0 ) {
 				$res[ $o ] = (int) $options[ $o ];
@@ -270,7 +311,7 @@ class Statify_Settings {
 		}
 
 		// Get checkbox values.
-		foreach ( array( 'today', 'snippet', 'blacklist' ) as $o ) {
+		foreach ( array( 'today', 'snippet', 'blacklist', 'show_totals' ) as $o ) {
 			$res[ $o ] = isset( $options[ $o ] ) && 1 === (int) $options[ $o ] ? 1 : 0;
 		}
 		foreach ( array( 'logged_in', 'feed', 'search' ) as $o ) {
