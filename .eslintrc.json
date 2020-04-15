@@ -1,0 +1,12 @@
+{
+  "extends": "plugin:@wordpress/eslint-plugin/es5",
+  "env": {
+    "browser": true,
+    "jquery": true
+  },
+  "globals": {
+    "Chartist": "readonly",
+    "statify_ajax": "readonly",
+    "statify_translations": "readonly"
+  }
+}

@@ -28,9 +28,11 @@
         <exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog_switch_to_blog" />
         <exclude name="WordPress.VIP.DirectDatabaseQuery.NoCaching" />
         <exclude name="WordPress.VIP.DirectDatabaseQuery.SchemaChange" />
-        <exclude name="WordPress.WP.PreparedSQL.NotPrepared" />
+        <exclude name="WordPress.DB.PreparedSQL.NotPrepared" />
         <!-- Sanitization of $_SERVER causes problems with some PHP implementations -->
         <exclude name="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized"/>
+        <!-- Precision alignment is used in HTML views -->
+        <exclude name="WordPress.WhiteSpace.PrecisionAlignment.Found" />
     </rule>
 
     <!-- Include sniffs for PHP cross-version compatibility. -->

@@ -5,6 +5,8 @@ php:
   - '7.0'
   - '7.1'
   - '7.2'
+  - '7.3'
+  - '7.4'
   - nightly
 
 matrix:
@@ -13,9 +15,11 @@ matrix:
 
 before_script:
   - composer install
+  - npm install
 
 script:
   - composer build
+  - composer lint-all
 
 notifications:
   email: false
