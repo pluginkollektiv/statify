@@ -35,7 +35,7 @@ class Statify_Frontend extends Statify {
 		$use_snippet = self::$_options['snippet'];
 
 		// Set target & referrer.
-		$target = null;
+		$target   = null;
 		$referrer = null;
 		if ( $use_snippet && $is_snippet ) {
 			if ( isset( $_REQUEST['statify_target'] ) ) {
@@ -419,10 +419,16 @@ class Statify_Frontend extends Statify {
 				'type'        => '',
 				'attributes'  => array(),
 				'config_data' => array(
-					'requests' => array(
-						'event' => get_site_url() . '/?statify_referrer=${documentReferrer}&statify_target=${canonicalPath}amp/',
+					'extraUrlParams' => array(
+						'action'           => 'statify_track',
+						'_ajax_nonce'      => wp_create_nonce( 'statify_track' ),
+						'statify_referrer' => '${documentReferrer}',
+						'statify_target'   => '${canonicalPath}amp/',
 					),
-					'triggers' => array(
+					'requests'       => array(
+						'event' => admin_url( 'admin-ajax.php' ),
+					),
+					'triggers'       => array(
 						'trackPageview' => array(
 							'on'      => 'visible',
 							'request' => 'event',
@@ -430,6 +436,9 @@ class Statify_Frontend extends Statify {
 								'eventId' => 'pageview',
 							),
 						),
+					),
+					'transport'      => array(
+						'xhrpost' => true,
 					),
 				),
 			);
