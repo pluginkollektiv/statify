@@ -246,18 +246,8 @@ class Statify_Frontend extends Statify {
 	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
 	 */
 	private static function _is_internal() {
-		// Skip for feed access, if enabled.
-		if ( self::$_options['skip']['feed'] && is_feed() ) {
-			return true;
-		}
-
-		// Skip for preview and 404 calls.
-		if ( is_preview() || is_404() ) {
-			return true;
-		}
-
-		// Skip for seach requests, if enabled.
-		return self::$_options['skip']['search'] && is_search();
+		// Skip for preview, 404 calls, feed and search access.
+		return is_preview() || is_404() || is_feed() || is_search();
 	}
 
 	/**

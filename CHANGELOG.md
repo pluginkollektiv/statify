@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ## Unreleased
 * Introduced separate settinge page and reduced widget backview to widget settings only
-* Add options to track logged in users, feeds and search requests
+* Add options to track logged in users
 * Add option to show total visits
 * Refactored JavaScript tracking to use WP AJAX
 * Updated Chartist JS library for dashboard widget
