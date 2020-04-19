@@ -73,8 +73,6 @@ class Statify {
 				'show_totals' => 0,
 				'skip'        => array(
 					'logged_in' => 1,
-					'feed'      => 1,
-					'search'    => 1,
 				),
 			)
 		);
