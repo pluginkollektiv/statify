@@ -26,24 +26,32 @@ class Statify {
 	 */
 	public static $_options;
 
+	/**
+	 * Class constructor
+	 *
+	 * @since      0.1.0
+	 * @deprecated As of 1.7 use static method init() to initialize the plugin.
+	 */
+	public function __construct() {
+		self::init();
+	}
 
 	/**
 	 * Class self initialize.
 	 *
-	 * @since    0.1.0
-	 * @version  0.1.0
+	 * @since      0.1.0
+	 * @deprecated As of 1.7 use init() to initialize the plugin.
 	 */
 	public static function instance() {
-		new self();
+		self::init();
 	}
 
 	/**
-	 * Class constructor
+	 * Plugin initialization.
 	 *
-	 * @since    0.1.0
-	 * @version  2017-01-10
+	 * @since    1.7 Replaces previously used instance() and __construct().
 	 */
-	public function __construct() {
+	public static function init() {
 		// Nothing to do on autosave.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
@@ -65,8 +73,6 @@ class Statify {
 				'show_totals' => 0,
 				'skip'        => array(
 					'logged_in' => 1,
-					'feed'      => 1,
-					'search'    => 1,
 				),
 			)
 		);

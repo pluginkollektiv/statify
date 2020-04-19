@@ -28,7 +28,7 @@ add_action(
 	'plugins_loaded',
 	array(
 		'Statify',
-		'instance',
+		'init',
 	)
 );
 register_activation_hook(
