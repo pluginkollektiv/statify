@@ -2,8 +2,9 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+* Fix offset in visitor reporting due to different timezones between PHP and DB
 * Introduced separate settinge page and reduced widget backview to widget settings only
-* Add options to track logged in users, feeds and search requests
+* Add options to track logged in users
 * Add option to show total visits
 * Refactored JavaScript tracking to use WP AJAX
 * Updated Chartist JS library for dashboard widget
