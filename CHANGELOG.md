@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This projec
 * Refactored JavaScript tracking to use WP AJAX
 * Updated Chartist JS library for dashboard widget
 * Introduced new option to separate display from storage range 
+* Dashboard widget is now scrollable to keep long-term statistics readable
 
 ## 1.6.3
 * Fix compatibility issue with some PHP implementations not populating `INPUT_SERVER`

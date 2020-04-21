@@ -2,9 +2,13 @@
 
 #statify_chart {
 	color: #aaa;
+	direction: rtl;
 	height: 140px;
 	margin: 0 -4px;
+	overflow-x: auto;
+	overflow-y: hidden;
 	text-align: center;
+	width: 100%;
 }
 
 #statify_chart_data {
