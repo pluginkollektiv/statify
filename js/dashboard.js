@@ -4,8 +4,10 @@
 	var data = [];
 	var statifyDataTable = jQuery( '#statify_chart_data' );
 	var maxValue;
+	var chartWidth;
+	var fullWidth = true;
+	var pointRadius = 4;
 	var chart;
-	var pointRadius;
 
 	// Abort if no data is present.
 	if ( ! statifyDataTable.length ) {
@@ -24,6 +26,17 @@
 	// Determine maximum value for scaling.
 	maxValue = Math.max.apply( Math, data );
 
+	// Adjust display according if there are too many values to display redable.
+	chartWidth = jQuery( '#statify_chart' ).width();
+	if ( chartWidth < data.length * 4 ) {
+		// Make chart scrollable, if 2px points are overlapping.
+		fullWidth = false;
+		pointRadius = 3;
+	} else if ( chartWidth < data.length * 8 ) {
+		// Shrink datapoints if 4px is overlapping, but 2 is not.
+		pointRadius = 2;
+	}
+
 	// Draw chart.
 	chart = new Chartist.Line( '#statify_chart', {
 		labels: labels,
@@ -33,20 +46,27 @@
 	}, {
 		low: 0,
 		showArea: true,
-		fullWidth: true,
+		fullWidth: fullWidth,
+		width: ( fullWidth ? null : 5 * data.length ),
 		axisX: {
 			showGrid: false,
 			showLabel: false,
 			offset: 0,
 		},
 		axisY: {
-			showGrid: false,
+			showGrid: true,
 			showLabel: true,
 			type: Chartist.FixedScaleAxis,
 			low: 0,
 			high: maxValue + 1,
-			ticks: [ maxValue ],
-			offset: 15,
+			ticks: [
+				0,
+				Math.round( maxValue * 1 / 4 ),
+				Math.round( maxValue * 2 / 4 ),
+				Math.round( maxValue * 3 / 4 ),
+				maxValue,
+			],
+			offset: 30,
 		},
 		plugins: [
 			Chartist.plugins.tooltip( {
@@ -55,15 +75,6 @@
 			} ),
 		],
 	} );
-
-	pointRadius = 4;
-	if ( data.length > 365 ) {
-		pointRadius = 0;
-	} else if ( data.length > 180 ) {
-		pointRadius = 1;
-	} else if ( data.length > 90 ) {
-		pointRadius = 2;
-	}
 
 	// Replace default points with hollow circles, add "pageview(s) to value and append date (label) as meta data.
 	chart.on( 'draw', function( d ) {
