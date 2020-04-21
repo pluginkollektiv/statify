@@ -35,7 +35,7 @@ class Statify_Frontend extends Statify {
 		$use_snippet = self::$_options['snippet'];
 
 		// Set target & referrer.
-		$target = null;
+		$target   = null;
 		$referrer = null;
 		if ( $use_snippet && $is_snippet ) {
 			if ( isset( $_REQUEST['statify_target'] ) ) {
@@ -389,5 +389,51 @@ class Statify_Frontend extends Statify {
 				'nonce' => wp_create_nonce( 'statify_track' ),
 			)
 		);
+	}
+
+	/**
+	 * Add amp-analytics.
+	 *
+	 * @see https://amp-wp.org/documentation/playbooks/analytics/
+	 *
+	 * @param array $analytics Analytics.
+	 */
+	public static function amp_post_template_analytics( $analytics ) {
+		if ( ! is_array( $analytics ) ) {
+			$analytics = array();
+		}
+
+		// Analytics script is only relevant, if "JS" tracking is enabled, to prevent double tracking.
+		if ( self::$_options['snippet'] ) {
+			$analytics['statify'] = array(
+				'type'        => '',
+				'attributes'  => array(),
+				'config_data' => array(
+					'extraUrlParams' => array(
+						'action'           => 'statify_track',
+						'_ajax_nonce'      => wp_create_nonce( 'statify_track' ),
+						'statify_referrer' => '${documentReferrer}',
+						'statify_target'   => '${canonicalPath}amp/',
+					),
+					'requests'       => array(
+						'event' => admin_url( 'admin-ajax.php' ),
+					),
+					'triggers'       => array(
+						'trackPageview' => array(
+							'on'      => 'visible',
+							'request' => 'event',
+							'vars'    => array(
+								'eventId' => 'pageview',
+							),
+						),
+					),
+					'transport'      => array(
+						'xhrpost' => true,
+					),
+				),
+			);
+		}
+
+		return $analytics;
 	}
 }

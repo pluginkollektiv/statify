@@ -138,7 +138,7 @@ class Statify_Settings {
 		<input id="statify-snippet" type="checkbox" name="statify[snippet]" value="1" <?php checked( Statify::$_options['snippet'], 1 ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
 		<br>
-		<p class="description"><?php esc_html_e( 'This option is strongly recommended if caching is in use.', 'statify' ); ?></p>
+		<p class="description"><?php esc_html_e( 'This option is strongly recommended if caching or AMP is in use.', 'statify' ); ?></p>
 		<?php
 	}
 
