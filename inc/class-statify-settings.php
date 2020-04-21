@@ -113,22 +113,6 @@ class Statify_Settings {
 			'statify-skip',
 			array( 'label_for' => 'statify-skip-logged_in' )
 		);
-		add_settings_field(
-			'statify-skip-feed',
-			__( 'Feed', 'statify' ),
-			array( __CLASS__, 'options_skip_feed' ),
-			'statify',
-			'statify-skip',
-			array( 'label_for' => 'statify-skip-feed' )
-		);
-		add_settings_field(
-			'statify-skip-search',
-			__( 'Search requests', 'statify' ),
-			array( __CLASS__, 'options_skip_search' ),
-			'statify',
-			'statify-skip',
-			array( 'label_for' => 'statify-skip-search' )
-		);
 	}
 
 	/**
@@ -154,7 +138,7 @@ class Statify_Settings {
 		<input id="statify-snippet" type="checkbox" name="statify[snippet]" value="1" <?php checked( Statify::$_options['snippet'], 1 ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
 		<br>
-		<p class="description"><?php esc_html_e( 'This option is strongly recommended if caching is in use.', 'statify' ); ?></p>
+		<p class="description"><?php esc_html_e( 'This option is strongly recommended if caching or AMP is in use.', 'statify' ); ?></p>
 		<?php
 	}
 
@@ -262,34 +246,6 @@ class Statify_Settings {
 	}
 
 	/**
-	 * Option to skip tracking for feed access.
-	 *
-	 * @return void
-	 */
-	public static function options_skip_feed() {
-		?>
-		<input id="statify-skip-feed" type="checkbox" name="statify[skip][feed]" value="1"<?php checked( Statify::$_options['skip']['feed'] ); ?>>
-		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes', 'statify' ); ?>)
-		<br>
-		<p class="description"><?php esc_html_e( 'Enabling this option excludes all requests to feeds (RSS, Atom, etc.) from tracking.', 'statify' ); ?></p>
-		<?php
-	}
-
-	/**
-	 * Option to skip tracking for search requests.
-	 *
-	 * @return void
-	 */
-	public static function options_skip_search() {
-		?>
-		<input id="statify-skip-search" type="checkbox" name="statify[skip][search]" value="1"<?php checked( Statify::$_options['skip']['search'] ); ?>>
-		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes', 'statify' ); ?>)
-		<br>
-		<p class="description"><?php esc_html_e( 'Enabling this option excludes search result pages from tracking.', 'statify' ); ?></p>
-		<?php
-	}
-
-	/**
 	 * Validate and sanitize submitted options.
 	 *
 	 * @param array $options Original options.
@@ -314,9 +270,7 @@ class Statify_Settings {
 		foreach ( array( 'today', 'snippet', 'blacklist', 'show_totals' ) as $o ) {
 			$res[ $o ] = isset( $options[ $o ] ) && 1 === (int) $options[ $o ] ? 1 : 0;
 		}
-		foreach ( array( 'logged_in', 'feed', 'search' ) as $o ) {
-			$res['skip'][ $o ] = isset( $options['skip'][ $o ] ) && 1 === (int) $options['skip'][ $o ] ? 1 : 0;
-		}
+		$res['skip']['logged_in'] = isset( $options['skip']['logged_in'] ) && 1 === (int) $options['skip']['logged_in'] ? 1 : 0;
 
 		return $res;
 	}
