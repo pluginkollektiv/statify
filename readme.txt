@@ -5,7 +5,7 @@
 * Requires at least: 4.7
 * Tested up to:      5.4
 * Requires PHP:      5.2
-* Stable tag:        1.6.3
+* Stable tag:        1.7.0
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -115,6 +115,21 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+### 1.7.0
+* Fix JavaScript embedding when bots visit before caching (#84) (#86)
+* Fix offset in visitor reporting due to different timezones between PHP and DB (#117, props @sophiehuiberts)
+* Fix untranslatable support link (#122) (#126, props @arkonisus)
+* Add separate settinge page and reduced widget backview to widget settings only (#111)
+* Add options to track logged in users (#103) (#111)
+* Add option to show total visits (#134, props @yurihs)
+* Refactored JavaScript tracking to use WP AJAX (#109)
+* Introduced new option to separate display from storage range (#72)
+* Automatically add AMP analytics trigger if official AMP PlugIn is installed (#110) (#116, props @tthemann)
+* Dashboard widget is now scrollable with dynamic point radius to keep long-term statistics readable (#71) (#101, props @manumeter)
+* Improved bot detection (#112) (#125, props @mahype)
+* Updated Chartist JS library for dashboard widget (#132)
+* Tested up to WordPress 5.4
+
 ### 1.6.3
 * Fix compatibility issue with some PHP implementations not populating `INPUT_SERVER`
 * Fix failing blacklist check for empty referrers
@@ -142,6 +157,10 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 
 ## Upgrade Notice ##
+
+### 1.7.0 ###
+JavaScript tracking has been changed to use the WordPress AJAX endpoint.
+If you are using Statify without modifications, you are all set. Custom logic however might require adjustments (see snippet.js for reference).
 
 ### 1.6.3 ###
 This bugfix release is recommended for all users.
