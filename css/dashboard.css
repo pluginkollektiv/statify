@@ -52,6 +52,13 @@
 	color: #0074a2;
 }
 
+#statify_dashboard .postbox-title-action a,
+#statify_dashboard .settings-link a {
+	display: block;
+	line-height: 20px;
+	text-decoration: none;
+}
+
 #statify_dashboard .inside {
 	height: 1%;
 	margin: 0;
