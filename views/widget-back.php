@@ -11,7 +11,7 @@
 class_exists( 'Statify' ) || exit; ?>
 
 <?php if ( current_user_can( 'manage_options' ) ) : ?>
-<p class="meta-links">
+<p class="meta-links settings-link">
 	<a href="<?php echo esc_attr( add_query_arg( array( 'page' => 'statify-settings' ), admin_url( '/options-general.php' ) ) ); ?>"
 		title="<?php esc_attr_e( 'Open full settings page', 'statify' ); ?>">
 		<span class="dashicons dashicons-admin-generic"></span>
