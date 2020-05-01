@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. This projec
 * Introduced new option to separate display from storage range
 * Automatically add AMP analytics trigger if official AMP PlugIn is installed
 * Dashboard widget is now scrollable to keep long-term statistics readable
+* Skip tracking for favicon.ico redirects (since WP 5.4)
 
 ## 1.6.3
 * Fix compatibility issue with some PHP implementations not populating `INPUT_SERVER`

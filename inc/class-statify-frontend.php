@@ -246,8 +246,9 @@ class Statify_Frontend extends Statify {
 	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
 	 */
 	private static function _is_internal() {
-		// Skip for preview, 404 calls, feed and search access.
-		return is_preview() || is_404() || is_feed() || is_search();
+		// Skip for preview, 404 calls, feed, search and favicon access.
+		return is_preview() || is_404() || is_feed() || is_search()
+			|| ( function_exists( 'is_favicon' ) && is_favicon() );
 	}
 
 	/**
