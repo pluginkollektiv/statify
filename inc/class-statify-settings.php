@@ -307,6 +307,12 @@ class Statify_Settings {
 				do_settings_sections( 'statify' );
 				submit_button();
 				?>
+				<p class="alignright">
+					<a href="<?php echo esc_url( __( 'https://wordpress.org/plugins/statify/', 'statify' ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Documentation', 'statify' ); ?></a>
+					&bull; <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Donate', 'statify' ); ?></a>
+					&bull; <a href="<?php echo esc_url( __( 'https://wordpress.org/support/plugin/statify', 'statify' ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Support', 'statify' ); ?></a>
+				</p>
+
 			</form>
 		</div>
 
