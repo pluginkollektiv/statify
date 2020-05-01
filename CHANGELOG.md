@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file. This projec
 * Improved bot detection (#112) (#125, props @mahype)
 * Updated Chartist JS library for dashboard widget (#132)
 * Tested up to WordPress 5.4
-
+* Skip tracking for favicon.ico redirects (since WP 5.4)
 
 ## 1.6.3
 * Fix compatibility issue with some PHP implementations not populating `INPUT_SERVER`
