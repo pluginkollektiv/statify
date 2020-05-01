@@ -117,17 +117,18 @@ You can find the full changelog in [our GitHub repository](https://github.com/pl
 
 ### 1.7.0
 * Fix JavaScript embedding when bots visit before caching (#84) (#86)
-* Fix offset in visitor reporting due to different timezones between PHP and DB (#117, props @sophiehuiberts)
+* Fix offset in visitor reporting due to different timezones between PHP and database (#117, props @sophiehuiberts)
 * Fix untranslatable support link (#122) (#126, props @arkonisus)
-* Add separate settinge page and reduced widget backview to widget settings only (#111)
+* Add separate settings page and reduced widget backview to widget settings only (#111)
 * Add options to track logged in users (#103) (#111)
 * Add option to show total visits (#134, props @yurihs)
-* Refactored JavaScript tracking to use WP AJAX (#109)
+* Refactored JavaScript tracking to use WP AJAX (#109) (#142)
 * Introduced new option to separate display from storage range (#72)
 * Automatically add AMP analytics trigger if official AMP PlugIn is installed (#110) (#116, props @tthemann)
 * Dashboard widget is now scrollable with dynamic point radius to keep long-term statistics readable (#71) (#101, props @manumeter)
 * Improved bot detection (#112) (#125, props @mahype)
 * Updated Chartist JS library for dashboard widget (#132)
+* Skip tracking for favicon.ico redirects (since WP 5.4) (#144)
 * Tested up to WordPress 5.4
 
 ### 1.6.3
@@ -175,4 +176,5 @@ This bugfix release is recommended for all users.
 
 ## Screenshots ##
 1. Statify dashboard widget
-2. Statify dashboard widget options
+2. Statify dashboard widget settings
+3. Statify settings page
