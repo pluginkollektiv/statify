@@ -1,4 +1,5 @@
 * text eol=lf
+*.png -text
 
 # Directories
 /.github export-ignore
