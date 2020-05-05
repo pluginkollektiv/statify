@@ -62,7 +62,7 @@ If you've problems or think you’ve found a bug (e.g. you’re experiencing une
 * trackbacks
 * searches
 * previews
-* views by logged in users
+* views by logged in users (unless tracking is activated via the settings page)
 * error pages
 
 This behavior can be modified with the `statify__skip_tracking` hook.
