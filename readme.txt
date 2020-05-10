@@ -34,7 +34,7 @@ The statistics for the dashboard widget are cached for four minutes.
 ### Period of data saving ###
 *Statify* stores the data only for a limited period (default: two weeks), longer intervals can be selected as option in the widget. Data which is older than the selected period is deleted by a daily cron job.
 
-An increase in the database volume can be expected because all statistic values are collected and managed in the local WordPress database (expecially if you increase the period of data saving).
+An increase in the database volume can be expected because all statistic values are collected and managed in the local WordPress database (especially if you increase the period of data saving).
 
 ### JavaScript tracking for caching compatibility ###
 For compatibility with caching plugins like [Cachify](http://cachify.de) *Statify* offers an optional switchable tracking via JavaScript. This function allows reliable count of cached blog pages.
