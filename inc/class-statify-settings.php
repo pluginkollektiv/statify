@@ -24,7 +24,7 @@ class Statify_Settings {
 	 * @return void
 	 */
 	public static function register_settings() {
-		register_setting( 'statify', 'statify', array( __CLASS__, 'sanitize_options' ) );
+		register_setting( 'statify', 'statify', array( __CLASS__, 'save_options' ) );
 
 		// Global settings.
 		add_settings_section(
@@ -243,6 +243,21 @@ class Statify_Settings {
 		<br>
 		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views of logged-in users from tracking.', 'statify' ); ?></p>
 		<?php
+	}
+
+	/**
+	 * Save the submitted options.
+	 *
+	 * @since 1.7.1
+	 *
+	 * @param array $options the submitted options.
+	 *
+	 * @return array Validated and sanitized options.
+	 */
+	public static function save_options( $options ) {
+		$validated = self::sanitize_options( $options );
+		delete_transient( 'statify_data' );
+		return $validated;
 	}
 
 	/**
