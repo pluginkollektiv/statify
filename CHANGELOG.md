@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## unreleased
+* Extend user agent filter for bot detection (#149) (#151)
+
 ## 1.7.0
 * Fix JavaScript embedding when bots visit before caching (#84) (#86) 
 * Fix offset in visitor reporting due to different timezones between PHP and database (#117, props @sophiehuiberts)
