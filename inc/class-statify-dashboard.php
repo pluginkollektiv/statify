@@ -240,11 +240,6 @@ class Statify_Dashboard extends Statify {
 
 		// Update values.
 		update_option( 'statify', $options );
-
-		// Clear Cachify cache.
-		if ( has_action( 'cachify_flush_cache' ) ) {
-			do_action( 'cachify_flush_cache' );
-		}
 	}
 
 
