@@ -246,6 +246,19 @@ class Statify_Settings {
 	}
 
 	/**
+	 * Action to be triggered after Statify options have been saved.
+	 * Delete transient data to refresh the dashboard widget.
+	 *
+	 * @since 1.7.1
+	 *
+	 * @return void
+	 */
+	public static function action_update_options( ) {
+		// Delete transient.
+		delete_transient( 'statify_data' );
+	}
+
+	/**
 	 * Validate and sanitize submitted options.
 	 *
 	 * @param array $options Original options.

@@ -241,9 +241,6 @@ class Statify_Dashboard extends Statify {
 		// Update values.
 		update_option( 'statify', $options );
 
-		// Delete transient.
-		delete_transient( 'statify_data' );
-
 		// Clear Cachify cache.
 		if ( has_action( 'cachify_flush_cache' ) ) {
 			do_action( 'cachify_flush_cache' );
