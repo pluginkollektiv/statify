@@ -227,7 +227,7 @@ class Statify_Settings {
 		<input id="statify-skip-referrer" type="checkbox" name="statify[blacklist]" value="1"<?php checked( Statify::$_options['blacklist'] ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
 		<br>
-		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views with referrers listed in the comment blacklist', 'statify' ); ?>.</p>
+		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views with referrers listed in the comment blacklist.', 'statify' ); ?></p>
 		<?php
 	}
 
