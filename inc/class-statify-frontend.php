@@ -227,6 +227,9 @@ class Statify_Frontend extends Statify {
 			'curl',
 			'facebook',
 			'fetch',
+			'python',
+			'wget',
+			'monitor',
 		);
 
 		foreach ( $identifiers as $identifier ) {
