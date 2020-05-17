@@ -372,8 +372,9 @@ class Statify_Dashboard extends Statify {
 						$current_date
 					)
 				),
-				'since_beginning' => $wpdb->get_var(
-					"SELECT COUNT(`created`) FROM `$wpdb->statify`"
+				'since_beginning' => $wpdb->get_row(
+					"SELECT COUNT(`created`) AS `count`, MIN(`created`) AS `date` FROM `$wpdb->statify`",
+					ARRAY_A
 				),
 			);
 		}
