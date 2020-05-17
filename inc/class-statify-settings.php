@@ -246,6 +246,28 @@ class Statify_Settings {
 	}
 
 	/**
+	 * Action to be triggered after Statify options have been saved.
+	 * Delete transient data to refresh the dashboard widget and flushes Cachify cache, if the plugin is available and
+	 * JS settings have changed.
+	 *
+	 * @since 1.7.1
+	 *
+	 * @param array $old_value The old options value.
+	 * @param array $value     The updated options value.
+	 *
+	 * @return void
+	 */
+	public static function action_update_options( $old_value, $value ) {
+		// Delete transient.
+		delete_transient( 'statify_data' );
+
+		// Clear Cachify cache, if JS settings have changed.
+		if ( $old_value['snippet'] !== $value['snippet'] && has_action( 'cachify_flush_cache' ) ) {
+			do_action( 'cachify_flush_cache' );
+		}
+	}
+
+	/**
 	 * Validate and sanitize submitted options.
 	 *
 	 * @param array $options Original options.
