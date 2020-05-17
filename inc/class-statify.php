@@ -94,6 +94,7 @@ class Statify {
 			add_filter( 'plugin_action_links_' . STATIFY_BASE, array( 'Statify_Backend', 'add_action_link' ) );
 			add_action( 'admin_init', array( 'Statify_Settings', 'register_settings' ) );
 			add_action( 'admin_menu', array( 'Statify_Settings', 'add_admin_menu' ) );
+			add_action( 'update_option_statify', array( 'Statify_Settings', 'action_update_options' ), 10, 2 );
 		} else {    // Frontend.
 			add_action( 'template_redirect', array( 'Statify_Frontend', 'track_visit' ) );
 			add_filter( 'query_vars', array( 'Statify_Frontend', 'query_vars' ) );
