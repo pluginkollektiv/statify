@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 * Fix _Cachify_ cache not being flushed after changing JavaScript settings (#152)
 * Fix date inconsistency for number of total visits (#150)
 * Extend user agent filter for bot detection (#149) (#151)
+* Update tooltip library (containing a bugfix in IE 11) (#156)
 
 ## 1.7.0
 * Fix JavaScript embedding when bots visit before caching (#84) (#86) 
