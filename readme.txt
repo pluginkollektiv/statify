@@ -5,7 +5,7 @@
 * Requires at least: 4.7
 * Tested up to:      5.4
 * Requires PHP:      5.2
-* Stable tag:        1.7.0
+* Stable tag:        1.7.1
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -115,6 +115,12 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+### 1.7.1
+* Fix refresh of the dashboard widget when settings have been changed through the settings page (#147)
+* Fix _Cachify_ cache not being flushed after changing JavaScript settings (#152)
+* Fix date inconsistency for number of total visits (#150)
+* Extend user agent filter for bot detection (#149) (#151)
+
 ### 1.7.0
 * Fix JavaScript embedding when bots visit before caching (#84) (#86)
 * Fix offset in visitor reporting due to different timezones between PHP and database (#117, props @sophiehuiberts)
@@ -159,19 +165,12 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 ## Upgrade Notice ##
 
+### 1.7.1 ###
+This release fixes some bugs introduced with version 1.7.0. It is recommended for all users.
+
 ### 1.7.0 ###
 JavaScript tracking has been changed to use the WordPress AJAX endpoint.
 If you are using Statify without modifications, you are all set. Custom logic however might require adjustments (see snippet.js for reference).
-
-### 1.6.3 ###
-This bugfix release is recommended for all users.
-It fixes completely broken tracking with some PHP implementations. Sorry for that, we might owe you a couple of visitors.
-
-### 1.6.2 ###
-This bugfix release is recommended for all users.
-
-### 1.6.1 ###
-This bugfix release is recommended for all users.
 
 
 ## Screenshots ##
