@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## unreleased
+* Prevent JavaScript tracking from raising 400 for logged-in users, if tracking is disabled (#159)
+
 ## 1.7.1
 * Fix refresh of the dashboard widget when settings have been changed through the settings page (#147)
 * Fix _Cachify_ cache not being flushed after changing JavaScript settings (#152)
