@@ -331,8 +331,7 @@ class Statify_Frontend extends Statify {
 
 		if ( $is_snippet ) {
 			nocache_headers();
-			header( 'Content-type: text/javascript', true, 204 );
-			exit;
+			wp_die( '', '', 204 );
 		}
 
 		return false;
