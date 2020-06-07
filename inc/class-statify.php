@@ -79,9 +79,7 @@ class Statify {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			add_action( 'wp_ajax_nopriv_statify_track', array( 'Statify_Frontend', 'track_visit_ajax' ) );
-			if ( 0 === self::$_options['skip']['logged_in'] ) {
-				add_action( 'wp_ajax_statify_track', array( 'Statify_Frontend', 'track_visit_ajax' ) );
-			}
+			add_action( 'wp_ajax_statify_track', array( 'Statify_Frontend', 'track_visit_ajax' ) );
 		} elseif ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {  // XMLRPC.
 			add_filter( 'xmlrpc_methods', array( 'Statify_XMLRPC', 'xmlrpc_methods' ) );
 		} elseif ( defined( 'DOING_CRON' ) && DOING_CRON ) {    // Cron.
