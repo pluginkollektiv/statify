@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ## unreleased
 * Prevent JavaScript tracking from raising 400 for logged-in users, if tracking is disabled (#159)
+* Use `wp_die()` instead of header and exit for AJAX requests (#160)
 
 ## 1.7.1
 * Fix refresh of the dashboard widget when settings have been changed through the settings page (#147)
