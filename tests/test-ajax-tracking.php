@@ -10,6 +10,7 @@
  * Tests for JavaScript based tracking using WP AJAX.
  */
 class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
+	use Statify_Test_Support;
 
 	/**
 	 * Set up the test case.
@@ -23,6 +24,8 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 
 	/**
 	 * Test case for AJAX tracking.
+	 *
+	 * @runInSeparateProcess Must not preserve global constant.
 	 */
 	public function test_track_ajax() {
 		global $_POST;
@@ -32,8 +35,13 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		$_POST['statify_target']   = '/';
 		$_POST['statify_referrer'] = 'https://statify.pluginkollektiv.org/';
 
+		// Emulate AJAX call.
+		if ( ! defined( 'DOING_AJAX' ) ) {
+			define( 'DOING_AJAX', true );
+		}
+
 		// Initialize Statify with default configuration: no JS tracking, no logged-in users.
-		$this->init_statify_ajax( false, false );
+		$this->init_statify();
 
 		try {
 			$this->_handleAjax( 'nopriv_statify_track' );
@@ -48,7 +56,7 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		$this->assertNull( $stats, 'Stats should be empty, i.e. visit should not have been tracked' );
 
 		// Now enable JS tracking.
-		$this->init_statify_ajax( true, false );
+		$this->init_statify( true );
 
 		try {
 			$_POST['_wpnonce'] = wp_create_nonce( 'statify_track' );
@@ -59,8 +67,7 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		$this->assertTrue( isset( $e ), 'AJAX should have stopped' );
 		$this->assertEquals( 0, $e->getCode(), 'Unexpected exit code after AJAX processing' );
 
-		delete_transient( 'statify_data' );
-		$stats = Statify_Dashboard::get_stats();
+		$stats = $this->get_stats();
 		$this->assertNotNull( $stats, 'Stats should be filled after tracking' );
 
 		$this->assertEquals( 1, count( $stats['visits'] ), 'Unexpected number of days with visits' );
@@ -90,8 +97,7 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		$this->assertTrue( isset( $e ), 'AJAX should have stopped' );
 		$this->assertEquals( 0, $e->getCode(), 'Unexpected exit code after AJAX processing' );
 
-		delete_transient( 'statify_data' );
-		$stats = Statify_Dashboard::get_stats();
+		$stats = $this->get_stats();
 		$this->assertNotNull( $stats, 'Stats should be filled after tracking' );
 
 		// Numbers should not have been increased.
@@ -105,7 +111,7 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		unset( $e );
 
 		// Now we allow tracking for logged-in users.
-		$this->init_statify_ajax( true, true );
+		$this->init_statify( true, true );
 
 		try {
 			$_POST['_wpnonce'] = wp_create_nonce( 'statify_track' );
@@ -116,8 +122,7 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		$this->assertTrue( isset( $e ), 'AJAX should have stopped' );
 		$this->assertEquals( 0, $e->getCode(), 'Unexpected exit code after AJAX processing' );
 
-		delete_transient( 'statify_data' );
-		$stats = Statify_Dashboard::get_stats();
+		$stats = $this->get_stats();
 		$this->assertNotNull( $stats, 'Stats should be filled after tracking' );
 
 		// Numbers should not have been increased.
@@ -127,25 +132,5 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		$this->assertEquals( 2, $stats['target'][0]['count'], 'Unexpected target count' );
 		$this->assertEquals( 1, count( $stats['referrer'] ), 'Unexpected number of referrers' );
 		$this->assertEquals( 2, $stats['referrer'][0]['count'], 'Unexpected referrer count' );
-	}
-
-	/**
-	 * Initialize Statify for AJAX call.
-	 *
-	 * @param bool $use_snippet     Configure tracking via JavaScript.
-	 * @param bool $track_logged_in Configure tracking for logged-in users.
-	 */
-	private function init_statify_ajax( $use_snippet, $track_logged_in ) {
-		$options = get_option( 'statify' );
-
-		$options['snippet']           = $use_snippet ? 1 : 0;
-		$options['skip']['logged_in'] = $track_logged_in ? 0 : 1;
-
-		update_option( 'statify', $options );
-
-		if ( ! defined( 'DOING_AJAX' ) ) {
-			define( 'DOING_AJAX', true );
-		}
-		Statify::init();
 	}
 }
