@@ -10,6 +10,8 @@
  * Tests for cron integration.
  */
 class Test_Cron extends WP_UnitTestCase {
+	use Statify_Test_Support;
+
 	/**
 	 * Set up the test case.
 	 */
@@ -45,26 +47,16 @@ class Test_Cron extends WP_UnitTestCase {
 		);
 
 		// Insert some test data, 2 entries over the last 5 days (including today).
-		global $wpdb;
-
 		$date  = new DateTime();
 		$dates = array();
-		$data  = array(
-			'created'  => '',
-			'referrer' => '',
-			'target'   => '',
-		);
 		for ( $i = 0; $i < 5; $i ++ ) {
-			$data['created'] = $date->format( 'Y-m-d' );
-			$dates[]         = $date->format( 'Y-m-d' );
-			$wpdb->insert( $wpdb->statify, $data );
-			$wpdb->insert( $wpdb->statify, $data );
+			$dates[] = $date->format( 'Y-m-d' );
+			$this->insert_test_data( $date->format( 'Y-m-d' ), '', '', 2 );
 			$date->modify( '-1 days' );
 		}
 
 		// Make sure our test data is correct.
-		delete_transient( 'statify_data' );
-		$stats = Statify_Dashboard::get_stats();
+		$stats = $this->get_stats();
 		$this->assertEquals( 5, count( $stats['visits'] ), 'Unexpected number of days with visits' );
 		foreach ( $stats['visits'] as $v ) {
 			$this->assertContains( $v['date'], $dates, 'Unexpected creation date in stats' );
@@ -75,8 +67,7 @@ class Test_Cron extends WP_UnitTestCase {
 		Statify_Cron::cleanup_data();
 
 		// Verify that 2 days have been deleted.
-		delete_transient( 'statify_data' );
-		$stats = Statify_Dashboard::get_stats();
+		$stats = $this->get_stats();
 		$this->assertEquals( 3, count( $stats['visits'] ), 'Unexpected number of days with visits after cleanup' );
 		$remaining_dates = array_slice( $dates, 0, 3 );
 		foreach ( $stats['visits'] as $v ) {

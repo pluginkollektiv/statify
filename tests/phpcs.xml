@@ -20,6 +20,7 @@
 	<config name="minimum_supported_wp_version" value="4.7"/>
 	<rule ref="WordPress">
 		<exclude name="WordPress.Security"/>
+		<exclude name="WordPress.DB.DirectDatabaseQuery.DirectQuery"/>
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCatch"/>
 	</rule>
 

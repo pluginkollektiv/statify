@@ -27,7 +27,6 @@ class Test_Tracking extends WP_UnitTestCase {
 	 */
 	public function test_default_tracking() {
 		global $_SERVER;
-		global $wp_rewrite;
 
 		// Initialize Statify with default configuration: no JS tracking, no logged-in users.
 		$this->init_statify();
@@ -94,7 +93,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		$this->assertEquals( 2, $stats['visits'][0]['count'], 'Unexpected visit count' );
 
 		// Internal referrer should be cleared + check permalink with structure.
-		$wp_rewrite->set_permalink_structure( '/%postname%/' );
+		$this->set_permalink_structure( '/%postname%/' );
 		$_SERVER['REQUEST_URI']  = '/?foo=bar';
 		$_SERVER['HTTP_REFERER'] = home_url();
 
@@ -106,7 +105,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		$this->assertEquals( 1, $stats['target'][1]['count'], 'Unexpected target count' );
 		$this->assertEquals( 1, count( $stats['referrer'] ), 'Unexpected number of referrers' );
 		$this->assertEquals( 2, $stats['referrer'][0]['count'], 'Unexpected referrer count' );
-		$wp_rewrite->set_permalink_structure( '' );
+		$this->set_permalink_structure( '' );
 
 		// If JavaScript tracking is enabled, the regular request should not be tracked.
 		$_SERVER['REQUEST_URI'] = '/';
