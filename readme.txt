@@ -115,6 +115,11 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+## 1.7.2
+* Prevent JavaScript tracking from raising 400 for logged-in users, if tracking is disabled (#159)
+* Use `wp_die()` instead of header and exit for AJAX requests (#160)
+* Fix 1 day offset between display range and number of days evaluated in top lists (#162)
+
 ### 1.7.1
 * Fix refresh of the dashboard widget when settings have been changed through the settings page (#147)
 * Fix _Cachify_ cache not being flushed after changing JavaScript settings (#152)
@@ -138,33 +143,13 @@ You can find the full changelog in [our GitHub repository](https://github.com/pl
 * Skip tracking for favicon.ico redirects (since WP 5.4) (#144)
 * Tested up to WordPress 5.4
 
-### 1.6.3
-* Fix compatibility issue with some PHP implementations not populating `INPUT_SERVER`
-* Fix failing blacklist check for empty referrers
-* JS snippet call properly breaks page generation when tracking is skipped
-
-### 1.6.2
-* Fix compatibility issues with JavaScript optimization plugins
-* Fix tracking issue if JavaScript tracking is disabled
-
-### 1.6.1
-* Scaled datapoint size to number of records in dashboard widget to improve legibility
-* Fix display of larger numbers in the y-axis
-* Added JS source maps to avoid warnings with developer tools
-* Move JS snippet to separate file
-* Add JS snippet to output even if tracking is skipped to avoid caching problems
-* Improve code style
-* Enable nonce-verification in dashboard widget to prevent CSRF
-
-### 1.6.0
-* Added hook statify__visit_saved which is fired after a visit was stored in the database.
-* Migrated dashboard chart to Chartist.
-* Fixed JavaScript tracking not working in some environment which have X-Content-Type: nosniff environment enabled.
-
 For the complete changelog, check out our [GitHub repository](https://github.com/pluginkollektiv/statify).
 
 
 ## Upgrade Notice ##
+
+### 1.7.2 ###
+This release fixes some bugs. It is recommended for all users.
 
 ### 1.7.1 ###
 This release fixes some bugs introduced with version 1.7.0. It is recommended for all users.
