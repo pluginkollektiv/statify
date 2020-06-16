@@ -41,7 +41,7 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		}
 
 		// Initialize Statify with default configuration: no JS tracking, no logged-in users.
-		$this->init_statify();
+		$this->init_statify_tracking();
 
 		try {
 			$this->_handleAjax( 'nopriv_statify_track' );
@@ -56,7 +56,7 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		$this->assertNull( $stats, 'Stats should be empty, i.e. visit should not have been tracked' );
 
 		// Now enable JS tracking.
-		$this->init_statify( true );
+		$this->init_statify_tracking( true );
 
 		try {
 			$_POST['_wpnonce'] = wp_create_nonce( 'statify_track' );
@@ -111,7 +111,7 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		unset( $e );
 
 		// Now we allow tracking for logged-in users.
-		$this->init_statify( true, true );
+		$this->init_statify_tracking( true, true );
 
 		try {
 			$_POST['_wpnonce'] = wp_create_nonce( 'statify_track' );

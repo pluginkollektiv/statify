@@ -10,16 +10,14 @@
  * Tests for frontend integration.
  */
 class Test_Frontend extends WP_UnitTestCase {
+	use Statify_Test_Support;
 
 	/**
 	 * Test wp_footer() generation.
 	 */
 	public function test_wp_footer() {
 		// Disable JS tracking.
-		$options            = get_option( 'statify' );
-		$options['snippet'] = 0;
-		update_option( 'statify', $options );
-		Statify::init();
+		$this->init_statify_tracking( false );
 		$this->assertNotFalse(
 			has_action( 'wp_footer', array( 'Statify_Frontend', 'wp_footer' ) ),
 			'Statify footer action not registered'
@@ -32,9 +30,7 @@ class Test_Frontend extends WP_UnitTestCase {
 		);
 
 		// Enable JS tracking.
-		$options['snippet'] = 1;
-		update_option( 'statify', $options );
-		Statify::init();
+		$this->init_statify_tracking( true );
 
 		Statify_Frontend::wp_footer();
 		$this->assertTrue(

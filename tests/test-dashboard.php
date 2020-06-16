@@ -158,7 +158,7 @@ class Test_Dashboard extends WP_UnitTestCase {
 
 		// Initialize with default configuration, all limits greater data dimension.
 		Statify::init();
-		$this->init_statify_2( 14, 14, 3, false, false );
+		$this->init_statify_widget( 14, 14, 3, false, false );
 		$stats = $this->get_stats();
 
 		$this->assertEquals( 3, count( $stats['visits'] ), 'Unexpected number of days with visits' );
@@ -191,7 +191,7 @@ class Test_Dashboard extends WP_UnitTestCase {
 		$this->assertArrayNotHasKey( 'visit_totals', $stats, 'Totals should not be provided, if not configured' );
 
 		// Top lists only for today.
-		$this->init_statify_2( 14, 14, 3, true, false );
+		$this->init_statify_widget( 14, 14, 3, true, false );
 		$stats2 = $this->get_stats();
 
 		$this->assertEquals( $stats['visits'], $stats2['visits'], 'Visit counts should not be affected by "today" switch' );
@@ -215,7 +215,7 @@ class Test_Dashboard extends WP_UnitTestCase {
 		$this->assertArrayNotHasKey( 'visit_totals', $stats2, 'Totals should not be provided, if not configured' );
 
 		// Limited display range of 2 days with total numbers.
-		$this->init_statify_2( 14, 2, 3, false, true );
+		$this->init_statify_widget( 14, 2, 3, false, true );
 		$stats3 = $this->get_stats();
 
 		$this->assertEquals(

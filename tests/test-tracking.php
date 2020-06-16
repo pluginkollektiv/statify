@@ -29,7 +29,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		global $_SERVER;
 
 		// Initialize Statify with default configuration: no JS tracking, no logged-in users.
-		$this->init_statify();
+		$this->init_statify_tracking();
 
 		// Check if actions are registered.
 		$this->assertNotFalse(
@@ -109,7 +109,7 @@ class Test_Tracking extends WP_UnitTestCase {
 
 		// If JavaScript tracking is enabled, the regular request should not be tracked.
 		$_SERVER['REQUEST_URI'] = '/';
-		$this->init_statify( true, false );
+		$this->init_statify_tracking( true, false );
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertEquals( 3, $stats['visits'][0]['count'], 'Unexpected visit count' );
@@ -123,7 +123,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		global $wp_query;
 
 		// Initialize Statify with default configuration: no JS tracking, no logged-in users.
-		$this->init_statify();
+		$this->init_statify_tracking();
 
 		// Basically a valid request.
 		$_SERVER['REQUEST_URI']     = '/';
@@ -177,7 +177,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		global $_SERVER;
 
 		// Initialize Statify with default configuration: no JS tracking, no logged-in users.
-		$this->init_statify();
+		$this->init_statify_tracking();
 
 		$bot_uas = array(
 			// Google Bots.
@@ -245,7 +245,7 @@ class Test_Tracking extends WP_UnitTestCase {
 			"example.com\nstatify.pluginkollektiv.org\nexample.net"
 		);
 
-		$this->init_statify( false, false, true );
+		$this->init_statify_tracking( false, false, true );
 
 		// Basically a valid request.
 		$_SERVER['REQUEST_URI']     = '/';
@@ -256,7 +256,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		$stats = $this->get_stats();
 		$this->assertNull( $stats, 'Tracking for blacklisted referrer succeeded' );
 
-		$this->init_statify();
+		$this->init_statify_tracking();
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNotNull( $stats, 'Blacklist evaluated when not enabled' );
@@ -269,7 +269,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		global $_SERVER;
 		global $wp_query;
 
-		$this->init_statify();
+		$this->init_statify_tracking();
 
 		// A valid request that should be tracked.
 		$_SERVER['REQUEST_URI']     = '/';
@@ -322,7 +322,7 @@ class Test_Tracking extends WP_UnitTestCase {
 	public function test_visit_saved_hook() {
 		global $_SERVER;
 
-		$this->init_statify();
+		$this->init_statify_tracking();
 
 		// A valid request that should be tracked.
 		$_SERVER['REQUEST_URI']     = '/page/';
@@ -363,7 +363,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		wp_set_current_user( 1 );
 
 		// Initialize Statify with default configuration: no JS tracking, no logged-in users.
-		$this->init_statify();
+		$this->init_statify_tracking();
 
 		// Basically a valid request.
 		$_SERVER['REQUEST_URI']     = '/private-page/';
@@ -375,7 +375,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		$this->assertNull( $stats, 'Logged-in user should not be tracked' );
 
 		// Re-initialize Statify, enabling logged-in user tracking.
-		$this->init_statify( false, true );
+		$this->init_statify_tracking( false, true );
 
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();

@@ -18,16 +18,16 @@ trait Statify_Test_Support {
 	 * @param bool $track_logged_in Configure tracking for logged-in users (default: false).
 	 * @param bool $blacklist       Configure blacklist usage (default: false).
 	 */
-	protected function init_statify( $use_snippet = false, $track_logged_in = false, $blacklist = false ) {
-		$options = get_option( 'statify' );
-
-		$options['snippet']           = $use_snippet ? 1 : 0;
-		$options['skip']['logged_in'] = $track_logged_in ? 0 : 1;
-		$options['blacklist']         = $blacklist ? 1 : 0;
-
-		update_option( 'statify', $options );
-
-		Statify::init();
+	protected function init_statify_tracking( $use_snippet = false, $track_logged_in = false, $blacklist = false ) {
+		$this->init_statify(
+			array(
+				'snippet'   => $use_snippet ? 1 : 0,
+				'skip'      => array(
+					'logged_in' => $track_logged_in ? 0 : 1,
+				),
+				'blacklist' => $blacklist ? 1 : 0,
+			)
+		);
 	}
 
 	/**
@@ -39,18 +39,31 @@ trait Statify_Test_Support {
 	 * @param boolean $today      Show top list only for today.
 	 * @param boolean $totals     Show totals.
 	 */
-	protected function init_statify_2( $days_store, $days_show, $top_limit, $today, $totals ) {
+	protected function init_statify_widget( $days_store = 14, $days_show = 14, $top_limit = 3, $today = false, $totals = false ) {
+		$this->init_statify(
+			array(
+				'days'        => $days_store,
+				'days_show'   => $days_show,
+				'limit'       => $top_limit,
+				'today'       => $today ? 1 : 0,
+				'show_totals' => $totals ? 1 : 0,
+			)
+		);
+	}
+
+	/**
+	 * Initialize Statify with custom options.
+	 *
+	 * @param array $args Custom parameters (key => value).
+	 */
+	protected function init_statify( $args = array() ) {
 		$options = get_option( 'statify' );
 
 		if ( false === $options && isset( Statify::$_options ) ) {
 			$options = Statify::$_options;
 		}
 
-		$options['days']        = $days_store;
-		$options['days_show']   = $days_show;
-		$options['limit']       = $top_limit;
-		$options['today']       = $today ? 1 : 0;
-		$options['show_totals'] = $totals ? 1 : 0;
+		$options = wp_parse_args( $args, $options );
 
 		update_option( 'statify', $options );
 
