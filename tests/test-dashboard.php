@@ -149,7 +149,7 @@ class Test_Dashboard extends WP_UnitTestCase {
 		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://statify.pluginkollektiv.org/', '/test/', 4 );
 		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://pluginkollektiv.org/', '', 1 );
 
-		$this->insert_test_data( $date2->format( 'Y-m-d' ), 'https://statify.pluginkollektiv.org/', '/', 1 );
+		$this->insert_test_data( $date2->format( 'Y-m-d' ), 'https://pluginkollektiv.org/', '/', 1 );
 		$this->insert_test_data( $date2->format( 'Y-m-d' ), 'https://statify.pluginkollektiv.org/documentation/', '/test/', 2 );
 		$this->insert_test_data( $date2->format( 'Y-m-d' ), 'https://wordpress.org/plugins/statify/', '', 1 );
 
@@ -178,10 +178,10 @@ class Test_Dashboard extends WP_UnitTestCase {
 		$this->assertEquals( 4, $stats['target'][2]['count'], 'Unexpected 3rd target count' );
 
 		$this->assertEquals( 3, count( $stats['referrer'] ), 'Unexpected number of referrers' );
-		$this->assertEquals( 10, $stats['referrer'][0]['count'], 'Unexpected referrer URL' );
+		$this->assertEquals( 9, $stats['referrer'][0]['count'], 'Unexpected referrer URL' );
 		$this->assertEquals( 'https://statify.pluginkollektiv.org/', $stats['referrer'][0]['url'], 'Unexpected 1st referrer URL' );
 		$this->assertEquals( 'statify.pluginkollektiv.org', $stats['referrer'][0]['host'], 'Unexpected 1st referrer hostname' );
-		$this->assertEquals( 3, $stats['referrer'][1]['count'], 'Unexpected 1st referrer URL' );
+		$this->assertEquals( 4, $stats['referrer'][1]['count'], 'Unexpected 1st referrer URL' );
 		$this->assertEquals( 'https://pluginkollektiv.org/', $stats['referrer'][1]['url'], 'Unexpected 2nd referrer URL' );
 		$this->assertEquals( 'pluginkollektiv.org', $stats['referrer'][1]['host'], 'Unexpected 3rd referrer hostname' );
 		$this->assertEquals( 1, $stats['referrer'][2]['count'], 'Unexpected 1st referrer URL' );
@@ -233,10 +233,10 @@ class Test_Dashboard extends WP_UnitTestCase {
 		$this->assertEquals( 2, $stats3['target'][2]['count'], 'Unexpected 3rd target count' );
 
 		$this->assertEquals( 3, count( $stats3['referrer'] ), 'Unexpected number of referrers' );
-		$this->assertEquals( 10, $stats3['referrer'][0]['count'], 'Unexpected referrer URL' );
+		$this->assertEquals( 9, $stats3['referrer'][0]['count'], 'Unexpected referrer URL' );
 		$this->assertEquals( 'https://statify.pluginkollektiv.org/', $stats3['referrer'][0]['url'], 'Unexpected 1st referrer URL' );
 		$this->assertEquals( 'statify.pluginkollektiv.org', $stats3['referrer'][0]['host'], 'Unexpected 1st referrer hostname' );
-		$this->assertEquals( 1, $stats3['referrer'][1]['count'], 'Unexpected 1st referrer URL' );
+		$this->assertEquals( 2, $stats3['referrer'][1]['count'], 'Unexpected 1st referrer URL' );
 		$this->assertEquals( 'https://pluginkollektiv.org/', $stats3['referrer'][1]['url'], 'Unexpected 2nd referrer URL' );
 		$this->assertEquals( 'pluginkollektiv.org', $stats3['referrer'][1]['host'], 'Unexpected 3rd referrer hostname' );
 		$this->assertEquals( 1, $stats3['referrer'][2]['count'], 'Unexpected 1st referrer URL' );
