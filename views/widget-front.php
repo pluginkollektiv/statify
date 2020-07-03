@@ -22,7 +22,7 @@ $stats = Statify_Dashboard::get_stats(); ?>
 			<table id="statify_chart_data">
 				<?php foreach ( (array) $stats['visits'] as $visit ) { ?>
 					<tr>
-						<th><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $visit['date'] ) ) ); ?></th>
+						<th><?php echo esc_html( Statify::parse_date( $visit['date'] ) ); ?></th>
 						<td><?php echo (int) $visit['count']; ?></td>
 					</tr>
 				<?php } ?>
@@ -105,7 +105,7 @@ $stats = Statify_Dashboard::get_stats(); ?>
 					</td>
 					<td class="t">
 						<?php esc_html_e( 'since', 'statify' ); ?>
-						<?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $stats['visit_totals']['since_beginning']['date'] ) ) ); ?>
+						<?php echo esc_html( Statify::parse_date( $stats['visit_totals']['since_beginning']['date'] ) ); ?>
 					</td>
 				</tr>
 			</table>
