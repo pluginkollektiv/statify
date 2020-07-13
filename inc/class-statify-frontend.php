@@ -128,7 +128,9 @@ class Statify_Frontend extends Statify {
 	 */
 	public static function track_visit_ajax() {
 		// Check AJAX referrer.
-		check_ajax_referer( 'statify_track' );
+		if ( self::$_options['nonce'] ) {
+			check_ajax_referer( 'statify_track' );
+		}
 		// Only do something if snippet use is actually configured.
 		if ( self::$_options['snippet'] ) {
 			self::track_visit( true );

@@ -8,7 +8,7 @@
  * @since     1.7
  */
 
-// Quit ic accessed directly..
+// Quit if accessed directly..
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -48,6 +48,14 @@ class Statify_Settings {
 			'statify',
 			'statify-global',
 			array( 'label_for' => 'statify-snippet' )
+		);
+		add_settings_field(
+			'statify-snippet-nonce',
+			__( 'Require nonce for JavaScript tracking', 'statify' ),
+			array( __CLASS__, 'options_nonce' ),
+			'statify',
+			'statify-global',
+			array( 'label_for' => 'statify-nonce' )
 		);
 
 		// Dashboard widget settings.
@@ -139,6 +147,22 @@ class Statify_Settings {
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
 		<br>
 		<p class="description"><?php esc_html_e( 'This option is strongly recommended if caching or AMP is in use.', 'statify' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Option for the nonce for tracking via JS.
+	 *
+	 * @since 1.7.3
+	 *
+	 * @return void
+	 */
+	public static function options_nonce() {
+		?>
+		<input id="statify-nonce" type="checkbox" name="statify[nonce]" value="1" <?php checked( Statify::$_options['nonce'], 1 ); ?>>
+		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes', 'statify' ); ?>)
+		<br>
+		<p class="description"><?php esc_html_e( 'Activate this setting if the caching time is longer than the nonce time.', 'statify' ); ?></p>
 		<?php
 	}
 
@@ -289,7 +313,7 @@ class Statify_Settings {
 		}
 
 		// Get checkbox values.
-		foreach ( array( 'today', 'snippet', 'blacklist', 'show_totals' ) as $o ) {
+		foreach ( array( 'today', 'snippet', 'nonce', 'blacklist', 'show_totals' ) as $o ) {
 			$res[ $o ] = isset( $options[ $o ] ) && 1 === (int) $options[ $o ] ? 1 : 0;
 		}
 		$res['skip']['logged_in'] = isset( $options['skip']['logged_in'] ) && 1 === (int) $options['skip']['logged_in'] ? 1 : 0;

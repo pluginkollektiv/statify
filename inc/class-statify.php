@@ -69,6 +69,7 @@ class Statify {
 				'limit'       => 3,
 				'today'       => 0,
 				'snippet'     => 0,
+				'nonce'       => 1,
 				'blacklist'   => 0,
 				'show_totals' => 0,
 				'skip'        => array(
