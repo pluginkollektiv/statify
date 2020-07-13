@@ -162,7 +162,7 @@ class Statify_Settings {
 		<input id="statify-nonce" type="checkbox" name="statify[nonce]" value="1" <?php checked( Statify::$_options['nonce'], 1 ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes', 'statify' ); ?>)
 		<br>
-		<p class="description"><?php esc_html_e( 'Activate this setting if the caching time is longer than the nonce time.', 'statify' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Activate this setting if the caching time is longer than the nonce time or you miss views due to 403 Forbidden errors.', 'statify' ); ?></p>
 		<?php
 	}
 
