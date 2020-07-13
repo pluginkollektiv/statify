@@ -102,4 +102,23 @@ class Statify {
 			}
 		}
 	}
+
+	/**
+	 * Get a readable date from YYYY-MM-DD database date.
+	 *
+	 * This function is designed as a wrapper around date_i18n() or wp_date(), if the latter is available (#166).
+	 *
+	 * @param string $date Raw date in "YYYY-MM-DD" format.
+	 *
+	 * @return string Parsed date in WP default format.
+	 *
+	 * @since 1.7.3
+	 */
+	public static function parse_date( $date ) {
+		if ( function_exists( 'wp_date' ) ) { // Exists since WP 5.3.
+			return wp_date( get_option( 'date_format' ), strtotime( $date ) );
+		}
+
+		return date_i18n( get_option( 'date_format' ), strtotime( $date ) );
+	}
 }
