@@ -43,19 +43,11 @@ class Statify_Settings {
 		);
 		add_settings_field(
 			'statify-snippet',
-			__( 'Tracking via JavaScript', 'statify' ),
+			__( 'Tracking method', 'statify' ),
 			array( __CLASS__, 'options_snippet' ),
 			'statify',
 			'statify-global',
 			array( 'label_for' => 'statify-snippet' )
-		);
-		add_settings_field(
-			'statify-snippet-nonce',
-			__( 'Require nonce for JavaScript tracking', 'statify' ),
-			array( __CLASS__, 'options_nonce' ),
-			'statify',
-			'statify-global',
-			array( 'label_for' => 'statify-nonce' )
 		);
 
 		// Dashboard widget settings.
@@ -143,26 +135,32 @@ class Statify_Settings {
 	 */
 	public static function options_snippet() {
 		?>
-		<input id="statify-snippet" type="checkbox" name="statify[snippet]" value="1" <?php checked( Statify::$_options['snippet'], 1 ); ?>>
-		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
-		<br>
-		<p class="description"><?php esc_html_e( 'This option is strongly recommended if caching or AMP is in use.', 'statify' ); ?></p>
+		<p>
+			<?php self::show_snippet_option( Statify::TRACKING_METHOD_DEFAULT, __( 'Default tracking', 'statify' ) ); ?>
+			<br>
+			<?php self::show_snippet_option( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK, __( 'JavaScript based tracking with nonce check', 'statify' ) ); ?>
+			<br>
+			<?php self::show_snippet_option( Statify::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK, __( 'JavaScript based tracking without nonce check', 'statify' ) ); ?>
+		</p>
+		<p class="description">
+			<?php esc_html_e( 'JavaScript based tracking is strongly recommended if caching or AMP is in use.', 'statify' ); ?>
+			<?php esc_html_e( 'Disable the nonce check if the caching time is longer than the nonce time or you miss views due to 403 Forbidden errors.', 'statify' ); ?>
+		</p>
 		<?php
 	}
 
 	/**
-	 * Option for the nonce for tracking via JS.
+	 * Outputs the input radio for an option.
 	 *
-	 * @since 1.7.3
-	 *
-	 * @return void
+	 * @param int    $value the value for the input radio.
+	 * @param string $label the label.
 	 */
-	public static function options_nonce() {
+	private static function show_snippet_option( $value, $label ) {
 		?>
-		<input id="statify-nonce" type="checkbox" name="statify[nonce]" value="1" <?php checked( Statify::$_options['nonce'], 1 ); ?>>
-		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes', 'statify' ); ?>)
-		<br>
-		<p class="description"><?php esc_html_e( 'Activate this setting if the caching time is longer than the nonce time or you miss views due to 403 Forbidden errors.', 'statify' ); ?></p>
+			<label>
+				<input name="statify[snippet]" type="radio" value="<?php echo esc_html( $value ); ?>>" <?php checked( Statify::$_options['snippet'], $value ); ?>>
+				<?php echo esc_html( $label ); ?>
+			</label>
 		<?php
 	}
 
@@ -250,7 +248,6 @@ class Statify_Settings {
 		?>
 		<input id="statify-skip-referrer" type="checkbox" name="statify[blacklist]" value="1"<?php checked( Statify::$_options['blacklist'] ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
-		<br>
 		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views with referrers listed in the comment blacklist.', 'statify' ); ?></p>
 		<?php
 	}
@@ -264,7 +261,6 @@ class Statify_Settings {
 		?>
 		<input id="statify-skip-logged_in" type="checkbox" name="statify[skip][logged_in]" value="1"<?php checked( Statify::$_options['skip']['logged_in'] ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes', 'statify' ); ?>)
-		<br>
 		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views of logged-in users from tracking.', 'statify' ); ?></p>
 		<?php
 	}
@@ -312,8 +308,23 @@ class Statify_Settings {
 			$res['limit'] = 100;
 		}
 
+		if ( isset( $options['snippet'] ) ) {
+			$method = (int) $options['snippet'];
+			if ( in_array(
+				$method,
+				array(
+					Statify::TRACKING_METHOD_DEFAULT,
+					Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK,
+					Statify::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK,
+				),
+				true
+			) ) {
+				$res['snippet'] = $method;
+			}
+		}
+
 		// Get checkbox values.
-		foreach ( array( 'today', 'snippet', 'nonce', 'blacklist', 'show_totals' ) as $o ) {
+		foreach ( array( 'today', 'blacklist', 'show_totals' ) as $o ) {
 			$res[ $o ] = isset( $options[ $o ] ) && 1 === (int) $options[ $o ] ? 1 : 0;
 		}
 		$res['skip']['logged_in'] = isset( $options['skip']['logged_in'] ) && 1 === (int) $options['skip']['logged_in'] ? 1 : 0;

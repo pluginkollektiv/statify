@@ -30,29 +30,27 @@ class Statify_Frontend extends Statify {
 	 * @return   boolean
 	 */
 	public static function track_visit( $is_snippet = false ) {
-
-		// Check of JS snippet is configured.
-		$use_snippet = self::$_options['snippet'];
-
 		// Set target & referrer.
 		$target   = null;
 		$referrer = null;
-		if ( $use_snippet && $is_snippet ) {
-			if ( isset( $_REQUEST['statify_target'] ) ) {
-				$target = filter_var( wp_unslash( $_REQUEST['statify_target'] ), FILTER_SANITIZE_URL );
+		if ( self::is_javascript_tracking_enabled() ) {
+			if ( $is_snippet ) {
+				if ( isset( $_REQUEST['statify_target'] ) ) {
+					$target = filter_var( wp_unslash( $_REQUEST['statify_target'] ), FILTER_SANITIZE_URL );
+				}
+				if ( isset( $_REQUEST['statify_referrer'] ) ) {
+					$referrer = filter_var( wp_unslash( $_REQUEST['statify_referrer'] ), FILTER_SANITIZE_URL );
+				}
+			} else {
+				return false;
 			}
-			if ( isset( $_REQUEST['statify_referrer'] ) ) {
-				$referrer = filter_var( wp_unslash( $_REQUEST['statify_referrer'] ), FILTER_SANITIZE_URL );
-			}
-		} elseif ( ! $use_snippet ) {
+		} else {
 			if ( isset( $_SERVER['REQUEST_URI'] ) ) {
 				$target = filter_var( wp_unslash( $_SERVER['REQUEST_URI'] ), FILTER_SANITIZE_URL );
 			}
 			if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
 				$referrer = filter_var( wp_unslash( $_SERVER['HTTP_REFERER'] ), FILTER_SANITIZE_URL );
 			}
-		} else {
-			return false;
 		}
 
 		// Fallbacks for uninitialized or omitted target and referrer values.
@@ -127,14 +125,17 @@ class Statify_Frontend extends Statify {
 	 * @return void
 	 */
 	public static function track_visit_ajax() {
+		// Only do something if snippet use is actually configured.
+		if ( ! self::is_javascript_tracking_enabled() ) {
+			return;
+		}
+
 		// Check AJAX referrer.
-		if ( self::$_options['nonce'] ) {
+		if ( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK === self::$_options['snippet'] ) {
 			check_ajax_referer( 'statify_track' );
 		}
-		// Only do something if snippet use is actually configured.
-		if ( self::$_options['snippet'] ) {
-			self::track_visit( true );
-		}
+
+		self::track_visit( true );
 	}
 
 	/**
@@ -366,9 +367,8 @@ class Statify_Frontend extends Statify {
 	 * @version  1.4.1
 	 */
 	public static function wp_footer() {
-
 		// Skip by option.
-		if ( ! self::$_options['snippet'] ) {
+		if ( ! self::is_javascript_tracking_enabled() ) {
 			return;
 		}
 
@@ -409,7 +409,7 @@ class Statify_Frontend extends Statify {
 		}
 
 		// Analytics script is only relevant, if "JS" tracking is enabled, to prevent double tracking.
-		if ( self::$_options['snippet'] ) {
+		if ( self::is_javascript_tracking_enabled() ) {
 			$analytics['statify'] = array(
 				'type'        => '',
 				'attributes'  => array(),
