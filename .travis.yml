@@ -15,6 +15,7 @@ matrix:
 
 before_script:
   - composer install
+  - npm i -g npm@latest
   - npm install
 
 script:
@@ -23,6 +24,3 @@ script:
 
 notifications:
   email: false
-
-cache:
-  npm: false
