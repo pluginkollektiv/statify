@@ -23,3 +23,6 @@ script:
 
 notifications:
   email: false
+
+cache:
+  npm: false
