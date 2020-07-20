@@ -9,6 +9,9 @@ php:
   - '7.4'
   - nightly
 
+node_js:
+  - 12
+
 matrix:
   allow_failures:
     - php: nightly
