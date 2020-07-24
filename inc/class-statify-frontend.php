@@ -34,15 +34,15 @@ class Statify_Frontend extends Statify {
 		$target   = null;
 		$referrer = null;
 		if ( self::is_javascript_tracking_enabled() ) {
-			if ( $is_snippet ) {
-				if ( isset( $_REQUEST['statify_target'] ) ) {
-					$target = filter_var( wp_unslash( $_REQUEST['statify_target'] ), FILTER_SANITIZE_URL );
-				}
-				if ( isset( $_REQUEST['statify_referrer'] ) ) {
-					$referrer = filter_var( wp_unslash( $_REQUEST['statify_referrer'] ), FILTER_SANITIZE_URL );
-				}
-			} else {
+			if ( ! $is_snippet ) {
 				return false;
+			}
+
+			if ( isset( $_REQUEST['statify_target'] ) ) {
+				$target = filter_var( wp_unslash( $_REQUEST['statify_target'] ), FILTER_SANITIZE_URL );
+			}
+			if ( isset( $_REQUEST['statify_referrer'] ) ) {
+				$referrer = filter_var( wp_unslash( $_REQUEST['statify_referrer'] ), FILTER_SANITIZE_URL );
 			}
 		} else {
 			if ( isset( $_SERVER['REQUEST_URI'] ) ) {
