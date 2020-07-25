@@ -17,7 +17,7 @@ class Test_Frontend extends WP_UnitTestCase {
 	 */
 	public function test_wp_footer() {
 		// Disable JS tracking.
-		$this->init_statify_tracking( false );
+		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT );
 		$this->assertNotFalse(
 			has_action( 'wp_footer', array( 'Statify_Frontend', 'wp_footer' ) ),
 			'Statify footer action not registered'
@@ -30,7 +30,7 @@ class Test_Frontend extends WP_UnitTestCase {
 		);
 
 		// Enable JS tracking.
-		$this->init_statify_tracking( true );
+		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK );
 
 		Statify_Frontend::wp_footer();
 		$this->assertTrue(

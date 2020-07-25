@@ -109,7 +109,7 @@ class Test_Tracking extends WP_UnitTestCase {
 
 		// If JavaScript tracking is enabled, the regular request should not be tracked.
 		$_SERVER['REQUEST_URI'] = '/';
-		$this->init_statify_tracking( true, false );
+		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK, false );
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertEquals( 3, $stats['visits'][0]['count'], 'Unexpected visit count' );
@@ -245,7 +245,7 @@ class Test_Tracking extends WP_UnitTestCase {
 			"example.com\nstatify.pluginkollektiv.org\nexample.net"
 		);
 
-		$this->init_statify_tracking( false, false, true );
+		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT, false, true );
 
 		// Basically a valid request.
 		$_SERVER['REQUEST_URI']     = '/';
@@ -375,7 +375,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		$this->assertNull( $stats, 'Logged-in user should not be tracked' );
 
 		// Re-initialize Statify, enabling logged-in user tracking.
-		$this->init_statify_tracking( false, true );
+		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT, true );
 
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
