@@ -13,6 +13,9 @@ matrix:
   allow_failures:
     - php: nightly
 
+before_install:
+  - nvm install 10
+
 before_script:
   - composer install
   - npm install
