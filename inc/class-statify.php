@@ -17,6 +17,9 @@ defined( 'ABSPATH' ) || exit;
  * @since 0.1.0
  */
 class Statify {
+	const TRACKING_METHOD_DEFAULT = 0;
+	const TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK = 1;
+	const TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK = 2;
 
 	/**
 	 * Plugin options.
@@ -25,26 +28,6 @@ class Statify {
 	 * @var    array $_options
 	 */
 	public static $_options;
-
-	/**
-	 * Class constructor
-	 *
-	 * @since      0.1.0
-	 * @deprecated As of 1.7 use static method init() to initialize the plugin.
-	 */
-	public function __construct() {
-		self::init();
-	}
-
-	/**
-	 * Class self initialize.
-	 *
-	 * @since      0.1.0
-	 * @deprecated As of 1.7 use init() to initialize the plugin.
-	 */
-	public static function instance() {
-		self::init();
-	}
 
 	/**
 	 * Plugin initialization.
@@ -120,5 +103,21 @@ class Statify {
 		}
 
 		return date_i18n( get_option( 'date_format' ), strtotime( $date ) );
+	}
+
+	/**
+	 * Check JavaScript tracking.
+	 *
+	 * @return bool true if and only if one of the JavaScript tracking options is enabled.
+	 */
+	public static function is_javascript_tracking_enabled() {
+		return in_array(
+			self::$_options['snippet'],
+			array(
+				self::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK,
+				self::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK,
+			),
+			true
+		);
 	}
 }
