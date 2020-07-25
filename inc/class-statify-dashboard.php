@@ -264,14 +264,18 @@ class Statify_Dashboard extends Statify {
 	 * @since   0.1.0
 	 * @version 1.4.0
 	 *
-	 * @return  array  $data  Data from cache or DB
+	 * @param bool $use_cache If true use data from cache, otherwise force retrieving data from the database.
+	 *
+	 * @return  array  $data  stats data from cache or database
 	 */
-	public static function get_stats() {
+	public static function get_stats( $use_cache = true ) {
 
-		// Get from cache.
-		$data = get_transient( 'statify_data' );
-		if ( $data ) {
-			return $data;
+		// Get from cache if enabled.
+		if ( $use_cache ) {
+			$data_from_cache = get_transient( 'statify_data' );
+			if ( $data_from_cache ) {
+				return $data_from_cache;
+			}
 		}
 
 		// Get from DB.
@@ -288,7 +292,7 @@ class Statify_Dashboard extends Statify {
 		set_transient(
 			'statify_data',
 			$data,
-			MINUTE_IN_SECONDS * 4
+			MINUTE_IN_SECONDS * 15
 		);
 
 		return $data;

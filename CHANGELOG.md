@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. This projec
 ## unreleased
 * Fix date offset in dashboard widget in WP 5.3+ environments with mixed timezones (#167)
 * Allow to deactivate the nonce check during JavaScript tracking (#168)
+* Add refresh button in the dashboard, increase caching time (#157)
 
 ## 1.7.2
 * Prevent JavaScript tracking from raising 400 for logged-in users, if tracking is disabled (#159)
