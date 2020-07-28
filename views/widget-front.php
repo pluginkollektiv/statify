@@ -12,7 +12,7 @@ class_exists( 'Statify' ) || exit;
 
 // Get stats.
 $refresh = isset( $_POST['statify-fresh'] ) && check_admin_referer( 'statify-dashboard-refresh' );
-$stats = Statify_Dashboard::get_stats( ! $refresh ); ?>
+$stats = Statify_Dashboard::get_stats( $refresh ); ?>
 
 	<div id="statify_chart">
 		<?php if ( empty( $stats['visits'] ) ) { ?>

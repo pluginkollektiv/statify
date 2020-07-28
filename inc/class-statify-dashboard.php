@@ -264,14 +264,14 @@ class Statify_Dashboard extends Statify {
 	 * @since   0.1.0
 	 * @version 1.4.0
 	 *
-	 * @param bool $use_cache If true use data from cache, otherwise force retrieving data from the database.
+	 * @param bool $force_refresh If true, the data is recalculated, otherwise the cached value is used if available.
 	 *
 	 * @return  array  $data  stats data from cache or database
 	 */
-	public static function get_stats( $use_cache = true ) {
+	public static function get_stats( $force_refresh = false ) {
 
 		// Get from cache if enabled.
-		if ( $use_cache ) {
+		if ( ! $force_refresh ) {
 			$data_from_cache = get_transient( 'statify_data' );
 			if ( $data_from_cache ) {
 				return $data_from_cache;
