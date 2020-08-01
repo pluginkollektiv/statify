@@ -11,7 +11,8 @@
 class_exists( 'Statify' ) || exit;
 
 // Get stats.
-$stats = Statify_Dashboard::get_stats(); ?>
+$refresh = isset( $_POST['statify-fresh'] ) && check_admin_referer( 'statify-dashboard-refresh' );
+$stats = Statify_Dashboard::get_stats( $refresh ); ?>
 
 	<div id="statify_chart">
 		<?php if ( empty( $stats['visits'] ) ) { ?>
@@ -83,7 +84,6 @@ $stats = Statify_Dashboard::get_stats(); ?>
 <?php } ?>
 
 
-
 <?php if ( ! empty( $stats['visit_totals'] ) ) { ?>
 	<div class="table total">
 		<p class="sub">
@@ -112,3 +112,8 @@ $stats = Statify_Dashboard::get_stats(); ?>
 		</div>
 	</div>
 <?php } ?>
+
+<form method="post" class="clear">
+	<?php wp_nonce_field( 'statify-dashboard-refresh' ); ?>
+	<button class="button button-primary" name="statify-fresh"><?php esc_html_e( 'Refresh', 'statify' ); ?></button>
+</form>
