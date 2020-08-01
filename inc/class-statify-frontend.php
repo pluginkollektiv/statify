@@ -258,17 +258,17 @@ class Statify_Frontend extends Statify {
 	}
 
 	/**
-	 * Compare the referrer url to the blacklist data.
+	 * Compare the referrer URL to the disallowed keys list.
 	 * De/activate this feature via settings in the Dashboard widget.
 	 *
 	 * @since   1.5.0
 	 * @version 1.6.3
 	 *
-	 * @return  boolean TRUE of referrer matches blacklist entry and should thus be excluded.
+	 * @return  boolean TRUE of referrer matches disallowed keys entry and should thus be excluded.
 	 */
 	private static function check_referrer() {
 
-		// Return false if the blacklist filter is inactive.
+		// Return false if the disallowed-keys filter (formerly blacklist) is inactive.
 		if ( ! self::$_options['blacklist'] ) {
 			return false;
 		}
@@ -291,9 +291,9 @@ class Statify_Frontend extends Statify {
 			return false;
 		}
 
-		// Finally compare referrer against the blacklist.
-		$blacklist = self::get_blacklist_keys();
-		foreach ( $blacklist as $item ) {
+		// Finally compare referrer against the disallowed keys.
+		$disallowed_keys = self::get_disallowed_keys();
+		foreach ( $disallowed_keys as $item ) {
 			if ( strpos( $referrer, $item ) !== false ) {
 				return true;
 			}
@@ -303,21 +303,28 @@ class Statify_Frontend extends Statify {
 	}
 
 	/**
-	 * Get a array from the blacklist option of 'Settings' - 'Discussion' - 'Comment Blacklist'.
+	 * Get a array from the disallowed_keys option of 'Settings' - 'Discussion' - 'Disallowed Comment Keys'.
 	 *
 	 * @since  2016-12-21
+	 * @since 1.7.3 Renamed to "get_disallowed_keys" to match WP 5.5. wording.
 	 *
 	 * @return array
 	 */
-	private static function get_blacklist_keys() {
+	private static function get_disallowed_keys() {
+		$disallowed_keys = get_option( 'disallowed_keys' );
 
-		$blacklist = trim( get_option( 'blacklist_keys' ) );
+		if ( false === $disallowed_keys ) {
+			// WordPress < 5.5 uses the old key.
+			$disallowed_keys = get_option( 'blacklist_keys' );
+		}
 
-		if ( empty( $blacklist ) ) {
+		$disallowed_keys = trim( $disallowed_keys );
+
+		if ( empty( $disallowed_keys ) ) {
 			return array();
 		}
 
-		return (array) explode( "\n", $blacklist );
+		return (array) explode( "\n", $disallowed_keys );
 	}
 
 	/**
