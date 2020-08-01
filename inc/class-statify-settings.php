@@ -99,7 +99,7 @@ class Statify_Settings {
 		);
 		add_settings_field(
 			'statify-skip-referrer',
-			__( 'Blacklisted referrers', 'statify' ),
+			__( 'Disallowed referrers', 'statify' ),
 			array( __CLASS__, 'options_skip_blacklist' ),
 			'statify',
 			'statify-skip',
@@ -240,7 +240,7 @@ class Statify_Settings {
 	}
 
 	/**
-	 * Option to skip tracking for blacklisted referrers.
+	 * Option to skip tracking for disallowed referrers.
 	 *
 	 * @return void
 	 */
@@ -248,7 +248,7 @@ class Statify_Settings {
 		?>
 		<input id="statify-skip-referrer" type="checkbox" name="statify[blacklist]" value="1"<?php checked( Statify::$_options['blacklist'] ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
-		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views with referrers listed in the comment blacklist.', 'statify' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views with referrers listed in the list of disallowed comment keys.', 'statify' ); ?></p>
 		<?php
 	}
 
