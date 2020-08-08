@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## unreleased
+## 1.8.0
 * Fix date offset in dashboard widget in WP 5.3+ environments with mixed timezones (#167)
 * Allow to deactivate the nonce check during JavaScript tracking (#168)
 * Add support for "disallowed_keys" option instead of "blacklist_keys" in WordPress 5.5 (#174)
