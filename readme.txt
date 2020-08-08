@@ -3,9 +3,9 @@
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              analytics, dashboard, pageviews, privacy, statistics, stats, visits, web stats, widget
 * Requires at least: 4.7
-* Tested up to:      5.4
+* Tested up to:      5.5
 * Requires PHP:      5.2
-* Stable tag:        1.7.2
+* Stable tag:        1.8.0
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -116,6 +116,12 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+## 1.8.0
+* Fix date offset in dashboard widget in WP 5.3+ environments with mixed timezones (#167)
+* Allow to deactivate the nonce check during JavaScript tracking (#168)
+* Add support for "disallowed_keys" option instead of "blacklist_keys" in WordPress 5.5 (#174)
+* Add refresh button in the dashboard, increase caching time (#157)
+
 ## 1.7.2
 * Prevent JavaScript tracking from raising 400 for logged-in users, if tracking is disabled (#159)
 * Use `wp_die()` instead of header and exit for AJAX requests (#160)
@@ -149,15 +155,8 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 ## Upgrade Notice ##
 
-### 1.7.2 ###
-This release fixes some bugs. It is recommended for all users.
-
-### 1.7.1 ###
-This release fixes some bugs introduced with version 1.7.0. It is recommended for all users.
-
-### 1.7.0 ###
-JavaScript tracking has been changed to use the WordPress AJAX endpoint.
-If you are using Statify without modifications, you are all set. Custom logic however might require adjustments (see snippet.js for reference).
+### 1.8.0 ###
+Some minor improvements. The most important one: This version offers to deactivate the nonce check for JavaScript tracking (recommend if a caching plugin with a long caching time is used).
 
 
 ## Screenshots ##
