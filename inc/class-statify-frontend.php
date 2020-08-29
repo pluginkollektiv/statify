@@ -374,8 +374,12 @@ class Statify_Frontend extends Statify {
 	 * @version  1.4.1
 	 */
 	public static function wp_footer() {
-		// Skip by option.
-		if ( ! self::is_javascript_tracking_enabled() ) {
+		// JS tracking disabled or AMP is used for the current request.
+		if (
+			! self::is_javascript_tracking_enabled() ||
+			( function_exists( 'amp_is_request' ) && amp_is_request() ) ||
+			( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() )
+		) {
 			return;
 		}
 
