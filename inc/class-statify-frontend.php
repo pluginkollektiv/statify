@@ -91,15 +91,24 @@ class Statify_Frontend extends Statify {
 			$data['referrer'] = esc_url_raw( $referrer, array( 'http', 'https' ) );
 		}
 
-		/* Relative target url */
+		// Relative target URL.
 		$data['target'] = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $target ) );
 
-		// Trim target url.
+		// Trim target URL, i.e. remove query parameters.
 		if ( $wp_rewrite->permalink_structure ) {
-			$data['target'] = wp_parse_url( $data['target'], PHP_URL_PATH );
+			$parsed_target  = wp_parse_url( $data['target'] );
+			$data['target'] = $parsed_target['path'];
+
+			/*
+			 * Re-add AMP parameter to keep that information (only applicable for JS tracking).
+			 * We can assume "amp" to be the only parameter, as ${canonicalPath} already eliminates other queries.
+			 */
+			if ( $is_snippet && isset( $parsed_target['query'] ) && 'amp/' === $parsed_target['query'] ) {
+				$data['target'] .= '?amp';
+			}
 		}
 
-		// Sanitize target url.
+		// Sanitize target URL.
 		$data['target'] = esc_url_raw( $data['target'] );
 
 		// Insert.
@@ -469,7 +478,7 @@ class Statify_Frontend extends Statify {
 				'action'           => 'statify_track',
 				'_ajax_nonce'      => wp_create_nonce( 'statify_track' ),
 				'statify_referrer' => '${documentReferrer}',
-				'statify_target'   => '${canonicalPath}amp/',
+				'statify_target'   => '${canonicalPath}?amp',
 			),
 			'triggers'       => array(
 				'trackPageview' => array(
