@@ -252,9 +252,11 @@ class Statify_Frontend extends Statify {
 	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
 	 */
 	private static function _is_internal() {
-		// Skip for preview, 404 calls, feed, search and favicon access.
+		global $wp_query;
+		// Skip for preview, 404 calls, feed, search, favicon and sitemap access.
 		return is_preview() || is_404() || is_feed() || is_search()
-			|| ( function_exists( 'is_favicon' ) && is_favicon() );
+			|| ( function_exists( 'is_favicon' ) && is_favicon() )
+			|| '' !== get_query_var( 'sitemap' ) || '' !== get_query_var( 'sitemap-stylesheet' );
 	}
 
 	/**
