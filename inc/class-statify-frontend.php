@@ -410,7 +410,7 @@ class Statify_Frontend extends Statify {
 	/**
 	 * Add amp-analytics for Standard and Transitional mode.
 	 *
-	 * @see hAMPttps://amp-wp.org/documentation/playbooks/analytics/
+	 * @see https://amp-wp.org/documentation/playbooks/analytics/
 	 *
 	 * @param array $analytics_entries Analytics entries.
 	 */
@@ -475,6 +475,11 @@ class Statify_Frontend extends Statify {
 					'on'      => 'visible',
 					'request' => 'pageview',
 				),
+			),
+			'transport'      => array(
+				'beacon'  => true,
+				'xhrpost' => true,
+				'image'   => false,
 			),
 		);
 	}
