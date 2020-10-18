@@ -234,14 +234,15 @@ class Test_Tracking extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test tracking exclusions for blacklisted referrers.
+	 * Test tracking exclusions for disallowed keys.
 	 */
-	public function test_referer_blacklist() {
+	public function test_disallowed_referer() {
 		global $_SERVER;
+		global $wp_version;
 
-		// Define a blacklist.
+		// Define a list of disallowed keys.
 		update_option(
-			'blacklist_keys',
+			version_compare( $wp_version, '5.5', '>=' ) ? 'disallowed_keys' : 'blacklist_keys',
 			"example.com\nstatify.pluginkollektiv.org\nexample.net"
 		);
 

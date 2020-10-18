@@ -26,6 +26,7 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 	 * Test case for AJAX tracking.
 	 *
 	 * @runInSeparateProcess Must not preserve global constant.
+	 * @preserveGlobalState disabled
 	 */
 	public function test_track_ajax() {
 		global $_POST;
@@ -95,7 +96,6 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		$this->assertTrue( isset( $e ), 'AJAX should have stopped' );
 		$this->assertEquals( 0, $e->getCode(), 'Unexpected exit code after AJAX processing' );
 
-
 		// Numbers should not have been increased.
 		$stats = $this->get_stats();
 		$this->assertEquals( 1, count( $stats['visits'] ), 'Number of days with visits should not be higher after AJAX request failed' );
@@ -115,14 +115,12 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 		$this->assertTrue( isset( $e ), 'AJAX should have stopped' );
 		$this->assertEquals( 0, $e->getCode(), 'Unexpected exit code after AJAX processing' );
 
-
 		// Numbers should not have been increased.
 		$stats = $this->get_stats();
 		$this->assertEquals( 1, count( $stats['visits'] ), 'Number of days with visits should not be highered' );
 		$this->assertEquals( 2, $stats['visits'][0]['count'], 'Visit count should be higher after successful AJAX request without nonce' );
 
 		unset( $e );
-
 
 		// Now we are logged in.
 		wp_set_current_user( 1 );

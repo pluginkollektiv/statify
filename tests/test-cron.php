@@ -26,6 +26,7 @@ class Test_Cron extends WP_UnitTestCase {
 	 * Test Statify Cron Job execution.
 	 *
 	 * @runInSeparateProcess Must not preserve global constant.
+	 * @preserveGlobalState disabled
 	 */
 	public function test_cronjob() {
 		// Initialize normal cycle, configure storage period of 3 days.
