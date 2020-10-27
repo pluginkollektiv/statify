@@ -6,9 +6,8 @@
 		 p flag: Show progress of the run.
 		 s flag: Show sniff codes in all reports.
 		 v flag: Print verbose output.
-		 n flag: Do not print warnings.
 	-->
-	<arg value="psvn"/>
+	<arg value="psv"/>
 
 	<!-- use colors in output -->
 	<arg name="colors"/>

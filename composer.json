@@ -63,6 +63,9 @@
     "lint-php": [
       "phpcs --standard=phpcs.xml -s"
     ],
+    "lint-tests": [
+      "phpcs --standard=tests/phpcs.xml tests"
+    ],
     "minify": [
       "minifycss css/dashboard.css > css/dashboard.min.css",
       "minifyjs js/dashboard.js > js/dashboard.min.js",
