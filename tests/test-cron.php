@@ -31,9 +31,9 @@ class Test_Cron extends WP_UnitTestCase {
 	public function test_cronjob() {
 		// Initialize normal cycle, configure storage period of 3 days.
 		$this->init_statify_widget( 3 );
-		$this->assertFalse(
+		$this->assertNotFalse(
 			has_action( 'statify_cleanup', array( 'Statify_Cron', 'cleanup_data' ) ),
-			'Statify cleanup cron job should not be registered in normal cycle'
+			'Statify cleanup cron job should be registered in normal cycle (always)'
 		);
 
 		// Initialize cron cycle.
