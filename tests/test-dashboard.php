@@ -236,7 +236,9 @@ class Test_Dashboard extends WP_UnitTestCase {
 
 		$this->assertEquals( 3, count( $stats3['referrer'] ), 'Unexpected number of referrers' );
 		$this->assertEquals( 9, $stats3['referrer'][0]['count'], 'Unexpected referrer URL' );
-		$this->assertEquals( 'https://statify.pluginkollektiv.org/', $stats3['referrer'][0]['url'], 'Unexpected 1st referrer URL' );
+		/* Top referrer URL is "https://statify.pluginkollektiv.org/". As we aggregate by host, the reported URL however
+		depends on the DB server, so it might be ".../documentation/", too. Just check the prefix here. */
+		$this->assertEquals( 'https://statify.pluginkollektiv.org/', substr( $stats['referrer'][0]['url'], 0, 36 ), 'Unexpected 1st referrer URL' );
 		$this->assertEquals( 'statify.pluginkollektiv.org', $stats3['referrer'][0]['host'], 'Unexpected 1st referrer hostname' );
 		$this->assertEquals( 2, $stats3['referrer'][1]['count'], 'Unexpected 1st referrer URL' );
 		$this->assertEquals( 'https://pluginkollektiv.org/', $stats3['referrer'][1]['url'], 'Unexpected 2nd referrer URL' );
