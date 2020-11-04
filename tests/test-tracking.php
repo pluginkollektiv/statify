@@ -121,6 +121,7 @@ class Test_Tracking extends WP_UnitTestCase {
 	public function test_skip_tracking() {
 		global $_SERVER;
 		global $wp_query;
+		global $wp_version;
 
 		// Initialize Statify with default configuration: no JS tracking, no logged-in users.
 		$this->init_statify_tracking();
