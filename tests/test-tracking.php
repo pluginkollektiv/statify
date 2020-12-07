@@ -121,6 +121,7 @@ class Test_Tracking extends WP_UnitTestCase {
 	public function test_skip_tracking() {
 		global $_SERVER;
 		global $wp_query;
+		global $wp_version;
 
 		// Initialize Statify with default configuration: no JS tracking, no logged-in users.
 		$this->init_statify_tracking();
@@ -167,6 +168,19 @@ class Test_Tracking extends WP_UnitTestCase {
 			$stats = $this->get_stats();
 			$this->assertNull( $stats, 'Favicons should not be tracked.' );
 			$wp_query->is_favicon = false;
+		}
+
+		// Sitemap XML and XSL for WP 5.5 and above.
+		if ( version_compare( $wp_version, '5.5', '>=' ) ) {
+			set_query_var( 'sitemap', 'index' );
+			Statify_Frontend::track_visit();
+			$stats = $this->get_stats();
+			$this->assertNull( $stats, 'Sitemap XML should not be tracked.' );
+			set_query_var( 'sitemap', null );
+			set_query_var( 'sitemap-stylesheet', 'sitemap' );
+			Statify_Frontend::track_visit();
+			$stats = $this->get_stats();
+			$this->assertNull( $stats, 'Sitemap XSL should not be tracked.' );
 		}
 	}
 
