@@ -117,20 +117,20 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
-## 1.8.1
+### 1.8.1
 * Fix AMP compatibility for Standard and Transitional mode (#181) (#182)
 * JavaScript is no longer embedded if request is served by AMP (#181) (#182)
 * Always register the action for the cleanup (#184)
 * Exclude sitemap calls (WP 5.5) from tracking (#185) (#186)
 * Tested up to WordPress 5.6
 
-## 1.8.0
+### 1.8.0
 * Fix date offset in dashboard widget in WP 5.3+ environments with mixed timezones (#167)
 * Allow to deactivate the nonce check during JavaScript tracking (#168)
 * Add support for "disallowed_keys" option instead of "blacklist_keys" in WordPress 5.5 (#174)
 * Add refresh button in the dashboard, increase caching time (#157)
 
-## 1.7.2
+### 1.7.2
 * Prevent JavaScript tracking from raising 400 for logged-in users, if tracking is disabled (#159)
 * Use `wp_die()` instead of header and exit for AJAX requests (#160)
 * Fix 1 day offset between display range and number of days evaluated in top lists (#162)
