@@ -121,7 +121,7 @@ You can find the full changelog in [our GitHub repository](https://github.com/pl
 * Fix AMP compatibility for Standard and Transitional mode (#181) (#182)
 * JavaScript is no longer embedded if request is served by AMP (#181) (#182)
 * Always register the action for the cleanup (#184)
-* Exclude sitemap calls (WP 5.5) from tracking (#185) (#186)
+* Exclude sitemap calls (WP 5.5+) from tracking (#185) (#186)
 * Tested up to WordPress 5.6
 
 ### 1.8.0
