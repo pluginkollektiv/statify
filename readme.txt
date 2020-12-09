@@ -5,7 +5,7 @@
 * Requires at least: 4.7
 * Tested up to:      5.6
 * Requires PHP:      5.2
-* Stable tag:        1.8.0
+* Stable tag:        1.8.1
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,6 +65,7 @@ If you've problems or think you’ve found a bug (e.g. you’re experiencing une
 * views by logged in users (unless tracking is activated via the settings page)
 * error pages
 * favicon (as of WP 5.4)
+* sitemap (as of WP 5.5)
 
 This behavior can be modified with the `statify__skip_tracking` hook.
 
@@ -116,6 +117,13 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+## 1.8.1
+* Fix AMP compatibility for Standard and Transitional mode (#181) (#182)
+* JavaScript is no longer embedded if request is served by AMP (#181) (#182)
+* Always register the action for the cleanup (#184)
+* Exclude sitemap calls (WP 5.5) from tracking (#185) (#186)
+* Tested up to WordPress 5.6
+
 ## 1.8.0
 * Fix date offset in dashboard widget in WP 5.3+ environments with mixed timezones (#167)
 * Allow to deactivate the nonce check during JavaScript tracking (#168)
@@ -154,6 +162,9 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 
 ## Upgrade Notice ##
+
+### 1.8.1 ###
+This is a bugfix release improving AMP compatibility and excluding native sitemaps as of WordPress 5.5. It is recommended for all users.
 
 ### 1.8.0 ###
 Some minor improvements. The most important one: This version offers to deactivate the nonce check for JavaScript tracking (recommend if a caching plugin with a long caching time is used).
