@@ -8,6 +8,11 @@
     "plugin",
     "statistics"
   ],
+  "config": {
+    "platform": {
+      "php": "5.6"
+    }
+  },
   "require": {
     "php": "^5.2|^7|^8",
     "npm-asset/chartist": "^0.11.4",

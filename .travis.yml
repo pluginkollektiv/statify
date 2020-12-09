@@ -6,22 +6,19 @@ services:
 matrix:
   include:
     - php: 5.6
-      env: WP_VERSION=4.7
-    - php: 7.0
-    - php: 7.1
-    - php: 7.2
-    - php: 7.3
+      env:
+        - WP_VERSION=4.7
+        - COMPOSER=composer-php5.json
     - php: 7.4
+      env: WP_VERSION=5.5
+    - php: 8.0
       env: WP_VERSION=5.6
-    - php: nightly
-  allow_failures:
-    - php: nightly
 
 before_install:
-  - nvm install 10
+  - nvm install 14
 
 before_script:
-  - composer install
+  - composer install --ignore-platform-reqs
   - npm install
   - |
     if [[ ! -z "$WP_VERSION" ]] ; then
