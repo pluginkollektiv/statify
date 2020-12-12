@@ -7,7 +7,7 @@
  * Author URI:  https://pluginkollektiv.org
  * Plugin URI:  https://wordpress.org/plugins/statify/
  * License:     GPLv3 or later
- * Version:     1.8.0
+ * Version:     1.8.1
  *
  * @package WordPress
  */
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 define( 'STATIFY_FILE', __FILE__ );
 define( 'STATIFY_DIR', dirname( __FILE__ ) );
 define( 'STATIFY_BASE', plugin_basename( __FILE__ ) );
-define( 'STATIFY_VERSION', '1.8.0' );
+define( 'STATIFY_VERSION', '1.8.1' );
 
 
 /* Hooks */

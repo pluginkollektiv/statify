@@ -2,10 +2,10 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.8.1
-* Fix AMP compatiblity for Standard and Transitional mode (#181) (#182)
+* Fix AMP compatibility for Standard and Transitional mode (#181) (#182)
 * JavaScript is no longer embedded if request is served by AMP (#181) (#182)
 * Always register the action for the cleanup (#184)
-* Exclude sitemap calls (WP 5.5) from tracking (#185) (#186)
+* Exclude sitemap calls (WP 5.5+) from tracking (#185) (#186)
 * Tested up to WordPress 5.6
 
 ## 1.8.0
