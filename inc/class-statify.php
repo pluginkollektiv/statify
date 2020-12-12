@@ -60,13 +60,14 @@ class Statify {
 			)
 		);
 
+		// Cron.
+		add_action( 'statify_cleanup', array( 'Statify_Cron', 'cleanup_data' ) );
+
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			add_action( 'wp_ajax_nopriv_statify_track', array( 'Statify_Frontend', 'track_visit_ajax' ) );
 			add_action( 'wp_ajax_statify_track', array( 'Statify_Frontend', 'track_visit_ajax' ) );
 		} elseif ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {  // XMLRPC.
 			add_filter( 'xmlrpc_methods', array( 'Statify_XMLRPC', 'xmlrpc_methods' ) );
-		} elseif ( defined( 'DOING_CRON' ) && DOING_CRON ) {    // Cron.
-			add_action( 'statify_cleanup', array( 'Statify_Cron', 'cleanup_data' ) );
 		} elseif ( is_admin() ) {   // Backend.
 			add_action( 'wpmu_new_blog', array( 'Statify_Install', 'init_site' ) );
 			add_action( 'delete_blog', array( 'Statify_Uninstall', 'init_site' ) );
@@ -80,7 +81,9 @@ class Statify {
 			add_action( 'template_redirect', array( 'Statify_Frontend', 'track_visit' ) );
 			add_filter( 'query_vars', array( 'Statify_Frontend', 'query_vars' ) );
 			add_action( 'wp_footer', array( 'Statify_Frontend', 'wp_footer' ) );
-			if ( function_exists( 'is_amp_endpoint' ) ) { // Automattic AMP plugin present.
+			if ( function_exists( 'amp_is_request' ) || function_exists( 'is_amp_endpoint' ) ) {
+				// Automattic AMP plugin present.
+				add_filter( 'amp_analytics_entries', array( 'Statify_Frontend', 'amp_analytics_entries' ) );
 				add_filter( 'amp_post_template_analytics', array( 'Statify_Frontend', 'amp_post_template_analytics' ) );
 			}
 		}

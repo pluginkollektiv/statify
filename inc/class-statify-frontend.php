@@ -252,9 +252,10 @@ class Statify_Frontend extends Statify {
 	 * @return   boolean  $skip_hook  TRUE if NO tracking is desired
 	 */
 	private static function _is_internal() {
-		// Skip for preview, 404 calls, feed, search and favicon access.
+		// Skip for preview, 404 calls, feed, search, favicon and sitemap access.
 		return is_preview() || is_404() || is_feed() || is_search()
-			|| ( function_exists( 'is_favicon' ) && is_favicon() );
+			|| ( function_exists( 'is_favicon' ) && is_favicon() )
+			|| '' !== get_query_var( 'sitemap' ) || '' !== get_query_var( 'sitemap-stylesheet' );
 	}
 
 	/**
@@ -374,8 +375,12 @@ class Statify_Frontend extends Statify {
 	 * @version  1.4.1
 	 */
 	public static function wp_footer() {
-		// Skip by option.
-		if ( ! self::is_javascript_tracking_enabled() ) {
+		// JS tracking disabled or AMP is used for the current request.
+		if (
+			! self::is_javascript_tracking_enabled() ||
+			( function_exists( 'amp_is_request' ) && amp_is_request() ) ||
+			( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() )
+		) {
 			return;
 		}
 
@@ -404,7 +409,30 @@ class Statify_Frontend extends Statify {
 	}
 
 	/**
-	 * Add amp-analytics.
+	 * Add amp-analytics for Standard and Transitional mode.
+	 *
+	 * @see https://amp-wp.org/documentation/playbooks/analytics/
+	 *
+	 * @param array $analytics_entries Analytics entries.
+	 */
+	public static function amp_analytics_entries( $analytics_entries ) {
+		if ( ! is_array( $analytics_entries ) ) {
+			$analytics_entries = array();
+		}
+
+		// Analytics script is only relevant, if "JS" tracking is enabled, to prevent double tracking.
+		if ( self::is_javascript_tracking_enabled() ) {
+			$analytics_entries['statify'] = array(
+				'type'   => '',
+				'config' => wp_json_encode( self::make_amp_config() ),
+			);
+		}
+
+		return $analytics_entries;
+	}
+
+	/**
+	 * Add AMP-analytics for Reader mode.
 	 *
 	 * @see https://amp-wp.org/documentation/playbooks/analytics/
 	 *
@@ -420,32 +448,40 @@ class Statify_Frontend extends Statify {
 			$analytics['statify'] = array(
 				'type'        => '',
 				'attributes'  => array(),
-				'config_data' => array(
-					'extraUrlParams' => array(
-						'action'           => 'statify_track',
-						'_ajax_nonce'      => wp_create_nonce( 'statify_track' ),
-						'statify_referrer' => '${documentReferrer}',
-						'statify_target'   => '${canonicalPath}amp/',
-					),
-					'requests'       => array(
-						'event' => admin_url( 'admin-ajax.php' ),
-					),
-					'triggers'       => array(
-						'trackPageview' => array(
-							'on'      => 'visible',
-							'request' => 'event',
-							'vars'    => array(
-								'eventId' => 'pageview',
-							),
-						),
-					),
-					'transport'      => array(
-						'xhrpost' => true,
-					),
-				),
+				'config_data' => self::make_amp_config(),
 			);
 		}
 
 		return $analytics;
+	}
+
+	/**
+	 * Generate AMP-analytics configuration.
+	 *
+	 * @return array Configuration array.
+	 */
+	private static function make_amp_config() {
+		return array(
+			'requests'       => array(
+				'pageview' => admin_url( 'admin-ajax.php' ),
+			),
+			'extraUrlParams' => array(
+				'action'           => 'statify_track',
+				'_ajax_nonce'      => wp_create_nonce( 'statify_track' ),
+				'statify_referrer' => '${documentReferrer}',
+				'statify_target'   => '${canonicalPath}amp/',
+			),
+			'triggers'       => array(
+				'trackPageview' => array(
+					'on'      => 'visible',
+					'request' => 'pageview',
+				),
+			),
+			'transport'      => array(
+				'beacon'  => true,
+				'xhrpost' => true,
+				'image'   => false,
+			),
+		);
 	}
 }

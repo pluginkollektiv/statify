@@ -4,7 +4,9 @@
 # Directories
 /.github export-ignore
 /.wordpress-org export-ignore
+/bin export-ignore
 /node_modules export-ignore
+/tests export-ignore
 /vendor export-ignore
 
 # Files
@@ -19,4 +21,5 @@
 /package-lock.json export-ignore
 /composer.lock export-ignore
 /phpcs.xml export-ignore
+/phpunit.xml export-ignore
 /README.md export-ignore

@@ -2,7 +2,9 @@
 /.git
 /.github
 /.wordpress-org
+/bin
 /node_modules
+/tests
 /vendor
 
 # Files
@@ -17,4 +19,5 @@
 /package-lock.json
 /composer.lock
 /phpcs.xml
+/phpunit.xml
 /README.md

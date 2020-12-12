@@ -19,7 +19,8 @@
     "slowprog/composer-copy-file": "^0.3",
     "squizlabs/php_codesniffer": "^3.5",
     "phpcompatibility/php-compatibility": "^9.3",
-    "wp-coding-standards/wpcs": "^2.3"
+    "wp-coding-standards/wpcs": "^2.3",
+    "phpunit/phpunit": "^5"
   },
   "repositories": [
     {
@@ -62,11 +63,17 @@
     "lint-php": [
       "phpcs --standard=phpcs.xml -s"
     ],
+    "lint-tests": [
+      "phpcs --standard=tests/phpcs.xml tests"
+    ],
     "minify": [
       "minifycss css/dashboard.css > css/dashboard.min.css",
       "minifyjs js/dashboard.js > js/dashboard.min.js",
       "minifyjs js/snippet.js > js/snippet.min.js",
       "minifycss vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.css > css/chartist-plugin-tooltip.min.css"
+    ],
+    "test": [
+      "phpunit"
     ]
   },
   "extra": {
