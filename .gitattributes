@@ -17,9 +17,11 @@
 /.stylelintrc.json export-ignore
 /.travis.yml export-ignore
 /composer.json export-ignore
+/composer-php5.json export-ignore
 /package.json export-ignore
 /package-lock.json export-ignore
 /composer.lock export-ignore
+/composer-php5.lock export-ignore
 /phpcs.xml export-ignore
 /phpunit.xml export-ignore
 /README.md export-ignore

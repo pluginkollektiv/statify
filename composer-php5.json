@@ -8,6 +8,11 @@
     "plugin",
     "statistics"
   ],
+  "config": {
+    "platform": {
+      "php": "5.6"
+    }
+  },
   "require": {
     "php": "^5.2|^7|^8",
     "npm-asset/chartist": "^0.11.4",
@@ -20,7 +25,7 @@
     "squizlabs/php_codesniffer": "^3.5",
     "phpcompatibility/phpcompatibility-wp": "^2.1",
     "wp-coding-standards/wpcs": "^2.3",
-    "phpunit/phpunit": "^5|^7"
+    "phpunit/phpunit": "^5"
   },
   "repositories": [
     {
