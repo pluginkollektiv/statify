@@ -1,7 +1,7 @@
 /* @group Front page */
 
 #statify_chart {
-	color: #aaa;
+	color: #a7aaad;
 	direction: rtl;
 	height: 140px;
 	margin: 0 -4px;
@@ -23,18 +23,18 @@
 }
 
 #statify_chart .ct-line {
-	stroke: #0074a2;
+	stroke: #3582c4;
 	stroke-width: 2px;
 }
 
 #statify_chart .ct-point {
 	fill: #fff;
-	stroke: #0074a2;
+	stroke: #3582c4;
 	stroke-width: 1.5px;
 }
 
 #statify_chart .ct-area {
-	fill: #0074a2;
+	fill: #3582c4;
 }
 
 .statify-chartist-tooltip {
@@ -49,7 +49,7 @@
 }
 
 .statify-chartist-tooltip .chartist-tooltip-meta {
-	color: #0074a2;
+	color: #3582c4;
 }
 
 #statify_dashboard .postbox-title-action a,
@@ -72,7 +72,7 @@
 }
 
 #statify_dashboard .table p.sub {
-	color: #bbb;
+	color: #646970;
 	margin: 0 0 -4px;
 }
 
@@ -104,7 +104,7 @@
 #statify_dashboard td.b {
 	text-align: right;
 	padding-right: 4px;
-	color: #777;
+	color: #646970;
 }
 
 #statify_dashboard label {
