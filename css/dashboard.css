@@ -2,13 +2,13 @@
 
 #statify_chart {
 	color: #a7aaad;
+	flex: 0 0 100%;
 	direction: rtl;
 	height: 140px;
 	margin: 0 -4px;
 	overflow-x: auto;
 	overflow-y: hidden;
 	text-align: center;
-	width: 100%;
 }
 
 #statify_chart_data {
@@ -60,6 +60,8 @@
 }
 
 #statify_dashboard .inside {
+	display: flex;
+	flex-wrap: wrap;
 	height: 1%;
 	margin: 0;
 	padding-bottom: 0;
@@ -80,20 +82,13 @@
 	overflow: hidden;
 }
 
-#statify_dashboard .table.referrer {
-	float: left;
-	width: 45%;
-}
-
+#statify_dashboard .table.referrer,
 #statify_dashboard .table.target {
-	float: right;
-	width: 55%;
+	flex: 1 0 50%;
 }
 
 #statify_dashboard .table.total {
-	clear: both;
-	float: left;
-	width: 45%;
+	flex: 0 0 100%;
 }
 
 #statify_dashboard td {
@@ -118,6 +113,7 @@
 /* @group Back stage */
 
 #statify_dashboard form {
+	flex: 0 0 100%;
 	padding: 18px 0;
 }
 
