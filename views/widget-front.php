@@ -32,32 +32,6 @@ $stats = Statify_Dashboard::get_stats( $refresh ); ?>
 	</div>
 
 
-<?php if ( ! empty( $stats['target'] ) ) { ?>
-	<div class="table target">
-		<p class="sub">
-			<?php esc_html_e( 'Top targets', 'statify' ); ?>
-		</p>
-
-		<div>
-			<table>
-				<?php foreach ( (array) $stats['target'] as $target ) { ?>
-					<tr>
-						<td class="b">
-							<?php echo (int) $target['count']; ?>
-						</td>
-						<td class="t">
-							<a href="<?php echo esc_url( home_url( $target['url'] ) ); ?>" target="_blank" rel="noopener noreferrer">
-								<?php echo esc_html( $target['url'] ); ?>
-							</a>
-						</td>
-					</tr>
-				<?php } ?>
-			</table>
-		</div>
-	</div>
-<?php } ?>
-
-
 <?php if ( ! empty( $stats['referrer'] ) ) { ?>
 	<div class="table referrer">
 		<p class="sub">
@@ -83,6 +57,30 @@ $stats = Statify_Dashboard::get_stats( $refresh ); ?>
 	</div>
 <?php } ?>
 
+<?php if ( ! empty( $stats['target'] ) ) { ?>
+	<div class="table target">
+		<p class="sub">
+			<?php esc_html_e( 'Top targets', 'statify' ); ?>
+		</p>
+
+		<div>
+			<table>
+				<?php foreach ( (array) $stats['target'] as $target ) { ?>
+					<tr>
+						<td class="b">
+							<?php echo (int) $target['count']; ?>
+						</td>
+						<td class="t">
+							<a href="<?php echo esc_url( home_url( $target['url'] ) ); ?>" target="_blank" rel="noopener noreferrer">
+								<?php echo esc_html( $target['url'] ); ?>
+							</a>
+						</td>
+					</tr>
+				<?php } ?>
+			</table>
+		</div>
+	</div>
+<?php } ?>
 
 <?php if ( ! empty( $stats['visit_totals'] ) ) { ?>
 	<div class="table total">
