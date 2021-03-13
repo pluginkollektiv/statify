@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.8.2
+* Minor adjustments for the dashboard widget (#197) (#199)
+* Tested up to WordPress 5.7
+
 ## 1.8.1
 * Fix AMP compatibility for Standard and Transitional mode (#181) (#182)
 * JavaScript is no longer embedded if request is served by AMP (#181) (#182)
