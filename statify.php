@@ -4,8 +4,8 @@
  * Description: Compact, easy-to-use and privacy-compliant stats plugin for WordPress.
  * Text Domain: statify
  * Author:      pluginkollektiv
- * Author URI:  https://pluginkollektiv.org
- * Plugin URI:  https://wordpress.org/plugins/statify/
+ * Author URI:  https://pluginkollektiv.org/
+ * Plugin URI:  https://statify.pluginkollektiv.org/
  * License:     GPLv3 or later
  * Version:     1.8.2
  *
