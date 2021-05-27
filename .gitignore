@@ -1,6 +1,9 @@
 .idea/
+.nyc_output
+coverage
 css/*.min.css
 js/*.min.js
 js/*.min.js.map
+phpunit.*.xml
 vendor/
 node_modules/

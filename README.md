@@ -1,7 +1,7 @@
 # Statify
 
 [![Version](https://img.shields.io/packagist/v/pluginkollektiv/statify.svg)](https://packagist.org/packages/pluginkollektiv/statify)
-[![Build Status](https://travis-ci.org/pluginkollektiv/statify.svg?branch=travis-support-with-code-style-checks)](https://travis-ci.org/pluginkollektiv/statify)
+[![Test](https://github.com/pluginkollektiv/statify/actions/workflows/tests.yml/badge.svg)](https://github.com/pluginkollektiv/statify/actions/workflows/tests.yml)
 
 Visitor statistics for WordPress with focus on data protection, transparency and clarity. Perfect as a widget in your WordPress Dashboard.
 

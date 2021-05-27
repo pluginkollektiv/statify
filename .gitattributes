@@ -16,7 +16,6 @@
 /.gitignore export-ignore
 /.sonarcloud.properties export-ignore
 /.stylelintrc.json export-ignore
-/.travis.yml export-ignore
 /composer.json export-ignore
 /composer-php5.json export-ignore
 /package.json export-ignore
@@ -25,4 +24,6 @@
 /composer-php5.lock export-ignore
 /phpcs.xml export-ignore
 /phpunit.xml export-ignore
+/phpunit.coverage.xml export-ignore
+/phpunit.report.xml export-ignore
 /README.md export-ignore
