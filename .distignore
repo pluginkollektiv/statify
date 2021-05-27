@@ -1,8 +1,10 @@
 # Directories
 /.git
 /.github
+/.nyc_output
 /.wordpress-org
 /bin
+/coverage
 /node_modules
 /tests
 /vendor
@@ -12,13 +14,14 @@
 /.eslintrc.json
 /.gitattributes
 /.gitignore
-/.sonarcloud.properties
 /.stylelintrc.json
-/.travis.yml
+/.sonarcloud.properties
 /composer.json
 /package.json
 /package-lock.json
 /composer.lock
 /phpcs.xml
 /phpunit.xml
+/phpunit.coverage.xml
+/phpunit.report.xml
 /README.md
