@@ -12,6 +12,7 @@
 /.eslintrc.json
 /.gitattributes
 /.gitignore
+/.sonarcloud.properties
 /.stylelintrc.json
 /.travis.yml
 /composer.json
