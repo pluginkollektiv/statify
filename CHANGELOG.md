@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## unreleased
+* Dashboard widget is closeable again (#208) (#209)
+
 ## 1.8.2
 * Minor adjustments for the dashboard widget (#197) (#199)
 * Tested up to WordPress 5.7
