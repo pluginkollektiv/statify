@@ -5,7 +5,7 @@
 		 convertNoticesToExceptions="true"
 		 convertWarningsToExceptions="true">
 	<testsuites>
-		<testsuite>
+		<testsuite name="default">
 			<directory prefix="test-" suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
@@ -16,4 +16,9 @@
 			<directory suffix=".php">inc</directory>
 		</whitelist>
 	</filter>
+
+	<logging>
+		<log type="coverage-clover" target="phpunit.coverage.xml"/>
+		<log type="junit" target="phpunit.report.xml"/>
+	</logging>
 </phpunit>

@@ -53,7 +53,7 @@ class Statify_Install {
 	 *
 	 * @param int $site_id Site ID.
 	 */
-	public function init_site( $site_id ) {
+	public static function init_site( $site_id ) {
 
 		switch_to_blog( (int) $site_id );
 

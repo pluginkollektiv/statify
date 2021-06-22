@@ -50,7 +50,7 @@ class Statify_Uninstall {
 	 *
 	 * @param int $site_id Site ID.
 	 */
-	public function init_site( $site_id ) {
+	public static function init_site( $site_id ) {
 
 		switch_to_blog( $site_id );
 
