@@ -1,8 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## unreleased
+## 1.8.3
+* Update documentation links (#204)
+* Minor markup fix on settings page (#206)
 * Dashboard widget is closeable again (#208) (#209)
+* Fix static initialization on multisite with PHP 8 (#210, props @walterebert)
 
 ## 1.8.2
 * Minor adjustments for the dashboard widget (#197) (#199)
