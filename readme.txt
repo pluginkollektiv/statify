@@ -5,7 +5,7 @@
 * Requires at least: 4.7
 * Tested up to:      5.7
 * Requires PHP:      5.2
-* Stable tag:        1.8.2
+* Stable tag:        1.8.3
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -117,6 +117,12 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+### 1.8.3
+* Update documentation links (#204)
+* Minor markup fix on settings page (#206)
+* Dashboard widget is closeable again (#208) (#209)
+* Fix static initialization on multisite with PHP 8 (#210, props @walterebert)
+
 ### 1.8.2
 * Minor adjustments for the dashboard widget (#197) (#199)
 * Tested up to WordPress 5.7
@@ -166,6 +172,9 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 
 ## Upgrade Notice ##
+
+### 1.8.3 ###
+This is a bugfix with corrections for the dashboard widget and PHP 8 issues on multisite. It is recommended for all users.
 
 ### 1.8.2 ###
 This is a maintenance release with minor changes in the dashboard widget. Compatible with WordPress 5.7.
