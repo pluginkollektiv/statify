@@ -3,7 +3,7 @@
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              analytics, dashboard, pageviews, privacy, statistics, stats, visits, web stats, widget
 * Requires at least: 4.7
-* Tested up to:      5.7
+* Tested up to:      5.8
 * Requires PHP:      5.2
 * Stable tag:        1.8.3
 * License:           GPLv3 or later
@@ -122,6 +122,7 @@ You can find the full changelog in [our GitHub repository](https://github.com/pl
 * Minor markup fix on settings page (#206)
 * Dashboard widget is closeable again (#208) (#209)
 * Fix static initialization on multisite with PHP 8 (#210, props @walterebert)
+* Tested up to WordPress 5.8
 
 ### 1.8.2
 * Minor adjustments for the dashboard widget (#197) (#199)
