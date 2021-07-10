@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 * Minor markup fix on settings page (#206)
 * Dashboard widget is closeable again (#208) (#209)
 * Fix static initialization on multisite with PHP 8 (#210, props @walterebert)
+* Tested up to WordPress 5.8
 
 ## 1.8.2
 * Minor adjustments for the dashboard widget (#197) (#199)
