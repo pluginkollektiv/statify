@@ -69,6 +69,10 @@
 	position: relative;
 }
 
+#statify_dashboard.closed .inside {
+	display: none;
+}
+
 #statify_dashboard .table {
 	padding-bottom: 12px;
 }

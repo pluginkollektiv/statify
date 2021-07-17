@@ -4,10 +4,10 @@
  * Description: Compact, easy-to-use and privacy-compliant stats plugin for WordPress.
  * Text Domain: statify
  * Author:      pluginkollektiv
- * Author URI:  https://pluginkollektiv.org
- * Plugin URI:  https://wordpress.org/plugins/statify/
+ * Author URI:  https://pluginkollektiv.org/
+ * Plugin URI:  https://statify.pluginkollektiv.org/
  * License:     GPLv3 or later
- * Version:     1.8.2
+ * Version:     1.8.3
  *
  * @package WordPress
  */
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 define( 'STATIFY_FILE', __FILE__ );
 define( 'STATIFY_DIR', dirname( __FILE__ ) );
 define( 'STATIFY_BASE', plugin_basename( __FILE__ ) );
-define( 'STATIFY_VERSION', '1.8.2' );
+define( 'STATIFY_VERSION', '1.8.3' );
 
 
 /* Hooks */
