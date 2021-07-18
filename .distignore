@@ -17,6 +17,7 @@
 /.stylelintrc.json
 /.sonarcloud.properties
 /composer.json
+/composer-php5.json
 /package.json
 /package-lock.json
 /composer.lock
