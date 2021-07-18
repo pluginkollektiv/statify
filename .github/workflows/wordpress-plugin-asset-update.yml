@@ -2,19 +2,24 @@ name: Plugin asset/readme update
 on:
   push:
     branches:
-    - stable
+      - stable
 jobs:
   stable:
     name: Push to stable
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: php-actions/composer@v5
-      with:
-        args: --ignore-platform-reqs
-    - name: WordPress.org plugin asset/readme update
-      uses: 10up/action-wordpress-plugin-asset-update@stable
-      env:
-        SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-        SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-        README_NAME: readme.txt
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          tools: composer
+      - name: Install
+        run: composer install --no-interaction
+      - name: WordPress.org plugin asset/readme update
+        uses: 10up/action-wordpress-plugin-asset-update@stable
+        env:
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          README_NAME: readme.txt
