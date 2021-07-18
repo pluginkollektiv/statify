@@ -12,7 +12,9 @@ jobs:
           - php: '7.4'
             wordpress: '5.5'
           - php: '8.0'
-            wordpress: '5.8-RC4'
+            wordpress: 'latest'
+          - php: '8.0'
+            wordpress: 'nightly'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
