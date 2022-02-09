@@ -63,10 +63,7 @@ class Statify {
 		// Cron.
 		add_action( 'statify_cleanup', array( 'Statify_Cron', 'cleanup_data' ) );
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			add_action( 'wp_ajax_nopriv_statify_track', array( 'Statify_Frontend', 'track_visit_ajax' ) );
-			add_action( 'wp_ajax_statify_track', array( 'Statify_Frontend', 'track_visit_ajax' ) );
-		} elseif ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {  // XMLRPC.
+		if ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {  // XMLRPC.
 			add_filter( 'xmlrpc_methods', array( 'Statify_XMLRPC', 'xmlrpc_methods' ) );
 		} elseif ( is_admin() ) {   // Backend.
 			add_action( 'wp_initialize_site', array( 'Statify_Install', 'init_site' ) );
@@ -86,7 +83,82 @@ class Statify {
 				add_filter( 'amp_analytics_entries', array( 'Statify_Frontend', 'amp_analytics_entries' ) );
 				add_filter( 'amp_post_template_analytics', array( 'Statify_Frontend', 'amp_post_template_analytics' ) );
 			}
+			// Initialize REST API.
+			if ( self::is_javascript_tracking_enabled() ) {
+				add_filter( 'rest_api_init', array( 'Statify_Api', 'init' ) );
+			}
 		}
+	}
+
+	/**
+	 * Track the page view.
+	 *
+	 * @param string|null $referrer Referrer URL.
+	 * @param string|null $target   Target URL.
+	 *
+	 * @return void
+	 *
+	 * @since  0.1.0
+	 * @since  1.7.0 $is_snippet parameter added.
+	 * @since  2.0.0 Migration from Statify_Frontend::track_visit to Statify::track with multiple parameters.
+	 */
+	protected static function track( $referrer, $target ) {
+		// Fallbacks for uninitialized or omitted target and referrer values.
+		if ( is_null( $target ) ) {
+			$target = '/';
+		}
+		if ( is_null( $referrer ) ) {
+			$referrer = '';
+		}
+
+		// Invalid target?
+		if ( empty( $target ) || ! wp_validate_redirect( $target, false ) ) {
+			return;
+		}
+
+		// Check whether tracking should be skipped for this view.
+		if ( self::skip_tracking() ) {
+			return;
+		}
+
+		// Sanitize referrer url.
+		if ( ! empty( $referrer ) && false === self::strposa( $referrer, array( home_url(), network_admin_url() ) ) ) {
+			$referrer = esc_url_raw( $referrer, array( 'http', 'https' ) );
+		} else {
+			$referrer = '';
+		}
+
+		// Relative target URL.
+		$target = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $target ) );
+
+		/* Global vars */
+		global $wp_rewrite;
+
+		// Trim target URL.
+		if ( $wp_rewrite->permalink_structure ) {
+			$target = wp_parse_url( $target, PHP_URL_PATH );
+		}
+
+		// Init rows.
+		$data = array(
+			'created'  => strftime( '%Y-%m-%d', current_time( 'timestamp' ) ),
+			'referrer' => $referrer,
+			'target'   => $target,
+		);
+
+		// Insert.
+		global $wpdb;
+		$wpdb->insert( $wpdb->statify, $data );
+
+		/**
+		 * Fires after a visit was stored in the database
+		 *
+		 * @param array $data
+		 * @param int   $wpdb- >insert_id
+		 *
+		 * @since 1.5.5
+		 */
+		do_action( 'statify__visit_saved', $data, $wpdb->insert_id );
 	}
 
 	/**
@@ -122,5 +194,175 @@ class Statify {
 			),
 			true
 		);
+	}
+
+	/**
+	 * Rules to skip the tracking.
+	 *
+	 * @hook   boolean  statify__skip_tracking
+	 * @see    https://wordpress.org/plugins/statify/
+	 *
+	 * @return boolean $skip_hook TRUE if NO tracking is desired.
+	 *
+	 * @since  1.2.6
+	 * @since  2.0.0 Migration from Statify_Frontend to Statify class.
+	 */
+	private static function skip_tracking() {
+		if ( function_exists( 'apply_filters_deprecated' ) ) {
+			apply_filters_deprecated( 'statify_skip_tracking', array( '' ), '1.5.0', 'statify__skip_tracking' );
+		}
+		// Skip tracking via Hook.
+		$skip_hook = apply_filters( 'statify__skip_tracking', null );
+		if ( null !== $skip_hook ) {
+			return $skip_hook;
+		}
+
+		// Skip tracking via User Agent.
+		$user_agent = filter_var(
+			( isset( $_SERVER['HTTP_USER_AGENT'] ) ? wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) : '' ),
+			FILTER_SANITIZE_STRING
+		);
+		if ( is_null( $user_agent )
+			|| false === $user_agent
+			|| self::is_bot() ) {
+			return true;
+		}
+
+		// Skip tracking via Referrer check.
+		if ( self::check_referrer() ) {
+			return true;
+		}
+
+		// Skip for trackbacks and robots.
+		if ( is_trackback() || is_robots() ) {
+			return true;
+		}
+
+		// Skip logged in users, if enabled.
+		if ( self::$_options['skip']['logged_in'] && is_user_logged_in() ) {
+			return true;
+		}
+
+		// Skip for "internal" requests.
+		return self::is_internal();
+	}
+
+	/**
+	 * Checks if user agent is a bot.
+	 *
+	 * @return boolean $is_bot TRUE if user agent is a bot, FALSE if not.
+	 *
+	 * @since 1.7.0
+	 * @since 2.0.0 Migration from Statify_Frontend to Statify class, removed $user_agent parameter.
+	 */
+	private static function is_bot() {
+		$crawler_detect = new \Jaybizzle\CrawlerDetect\CrawlerDetect();
+
+		// Check the user agent of the current 'visitor' via the user agent and http_from header.
+		return $crawler_detect->isCrawler();
+	}
+
+	/**
+	 * Rules to detect internal calls to skip tracking and not print code snippet.
+	 *
+	 * @return boolean  $skip_hook TRUE if NO tracking is desired
+	 *
+	 * @since 1.6.1
+	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
+	 */
+	protected static function is_internal() {
+		// Skip for preview, 404 calls, feed, search, favicon and sitemap access.
+		return is_preview() || is_404() || is_feed() || is_search()
+			|| ( function_exists( 'is_favicon' ) && is_favicon() )
+			|| '' !== get_query_var( 'sitemap' ) || '' !== get_query_var( 'sitemap-stylesheet' );
+	}
+
+	/**
+	 * Compare the referrer URL to the disallowed keys list.
+	 * De/activate this feature via settings in the Dashboard widget.
+	 *
+	 * @return  boolean TRUE of referrer matches disallowed keys entry and should thus be excluded.
+	 *
+	 * @since 1.5.0
+	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
+	 */
+	private static function check_referrer() {
+		// Return false if the disallowed-keys filter (formerly blacklist) is inactive.
+		if ( ! self::$_options['blacklist'] ) {
+			return false;
+		}
+
+		$referrer = filter_var(
+			( isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '' ),
+			FILTER_SANITIZE_URL
+		);
+		if ( ! is_null( $referrer ) && false !== $referrer ) {
+			$referrer = wp_parse_url( $referrer, PHP_URL_HOST );
+		}
+
+		// Fallback for wp_parse_url() returning array instead of host only.
+		if ( is_array( $referrer ) && isset( $referrer['host'] ) ) {
+			$referrer = $referrer['host'];
+		}
+
+		// Return false if there still is no referrer to checj.
+		if ( ! is_string( $referrer ) ) {
+			return false;
+		}
+
+		// Finally compare referrer against the disallowed keys.
+		$disallowed_keys = self::get_disallowed_keys();
+		foreach ( $disallowed_keys as $item ) {
+			if ( strpos( $referrer, $item ) !== false ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get a array from the disallowed_keys option of 'Settings' - 'Discussion' - 'Disallowed Comment Keys'.
+	 *
+	 * @return array
+	 *
+	 * @since 1.7.3 Renamed to "get_disallowed_keys" to match WP 5.5. wording.
+	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
+	 */
+	private static function get_disallowed_keys() {
+		$disallowed_keys = get_option( 'disallowed_keys' );
+
+		if ( false === $disallowed_keys ) {
+			// WordPress < 5.5 uses the old key.
+			$disallowed_keys = get_option( 'blacklist_keys' );
+		}
+
+		$disallowed_keys = trim( $disallowed_keys );
+
+		if ( empty( $disallowed_keys ) ) {
+			return array();
+		}
+
+		return (array) explode( "\n", $disallowed_keys );
+	}
+
+	/**
+	 * Find the position of the first occurrence of a substring in a string about a array.
+	 *
+	 * @param string  $haystack The string to search in.
+	 * @param array   $needle   The string to search for.
+	 * @param integer $offset   Search will start this number of characters counted from the beginning of the string.
+	 *
+	 * @return boolean
+	 */
+	private static function strposa( $haystack, array $needle, $offset = 0 ) {
+
+		foreach ( $needle as $query ) {
+			if ( strpos( $haystack, $query, $offset ) !== false ) {
+				return true;
+			} // Stop on first true result.
+		}
+
+		return false;
 	}
 }

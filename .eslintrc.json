@@ -6,7 +6,7 @@
   },
   "globals": {
     "Chartist": "readonly",
-    "statify_ajax": "readonly",
+    "statifyAjax": "readonly",
     "statify_translations": "readonly"
   },
   "rules": {

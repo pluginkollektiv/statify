@@ -1,15 +1,18 @@
 ( function() {
 	var statifyReq;
+	var data;
 	try {
 		statifyReq = new XMLHttpRequest();
-		statifyReq.open( 'POST', statify_ajax.url, true );
-		statifyReq.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded;' );
-		statifyReq.send(
-			'_ajax_nonce=' + statify_ajax.nonce +
-			'&action=statify_track' +
-			'&statify_referrer=' + encodeURIComponent( document.referrer ) +
-			'&statify_target=' + encodeURIComponent( location.pathname + location.search )
-		);
+		statifyReq.open( 'POST', statifyAjax.url, true );
+		statifyReq.setRequestHeader( 'Content-Type', 'application/json' );
+		data = {
+			referrer: document.referrer,
+			target: location.pathname + location.search,
+		};
+		if ( 'nonce' in statifyAjax ) {
+			data.nonce = statifyAjax.nonce;
+		}
+		statifyReq.send( JSON.stringify( data ) );
 	} catch ( e ) {
 	}
 }() );
