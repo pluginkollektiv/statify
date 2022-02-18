@@ -5,14 +5,15 @@
 	flex: 0 0 100%;
 	direction: rtl;
 	height: 140px;
-	margin: 0 -4px;
+	margin: 1em -0.5em;
 	overflow-x: auto;
 	overflow-y: hidden;
 	text-align: center;
 }
 
-#statify_chart_data {
-	display: none;
+#statify_chart .spinner {
+	float: none;
+	margin: 1em;
 }
 
 #statify_chart .ct-label.ct-vertical.ct-start {
@@ -64,7 +65,6 @@
 	flex-wrap: wrap;
 	height: 1%;
 	margin: 0;
-	padding-bottom: 0;
 	overflow: hidden;
 	position: relative;
 }
@@ -98,6 +98,12 @@
 #statify_dashboard td {
 	padding: 8px 0 0;
 	line-height: 1.4;
+}
+
+#statify_dashboard tr.placeholder td {
+	background-color: #f5f5f5;
+	border-radius: 1em;
+	width: 10em;
 }
 
 #statify_dashboard td.b {

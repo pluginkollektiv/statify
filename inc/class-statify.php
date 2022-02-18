@@ -197,6 +197,20 @@ class Statify {
 	}
 
 	/**
+	 * Check whether the current user can see stats.
+	 *
+	 * @return boolean TRUE, if the user can see stats. FALSE otherwise.
+	 *
+	 * @since 1.9.0 extracted into method for reusability
+	 *
+	 * @hook  boolean  statify__user_can_see_stats
+	 * @see   https://wordpress.org/plugins/statify/
+	 */
+	public static function user_can_see_stats() {
+		return apply_filters( 'statify__user_can_see_stats', current_user_can( 'edit_dashboard' ) );
+	}
+
+	/**
 	 * Rules to skip the tracking.
 	 *
 	 * @hook   boolean  statify__skip_tracking

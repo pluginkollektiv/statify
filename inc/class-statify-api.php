@@ -24,6 +24,7 @@ class Statify_Api extends Statify {
 	 */
 	const REST_NAMESPACE   = 'statify/v1';
 	const REST_ROUTE_TRACK = 'track';
+	const REST_ROUTE_STATS = 'stats';
 
 	/**
 	 * Initialize REST API routes.
@@ -39,6 +40,16 @@ class Statify_Api extends Statify {
 				'accept_json'         => true,
 				'callback'            => array( __CLASS__, 'track_visit' ),
 				'permission_callback' => '__return_true',
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_STATS,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( __CLASS__, 'get_stats' ),
+				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
 			)
 		);
 
@@ -99,5 +110,43 @@ class Statify_Api extends Statify {
 		}
 
 		return new WP_REST_Response( null, 204 );
+	}
+
+	/**
+	 * Get statistics.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return WP_REST_Response The response.
+	 */
+	public static function get_stats( $request ) {
+		$refresh = '1' === $request->get_param( 'refresh' );
+
+		$stats  = Statify_Dashboard::get_stats( $refresh );
+
+		$visits          = $stats['visits'];
+		$stats['visits'] = array();
+		foreach ( $visits as $v ) {
+			$stats['visits'][ Statify::parse_date( $v['date'] ) ] = intval( $v['count'] );
+		}
+
+		foreach ( $stats['referrer'] as &$r ) {
+			$r['count'] = intval( $r['count'] );
+		}
+
+		foreach ( $stats['target'] as &$t ) {
+			$t['count'] = intval( $t['count'] );
+		}
+
+		if ( isset( $stats['visit_totals'] ) ) {
+			$stats['totals'] = array(
+				'today'   => intval( $stats['visit_totals']['today'] ),
+				'alltime' => intval( $stats['visit_totals']['since_beginning']['count'] ),
+				'since'   => Statify::parse_date( $stats['visit_totals']['since_beginning']['date'] ),
+			);
+			unset( $stats['visit_totals'] );
+		}
+
+		return new WP_REST_Response( $stats );
 	}
 }
