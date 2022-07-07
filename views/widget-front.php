@@ -46,7 +46,7 @@ $stats = Statify_Dashboard::get_stats( $refresh ); ?>
 							<?php echo (int) $referrer['count']; ?>
 						</td>
 						<td class="t">
-							<a href="<?php echo esc_url( $referrer['url'] ); ?>" target="_blank"  rel="noopener noreferrer">
+							<a href="<?php echo esc_url( $referrer['url'] ); ?>" target="_blank"  rel="noopener noreferrer" title="<?php echo is_null( get_page_by_path( $target['url'] ) ) ? get_bloginfo( 'name' ) : get_the_title( get_page_by_path( $target['url'] ) ); ?>">
 								<?php echo esc_html( $referrer['host'] ); ?>
 							</a>
 						</td>
