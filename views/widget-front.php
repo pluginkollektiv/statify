@@ -71,7 +71,7 @@ $stats = Statify_Dashboard::get_stats( $refresh ); ?>
 							<?php echo (int) $target['count']; ?>
 						</td>
 						<td class="t">
-							<a href="<?php echo esc_url( home_url( $target['url'] ) ); ?>" target="_blank" rel="noopener noreferrer" title="<?php echo is_null( get_page_by_path( $target['url'] ) ) ? get_bloginfo( 'name' ) : get_the_title( get_page_by_path( $target['url'] ) ); ?>">
+							<a href="<?php echo esc_url( home_url( $target['url'] ) ); ?>" target="_blank" rel="noopener noreferrer"  title="<?php echo 0 == url_to_postid( $target['url'] ) ? get_bloginfo( 'name' ) : get_the_title( url_to_postid( $target['url'] ) ); ?>">
 								<?php echo esc_html( $target['url'] ); ?>
 							</a>
 						</td>
