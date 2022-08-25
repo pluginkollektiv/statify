@@ -15,8 +15,8 @@ class Test_Dashboard extends WP_UnitTestCase {
 	/**
 	 * Set up the test case.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		set_current_screen( 'dashboard' );
 

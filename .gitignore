@@ -1,5 +1,7 @@
 .idea/
+.phpunit.result.cache
 .nyc_output
+composer.lock
 coverage
 css/*.min.css
 js/*.min.js
