@@ -1,24 +1,20 @@
-<phpunit bootstrap="tests/bootstrap.php"
-		 backupGlobals="false"
-		 colors="true"
-		 convertErrorsToExceptions="true"
-		 convertNoticesToExceptions="true"
-		 convertWarningsToExceptions="true">
-	<testsuites>
-		<testsuite name="default">
-			<directory prefix="test-" suffix=".php">./tests/</directory>
-		</testsuite>
-	</testsuites>
-
-	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
-			<file>statify.php</file>
-			<directory suffix=".php">inc</directory>
-		</whitelist>
-	</filter>
-
-	<logging>
-		<log type="coverage-clover" target="phpunit.coverage.xml"/>
-		<log type="junit" target="phpunit.report.xml"/>
-	</logging>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="tests/bootstrap.php" backupGlobals="false" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <file>statify.php</file>
+      <directory suffix=".php">inc</directory>
+    </include>
+    <report>
+      <clover outputFile="phpunit.coverage.xml"/>
+    </report>
+  </coverage>
+  <testsuites>
+    <testsuite name="default">
+      <directory prefix="test-" suffix=".php">./tests/</directory>
+    </testsuite>
+  </testsuites>
+  <logging>
+    <junit outputFile="phpunit.report.xml"/>
+  </logging>
 </phpunit>

@@ -15,8 +15,8 @@ class Test_Ajax_Tracking extends WP_Ajax_UnitTestCase {
 	/**
 	 * Set up the test case.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		// "Install" Statify, i.e. create tables and options.
 		Statify_Install::init();

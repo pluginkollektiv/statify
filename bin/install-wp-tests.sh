@@ -119,6 +119,17 @@ install_test_suite() {
 		sed $ioption "s|localhost|${DB_HOST}|" "$WP_TESTS_DIR"/wp-tests-config.php
 	fi
 
+	# Modify the WP_UnitTestCase class to use the polyfilled version for PHPUnit cross-compatibility.
+	# This is a dirty "backport" of the polyfills used in WP 5.9 and might fail with future updates.
+	if [ ! -f "$WP_TESTS_DIR"/includes/abstract-testcase.php ]; then
+	  local testcase_file="$WP_TESTS_DIR"/includes/testcase.php
+	  sed $ioption 's/class WP_UnitTestCase extends PHPUnit_Framework_TestCase /class WP_UnitTestCase extends Yoast\\PHPUnitPolyfills\\TestCases\\TestCase /' "$testcase_file"
+    sed $ioption 's/setUpBeforeClass[(][)]/set_up_before_class()/g' "$testcase_file"
+    sed $ioption 's/tearDownAfterClass[(][)]/tear_down_after_class()/g' "$testcase_file"
+    sed $ioption 's/setUp[(][)]/set_up()/g' "$testcase_file"
+    sed $ioption 's/tearDown[(][)]/tear_down()/g' "$testcase_file"
+	fi
+
 }
 
 install_db() {
