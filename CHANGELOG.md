@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## unreleased
+* Use same date retrieval for tracking and analysis (#227) (#232)
+
 ## 1.8.3
 * Update documentation links (#204)
 * Minor markup fix on settings page (#206)

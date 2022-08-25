@@ -82,7 +82,7 @@ class Statify_Frontend extends Statify {
 		);
 
 		// Set request timestamp.
-		$data['created'] = strftime( '%Y-%m-%d', current_time( 'timestamp' ) );
+		$data['created'] = current_time( 'Y-m-d' );
 
 		$needles = array( home_url(), network_admin_url() );
 
