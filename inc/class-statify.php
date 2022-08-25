@@ -147,6 +147,7 @@ class Statify {
 			'created'  => current_time( 'Y-m-d' ),
 			'referrer' => $referrer,
 			'target'   => $target,
+			'hits'     => 1,
 		);
 
 		// Insert.
