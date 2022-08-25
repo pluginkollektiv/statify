@@ -361,10 +361,11 @@ class Test_Tracking extends WP_UnitTestCase {
 		$this->assertNotNull( $stats['visits'][0]['count'], 'Request not tracked' );
 		$this->assertNotEmpty( $capture, 'Hook stativy__visit_saved has not fired' );
 		$this->assertTrue( is_numeric( $capture['id'] ) && $capture['id'] > 0, 'unexpected entry ID' );
-		$this->assertCount( 3, $capture['data'], 'unexpected number of data fields' );
+		$this->assertCount( 4, $capture['data'], 'unexpected number of data fields' );
 		$this->assertEquals( ( new DateTime() )->format( 'Y-m-d' ), $capture['data']['created'], 'unexpected creation date' );
 		$this->assertEquals( 'https://statify.pluginkollektiv.org/', $capture['data']['referrer'], 'unexpected referrer' );
 		$this->assertEquals( '/page', $capture['data']['target'], 'unexpected target' );
+		$this->assertEquals( 1, $capture['data']['hits'], 'unexpected hits' );
 	}
 
 	/**
