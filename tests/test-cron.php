@@ -29,6 +29,8 @@ class Test_Cron extends WP_UnitTestCase {
 	 * @preserveGlobalState disabled
 	 */
 	public function test_cronjob() {
+		global $wpdb;
+
 		// Initialize normal cycle, configure storage period of 3 days.
 		$this->init_statify_widget( 3 );
 		$this->assertNotFalse(
@@ -61,7 +63,8 @@ class Test_Cron extends WP_UnitTestCase {
 			$this->assertEquals( 2, $v['count'], 'Unexpected visit count' );
 		}
 
-		// Run the cron job.
+		// Run the cron job without aggregation.
+		add_filter( 'statify__skip_aggregation', '__return_true' );
 		Statify_Cron::cleanup_data();
 
 		// Verify that 2 days have been deleted.
@@ -72,6 +75,20 @@ class Test_Cron extends WP_UnitTestCase {
 			$this->assertContains( $v['date'], $remaining_dates, 'Unexpected remaining date in stats' );
 			$this->assertEquals( 2, $v['count'], 'Unexpected visit count' );
 		}
+		$this->assertEquals(
+			6,
+			$wpdb->get_var( "SELECT COUNT(*) FROM `$wpdb->statify`" ),
+			'Unexpected number of entries after cleanup without aggregation'
+		);
+
+		// Run the cron job with aggregation (default).
+		remove_filter( 'statify__skip_aggregation', '__return_true' );
+		Statify_Cron::cleanup_data();
+		$this->assertEquals(
+			3,
+			$wpdb->get_var( "SELECT COUNT(*) FROM `$wpdb->statify`" ),
+			'Unexpected number of entries after cleanup with aggregation'
+		);
 	}
 
 	/**

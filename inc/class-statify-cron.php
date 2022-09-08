@@ -23,13 +23,12 @@ class Statify_Cron extends Statify {
 	 *
 	 * @since    0.3.0
 	 * @version  1.4.0
+	 * @wp-hook boolean  statify__skip_aggregation
 	 */
 	public static function cleanup_data() {
-
-		// Global.
 		global $wpdb;
 
-		// Remove items.
+		// Remove old items.
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM `$wpdb->statify` WHERE created <= SUBDATE(%s, %d)",
@@ -38,13 +37,13 @@ class Statify_Cron extends Statify {
 			)
 		);
 
-		// Aggregate.
-		self::aggregate_data();
+		// Aggregate data.
+		if ( ! apply_filters( 'statify__skip_aggregation', false ) ) {
+			self::aggregate_data();
+		}
 
 		// Optimize DB.
-		$wpdb->query(
-			"OPTIMIZE TABLE `$wpdb->statify`"
-		);
+		$wpdb->query( "OPTIMIZE TABLE `$wpdb->statify`" );
 	}
 
 	/**
