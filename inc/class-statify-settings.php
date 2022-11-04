@@ -323,9 +323,13 @@ class Statify_Settings {
 	 */
 	public static function options_skip_logged_in() {
 		?>
-		<input id="statify-skip-logged_in" type="checkbox" name="statify[skip][logged_in]" value="1"<?php checked( Statify::$_options['skip']['logged_in'] ); ?>>
-		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes', 'statify' ); ?>)
-		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views of logged-in users from tracking.', 'statify' ); ?></p>
+		<select id="statify-skip-logged_in" name="statify[skip][logged_in]">
+			<option value="0" <?php selected( Statify::$_options['skip']['logged_in'], 0 ); ?>><?php esc_html_e( 'Track all users', 'statify' ); ?></option>
+			<option value="1" <?php selected( Statify::$_options['skip']['logged_in'], 1 ); ?>><?php esc_html_e( 'Skip all users', 'statify' ); ?></option>
+			<option value="2" <?php selected( Statify::$_options['skip']['logged_in'], 2 ); ?>><?php esc_html_e( 'Skip administrators', 'statify' ); ?></option>
+		</select>
+		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Skip all users', 'statify' ); ?>)
+		<p class="description"><?php esc_html_e( 'This option specified whether logged-in users and/or administrators should be excluded from tracking.', 'statify' ); ?></p>
 		<?php
 	}
 
@@ -393,7 +397,21 @@ class Statify_Settings {
 		foreach ( array( 'today', 'blacklist', 'show_totals' ) as $o ) {
 			$res[ $o ] = isset( $options[ $o ] ) && 1 === (int) $options[ $o ] ? 1 : 0;
 		}
-		$res['skip']['logged_in'] = isset( $options['skip']['logged_in'] ) && 1 === (int) $options['skip']['logged_in'] ? 1 : 0;
+
+		if ( isset( $options['skip']['logged_in'] ) ) {
+			$skip_logged_in = (int) $options['skip']['logged_in'];
+			if ( in_array(
+				$skip_logged_in,
+				array(
+					Statify::SKIP_USERS_NONE,
+					Statify::SKIP_USERS_ALL,
+					Statify::SKIP_USERS_ADMIN,
+				),
+				true
+			) ) {
+				$res['skip']['logged_in'] = $skip_logged_in;
+			}
+		}
 
 		// Sanitize user roles.
 		$res['show_widget_roles'] = array();

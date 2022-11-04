@@ -14,16 +14,16 @@ trait Statify_Test_Support {
 	/**
 	 * Initialize Statify.
 	 *
-	 * @param integer $method          Configure tracking method (default: 0).
-	 * @param boolean $track_logged_in Configure tracking for logged-in users (default: false).
-	 * @param boolean $blacklist       Configure blacklist usage (default: false).
+	 * @param integer $method         Configure tracking method (default: 0).
+	 * @param integer $skip_logged_in Configure tracking for logged-in users (default: 1).
+	 * @param boolean $blacklist      Configure blacklist usage (default: false).
 	 */
-	protected function init_statify_tracking( $method = 0, $track_logged_in = false, $blacklist = false ) {
+	protected function init_statify_tracking( $method = 0, $skip_logged_in = 1, $blacklist = false ) {
 		$this->init_statify(
 			array(
 				'snippet'   => $method,
 				'skip'      => array(
-					'logged_in' => $track_logged_in ? 0 : 1,
+					'logged_in' => $skip_logged_in,
 				),
 				'blacklist' => $blacklist ? 1 : 0,
 			)

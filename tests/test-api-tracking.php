@@ -41,7 +41,7 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 		);
 
 		// Enable JS tracking.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK );
 		do_action( 'rest_api_init' );
 		$this->assertArrayHasKey(
 			'/' . Statify_Api::REST_NAMESPACE . '/' . Statify_Api::REST_ROUTE_TRACK,
@@ -67,7 +67,7 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 		$request->set_param( 'nonce', wp_create_nonce( 'statify_track' ) );
 
 		// Initialize Statify with JS tracking enabled.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK );
 		do_action( 'rest_api_init' );
 
 		$response = $wp_rest_server->dispatch( $request );
@@ -108,7 +108,7 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 		$this->assertEquals( 1, $stats['visits'][0]['count'], 'Visit count should not be higher after AJAX request failed' );
 
 		// Now disable JS tracking.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_DEFAULT );
 
 		// The REST routes for testing are not reset, so the endpoint is evaluated and does not return 404 here.
 		$response = $wp_rest_server->dispatch( $request );
@@ -118,7 +118,7 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 		$this->assertEquals( 1, $stats['referrer'][0]['count'], 'Unexpected referrer count' );
 
 		// Re-enable JS without nonce.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK );
 
 		$response = $wp_rest_server->dispatch( $request );
 		$this->assertEquals( 204, $response->get_status(), 'API request should return 204 with JS enabled' );
@@ -136,11 +136,26 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 
 		/* Allow tracking for logged-in users.
 		   This also check the overruled check, i.e. the login status is not reset without nonce. */
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK, true );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK, Statify::SKIP_USERS_NONE );
 		$response = $wp_rest_server->dispatch( $request );
 		$this->assertEquals( 204, $response->get_status(), 'API request should return 204 with JS enabled and logged in' );
 		$stats = $this->get_stats();
 		$this->assertEquals( 1, count( $stats['referrer'] ), 'Unexpected number of referrers when logged in (enabled)' );
-		$this->assertEquals( 3, $stats['referrer'][0]['count'], 'Referrer count should not have increased when logged in (enabled)' );
+		$this->assertEquals( 3, $stats['referrer'][0]['count'], 'Referrer count should have increased when logged in (enabled)' );
+
+		// Exclude administrators.
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK, Statify::SKIP_USERS_ADMIN );
+		$response = $wp_rest_server->dispatch( $request );
+		$this->assertEquals( 204, $response->get_status(), 'API request should return 204 with JS enabled and logged in' );
+		$stats = $this->get_stats();
+		$this->assertEquals( 3, $stats['visits'][0]['count'], 'Administrator user should not be tracked' );
+
+		// Switch to regular user account.
+		$author = $this->factory()->user->create( array( 'role' => 'author' ) );
+		wp_set_current_user( $author );
+		$response = $wp_rest_server->dispatch( $request );
+		$this->assertEquals( 204, $response->get_status(), 'API request should return 204 with JS enabled and logged in' );
+		$stats = $this->get_stats();
+		$this->assertEquals( 4, $stats['visits'][0]['count'], 'Regular user should be tracked' );
 	}
 }

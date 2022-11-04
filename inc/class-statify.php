@@ -21,6 +21,10 @@ class Statify {
 	const TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK = 1;
 	const TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK = 2;
 
+	const SKIP_USERS_NONE = 0;
+	const SKIP_USERS_ALL = 1;
+	const SKIP_USERS_ADMIN = 2;
+
 	/**
 	 * Plugin options.
 	 *
@@ -56,7 +60,7 @@ class Statify {
 				'show_totals'       => 0,
 				'show_widget_roles' => null, // Just for documentation, the default is calculated later.
 				'skip'              => array(
-					'logged_in' => 1,
+					'logged_in' => self::SKIP_USERS_ALL,
 				),
 			)
 		);
@@ -265,7 +269,9 @@ class Statify {
 		}
 
 		// Skip logged in users, if enabled.
-		if ( self::$_options['skip']['logged_in'] && is_user_logged_in() ) {
+		if ( self::SKIP_USERS_ALL === self::$_options['skip']['logged_in'] && is_user_logged_in() ||
+			// Only skip administrators.
+			self::SKIP_USERS_ADMIN === self::$_options['skip']['logged_in'] && current_user_can( 'manage_options' ) ) {
 			return true;
 		}
 

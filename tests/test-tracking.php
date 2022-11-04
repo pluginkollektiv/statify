@@ -109,7 +109,7 @@ class Test_Tracking extends WP_UnitTestCase {
 
 		// If JavaScript tracking is enabled, the regular request should not be tracked.
 		$_SERVER['REQUEST_URI'] = '/';
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK, false );
+		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK, Statify::SKIP_USERS_NONE );
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertEquals( 3, $stats['visits'][0]['count'], 'Unexpected visit count' );
@@ -260,7 +260,7 @@ class Test_Tracking extends WP_UnitTestCase {
 			"example.com\nstatify.pluginkollektiv.org\nexample.net"
 		);
 
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT, false, true );
+		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT, Statify::SKIP_USERS_ALL, true );
 
 		// Basically a valid request.
 		$_SERVER['REQUEST_URI']     = '/';
@@ -374,7 +374,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		global $_SERVER;
 		global $wp_query;
 
-		// Assume we are logged in.
+		// Assume we are logged in as administrator.
 		wp_set_current_user( 1 );
 
 		// Initialize Statify with default configuration: no JS tracking, no logged-in users.
@@ -390,10 +390,24 @@ class Test_Tracking extends WP_UnitTestCase {
 		$this->assertNull( $stats, 'Logged-in user should not be tracked' );
 
 		// Re-initialize Statify, enabling logged-in user tracking.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT, true );
+		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT, Statify::SKIP_USERS_NONE );
 
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNotNull( $stats, 'Logged-in user should be tracked' );
+		$this->assertEquals( 1, $stats['visits'][0]['count'], 'Logged-in user should be tracked' );
+
+		// Exclude administrators.
+		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT, Statify::SKIP_USERS_ADMIN );
+		Statify_Frontend::track_visit();
+		$stats = $this->get_stats();
+		$this->assertEquals( 1, $stats['visits'][0]['count'], 'Administrator user should not be tracked' );
+
+		// Switch to regular user account.
+		$author = $this->factory()->user->create( array( 'role' => 'author' ) );
+		wp_set_current_user( $author );
+		Statify_Frontend::track_visit();
+		$stats = $this->get_stats();
+		$this->assertEquals( 2, $stats['visits'][0]['count'], 'Regular user should be tracked' );
 	}
 }
