@@ -113,5 +113,5 @@ $stats = Statify_Dashboard::get_stats( $refresh ); ?>
 
 <form method="post">
 	<?php wp_nonce_field( 'statify-dashboard-refresh' ); ?>
-	<button class="button button-primary" name="statify-fresh"><?php esc_html_e( 'Refresh', 'statify' ); ?></button>
+	<button type="submit" class="button button-primary" name="statify-fresh"><?php esc_html_e( 'Refresh', 'statify' ); ?></button>
 </form>

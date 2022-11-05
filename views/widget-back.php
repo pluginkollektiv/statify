@@ -22,27 +22,27 @@ class_exists( 'Statify' ) || exit; ?>
 <?php endif; ?>
 
 <h3><?php esc_html_e( 'Widget Settings', 'statify' ); ?></h3>
-<fieldset>
-	<label for="statify_days_show">
-		<input name="statify[days_show]" id="statify_days_show" type="number" min="1"
+<div>
+	<label>
+		<input name="statify[days_show]" type="number" min="1"
 			   value="<?php echo esc_attr( Statify::$_options['days_show'] ); ?>">
 		<?php esc_html_e( 'days', 'statify' ); ?> -
 		<?php esc_html_e( 'Period of data display in Dashboard', 'statify' ); ?>
 	</label>
-	<label for="statify_limit">
-		<input name="statify[limit]" id="statify_limit" type="number" min="1" max="100"
+	<label>
+		<input name="statify[limit]" type="number" min="1" max="100"
 			   value="<?php echo esc_attr( Statify::$_options['limit'] ); ?>">
 		<?php esc_html_e( 'Number of entries in top lists', 'statify' ); ?>
 	</label>
-	<label for="statify_today">
-		<input type="checkbox" name="statify[today]" id="statify_today" value="1" <?php checked( Statify::$_options['today'], 1 ); ?> />
+	<label>
+		<input type="checkbox" name="statify[today]" value="1" <?php checked( Statify::$_options['today'], 1 ); ?>>
 		<?php esc_html_e( 'Entries in top lists only for today', 'statify' ); ?>
 	</label>
-	<label for="statify_show_totals">
-		<input type="checkbox" name="statify[show_totals]" id="statify_show_totals" value="1" <?php checked( Statify::$_options['show_totals'], 1 ); ?> />
+	<label>
+		<input type="checkbox" name="statify[show_totals]" value="1" <?php checked( Statify::$_options['show_totals'], 1 ); ?>>
 		<?php esc_html_e( 'Show totals', 'statify' ); ?>
 	</label>
-</fieldset>
+</div>
 <?php wp_nonce_field( 'statify-dashboard' ); ?>
 
 <p class="meta-links">
