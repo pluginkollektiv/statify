@@ -3,9 +3,9 @@
 * Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              analytics, dashboard, pageviews, privacy, statistics, stats, visits, web stats, widget
 * Requires at least: 4.7
-* Tested up to:      5.9
+* Tested up to:      6.1
 * Requires PHP:      5.2
-* Stable tag:        1.8.3
+* Stable tag:        1.8.4
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -117,6 +117,12 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+### 1.8.4
+* Use same date retrieval for tracking and analysis (#227) (#232)
+* Replace input filtering for PHP 8.1 compatibility (#237)
+* Minor markup corrections in dashboard widget (#235)
+* Tested up to WordPress 6.1
+
 ### 1.8.3
 * Update documentation links (#204)
 * Minor markup fix on settings page (#206)
@@ -173,6 +179,9 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 
 ## Upgrade Notice ##
+
+### 1.8.4 ###
+This is a maintenance release targeting WordPress 6.1 and PHP 8.1 compatibility. It is recommended for all users.
 
 ### 1.8.3 ###
 This is a bugfix with corrections for the dashboard widget and PHP 8 issues on multisite. It is recommended for all users.

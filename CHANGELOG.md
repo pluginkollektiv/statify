@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.8.4
+* Use same date retrieval for tracking and analysis (#227) (#232)
+* Replace input filtering for PHP 8.1 compatibility (#237)
+* Minor markup corrections in dashboard widget (#235)
+* Tested up to WordPress 6.1
+
 ## 1.8.3
 * Update documentation links (#204)
 * Minor markup fix on settings page (#206)
