@@ -10,8 +10,8 @@
   ],
   "require": {
     "php": "^5.2|^7|^8",
-    "npm-asset/chartist": "0.11.4",
-    "npm-asset/chartist-plugin-tooltips-updated": "0.1.4"
+    "npm-asset/chartist": "^1.3.0",
+    "npm-asset/chartist-plugin-tooltips-updated": "^1.0.0"
   },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
@@ -82,11 +82,9 @@
   },
   "extra": {
     "copy-file": {
-      "vendor/npm-asset/chartist/dist/chartist.min.css": "css/",
-      "vendor/npm-asset/chartist/dist/chartist.min.js": "js/",
-      "vendor/npm-asset/chartist/dist/chartist.min.js.map": "js/",
-      "vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.min.js": "js/",
-      "vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.min.js.map": "js/"
+      "vendor/npm-asset/chartist/dist/index.css": "css/chartist.min.css",
+      "vendor/npm-asset/chartist/dist/index.umd.js": "js/chartist.min.js",
+      "vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.min.js": "js/"
     }
   },
   "config": {
