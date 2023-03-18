@@ -100,8 +100,8 @@ class Statify_Frontend extends Statify {
 
 		// Trim target url.
 		if ( $wp_rewrite->permalink_structure ) {
-			// Check if that is not a search.
 			if ( 0 !== strpos( $data['target'], '/?s=' ) ) {
+				// No search, so we only need the `PHP_URL_PATH`.
 				$data['target'] = wp_parse_url( $data['target'], PHP_URL_PATH );
 			}
 		}
