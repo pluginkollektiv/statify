@@ -38,7 +38,7 @@
 	}
 
 	// Draw chart.
-	chart = new Chartist.Line( '#statify_chart', {
+	chart = new Chartist.LineChart( '#statify_chart', {
 		labels: labels,
 		series: [
 			data,
@@ -47,7 +47,7 @@
 		low: 0,
 		showArea: true,
 		fullWidth: fullWidth,
-		width: ( fullWidth ? null : 5 * data.length ),
+		width: ( fullWidth ? undefined : 5 * data.length ),
 		axisX: {
 			showGrid: false,
 			showLabel: false,
