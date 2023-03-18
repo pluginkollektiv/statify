@@ -72,7 +72,7 @@ $stats = Statify_Dashboard::get_stats( $refresh ); ?>
 						</td>
 						<td class="t">
 							<a href="<?php echo esc_url( home_url( $target['url'] ) ); ?>" target="_blank" rel="noopener noreferrer">
-								<?php echo esc_html( $target['url'] ); ?>
+								<?php echo Statify_Dashboard::parse_target( $target['url'] ); ?>
 							</a>
 						</td>
 					</tr>

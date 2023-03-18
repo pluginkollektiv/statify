@@ -92,11 +92,23 @@ class Statify_Frontend extends Statify {
 		}
 
 		/* Relative target url */
-		$data['target'] = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $target ) );
+		$data['target'] = str_replace( home_url( '/', 'relative' ), '/', $target );
+		// Maybe add trailing slash if that is no search query.
+		if ( 0 !== strpos( $data['target'], '/?s=' ) ) {
+			$data['target'] = user_trailingslashit( $data['target'] );
+		}
 
 		// Trim target url.
 		if ( $wp_rewrite->permalink_structure ) {
-			$data['target'] = wp_parse_url( $data['target'], PHP_URL_PATH );
+			// Check if that is not a search.
+			if ( 0 !== strpos( $data['target'], '/?s=' ) ) {
+				$data['target'] = wp_parse_url( $data['target'], PHP_URL_PATH );
+			}
+		}
+
+		// Convert search query to lowercase.
+		if ( 0 === strpos( $data['target'], '/?s=' ) ) {
+			$data['target'] = strtolower( $data['target'] );
 		}
 
 		// Sanitize target url.
@@ -250,7 +262,7 @@ class Statify_Frontend extends Statify {
 	 */
 	private static function _is_internal() {
 		// Skip for preview, 404 calls, feed, search, favicon and sitemap access.
-		return is_preview() || is_404() || is_feed() || is_search()
+		return is_preview() || is_404() || is_feed()
 			|| ( function_exists( 'is_favicon' ) && is_favicon() )
 			|| '' !== get_query_var( 'sitemap' ) || '' !== get_query_var( 'sitemap-stylesheet' );
 	}

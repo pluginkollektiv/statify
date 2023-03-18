@@ -385,4 +385,24 @@ class Statify_Dashboard extends Statify {
 
 		return $data;
 	}
+
+	/**
+	 * Parses a visit target and, if needed, modifies it for displaying.
+	 *
+	 * @param string $target URL target as displayed in widget.
+	 *
+	 * @return string
+	 */
+	public static function parse_target( $target ) {
+		// Modify for search strings.
+		if ( 0 === strpos( $target, '/?s=' ) ) {
+			$target = preg_replace( '/^\/\?s=/', '', $target );
+			$target = urldecode( $target );
+			return sprintf( /* translators: s = search term */
+				__( 'Search query: “%s”', 'statify' ),
+				$target
+			);
+		}
+		return $target;
+	}
 }
