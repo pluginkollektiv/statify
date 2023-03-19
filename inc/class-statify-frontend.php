@@ -105,6 +105,11 @@ class Statify_Frontend extends Statify {
 		} else {
 			// Lowercase search query.
 			$data['target'] = strtolower( $data['target'] );
+
+			// Remove additional query parameters that might exist.
+			$data['target'] = preg_replace( '/^\/\?/', '', $data['target'] );
+			wp_parse_str( $data['target'], $tmp );
+			$data['target'] = "/?s={$tmp['s']}";
 		}
 
 		// Sanitize target url.
