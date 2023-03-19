@@ -47,14 +47,15 @@ class Statify {
 		self::$_options = wp_parse_args(
 			get_option( 'statify' ),
 			array(
-				'days'        => 14,
-				'days_show'   => 14,
-				'limit'       => 3,
-				'today'       => 0,
-				'snippet'     => 0,
-				'blacklist'   => 0,
-				'show_totals' => 0,
-				'skip'        => array(
+				'days'              => 14,
+				'days_show'         => 14,
+				'limit'             => 3,
+				'today'             => 0,
+				'snippet'           => 0,
+				'blacklist'         => 0,
+				'show_totals'       => 0,
+				'show_widget_roles' => null, // Just for documentation, the default is calculated later.
+				'skip'              => array(
 					'logged_in' => 1,
 				),
 			)

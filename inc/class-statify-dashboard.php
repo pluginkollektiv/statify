@@ -37,13 +37,24 @@ class Statify_Dashboard extends Statify {
 	 */
 	public static function init() {
 
-		// Filter user_can_see_stats.
-		if ( ! apply_filters( 'statify__user_can_see_stats', current_user_can( 'edit_dashboard' ) ) ) {
-			return;
+		// Backwards compatibility for older statify versions without this option.
+		if ( ! isset( Statify::$_options['show_widget_roles'] ) ) {
+			// Filter user_can_see_stats.
+			$can_edit = apply_filters( 'statify__user_can_see_stats', current_user_can( 'edit_dashboard' ) );
+		} else {
+			$statify_roles = Statify::$_options['show_widget_roles'];
+			$current_user = wp_get_current_user();
+			$user_roles = (array) $current_user->roles;
+
+			// Filter user_can_see_stats.
+			$allowed_roles = array_intersect( $statify_roles, $user_roles );
+			$can_edit = apply_filters( 'statify__user_can_see_stats', ! empty( $allowed_roles ) );
 		}
 
 		// Check if user can edit the widget.
-		$can_edit = apply_filters( 'statify__user_can_see_stats', current_user_can( 'edit_dashboard' ) );
+		if ( ! $can_edit ) {
+			return;
+		}
 
 		// Load textdomain.
 		load_plugin_textdomain(

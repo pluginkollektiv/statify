@@ -89,6 +89,13 @@ class Statify_Settings {
 			'statify-dashboard',
 			array( 'label_for' => 'statify-show-totals' )
 		);
+		add_settings_field(
+			'statify-show-widget-roles',
+			__( 'Which user role(s) should see the statify dashboard widget?', 'statify' ),
+			array( __CLASS__, 'options_show_widget_roles' ),
+			'statify',
+			'statify-dashboard'
+		);
 
 		// Exclusion settings.
 		add_settings_section(
@@ -227,6 +234,63 @@ class Statify_Settings {
 	}
 
 	/**
+	 * Option for excluding roles from seeing the dashboard widget.
+	 *
+	 * @wp-hook array  statify__available_roles
+	 *
+	 * @return void
+	 */
+	public static function options_show_widget_roles() {
+		$all_roles = apply_filters( 'statify__available_roles', wp_roles()->roles );
+
+		// Backwards compatibility for older statify versions without this option.
+		if ( ! isset( Statify::$_options['show_widget_roles'] ) ) {
+			// Loop over all roles to find these with the capability edit_dashboard.
+			$saved_roles = array();
+
+			foreach ( $all_roles as $role => $role_object ) {
+				$capabilities = $role_object['capabilities'];
+				if ( in_array( 'edit_dashboard', array_keys( $capabilities ) ) ) {
+					array_push( $saved_roles, $role );
+				}
+			}
+		} else {
+			$saved_roles = Statify::$_options['show_widget_roles'];
+		}
+
+		self::show_roles_list( 'show-widget-roles', 'show_widget_roles', $all_roles, $saved_roles );
+	}
+
+	/**
+	 * Outputs the list of input checkboxes of all available roles.
+	 *
+	 * @param string $input_id the name for the input element id.
+	 * @param string $name the name for the input element name attribute.
+	 * @param array  $available_roles the list of all available roles to be listes with checkbox.
+	 * @param array  $saved_roles the list of all role names that should be checked.
+	 *
+	 * @return void
+	 */
+	private static function show_roles_list( $input_id, $name, $available_roles, $saved_roles = array() ) {
+		foreach ( $available_roles as $role => $role_object ) {
+			?>
+			<p><label for="statify-<?php echo esc_html( $input_id ); ?>-<?php echo esc_html( $role ); ?>">
+			<?php
+			echo sprintf(
+				'<input id="statify-%1$s-%2$s" type="checkbox" name="statify[%3$s][]" value="%2$s" %4$s>',
+				esc_html( $input_id ),
+				esc_html( $role ),
+				esc_html( $name ),
+				checked( in_array( $role, $saved_roles ), true, false )
+			);
+			echo esc_html( $role_object['name'] );
+			?>
+			</label></p>
+			<?php
+		}
+	}
+
+	/**
 	 * Section header for "Skip tracking for..." section.
 	 *
 	 * @return void
@@ -292,6 +356,8 @@ class Statify_Settings {
 	 *
 	 * @param array $options Original options.
 	 *
+	 * @wp-hook array  statify__available_roles
+	 *
 	 * @return array Validated and sanitized options.
 	 */
 	public static function sanitize_options( $options ) {
@@ -328,6 +394,17 @@ class Statify_Settings {
 			$res[ $o ] = isset( $options[ $o ] ) && 1 === (int) $options[ $o ] ? 1 : 0;
 		}
 		$res['skip']['logged_in'] = isset( $options['skip']['logged_in'] ) && 1 === (int) $options['skip']['logged_in'] ? 1 : 0;
+
+		// Sanitize user roles.
+		$res['show_widget_roles'] = array();
+		if ( isset( $options['show_widget_roles'] ) ) {
+			$available_roles = apply_filters( 'statify__available_roles', wp_roles()->roles );
+			foreach ( $options['show_widget_roles'] as $saved_role ) {
+				if ( in_array( $saved_role, array_keys( $available_roles ), true ) ) {
+					array_push( $res['show_widget_roles'], $saved_role );
+				}
+			}
+		}
 
 		return $res;
 	}
