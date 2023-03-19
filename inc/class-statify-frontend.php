@@ -184,7 +184,7 @@ class Statify_Frontend extends Statify {
 		$user_agent = sanitize_text_field( isset( $_SERVER['HTTP_USER_AGENT'] ) ? wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) : '' );
 		if ( is_null( $user_agent )
 			|| false === $user_agent
-			|| self::is_bot( $user_agent ) ) {
+			|| self::is_bot() ) {
 			return true;
 		}
 
@@ -212,33 +212,13 @@ class Statify_Frontend extends Statify {
 	 *
 	 * @since 1.7.0
 	 *
-	 * @param  string $user_agent Server user agent string.
-	 *
-	 * @return boolean $is_bot     TRUE if user agent is a bot, FALSE if not.
+	 * @return boolean $is_bot     true if user agent is a bot, false if not.
 	 */
-	private static function is_bot( $user_agent ) {
-		$user_agent = strtolower( $user_agent );
+	private static function is_bot() {
+		$crawler_detect = new \Jaybizzle\CrawlerDetect\CrawlerDetect();
 
-		$identifiers = array(
-			'bot',
-			'slurp',
-			'crawler',
-			'spider',
-			'curl',
-			'facebook',
-			'fetch',
-			'python',
-			'wget',
-			'monitor',
-		);
-
-		foreach ( $identifiers as $identifier ) {
-			if ( strpos( $user_agent, $identifier ) !== false ) {
-				return true;
-			}
-		}
-
-		return false;
+		// Check the user agent of the current 'visitor' via the user agent and http_from header.
+		return $crawler_detect->isCrawler();
 	}
 
 	/**

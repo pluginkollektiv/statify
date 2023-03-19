@@ -53,6 +53,8 @@ register_uninstall_hook(
 	)
 );
 
+/* Composer Autoload */
+require __DIR__ . '/vendor/autoload.php';
 
 /* Autoload */
 spl_autoload_register( 'statify_autoload' );
