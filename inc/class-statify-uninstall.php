@@ -70,10 +70,10 @@ class Statify_Uninstall {
 		// Delete options.
 		delete_option( 'statify' );
 
-		// Init table.
-		Statify_Table::init();
+		// Initialize the database schema.
+		Statify_Schema::init();
 
-		// Delete table.
-		Statify_Table::drop();
+		// Delete tables.
+		Statify_Schema::drop_tables();
 	}
 }

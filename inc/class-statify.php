@@ -40,8 +40,8 @@ class Statify {
 			return;
 		}
 
-		// Table init.
-		Statify_Table::init();
+		// Initialize the database schema.
+		Statify_Schema::init();
 
 		// Plugin options.
 		self::$_options = wp_parse_args(
@@ -78,6 +78,7 @@ class Statify {
 			add_action( 'admin_menu', array( 'Statify_Settings', 'add_admin_menu' ) );
 			add_action( 'update_option_statify', array( 'Statify_Settings', 'action_update_options' ), 10, 2 );
 		} else {    // Frontend.
+			add_action( 'template_redirect', array( 'Statify_Frontend', 'init_tracking_data' ), 9 );
 			add_action( 'template_redirect', array( 'Statify_Frontend', 'track_visit' ) );
 			add_filter( 'query_vars', array( 'Statify_Frontend', 'query_vars' ) );
 			add_action( 'wp_footer', array( 'Statify_Frontend', 'wp_footer' ) );
@@ -122,5 +123,24 @@ class Statify {
 			),
 			true
 		);
+	}
+
+	/**
+	 * Retrieves statify metadata for the given statify ID.
+	 *
+	 * @param int    $statify_id Statify ID.
+	 * @param string $meta_key   Optional. The meta key to retrieve. By default,
+	 *                              returns data for all keys. Default empty.
+	 * @param bool   $single     Optional. Whether to return a single value.
+	 *                              This parameter has no effect if `$key` is not specified.
+	 *                              Default false.
+	 *
+	 * @return mixed An array of values if `$single` is false.
+	 *               The value of the meta field if `$single` is true.
+	 *               False for an invalid `$statify_id` (non-numeric, zero, or negative value).
+	 *               An empty string if a valid but non-existing statify ID is passed.
+	 */
+	public static function get_meta( $statify_id, $meta_key = '', $single = false ) {
+		return get_metadata( 'statify', $statify_id, $meta_key, $single );
 	}
 }

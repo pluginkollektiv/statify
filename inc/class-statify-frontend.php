@@ -19,6 +19,47 @@ defined( 'ABSPATH' ) || exit;
 class Statify_Frontend extends Statify {
 
 	/**
+	 * Statify meta fields for tracking
+	 *
+	 * @var array
+	 */
+	private static $tracking_meta = array();
+
+	/**
+	 * Default statify tracking data
+	 *
+	 * @var array
+	 */
+	private static $tracking_data = array();
+
+	/**
+	 * Initialization of tracking data
+	 *
+	 * @return void
+	 */
+	public static function init_tracking_data() {
+		self::$tracking_data['target'] = isset( $_SERVER['REQUEST_URI'] )
+			? filter_var( wp_unslash( $_SERVER['REQUEST_URI'] ), FILTER_SANITIZE_URL )
+			: '/';
+
+		self::$tracking_data['referrer'] = isset( $_SERVER['HTTP_REFERER'] )
+			? filter_var( wp_unslash( $_SERVER['HTTP_REFERER'] ), FILTER_SANITIZE_URL )
+			: '';
+
+		self::$tracking_data = apply_filters( 'statify__tracking_data', self::$tracking_data );
+
+		self::$tracking_meta = array(
+			array(
+				'meta_key' => 'title',
+				'meta_value' => wp_get_document_title(),
+				'type' => 'text',
+				'sanitize_callback' => 'sanitize_text_field',
+			),
+		);
+		self::$tracking_meta = apply_filters( 'statify__tracking_meta', self::$tracking_meta, self::$tracking_data );
+	}
+
+	/**
 	 * Track the page view
 	 *
 	 * @since    0.1.0
@@ -30,51 +71,55 @@ class Statify_Frontend extends Statify {
 	 * @return   boolean
 	 */
 	public static function track_visit( $is_snippet = false ) {
-		// Set target & referrer.
-		$target   = null;
-		$referrer = null;
+		if ( empty( self::$tracking_data ) ) {
+			self::init_tracking_data();
+		}
+
 		if ( self::is_javascript_tracking_enabled() ) {
 			if ( ! $is_snippet ) {
 				return false;
 			}
 
-			if ( isset( $_REQUEST['statify_target'] ) ) {
-				$target = filter_var( wp_unslash( $_REQUEST['statify_target'] ), FILTER_SANITIZE_URL );
+			$json = file_get_contents( 'php://input' );
+			$raw_data = json_decode( $json, true );
+			if ( ! $raw_data || ! isset( $raw_data['statify_tracking_data'] ) ) {
+				return false;
 			}
-			if ( isset( $_REQUEST['statify_referrer'] ) ) {
-				$referrer = filter_var( wp_unslash( $_REQUEST['statify_referrer'] ), FILTER_SANITIZE_URL );
+
+			$tracking_data = array(
+				'target' =>
+					isset( $raw_data['statify_tracking_data']['target'] )
+					? filter_var( wp_unslash( $raw_data['statify_tracking_data']['target'] ), FILTER_SANITIZE_URL )
+					: '/',
+				'referrer' =>
+					isset( $raw_data['statify_tracking_data']['referrer'] )
+					? filter_var( wp_unslash( $raw_data['statify_tracking_data']['referrer'] ), FILTER_SANITIZE_URL )
+					: '',
+			);
+
+			$tracking_meta = array();
+			if ( isset( $raw_data['statify_tracking_meta'] ) && is_array( $raw_data['statify_tracking_meta'] ) ) {
+				$tracking_meta = $raw_data['statify_tracking_meta'];
 			}
 		} else {
-			if ( isset( $_SERVER['REQUEST_URI'] ) ) {
-				$target = filter_var( wp_unslash( $_SERVER['REQUEST_URI'] ), FILTER_SANITIZE_URL );
-			}
-			if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
-				$referrer = filter_var( wp_unslash( $_SERVER['HTTP_REFERER'] ), FILTER_SANITIZE_URL );
-			}
+			$tracking_data = self::$tracking_data;
+			$tracking_meta = wp_list_pluck( self::$tracking_meta, 'meta_value', 'meta_key' );
 		}
 
-		// Fallbacks for uninitialized or omitted target and referrer values.
-		if ( is_null( $target ) || false === $target ) {
-			$target = '/';
-		}
-		if ( is_null( $referrer ) || false === $referrer ) {
-			$referrer = '';
-		}
-
-		/* Invalid target? */
-		if ( empty( $target ) || ! wp_validate_redirect( $target, false ) ) {
+		// Invalid target.
+		if ( ! wp_validate_redirect( $tracking_data['target'], false ) ) {
 			return self::_jump_out( $is_snippet );
 		}
 
-		/* Check whether tracking should be skipped for this view. */
+		// Check whether tracking should be skipped for this view.
 		if ( self::_skip_tracking() ) {
 			return self::_jump_out( $is_snippet );
 		}
 
-		/* Global vars */
+		// Global vars.
 		global $wpdb, $wp_rewrite;
 
-		/* Init rows */
+		// Init rows.
 		$data = array(
 			'created'  => '',
 			'referrer' => '',
@@ -87,23 +132,48 @@ class Statify_Frontend extends Statify {
 		$needles = array( home_url(), network_admin_url() );
 
 		// Sanitize referrer url.
-		if ( ! empty( $referrer ) && self::strposa( $referrer, $needles ) === false ) {
-			$data['referrer'] = esc_url_raw( $referrer, array( 'http', 'https' ) );
+		if ( self::strposa( $tracking_data['referrer'], $needles ) === false ) {
+			$data['referrer'] = filter_var( $tracking_data['referrer'], FILTER_SANITIZE_URL );
+			$data['referrer'] = esc_url_raw( $data['referrer'], array( 'http', 'https' ) );
 		}
 
-		/* Relative target url */
-		$data['target'] = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $target ) );
+		// Relative target url.
+		$data['target'] = filter_var( $tracking_data['target'], FILTER_SANITIZE_URL );
+		$data['target'] = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $data['target'] ) );
 
 		// Trim target url.
 		if ( $wp_rewrite->permalink_structure ) {
 			$data['target'] = wp_parse_url( $data['target'], PHP_URL_PATH );
 		}
 
-		// Sanitize target url.
+		// Escaping target url.
 		$data['target'] = esc_url_raw( $data['target'] );
 
 		// Insert.
 		$wpdb->insert( $wpdb->statify, $data );
+
+		$statify_id = $wpdb->insert_id;
+
+		foreach ( self::$tracking_meta as $meta_field ) {
+			if ( array_key_exists( $meta_field['meta_key'], $tracking_meta ) ) {
+				$meta_value = $tracking_meta[ $meta_field['meta_key'] ];
+
+				$sanitize_function = isset( $meta_field['sanitize_callback'] ) && is_callable( $meta_field['sanitize_callback'] )
+					? $meta_field['sanitize_callback']
+					: 'sanitize_text_field';
+
+				$meta_value = call_user_func( $sanitize_function, $meta_value );
+
+				// Init rows.
+				$data = array(
+					'statify_id' => $statify_id,
+					'meta_key' => $meta_field['meta_key'],
+					'meta_value' => $meta_value,
+				);
+
+				$wpdb->insert( $wpdb->statifymeta, $data );
+			}
+		}
 
 		/**
 		 * Fires after a visit was stored in the database
@@ -374,13 +444,15 @@ class Statify_Frontend extends Statify {
 			true
 		);
 
-		// Add endpoint to script.
+		// Add endpoint and tracking_information to script.
 		wp_localize_script(
 			'statify-js',
 			'statify_ajax',
 			array(
 				'url'   => admin_url( 'admin-ajax.php' ),
 				'nonce' => wp_create_nonce( 'statify_track' ),
+				'tracking_data' => self::$tracking_data,
+				'tracking_meta' => wp_list_pluck( self::$tracking_meta, 'meta_value', 'meta_key' ),
 			)
 		);
 	}

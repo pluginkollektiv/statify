@@ -82,8 +82,7 @@ class Statify_Install {
 			);
 		}
 
-		// Create the actual tables.
-		Statify_Table::init();
-		Statify_Table::create();
+		// Initialize the database schema.
+		Statify_Schema::init();
 	}
 }
