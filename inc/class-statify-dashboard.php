@@ -333,16 +333,18 @@ class Statify_Dashboard extends Statify {
 		if ( $today ) {
 			$data['target'] = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created = %s AND target NOT LIKE '/?s%' GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created = %s AND target NOT LIKE %s GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
 					$current_date,
+					'/?s%',
 					$limit
 				),
 				ARRAY_A
 			);
 			$data['searches'] = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created = %s AND target LIKE '/?s%' GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created = %s AND target LIKE %s GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
 					$current_date,
+					'/?s%',
 					$limit
 				),
 				ARRAY_A
@@ -358,18 +360,20 @@ class Statify_Dashboard extends Statify {
 		} else {
 			$data['target'] = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created > DATE_SUB(%s, INTERVAL %d DAY) AND target NOT LIKE '/?s%' GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created > DATE_SUB(%s, INTERVAL %d DAY) AND target NOT LIKE %s GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
 					$current_date,
 					$days_show,
+					'/?s%',
 					$limit
 				),
 				ARRAY_A
 			);
 			$data['searches'] = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created > DATE_SUB(%s, INTERVAL %d DAY) AND target LIKE '/?s%' GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created > DATE_SUB(%s, INTERVAL %d DAY) AND target LIKE %s GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
 					$current_date,
 					$days_show,
+					'/?s%',
 					$limit
 				),
 				ARRAY_A
