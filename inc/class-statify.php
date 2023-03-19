@@ -40,8 +40,8 @@ class Statify {
 			return;
 		}
 
-		// Table init.
-		Statify_Table::init();
+		// Initialize the database schema.
+		Statify_Schema::init();
 
 		// Plugin options.
 		self::$_options = wp_parse_args(
