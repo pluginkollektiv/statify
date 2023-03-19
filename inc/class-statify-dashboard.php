@@ -395,7 +395,7 @@ class Statify_Dashboard extends Statify {
 	 */
 	public static function parse_target( $target ) {
 		// Modify for search strings.
-		if ( 0 === strpos( $target, '/?s=' ) ) {
+		if ( self::query_string_contains_search( $target ) ) {
 			$target = preg_replace( '/^\/\?s=/', '', $target );
 			$target = urldecode( $target );
 			return sprintf( /* translators: s = search term */

@@ -91,23 +91,19 @@ class Statify_Frontend extends Statify {
 			$data['referrer'] = esc_url_raw( $referrer, array( 'http', 'https' ) );
 		}
 
-		/* Relative target url */
+		// Relative target url
 		$data['target'] = str_replace( home_url( '/', 'relative' ), '/', $target );
-		// Maybe add trailing slash if that is no search query.
-		if ( 0 !== strpos( $data['target'], '/?s=' ) ) {
-			$data['target'] = user_trailingslashit( $data['target'] );
-		}
 
-		// Trim target url.
-		if ( $wp_rewrite->permalink_structure ) {
-			if ( 0 !== strpos( $data['target'], '/?s=' ) ) {
-				// No search, so we only need the `PHP_URL_PATH`.
+		// Maybe add trailing slash if that is no search query.
+		if ( ! self::query_string_contains_search( $data['target'] ) ) {
+			$data['target'] = user_trailingslashit( $data['target'] );
+
+			// Trim target url.
+			if ( $wp_rewrite->permalink_structure ) {
 				$data['target'] = wp_parse_url( $data['target'], PHP_URL_PATH );
 			}
-		}
-
-		// Convert search query to lowercase.
-		if ( 0 === strpos( $data['target'], '/?s=' ) ) {
+		} else {
+			// Lowercase search query.
 			$data['target'] = strtolower( $data['target'] );
 		}
 

@@ -109,6 +109,23 @@ class Statify {
 	}
 
 	/**
+	 * Checks a string of query parameters for the `s` query param.
+	 *
+	 * @param string $query_string String with query parameters.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @return bool
+	 */
+	public static function query_string_contains_search( $query_string ) {
+		// Remove leading `/?`.
+		$query_string = preg_replace( '/^\/\?/', '', $query_string );
+		wp_parse_str( $query_string, $query_params );
+
+		return isset( $query_params['s'] ) && ! empty( $query_params['s'] );
+	}
+
+	/**
 	 * Check JavaScript tracking.
 	 *
 	 * @return bool true if and only if one of the JavaScript tracking options is enabled.
