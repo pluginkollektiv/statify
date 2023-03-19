@@ -82,6 +82,31 @@ $stats = Statify_Dashboard::get_stats( $refresh ); ?>
 	</div>
 <?php } ?>
 
+<?php if ( ! empty( $stats['searches'] ) ) { ?>
+	<div class="table searches">
+		<p class="sub">
+			<?php esc_html_e( 'Top searches', 'statify' ); ?>
+		</p>
+
+		<div>
+			<table>
+				<?php foreach ( (array) $stats['searches'] as $target ) { ?>
+					<tr>
+						<td class="b">
+							<?php echo (int) $target['count']; ?>
+						</td>
+						<td class="t">
+							<a href="<?php echo esc_url( home_url( $target['url'] ) ); ?>" target="_blank" rel="noopener noreferrer">
+								<?php echo esc_html( Statify_Dashboard::parse_target( $target['url'] ) ); ?>
+							</a>
+						</td>
+					</tr>
+				<?php } ?>
+			</table>
+		</div>
+	</div>
+<?php } ?>
+
 <?php if ( ! empty( $stats['visit_totals'] ) ) { ?>
 	<div class="table total">
 		<p class="sub">

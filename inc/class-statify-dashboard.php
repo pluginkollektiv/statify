@@ -333,7 +333,15 @@ class Statify_Dashboard extends Statify {
 		if ( $today ) {
 			$data['target'] = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created = %s GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created = %s AND target NOT LIKE '/?s%' GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
+					$current_date,
+					$limit
+				),
+				ARRAY_A
+			);
+			$data['searches'] = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created = %s AND target LIKE '/?s%' GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
 					$current_date,
 					$limit
 				),
@@ -350,7 +358,16 @@ class Statify_Dashboard extends Statify {
 		} else {
 			$data['target'] = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created > DATE_SUB(%s, INTERVAL %d DAY) GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created > DATE_SUB(%s, INTERVAL %d DAY) AND target NOT LIKE '/?s%' GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
+					$current_date,
+					$days_show,
+					$limit
+				),
+				ARRAY_A
+			);
+			$data['searches'] = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT COUNT(`target`) as `count`, `target` as `url` FROM `$wpdb->statify` WHERE created > DATE_SUB(%s, INTERVAL %d DAY) AND target LIKE '/?s%' GROUP BY `target` ORDER BY `count` DESC LIMIT %d",
 					$current_date,
 					$days_show,
 					$limit
@@ -397,11 +414,7 @@ class Statify_Dashboard extends Statify {
 		// Modify for search strings.
 		if ( self::query_string_contains_search( $target ) ) {
 			$target = preg_replace( '/^\/\?s=/', '', $target );
-			$target = urldecode( $target );
-			return sprintf( /* translators: s = search term */
-				__( 'Search query: “%s”', 'statify' ),
-				$target
-			);
+			return urldecode( $target );
 		}
 		return $target;
 	}

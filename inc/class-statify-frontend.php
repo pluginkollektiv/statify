@@ -91,7 +91,7 @@ class Statify_Frontend extends Statify {
 			$data['referrer'] = esc_url_raw( $referrer, array( 'http', 'https' ) );
 		}
 
-		// Relative target url
+		// Relative target url.
 		$data['target'] = str_replace( home_url( '/', 'relative' ), '/', $target );
 
 		// Maybe add trailing slash if that is no search query.
