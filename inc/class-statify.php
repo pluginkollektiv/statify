@@ -69,8 +69,8 @@ class Statify {
 		} elseif ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {  // XMLRPC.
 			add_filter( 'xmlrpc_methods', array( 'Statify_XMLRPC', 'xmlrpc_methods' ) );
 		} elseif ( is_admin() ) {   // Backend.
-			add_action( 'wpmu_new_blog', array( 'Statify_Install', 'init_site' ) );
-			add_action( 'delete_blog', array( 'Statify_Uninstall', 'init_site' ) );
+			add_action( 'wp_initialize_site', array( 'Statify_Install', 'init_site' ) );
+			add_action( 'wp_uninitialize_site', array( 'Statify_Uninstall', 'init_site' ) );
 			add_action( 'wp_dashboard_setup', array( 'Statify_Dashboard', 'init' ) );
 			add_filter( 'plugin_row_meta', array( 'Statify_Backend', 'add_meta_link' ), 10, 2 );
 			add_filter( 'plugin_action_links_' . STATIFY_BASE, array( 'Statify_Backend', 'add_action_link' ) );
