@@ -19,6 +19,47 @@ defined( 'ABSPATH' ) || exit;
 class Statify_Frontend extends Statify {
 
 	/**
+	 * Statify meta fields for tracking
+	 *
+	 * @var array
+	 */
+	private static $tracking_meta = array();
+
+	/**
+	 * Default statify tracking data
+	 *
+	 * @var array
+	 */
+	private static $tracking_data = array();
+
+	/**
+	 * Initialization of tracking data
+	 *
+	 * @return void
+	 */
+	public static function init_tracking_data() {
+		self::$tracking_data['target'] = isset( $_SERVER['REQUEST_URI'] )
+			? filter_var( wp_unslash( $_SERVER['REQUEST_URI'] ), FILTER_SANITIZE_URL )
+			: '/';
+
+		self::$tracking_data['referrer'] = isset( $_SERVER['HTTP_REFERER'] )
+			? filter_var( wp_unslash( $_SERVER['HTTP_REFERER'] ), FILTER_SANITIZE_URL )
+			: '';
+
+		self::$tracking_data = apply_filters( 'statify__tracking_data', self::$tracking_data );
+
+		self::$tracking_meta = array(
+			array(
+				'meta_key' => 'title',
+				'meta_value' => wp_get_document_title(),
+				'type' => 'text',
+				'sanitize_callback' => 'sanitize_text_field',
+			),
+		);
+		self::$tracking_meta = apply_filters( 'statify__tracking_meta', self::$tracking_meta, self::$tracking_data );
+	}
+
+	/**
 	 * Track the page view
 	 *
 	 * @since    0.1.0

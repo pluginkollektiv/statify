@@ -76,6 +76,7 @@ class Statify {
 			add_action( 'admin_menu', array( 'Statify_Settings', 'add_admin_menu' ) );
 			add_action( 'update_option_statify', array( 'Statify_Settings', 'action_update_options' ), 10, 2 );
 		} else {    // Frontend.
+			add_action( 'template_redirect', array( 'Statify_Frontend', 'init_tracking_data' ), 9 );
 			add_action( 'template_redirect', array( 'Statify_Frontend', 'track_visit' ) );
 			add_filter( 'query_vars', array( 'Statify_Frontend', 'query_vars' ) );
 			add_action( 'wp_footer', array( 'Statify_Frontend', 'wp_footer' ) );
