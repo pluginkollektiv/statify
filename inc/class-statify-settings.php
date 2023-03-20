@@ -251,7 +251,7 @@ class Statify_Settings {
 			foreach ( $all_roles as $role => $role_object ) {
 				$capabilities = $role_object['capabilities'];
 				if ( in_array( 'edit_dashboard', array_keys( $capabilities ) ) ) {
-					array_push( $saved_roles, $role );
+					$saved_roles[] = $role;
 				}
 			}
 		} else {

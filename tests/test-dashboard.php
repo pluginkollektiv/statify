@@ -55,7 +55,7 @@ class Test_Dashboard extends WP_UnitTestCase {
 	public function test_init() {
 		global $widget_capture;
 
-		// Anonymous users do not have die "edit_dashboard" capability, i.e. can't see the stats.
+		// Anonymous users do not have the "edit_dashboard" capability, i.e. can't see the stats.
 		wp_set_current_user( 0 );
 		Statify_Dashboard::init();
 		$this->assertFalse(
