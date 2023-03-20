@@ -149,8 +149,8 @@ class Statify {
 			// Remove additional query parameters that might exist.
 			$target = preg_replace( '/^\/\?/', '', $target, -1, $count );
 
-			if ( $count === 0 ) {
-				// If `/search/search query` is used, remove the `/search/`
+			if ( 0 === $count ) {
+				// If `/search/search query` is used, remove the `/search/`.
 				$target = urldecode( preg_replace( '/^\/search\/(.*)\/$/', '$1', $target ) );
 			} else {
 				// ?s= was used.
