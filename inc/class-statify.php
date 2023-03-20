@@ -47,14 +47,15 @@ class Statify {
 		self::$_options = wp_parse_args(
 			get_option( 'statify' ),
 			array(
-				'days'        => 14,
-				'days_show'   => 14,
-				'limit'       => 3,
-				'today'       => 0,
-				'snippet'     => 0,
-				'blacklist'   => 0,
-				'show_totals' => 0,
-				'skip'        => array(
+				'days'              => 14,
+				'days_show'         => 14,
+				'limit'             => 3,
+				'today'             => 0,
+				'snippet'           => 0,
+				'blacklist'         => 0,
+				'show_totals'       => 0,
+				'show_widget_roles' => null, // Just for documentation, the default is calculated later.
+				'skip'              => array(
 					'logged_in' => 1,
 				),
 			)
@@ -201,13 +202,27 @@ class Statify {
 	 *
 	 * @return boolean TRUE, if the user can see stats. FALSE otherwise.
 	 *
-	 * @since 1.9.0 extracted into method for reusability
+	 * @since 2.0.0 extracted into method for reusability
 	 *
 	 * @hook  boolean  statify__user_can_see_stats
 	 * @see   https://wordpress.org/plugins/statify/
 	 */
 	public static function user_can_see_stats() {
-		return apply_filters( 'statify__user_can_see_stats', current_user_can( 'edit_dashboard' ) );
+		if ( isset( self::$_options['show_widget_roles'] ) ) {
+			$statify_roles = self::$_options['show_widget_roles'];
+			$current_user = wp_get_current_user();
+			$user_roles = $current_user->roles;
+
+			// Filter user_can_see_stats.
+			$allowed_roles = array_intersect( $statify_roles, $user_roles );
+			$can_see = ! empty( $allowed_roles );
+		} else {
+			// Backwards compatibility for older statify versions without this option.
+			$can_see = current_user_can( 'edit_dashboard' );
+		}
+
+		// Filter user_can_see_stats.
+		return apply_filters( 'statify__user_can_see_stats', $can_see );
 	}
 
 	/**
