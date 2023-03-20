@@ -141,7 +141,7 @@ class Statify {
 
 		// Init rows.
 		$data = array(
-			'created'  => strftime( '%Y-%m-%d', current_time( 'timestamp' ) ),
+			'created'  => current_time( 'Y-m-d' ),
 			'referrer' => $referrer,
 			'target'   => $target,
 		);
@@ -232,10 +232,7 @@ class Statify {
 		}
 
 		// Skip tracking via User Agent.
-		$user_agent = filter_var(
-			( isset( $_SERVER['HTTP_USER_AGENT'] ) ? wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) : '' ),
-			FILTER_SANITIZE_STRING
-		);
+		$user_agent = sanitize_text_field( isset( $_SERVER['HTTP_USER_AGENT'] ) ? wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) : '' );
 		if ( is_null( $user_agent )
 			|| false === $user_agent
 			|| self::is_bot() ) {
