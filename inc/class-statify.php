@@ -131,12 +131,33 @@ class Statify {
 		// Relative target URL.
 		$target = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $target ) );
 
-		/* Global vars */
+		// Global vars.
 		global $wp_rewrite;
 
-		// Trim target URL.
-		if ( $wp_rewrite->permalink_structure ) {
-			$target = wp_parse_url( $target, PHP_URL_PATH );
+		// Maybe add trailing slash if that is no search query.
+		if ( ! self::is_search( $target ) ) {
+			$target = user_trailingslashit( $target );
+
+			// Trim target url.
+			if ( $wp_rewrite->permalink_structure ) {
+				$target = wp_parse_url( $target, PHP_URL_PATH );
+			}
+		} else {
+			// Lowercase search query.
+			$target = strtolower( $target );
+
+			// Remove additional query parameters that might exist.
+			$target = preg_replace( '/^\/\?/', '', $target, -1, $count );
+
+			if ( 0 === $count ) {
+				// If `/search/search query` is used, remove the `/search/`.
+				$target = urldecode( preg_replace( '/^\/search\/(.*)\/$/', '$1', $target ) );
+			} else {
+				// ?s= was used.
+				wp_parse_str( $target, $tmp );
+				$target = urldecode( $tmp['s'] );
+			}
+			$target = "/?s={$target}";
 		}
 
 		// Init rows.
@@ -178,6 +199,27 @@ class Statify {
 		}
 
 		return date_i18n( get_option( 'date_format' ), strtotime( $date ) );
+	}
+
+	/**
+	 * Checks URL path/query string for search.
+	 *
+	 * @param string $query_string String with query parameters.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return bool
+	 */
+	public static function is_search( $query_string ) {
+		if ( 1 === preg_match( '/^\/search\/.+/', $query_string ) ) {
+			return true;
+		}
+
+		// Remove leading `/?`.
+		$query_string = preg_replace( '/^\/\?/', '', $query_string );
+		wp_parse_str( $query_string, $query_params );
+
+		return isset( $query_params['s'] ) && ! empty( $query_params['s'] );
 	}
 
 	/**
@@ -286,7 +328,7 @@ class Statify {
 	 */
 	protected static function is_internal() {
 		// Skip for preview, 404 calls, feed, search, favicon and sitemap access.
-		return is_preview() || is_404() || is_feed() || is_search()
+		return is_preview() || is_404() || is_feed()
 			|| ( function_exists( 'is_favicon' ) && is_favicon() )
 			|| '' !== get_query_var( 'sitemap' ) || '' !== get_query_var( 'sitemap-stylesheet' );
 	}

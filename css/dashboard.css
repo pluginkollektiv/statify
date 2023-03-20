@@ -75,6 +75,7 @@
 
 #statify_dashboard .table {
 	padding-bottom: 12px;
+	flex: 1 0 50%;
 }
 
 #statify_dashboard .table p.sub {
@@ -86,13 +87,13 @@
 	overflow: hidden;
 }
 
-#statify_dashboard .table.referrer,
-#statify_dashboard .table.target {
-	flex: 1 0 50%;
-}
-
 #statify_dashboard .table.total {
 	flex: 0 0 100%;
+}
+
+#statify_dashboard .statify-refresh-button-wrapper {
+	padding-top: 12px;
+	width: 100%;
 }
 
 #statify_dashboard td {

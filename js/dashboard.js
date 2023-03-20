@@ -3,6 +3,7 @@
 	var chartElem = document.getElementById( 'statify_chart' );
 	var referrerTable = document.querySelector( '#statify_dashboard .table.referrer table tbody' );
 	var targetTable = document.querySelector( '#statify_dashboard .table.target table tbody' );
+	var searchesTable = document.querySelector( '#statify_dashboard .table.searches table tbody' );
 	var totalsTable = document.querySelector( '#statify_dashboard .table.total table tbody' );
 	var refreshBtn = document.getElementById( 'statify_refresh' );
 
@@ -143,6 +144,24 @@
 				} );
 				for ( i = data.target.length; i < rows.length; i++ ) {
 					targetTable.removeChild( rows[i] );
+				}
+			}
+
+			if ( searchesTable ) {
+				rows = searchesTable.querySelectorAll( 'tr' );
+
+				data.searches.forEach( function( r, idx ) {
+					row = document.createElement( 'TR' );
+					row.innerHTML = '<td class="b">' + r.count + '</td>' +
+						'<td class="t"><a href="' + r.url + '" target="_blank"  rel="noopener noreferrer">' + decodeURI( r.url.replace( '/?s=', '' ) ) + '</td>';
+					if ( rows.length > idx ) {
+						searchesTable.replaceChild( row, rows[idx] );
+					} else {
+						searchesTable.appendChild( row );
+					}
+				} );
+				for ( i = data.searches.length; i < rows.length; i++ ) {
+					searchesTable.removeChild( rows[i] );
 				}
 			}
 

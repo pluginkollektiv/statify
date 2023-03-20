@@ -44,6 +44,17 @@ $show_totals = (int) Statify::$_options['show_totals'];
 		</table>
 	</div>
 
+	<div class="table searches">
+		<p class="sub"><?php esc_html_e( 'Top searches', 'statify' ); ?></p>
+		<table>
+			<tbody>
+				<?php for ( $i = 0; $i < $limit; $i++ ) { ?>
+					<tr class="placeholder"><td colspan="2">&nbsp;</td></tr>
+				<?php } ?>
+			</tbody>
+		</table>
+	</div>
+
 <?php endif; if ( $show_totals ) : ?>
 	<div class="table total">
 		<p class="sub"><?php esc_html_e( 'Totals', 'statify' ); ?></p>
@@ -55,4 +66,6 @@ $show_totals = (int) Statify::$_options['show_totals'];
 	</div>
 <?php endif; ?>
 
-	<button type="button" class="button button-primary" id="statify_refresh"><?php esc_html_e( 'Refresh', 'statify' ); ?></button>
+	<div class="statify-refresh-button-wrapper">
+		<button type="button" class="button button-primary" id="statify_refresh"><?php esc_html_e( 'Refresh', 'statify' ); ?></button>
+	</div>
