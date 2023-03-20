@@ -97,16 +97,17 @@ class Statify_Api extends Statify {
 				}
 			}
 
-			$referrer = $request->get_param( 'referrer' );
-			if ( null !== $referrer ) {
-				$referrer = filter_var( $referrer, FILTER_SANITIZE_URL );
+			$tracking_data = $request->get_param( 'tracking_data' );
+			if ( null !== $tracking_data['referrer'] ) {
+				$tracking_data['referrer'] = filter_var( $tracking_data['referrer'], FILTER_SANITIZE_URL );
 			}
-			$target   = $request->get_param( 'target' );
-			if ( null !== $target ) {
-				$target = filter_var( $target, FILTER_SANITIZE_URL );
+			if ( null !== $tracking_data['target'] ) {
+				$tracking_data['target'] = filter_var( $tracking_data['target'], FILTER_SANITIZE_URL );
 			}
 
-			Statify::track( $referrer, $target );
+            $tracking_meta = $request->get_param( 'tracking_meta' );
+
+			Statify::track( $tracking_data, $tracking_meta );
 		}
 
 		return new WP_REST_Response( null, 204 );

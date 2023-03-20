@@ -95,8 +95,8 @@ class Statify {
 	/**
 	 * Track the page view.
 	 *
-	 * @param string|null $referrer Referrer URL.
-	 * @param string|null $target   Target URL.
+	 * @param array $tracking_data Tracking data.
+	 * @param array $tracking_meta Tracking meta.
 	 *
 	 * @return void
 	 *
@@ -104,21 +104,21 @@ class Statify {
 	 * @since  1.7.0 $is_snippet parameter added.
 	 * @since  2.0.0 Migration from Statify_Frontend::track_visit to Statify::track with multiple parameters.
 	 */
-	protected static function track( $referrer, $target ) {
+	protected static function track( $tracking_data, $tracking_meta  ) {
         if ( empty( Statify_Frontend::get_tracking_data() ) ) {
             Statify_Frontend::init_tracking_data();
         }
 
 		// Fallbacks for uninitialized or omitted target and referrer values.
-		if ( is_null( $target ) ) {
-			$target = '/';
+		if ( is_null( $tracking_data['target'] ) ) {
+			$tracking_data['target'] = '/';
 		}
-		if ( is_null( $referrer ) ) {
-			$referrer = '';
+		if ( is_null( $tracking_data['referrer'] ) ) {
+            $tracking_data['referrer'] = '';
 		}
 
 		// Invalid target?
-		if ( empty( $target ) || ! wp_validate_redirect( $target, false ) ) {
+		if ( empty( $tracking_data['target'] ) || ! wp_validate_redirect( $tracking_data['target'], false ) ) {
 			return;
 		}
 
@@ -128,28 +128,28 @@ class Statify {
 		}
 
 		// Sanitize referrer url.
-		if ( ! empty( $referrer ) && false === self::strposa( $referrer, array( home_url(), network_admin_url() ) ) ) {
-			$referrer = esc_url_raw( $referrer, array( 'http', 'https' ) );
+		if ( ! empty( $tracking_data['referrer'] ) && false === self::strposa( $tracking_data['referrer'], array( home_url(), network_admin_url() ) ) ) {
+            $tracking_data['referrer'] = esc_url_raw( $tracking_data['referrer'], array( 'http', 'https' ) );
 		} else {
-			$referrer = '';
+            $tracking_data['referrer'] = '';
 		}
 
 		// Relative target URL.
-		$target = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $target ) );
+		$tracking_data['target'] = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $tracking_data['target'] ) );
 
 		/* Global vars */
 		global $wp_rewrite;
 
 		// Trim target URL.
 		if ( $wp_rewrite->permalink_structure ) {
-			$target = wp_parse_url( $target, PHP_URL_PATH );
+			$tracking_data['target'] = wp_parse_url( $tracking_data['target'], PHP_URL_PATH );
 		}
 
 		// Init rows.
 		$data = array(
-			'created'  => current_time( 'Y-m-d' ),
-			'referrer' => $referrer,
-			'target'   => $target,
+            'created'  => current_time( 'Y-m-d' ),
+			'referrer' => $tracking_data['referrer'],
+			'target'   => $tracking_data['target'],
 		);
 
 		// Insert.
@@ -158,9 +158,7 @@ class Statify {
 
         $statify_id = $wpdb->insert_id;
 
-        $tracking_meta = Statify_Frontend::get_tracking_data();
-
-        foreach ( self::$tracking_meta as $meta_field ) {
+        foreach ( Statify_Frontend::get_tracking_data() as $meta_field ) {
             if ( array_key_exists( $meta_field['meta_key'], $tracking_meta ) ) {
                 $meta_value = $tracking_meta[ $meta_field['meta_key'] ];
 

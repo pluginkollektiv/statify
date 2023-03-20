@@ -6,8 +6,8 @@
 		statifyReq.open( 'POST', statifyAjax.url, true );
 		statifyReq.setRequestHeader( 'Content-Type', 'application/json' );
 		data = {
-			referrer: document.referrer,
-			target: location.pathname + location.search,
+			tracking_data: statifyAjax.tracking_data,
+			tracking_meta: statifyAjax.tracking_meta,
 		};
 		if ( 'nonce' in statifyAjax ) {
 			data.nonce = statifyAjax.nonce;
