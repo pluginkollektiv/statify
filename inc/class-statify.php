@@ -208,8 +208,8 @@ class Statify {
 	 * @see   https://wordpress.org/plugins/statify/
 	 */
 	public static function user_can_see_stats() {
-		if ( isset( Statify::$_options['show_widget_roles'] ) ) {
-			$statify_roles = Statify::$_options['show_widget_roles'];
+		if ( isset( self::$_options['show_widget_roles'] ) ) {
+			$statify_roles = self::$_options['show_widget_roles'];
 			$current_user = wp_get_current_user();
 			$user_roles = $current_user->roles;
 
