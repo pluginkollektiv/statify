@@ -302,8 +302,9 @@ class Statify_Dashboard extends Statify {
 	/**
 	 * Get stats from DB
 	 *
-	 * @since    0.1.0
-	 * @version  1.4.0
+	 * @since   0.1.0
+	 * @since   1.4.0
+	 * @since   2.0.0  Add search queries to `$data` array.
 	 *
 	 * @return  array  DB results
 	 */
