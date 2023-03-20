@@ -113,7 +113,7 @@ class Statify {
 	 *
 	 * @param string $query_string String with query parameters.
 	 *
-	 * @since 1.9.0
+	 * @since 2.0.0
 	 *
 	 * @return bool
 	 */
