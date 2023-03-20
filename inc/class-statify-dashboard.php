@@ -444,20 +444,4 @@ class Statify_Dashboard extends Statify {
 
 		return $data;
 	}
-
-	/**
-	 * Parses a visit target and, if needed, modifies it for displaying.
-	 *
-	 * @param string $target URL target as displayed in widget.
-	 *
-	 * @return string
-	 */
-	public static function parse_target( $target ) {
-		// Modify for search strings.
-		if ( self::query_string_contains_search( $target ) ) {
-			$target = preg_replace( '/^\/\?s=/', '', $target );
-			return urldecode( $target );
-		}
-		return $target;
-	}
 }

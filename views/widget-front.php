@@ -34,56 +34,22 @@ $show_totals = (int) Statify::$_options['show_totals'];
 	</div>
 
 	<div class="table target">
-<<<<<<< HEAD
-		<p class="sub">
-			<?php esc_html_e( 'Top targets', 'statify' ); ?>
-		</p>
-
-		<div>
-			<table>
-				<?php foreach ( (array) $stats['target'] as $target ) { ?>
-					<tr>
-						<td class="b">
-							<?php echo (int) $target['count']; ?>
-						</td>
-						<td class="t">
-							<a href="<?php echo esc_url( home_url( $target['url'] ) ); ?>" target="_blank" rel="noopener noreferrer">
-								<?php echo esc_html( Statify_Dashboard::parse_target( $target['url'] ) ); ?>
-							</a>
-						</td>
-					</tr>
-				<?php } ?>
-			</table>
-		</div>
-	</div>
-<?php } ?>
-
-<?php if ( ! empty( $stats['searches'] ) ) { ?>
-	<div class="table searches">
-		<p class="sub">
-			<?php esc_html_e( 'Top searches', 'statify' ); ?>
-		</p>
-
-		<div>
-			<table>
-				<?php foreach ( (array) $stats['searches'] as $target ) { ?>
-					<tr>
-						<td class="b">
-							<?php echo (int) $target['count']; ?>
-						</td>
-						<td class="t">
-							<a href="<?php echo esc_url( home_url( $target['url'] ) ); ?>" target="_blank" rel="noopener noreferrer">
-								<?php echo esc_html( Statify_Dashboard::parse_target( $target['url'] ) ); ?>
-							</a>
-						</td>
-					</tr>
-=======
 		<p class="sub"><?php esc_html_e( 'Top targets', 'statify' ); ?></p>
 		<table>
 			<tbody>
 				<?php for ( $i = 0; $i < $limit; $i++ ) { ?>
 					<tr class="placeholder"><td colspan="2">&nbsp;</td></tr>
->>>>>>> develop
+				<?php } ?>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="table searches">
+		<p class="sub"><?php esc_html_e( 'Top searches', 'statify' ); ?></p>
+		<table>
+			<tbody>
+				<?php for ( $i = 0; $i < $limit; $i++ ) { ?>
+					<tr class="placeholder"><td colspan="2">&nbsp;</td></tr>
 				<?php } ?>
 			</tbody>
 		</table>

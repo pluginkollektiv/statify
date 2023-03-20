@@ -135,7 +135,7 @@ class Statify {
 		global $wp_rewrite;
 
 		// Maybe add trailing slash if that is no search query.
-		if ( ! self::query_string_contains_search( $target ) ) {
+		if ( ! self::is_search( $target ) ) {
 			$target = user_trailingslashit( $target );
 
 			// Trim target url.
@@ -147,9 +147,17 @@ class Statify {
 			$target = strtolower( $target );
 
 			// Remove additional query parameters that might exist.
-			$target = preg_replace( '/^\/\?/', '', $target );
-			wp_parse_str( $target, $tmp );
-			$target = "/?s={$tmp['s']}";
+			$target = preg_replace( '/^\/\?/', '', $target, -1, $count );
+
+			if ( $count === 0 ) {
+				// If `/search/search query` is used, remove the `/search/`
+				$target = urldecode( preg_replace( '/^\/search\/(.*)\/$/', '$1', $target ) );
+			} else {
+				// ?s= was used.
+				wp_parse_str( $target, $tmp );
+				$target = urldecode( $tmp['s'] );
+			}
+			$target = "/?s={$target}";
 		}
 
 		// Init rows.
@@ -194,7 +202,7 @@ class Statify {
 	}
 
 	/**
-	 * Checks a string of query parameters for the `s` query param.
+	 * Checks URL path/query string for search.
 	 *
 	 * @param string $query_string String with query parameters.
 	 *
@@ -202,7 +210,11 @@ class Statify {
 	 *
 	 * @return bool
 	 */
-	public static function query_string_contains_search( $query_string ) {
+	public static function is_search( $query_string ) {
+		if ( 1 === preg_match( '/^\/search\/.+/', $query_string ) ) {
+			return true;
+		}
+
 		// Remove leading `/?`.
 		$query_string = preg_replace( '/^\/\?/', '', $query_string );
 		wp_parse_str( $query_string, $query_params );
