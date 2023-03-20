@@ -6,10 +6,8 @@
   },
   "globals": {
     "Chartist": "readonly",
-    "statify_ajax": "readonly",
-    "statify_translations": "readonly"
-  },
-  "rules": {
-    "camelcase": "warn"
+    "statifyAjax": "readonly",
+    "statifyDashboard": "readonly",
+    "wp": "readonly"
   }
 }
