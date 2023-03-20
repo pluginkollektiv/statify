@@ -208,7 +208,6 @@ class Statify {
 	 * @see   https://wordpress.org/plugins/statify/
 	 */
 	public static function user_can_see_stats() {
-		// Backwards compatibility for older statify versions without this option.
 		if ( isset( Statify::$_options['show_widget_roles'] ) ) {
 			$statify_roles = Statify::$_options['show_widget_roles'];
 			$current_user = wp_get_current_user();
@@ -216,10 +215,14 @@ class Statify {
 
 			// Filter user_can_see_stats.
 			$allowed_roles = array_intersect( $statify_roles, $user_roles );
+			$can_see = ! empty( $allowed_roles );
+		} else {
+			// Backwards compatibility for older statify versions without this option.
+			$can_see = current_user_can( 'edit_dashboard' );
 		}
 
 		// Filter user_can_see_stats.
-		return apply_filters( 'statify__user_can_see_stats', ! empty( $allowed_roles ) );
+		return apply_filters( 'statify__user_can_see_stats', $can_see );
 	}
 
 	/**
