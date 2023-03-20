@@ -27,6 +27,8 @@ class Test_Statify extends WP_UnitTestCase {
 	 */
 	public function test_user_can_see_stats_hook() {
 		Statify::init();
+
+		wp_get_current_user()->remove_all_caps();
 		self::assertFalse( Statify::user_can_see_stats(), 'Anonymous user must not see stats' );
 
 		// With default capability
