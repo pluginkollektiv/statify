@@ -10,55 +10,31 @@
 // Quit if accessed outside WP context.
 class_exists( 'Statify' ) || exit;
 
-// Get stats.
-$refresh = isset( $_POST['statify-fresh'] ) && check_admin_referer( 'statify-dashboard-refresh' );
-$stats = Statify_Dashboard::get_stats( $refresh ); ?>
+$limit       = (int) Statify::$_options['limit'];
+$show_totals = (int) Statify::$_options['show_totals'];
+?>
 
 	<div id="statify_chart">
-		<?php if ( empty( $stats['visits'] ) ) { ?>
-			<p>
-				<?php esc_html_e( 'No data available.', 'statify' ); ?>
-			</p>
-		<?php } else { ?>
-			<table id="statify_chart_data">
-				<?php foreach ( (array) $stats['visits'] as $visit ) { ?>
-					<tr>
-						<th><?php echo esc_html( Statify::parse_date( $visit['date'] ) ); ?></th>
-						<td><?php echo (int) $visit['count']; ?></td>
-					</tr>
-				<?php } ?>
-			</table>
-		<?php } ?>
+		<span class="spinner is-active" title="<?php esc_html_e( 'loading', 'statify' ); ?>"></span>
 	</div>
 
+<?php if ( $limit > 0 ) : ?>
 
-<?php if ( ! empty( $stats['referrer'] ) ) { ?>
 	<div class="table referrer">
-		<p class="sub">
-			<?php esc_html_e( 'Top referers', 'statify' ); ?>
-		</p>
-
-		<div>
-			<table>
-				<?php foreach ( (array) $stats['referrer'] as $referrer ) { ?>
-					<tr>
-						<td class="b">
-							<?php echo (int) $referrer['count']; ?>
-						</td>
-						<td class="t">
-							<a href="<?php echo esc_url( $referrer['url'] ); ?>" target="_blank"  rel="noopener noreferrer">
-								<?php echo esc_html( $referrer['host'] ); ?>
-							</a>
-						</td>
+		<p class="sub"><?php esc_html_e( 'Top referers', 'statify' ); ?></p>
+		<table>
+			<tbody>
+				<?php for ( $i = 0; $i < $limit; $i++ ) { ?>
+					<tr class="placeholder">
+						<td colspan="2">&nbsp;</td>
 					</tr>
 				<?php } ?>
-			</table>
-		</div>
+			</tbody>
+		</table>
 	</div>
-<?php } ?>
 
-<?php if ( ! empty( $stats['target'] ) ) { ?>
 	<div class="table target">
+<<<<<<< HEAD
 		<p class="sub">
 			<?php esc_html_e( 'Top targets', 'statify' ); ?>
 		</p>
@@ -101,42 +77,27 @@ $stats = Statify_Dashboard::get_stats( $refresh ); ?>
 							</a>
 						</td>
 					</tr>
+=======
+		<p class="sub"><?php esc_html_e( 'Top targets', 'statify' ); ?></p>
+		<table>
+			<tbody>
+				<?php for ( $i = 0; $i < $limit; $i++ ) { ?>
+					<tr class="placeholder"><td colspan="2">&nbsp;</td></tr>
+>>>>>>> develop
 				<?php } ?>
-			</table>
-		</div>
+			</tbody>
+		</table>
 	</div>
-<?php } ?>
 
-<?php if ( ! empty( $stats['visit_totals'] ) ) { ?>
+<?php endif; if ( $show_totals ) : ?>
 	<div class="table total">
-		<p class="sub">
-			<?php esc_html_e( 'Totals', 'statify' ); ?>
-		</p>
-		<div>
-			<table>
-				<tr>
-					<td class="b">
-						<?php echo (int) $stats['visit_totals']['today']; ?>
-					</td>
-					<td class="t">
-						<?php esc_html_e( 'today', 'statify' ); ?>
-					</td>
-				</tr>
-				<tr>
-					<td class="b">
-						<?php echo (int) $stats['visit_totals']['since_beginning']['count']; ?>
-					</td>
-					<td class="t">
-						<?php esc_html_e( 'since', 'statify' ); ?>
-						<?php echo esc_html( Statify::parse_date( $stats['visit_totals']['since_beginning']['date'] ) ); ?>
-					</td>
-				</tr>
-			</table>
-		</div>
+		<p class="sub"><?php esc_html_e( 'Totals', 'statify' ); ?></p>
+		<table>
+			<tbody>
+				<tr class="placeholder"><td colspan="2">&nbsp;</td></tr>
+				<tr class="placeholder"><td colspan="2">&nbsp;</td></tr>
+		</table>
 	</div>
-<?php } ?>
+<?php endif; ?>
 
-<form method="post">
-	<?php wp_nonce_field( 'statify-dashboard-refresh' ); ?>
-	<button type="submit" class="button button-primary" name="statify-fresh"><?php esc_html_e( 'Refresh', 'statify' ); ?></button>
-</form>
+	<button type="button" class="button button-primary" id="statify_refresh"><?php esc_html_e( 'Refresh', 'statify' ); ?></button>

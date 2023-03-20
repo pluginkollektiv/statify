@@ -30,20 +30,16 @@ class Statify_Dashboard extends Statify {
 	 * Dashboard widget initialize
 	 *
 	 * @since   0.1.0
-	 * @version 2016-12-21
-	 *
-	 * @wp-hook boolean  statify__user_can_see_stats
-	 * @see     https://wordpress.org/plugins/statify/
 	 */
 	public static function init() {
 
 		// Filter user_can_see_stats.
-		if ( ! apply_filters( 'statify__user_can_see_stats', current_user_can( 'edit_dashboard' ) ) ) {
+		if ( ! self::user_can_see_stats() ) {
 			return;
 		}
 
 		// Check if user can edit the widget.
-		$can_edit = apply_filters( 'statify__user_can_see_stats', current_user_can( 'edit_dashboard' ) );
+		$can_edit = self::user_can_see_stats();
 
 		// Load textdomain.
 		load_plugin_textdomain(
@@ -129,11 +125,8 @@ class Statify_Dashboard extends Statify {
 		);
 		wp_register_script(
 			'statify_chart_js',
-			plugins_url(
-				'js/dashboard.min.js',
-				STATIFY_FILE
-			),
-			array( 'jquery', 'chartist_tooltip_js' ),
+			plugins_url( 'js/dashboard.min.js', STATIFY_FILE ),
+			array( 'wp-api-fetch', 'chartist_tooltip_js' ),
 			self::$_plugin_version,
 			true
 		);
@@ -141,10 +134,16 @@ class Statify_Dashboard extends Statify {
 		// Localize strings.
 		wp_localize_script(
 			'statify_chart_js',
-			'statify_translations',
+			'statifyDashboard',
 			array(
-				'pageview'  => strip_tags( esc_html__( 'Pageview', 'statify' ) ),
-				'pageviews' => strip_tags( esc_html__( 'Pageviews', 'statify' ) ),
+				'i18n'  => array(
+					'error'        => esc_html__( 'Error loading data.', 'statify' ),
+					'nodata'       => esc_html__( 'No data available.', 'statify' ),
+					'pageview'     => esc_html__( 'Pageview', 'statify' ),
+					'pageviews'    => esc_html__( 'Pageviews', 'statify' ),
+					'since'        => esc_html__( 'since', 'statify' ),
+					'today'        => esc_html__( 'today', 'statify' ),
+				),
 			)
 		);
 	}
