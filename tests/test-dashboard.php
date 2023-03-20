@@ -256,5 +256,19 @@ class Test_Dashboard extends WP_UnitTestCase {
 		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://example.com/', '/example/', 1 );
 		$stats4 = Statify_Dashboard::get_stats();
 		$this->assertEquals( $stats3, $stats4, 'Stats expected to be equal, is the transient cache active?' );
+
+		// Add more data and force reload. We now should see that fallback ordering by URL works.
+		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://example.com/', '/', 1 );
+		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://example.net/', '/', 1 );
+		$stats5 = Statify_Dashboard::get_stats( true );
+		$this->assertEquals( 18, $stats5['visit_totals']['since_beginning']['count'], 'Unexpected total since beginning' );
+		$this->assertEquals( 2, $stats5['referrer'][1]['count'], 'Unexpected 2nd referrer count' );
+		$this->assertEquals( 'example.com', $stats5['referrer'][1]['host'], 'Unexpected 2nd referrer hostname' );
+		$this->assertEquals( 2, $stats5['referrer'][2]['count'], 'Unexpected 3rd referrer count' );
+		$this->assertEquals( 'pluginkollektiv.org', $stats5['referrer'][2]['host'], 'Unexpected 3rd referrer hostname' );
+		$this->assertEquals( 6, $stats5['target'][0]['count'], 'Unexpected 1st target count' );
+		$this->assertEquals( '/', $stats5['target'][0]['url'], 'Unexpected 1st target url' );
+		$this->assertEquals( 6, $stats5['target'][1]['count'], 'Unexpected 2nd target count' );
+		$this->assertEquals( '/test/', $stats5['target'][1]['url'], 'Unexpected 2nd target url' );
 	}
 }
