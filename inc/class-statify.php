@@ -105,6 +105,10 @@ class Statify {
 	 * @since  2.0.0 Migration from Statify_Frontend::track_visit to Statify::track with multiple parameters.
 	 */
 	protected static function track( $referrer, $target ) {
+        if ( empty( Statify_Frontend::get_tracking_data() ) ) {
+            Statify_Frontend::init_tracking_data();
+        }
+
 		// Fallbacks for uninitialized or omitted target and referrer values.
 		if ( is_null( $target ) ) {
 			$target = '/';
