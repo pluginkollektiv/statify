@@ -152,6 +152,31 @@ class Statify {
 		global $wpdb;
 		$wpdb->insert( $wpdb->statify, $data );
 
+        $statify_id = $wpdb->insert_id;
+
+        $tracking_meta = Statify_Frontend::get_tracking_data();
+
+        foreach ( self::$tracking_meta as $meta_field ) {
+            if ( array_key_exists( $meta_field['meta_key'], $tracking_meta ) ) {
+                $meta_value = $tracking_meta[ $meta_field['meta_key'] ];
+
+                $sanitize_function = isset( $meta_field['sanitize_callback'] ) && is_callable( $meta_field['sanitize_callback'] )
+                    ? $meta_field['sanitize_callback']
+                    : 'sanitize_text_field';
+
+                $meta_value = call_user_func( $sanitize_function, $meta_value );
+
+                // Init rows.
+                $data = array(
+                    'statify_id' => $statify_id,
+                    'meta_key' => $meta_field['meta_key'],
+                    'meta_value' => $meta_value,
+                );
+
+                $wpdb->insert( $wpdb->statifymeta, $data );
+            }
+        }
+
 		/**
 		 * Fires after a visit was stored in the database
 		 *

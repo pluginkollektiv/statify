@@ -59,6 +59,14 @@ class Statify_Frontend extends Statify {
 		self::$tracking_meta = apply_filters( 'statify__tracking_meta', self::$tracking_meta, self::$tracking_data );
 	}
 
+    public static function get_tracking_data() {
+        return self::$tracking_data;
+    }
+
+    public static function get_tracking_meta() {
+        return self::$tracking_meta;
+    }
+
 	/**
 	 * Track the page view
 	 *
