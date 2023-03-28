@@ -39,8 +39,8 @@ class Test_Frontend extends WP_UnitTestCase {
 		);
 		$script_data = wp_scripts()->registered['statify-js']->extra['data'];
 		$this->assertNotNull( $script_data, 'Statify script not localized' );
-		$this->assertRegExp(
-			'/^var statify_ajax = {"url":"[^"]+","nonce":"[^"]+"};$/',
+		$this->assertMatchesRegularExpression(
+			'/^var statifyAjax = {"url":"[^"]+","nonce":"[^"]+"};$/',
 			$script_data,
 			'unexpected JS localization values'
 		);
