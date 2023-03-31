@@ -83,6 +83,7 @@
   },
   "extra": {
     "copy-file": {
+      "vendor/jaybizzle/crawler-detect/src/": "lib/Jaybizzle/CrawlerDetect/",
       "vendor/npm-asset/chartist/dist/index.css": "css/chartist.min.css",
       "vendor/npm-asset/chartist/dist/index.umd.js": "js/chartist.min.js",
       "vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.min.js": "js/"

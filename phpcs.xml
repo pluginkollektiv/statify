@@ -19,9 +19,6 @@
     <file>statify.php</file>
     <exclude-pattern>vendor/*</exclude-pattern>
 
-    <!-- Exclude minified Javascript files. -->
-    <exclude-pattern>*.min.js</exclude-pattern>
-
     <!-- WordPress coding standards -->
     <config name="minimum_supported_wp_version" value="4.7" />
     <rule ref="WordPress">

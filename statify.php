@@ -53,9 +53,6 @@ register_uninstall_hook(
 	)
 );
 
-/* Composer Autoload */
-require __DIR__ . '/vendor/autoload.php';
-
 /* Autoload */
 spl_autoload_register( 'statify_autoload' );
 
@@ -86,6 +83,12 @@ function statify_autoload( $class ) {
 			'%s/inc/class-%s.php',
 			STATIFY_DIR,
 			strtolower( str_replace( '_', '-', $class ) )
+		);
+	} elseif ( 0 === strncmp( $class, 'Jaybizzle\\CrawlerDetect\\', 24 ) && ! class_exists( $class, false ) ) {
+		require_once sprintf(
+			'%s/lib/%s.php',
+			STATIFY_DIR,
+			str_replace( '\\', DIRECTORY_SEPARATOR, $class )
 		);
 	}
 }
