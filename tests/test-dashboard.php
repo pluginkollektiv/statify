@@ -86,11 +86,11 @@ class Test_Dashboard extends WP_UnitTestCase {
 			'Unexpected control callback'
 		);
 		$this->assertNotFalse(
-			has_action( 'admin_print_styles', array( Statify_Dashboard::class, 'add_style' ) ),
+			has_action( 'admin_print_styles', array( Statify::class, 'add_style' ) ),
 			'Styles not added'
 		);
 		$this->assertNotFalse(
-			has_action( 'admin_print_scripts', array( Statify_Dashboard::class, 'add_js' ) ),
+			has_action( 'admin_print_scripts', array( Statify::class, 'add_js' ) ),
 			'Scripts not added'
 		);
 	}

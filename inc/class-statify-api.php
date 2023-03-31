@@ -22,10 +22,11 @@ class Statify_Api extends Statify {
 	 *
 	 * @var    string
 	 */
-	const REST_NAMESPACE   = 'statify/v1';
+	const REST_NAMESPACE = 'statify/v1';
 	const REST_ROUTE_TRACK = 'track';
 	const REST_ROUTE_STATS = 'stats';
 	const REST_ROUTE_RESET = 'reset';
+	const REST_ROUTE_STATS_EXTENDED = 'stats/extended';
 
 	/**
 	 * Initialize REST API routes.
@@ -65,6 +66,16 @@ class Statify_Api extends Statify {
 				'permission_callback' => function () {
 					return current_user_can( 'manage_options' );
 				},
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_STATS_EXTENDED,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( __CLASS__, 'get_extended' ),
+				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
 			)
 		);
 
@@ -116,7 +127,7 @@ class Statify_Api extends Statify {
 			if ( null !== $referrer ) {
 				$referrer = filter_var( $referrer, FILTER_SANITIZE_URL );
 			}
-			$target   = $request->get_param( 'target' );
+			$target = $request->get_param( 'target' );
 			if ( null !== $target ) {
 				$target = filter_var( $target, FILTER_SANITIZE_URL );
 			}
@@ -137,7 +148,7 @@ class Statify_Api extends Statify {
 	public static function get_stats( WP_REST_Request $request ): WP_REST_Response {
 		$refresh = '1' === $request->get_param( 'refresh' );
 
-		$stats  = Statify_Dashboard::get_stats( $refresh );
+		$stats = Statify_Dashboard::get_stats( $refresh );
 
 		$visits          = $stats['visits'];
 		$stats['visits'] = array();
@@ -192,5 +203,54 @@ class Statify_Api extends Statify {
 			),
 			200
 		);
+	}
+
+	/**
+	 * Get extended statistics.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return WP_REST_Response The response.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function get_extended( WP_REST_Request $request ): WP_REST_Response {
+		$scope = $request->get_param( 'scope' );
+		$post  = $request->get_param( 'post' );
+
+		$status = 200;
+		if ( 'year' === $scope ) {
+			$stats = Statify_Evaluation::get_views_for_all_years( $post );
+		} elseif ( 'month' === $scope ) {
+			$visits  = Statify_Evaluation::get_views_for_all_months( $post );
+			$stats   = array( 'visits' => array() );
+			$last_ym = 0;
+			foreach ( $visits as $ym => $v ) {
+				$ym         = explode( '-', $ym );
+				$year       = intval( $ym[0] );
+				$month      = intval( $ym[1] );
+				$year_month = $year * 12 + $month;
+				for ( $ym = $last_ym + 1; $last_ym > 0 && $ym < $year_month; $ym++ ) {
+					// Fill gaps.
+					$y = intval( $ym / 12 );
+					if ( ! isset( $stats['visits'][ $y ] ) ) {
+						$stats['visits'][ $y ] = array();
+					}
+					$stats['visits'][ $y ][ $ym % 12 ] = 0;
+				}
+				if ( ! isset( $stats['visits'][ $year ] ) ) {
+					$stats['visits'][ $year ] = array();
+				}
+				$stats['visits'][ $year ][ $month ] = $v;
+				$last_ym                            = $year_month;
+			}
+		} elseif ( 'day' === $scope ) {
+			$stats = Statify_Evaluation::get_views_for_all_days( $post );
+		} else {
+			$stats  = array( 'error' => 'invalid scope (allowed: year, month, day)' );
+			$status = 400;
+		}
+
+		return new WP_REST_Response( $stats, $status );
 	}
 }

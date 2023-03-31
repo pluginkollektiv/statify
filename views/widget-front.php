@@ -14,7 +14,7 @@ $limit       = (int) Statify::$_options['limit'];
 $show_totals = (int) Statify::$_options['show_totals'];
 ?>
 
-	<div id="statify_chart">
+	<div id="statify_chart" class="statify-chart">
 		<span class="spinner is-active" title="<?php esc_html_e( 'loading', 'statify' ); ?>"></span>
 	</div>
 
