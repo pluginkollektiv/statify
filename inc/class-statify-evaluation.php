@@ -18,6 +18,54 @@ defined( 'ABSPATH' ) || exit;
  * @since 2.0.0
  */
 class Statify_Evaluation extends Statify {
+	const CAPABILITY_SEE_STATS = 'see_statify_evaluation';
+
+	/**
+	 * Add capability to see evaluations.
+	 */
+	public static function add_capability() {
+		if ( isset( self::$_options['show_widget_roles'] ) ) {
+			foreach ( self::$_options['show_widget_roles'] as $role_name ) {
+				$role = get_role( $role_name );
+				if ( $role ) {
+					$role->add_cap( self::CAPABILITY_SEE_STATS );
+				}
+			}
+		} else {
+			// Backwards compatibility for older statify versions without this option.
+			$role = get_role( 'administrator' );
+			if ( $role ) {
+				$role->add_cap( self::CAPABILITY_SEE_STATS );
+			}
+		}
+	}
+
+	/**
+	 * Create an item and submenu items in the WordPress admin menu.
+	 */
+	public static function add_menu() {
+		add_menu_page(
+			__( 'Statify', 'statify' ),
+			'Statify',
+			'see_statify_evaluation',
+			'statify_dashboard',
+			array( __CLASS__, 'show_dashboard' ),
+			'dashicons-chart-area',
+			50
+		);
+	}
+
+	/**
+	 * Show the dashboard page.
+	 */
+	public static function show_dashboard() {
+		self::add_js();
+		self::add_style();
+		wp_enqueue_script( 'chartist_js' );
+		wp_enqueue_script( 'statify_chart_js' );
+
+		load_template( wp_normalize_path( STATIFY_DIR . '/views/view-dashboard.php' ) );
+	}
 
 	/**
 	 * Returns the numeric values for all days in a month.
@@ -480,5 +528,19 @@ class Statify_Evaluation extends Statify {
 			" FROM `$wpdb->statify`" .
 			' ORDER BY `target` ASC'
 		);
+	}
+
+	/**
+	 * Returns the post types of the site: post, page and custom post types.
+	 *
+	 * @return array an array of post type slugs.
+	 */
+	public static function get_post_types() {
+		$types_args = array(
+			'public' => true,
+			'_builtin' => false,
+		);
+
+		return array_merge( array( 'post', 'page' ), get_post_types( $types_args ) );
 	}
 }

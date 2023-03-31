@@ -12,6 +12,10 @@
 	);
 	const refreshBtn = document.getElementById('statify_refresh');
 
+	const chartElemMonthly = document.getElementById('statify_chart_monthly');
+	const chartElemYearly = document.getElementById('statify_chart_yearly');
+	const yearlyTable = document.getElementById('statify-table-yearly');
+
 	/**
 	 * Update the dashboard widget
 	 *
@@ -31,7 +35,7 @@
 				const labels = Object.keys(data.visits);
 				const values = Object.values(data.visits);
 
-				render(chartElem, labels, values);
+				render(chartElem, labels, values, false);
 
 				// Render top lists.
 				if (referrerTable) {
@@ -58,13 +62,62 @@
 	}
 
 	/**
+	 * Render monthly statistics.
+	 *
+	 * @return {Promise<{visits: {[key: string]: {[key: string]: number}}}>} Data promise from API.
+	 */
+	function loadMonthly() {
+		// Load data from API.
+		return wp.apiFetch({ path: '/statify/v1/stats/extended?scope=month' });
+	}
+
+	/**
+	 * Render monthly statistics.
+	 *
+	 * @param {HTMLElement}                                        root Root element.
+	 * @param {{visits: {[key: string]: {[key: string]: number}}}} data Data from API.
+	 */
+	function renderMonthly(root, data) {
+		const labels = Object.keys(data.visits).flatMap((y) =>
+			Object.keys(data.visits[y]).map(
+				(m) => statifyDashboard.i18n.months[m - 1] + ' ' + y
+			)
+		);
+		const values = Object.values(data.visits).flatMap((y) =>
+			Object.values(y)
+		);
+
+		render(root, labels, values);
+	}
+
+	/**
+	 * Render yearly statistics.
+	 *
+	 * @param {HTMLElement}                                        root Root element.
+	 * @param {{visits: {[key: string]: {[key: string]: number}}}} data Data from API.
+	 */
+	function renderYearly(root, data) {
+		const labels = Object.keys(data.visits);
+		const values = Object.values(data.visits).flatMap((y) =>
+			Object.values(y).reduce((a, b) => a + b, 0)
+		);
+
+		render(root, labels, values);
+	}
+
+	/**
 	 * Render statistics chart.
 	 *
-	 * @param {HTMLElement} root   Root element.
-	 * @param {string[]}    labels Labels.
-	 * @param {number[]}    values Values.
+	 * @param {HTMLElement} root     Root element.
+	 * @param {string[]}    labels   Labels.
+	 * @param {number[]}    values   Values.
+	 * @param {boolean}     showAxis Show X axis?
 	 */
-	function render(root, labels, values) {
+	function render(root, labels, values, showAxis) {
+		if (typeof showAxis === 'undefined') {
+			showAxis = true;
+		}
+
 		// Remove the loading content.
 		root.innerHTML = '';
 
@@ -100,8 +153,8 @@
 				width: fullWidth ? undefined : 5 * labels.length,
 				axisX: {
 					showGrid: false,
-					showLabel: false,
-					offset: 0,
+					showLabel: showAxis,
+					offset: showAxis ? 30 : 0,
 				},
 				axisY: {
 					showGrid: true,
@@ -228,19 +281,75 @@
 		}
 	}
 
-	// Abort if config or target element is not present.
-	if (typeof statifyDashboard !== 'undefined' && chartElem) {
-		// Bind update function to "refresh" button.
-		if (refreshBtn) {
-			refreshBtn.addEventListener('click', (evt) => {
-				evt.preventDefault();
-				updateDashboard(true);
+	/**
+	 * Render yearly table.
+	 *
+	 * @param {HTMLElement} table Root element.
+	 * @param {any}         data  Data from API.
+	 */
+	function renderYearlyTable(table, data) {
+		const tbody = table.querySelector('tbody');
 
-				return false;
-			});
+		tbody.innerHTML = '';
+
+		for (const year in data.visits) {
+			const row = document.createElement('TR');
+			let col = document.createElement('TH');
+			let sum = 0;
+			col.scope = 'row';
+			col.innerText = year;
+			row.appendChild(col);
+
+			for (let month = 1; month <= 12; month++) {
+				col = document.createElement('TD');
+				col.innerText = data.visits[year][month - 1] || '-';
+				row.appendChild(col);
+				sum += data.visits[year][month - 1] || 0;
+			}
+
+			col = document.createElement('TD');
+			col.innerText = sum;
+			row.appendChild(col);
+
+			tbody.insertBefore(row, tbody.firstChild);
+		}
+	}
+
+	// Abort if config or target element is not present.
+	if (typeof statifyDashboard !== 'undefined') {
+		if (chartElem) {
+			// Bind update function to "refresh" button.
+			if (refreshBtn) {
+				refreshBtn.addEventListener('click', (evt) => {
+					evt.preventDefault();
+					updateDashboard(true);
+
+					return false;
+				});
+			}
+
+			// Initial update.
+			updateDashboard(false);
 		}
 
-		// Initial update.
-		updateDashboard(false);
+		if (chartElemMonthly) {
+			loadMonthly()
+				.then((data) => {
+					renderMonthly(chartElemMonthly, data);
+
+					if (chartElemYearly) {
+						renderYearly(chartElemYearly, data);
+					}
+
+					if (yearlyTable) {
+						renderYearlyTable(yearlyTable, data);
+					}
+				})
+				.catch(() => {
+					// Failed to load.
+					chartElem.innerHTML =
+						'<p>' + statifyDashboard.i18n.error + '</p>';
+				});
+		}
 	}
 }
