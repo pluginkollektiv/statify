@@ -1,6 +1,6 @@
 <?php
 /**
- * Statify: Statify_Install class
+ * Statify: Install class
  *
  * This file contains the derived class for the plugin's installation features.
  *
@@ -8,16 +8,18 @@
  * @since     0.1
  */
 
+namespace Statify;
+
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Statify_Install
+ * Statify Install
  *
- * @since   0.1
- * @version 2016-12-20
+ * @since 0.1
+ * @since 2.0.0 renamed to Statify\Install
  */
-class Statify_Install {
+class Install {
 
 	/**
 	 * Plugin activation handler.
@@ -83,7 +85,7 @@ class Statify_Install {
 		}
 
 		// Create the actual tables.
-		Statify_Table::init();
-		Statify_Table::create();
+		Table::init();
+		Table::create();
 	}
 }

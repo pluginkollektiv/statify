@@ -5,6 +5,11 @@
  * @package Statify
  */
 
+namespace Statify;
+
+use DateTime;
+use WP_UnitTestCase;
+
 /**
  * Class Test_Cron.
  * Tests for cron integration.
@@ -19,7 +24,7 @@ class Test_Cron extends WP_UnitTestCase {
 		parent::set_up();
 
 		// "Install" Statify, i.e. create tables and options.
-		Statify_Install::init();
+		Install::init();
 	}
 
 	/**
@@ -32,7 +37,7 @@ class Test_Cron extends WP_UnitTestCase {
 		// Initialize normal cycle, configure storage period of 3 days.
 		$this->init_statify_widget( 3 );
 		$this->assertNotFalse(
-			has_action( 'statify_cleanup', array( 'Statify_Cron', 'cleanup_data' ) ),
+			has_action( 'statify_cleanup', array( 'Statify\Cron', 'cleanup_data' ) ),
 			'Statify cleanup cron job should be registered in normal cycle (always)'
 		);
 
@@ -40,7 +45,7 @@ class Test_Cron extends WP_UnitTestCase {
 		define( 'DOING_CRON', true );
 		Statify::init();
 		$this->assertNotFalse(
-			has_action( 'statify_cleanup', array( 'Statify_Cron', 'cleanup_data' ) ),
+			has_action( 'statify_cleanup', array( 'Statify\Cron', 'cleanup_data' ) ),
 			'Statify cleanup cron job was not registered'
 		);
 
@@ -62,7 +67,7 @@ class Test_Cron extends WP_UnitTestCase {
 		}
 
 		// Run the cron job.
-		Statify_Cron::cleanup_data();
+		Cron::cleanup_data();
 
 		// Verify that 2 days have been deleted.
 		$stats = $this->get_stats();

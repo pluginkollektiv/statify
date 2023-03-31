@@ -1,6 +1,6 @@
 <?php
 /**
- * Statify: Statify_Frontend class
+ * Statify: Frontend class
  *
  * This file contains the derived class for the plugin's frontend features.
  *
@@ -8,15 +8,18 @@
  * @since     1.4.0
  */
 
+namespace Statify;
+
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Statify_Frontend
+ * Statify Frontend
  *
  * @since 1.4.0
+ * @since 2.0.0 renamed to Statify\Frontend
  */
-class Statify_Frontend extends Statify {
+class Frontend extends Statify {
 
 	/**
 	 * Track the page view
@@ -96,7 +99,7 @@ class Statify_Frontend extends Statify {
 
 		// Add endpoint to script.
 		$script_data = array(
-			'url' => esc_url_raw( rest_url( Statify_Api::REST_NAMESPACE . '/' . Statify_Api::REST_ROUTE_TRACK ) ),
+			'url' => esc_url_raw( rest_url( Api::REST_NAMESPACE . '/' . Api::REST_ROUTE_TRACK ) ),
 		);
 		if ( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK === self::$_options['snippet'] ) {
 			$script_data['nonce'] = wp_create_nonce( 'statify_track' );
@@ -159,7 +162,7 @@ class Statify_Frontend extends Statify {
 	private static function make_amp_config() {
 		$cfg = array(
 			'requests'       => array(
-				'pageview' => rest_url( Statify_Api::REST_NAMESPACE . '/' . Statify_Api::REST_ROUTE_TRACK ),
+				'pageview' => rest_url( Api::REST_NAMESPACE . '/' . Api::REST_ROUTE_TRACK ),
 			),
 			'extraUrlParams' => array(
 				'referrer' => '${documentReferrer}',

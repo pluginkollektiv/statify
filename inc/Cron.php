@@ -1,6 +1,6 @@
 <?php
 /**
- * Statify: Statify_Cron class
+ * Statify: Cron class
  *
  * This file contains the derived class for the plugin's cron features.
  *
@@ -8,15 +8,18 @@
  * @since     1.4.0
  */
 
+namespace Statify;
+
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Statify_Cron
+ * Statify Cron
  *
  * @since 1.4.0
+ * @since 2.0.0 renamed to Statify\Cron
  */
-class Statify_Cron extends Statify {
+class Cron extends Statify {
 
 	/**
 	 * Cleanup obsolete DB values

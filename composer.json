@@ -88,6 +88,11 @@
       "vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.min.js": "js/"
     }
   },
+  "autoload": {
+    "psr-4": {
+      "Statify\\": "inc/"
+    }
+  },
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true

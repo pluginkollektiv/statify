@@ -27,65 +27,31 @@ define( 'STATIFY_VERSION', '1.9.0' );
 add_action(
 	'plugins_loaded',
 	array(
-		'Statify',
+		'Statify\Statify',
 		'init',
 	)
 );
 register_activation_hook(
 	STATIFY_FILE,
 	array(
-		'Statify_Install',
+		'Statify\Install',
 		'init',
 	)
 );
 register_deactivation_hook(
 	STATIFY_FILE,
 	array(
-		'Statify_Deactivate',
+		'Statify\Deactivate',
 		'init',
 	)
 );
 register_uninstall_hook(
 	STATIFY_FILE,
 	array(
-		'Statify_Uninstall',
+		'Statify\Uninstall',
 		'init',
 	)
 );
 
 /* Composer Autoload */
 require __DIR__ . '/vendor/autoload.php';
-
-/* Autoload */
-spl_autoload_register( 'statify_autoload' );
-
-/**
- * Include classes via autoload.
- *
- * @param string $class Name of an class-file name, without file extension.
- */
-function statify_autoload( $class ) {
-
-	$plugin_classes = array(
-		'Statify',
-		'Statify_Api',
-		'Statify_Backend',
-		'Statify_Frontend',
-		'Statify_Dashboard',
-		'Statify_Install',
-		'Statify_Uninstall',
-		'Statify_Deactivate',
-		'Statify_Settings',
-		'Statify_Table',
-		'Statify_XMLRPC',
-		'Statify_Cron',
-	);
-
-	if ( in_array( $class, $plugin_classes, true ) ) {
-		require_once sprintf(
-			'%s/inc/class-%s.php',
-			STATIFY_DIR,
-			strtolower( str_replace( '_', '-', $class ) )
-		);
-	}
-}

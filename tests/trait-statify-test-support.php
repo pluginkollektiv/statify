@@ -5,6 +5,8 @@
  * @package Statify
  */
 
+namespace Statify;
+
 /**
  * Trait Statify_Test_Support.
  *
@@ -79,7 +81,7 @@ trait Statify_Test_Support {
 	protected function get_stats() {
 		delete_transient( 'statify_data' );
 
-		return Statify_Dashboard::get_stats();
+		return Dashboard::get_stats();
 	}
 
 	/**
