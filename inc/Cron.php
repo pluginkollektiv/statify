@@ -8,7 +8,7 @@
  * @since     1.4.0
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * Statify Cron
  *
  * @since 1.4.0
- * @since 2.0.0 renamed to Statify\Cron
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Cron
  */
 class Cron extends Statify {
 

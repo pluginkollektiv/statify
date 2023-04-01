@@ -8,7 +8,7 @@
  * @since     1.1
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * Statify Dashboard
  *
  * @since 1.1
- * @since 2.0.0 renamed to Statify\Dashboard
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Dashboard
  */
 class Dashboard extends Statify {
 

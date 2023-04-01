@@ -5,7 +5,7 @@
  * @package Statify
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 use WP_UnitTestCase;
 
@@ -23,7 +23,7 @@ class Test_Frontend extends WP_UnitTestCase {
 		// Disable JS tracking.
 		$this->init_statify_tracking( Statify::TRACKING_METHOD_DEFAULT );
 		$this->assertNotFalse(
-			has_action( 'wp_footer', array( 'Statify\Frontend', 'wp_footer' ) ),
+			has_action( 'wp_footer', array( 'Pluginkollektiv\Statify\Frontend', 'wp_footer' ) ),
 			'Statify footer action not registered'
 		);
 
@@ -58,7 +58,7 @@ class Test_Frontend extends WP_UnitTestCase {
 		$this->assertNotFalse(
 			has_action(
 				'query_vars',
-				array( 'Statify\Frontend', 'query_vars' )
+				array( 'Pluginkollektiv\Statify\Frontend', 'query_vars' )
 			),
 			'Statify query_vars action not registered'
 		);

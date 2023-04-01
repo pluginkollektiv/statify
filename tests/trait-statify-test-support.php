@@ -5,7 +5,7 @@
  * @package Statify
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 /**
  * Trait Statify_Test_Support.

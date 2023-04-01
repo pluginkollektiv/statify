@@ -8,7 +8,7 @@
  * @since     0.1
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * Statify Install
  *
  * @since 0.1
- * @since 2.0.0 renamed to Statify\Install
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Install
  */
 class Install {
 

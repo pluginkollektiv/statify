@@ -8,7 +8,7 @@
  * @since     0.6
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * Statify Table
  *
  * @since 0.6
- * @since 2.0.0 renamed to Statify\Table
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Table
  */
 class Table {
 

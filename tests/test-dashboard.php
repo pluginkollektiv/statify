@@ -5,7 +5,7 @@
  * @package Statify
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 use DateTime;
 use WP_UnitTestCase;
@@ -28,7 +28,9 @@ class Test_Dashboard extends WP_UnitTestCase {
 		// "Install" Statify, i.e. create tables and options.
 		Install::init();
 
-		if ( ! function_exists( 'Statify\wp_add_dashboard_widget' ) ) {
+		/* This function is typically defined in the root namespace. However, the hierarchy prefers this overridden
+		   instance here, so it will be used for testing purposes. */
+		if ( ! function_exists( 'Pluginkollektiv\Statify\wp_add_dashboard_widget' ) ) {
 			global $widget_capture;
 			$widget_capture = array();
 

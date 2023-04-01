@@ -8,7 +8,7 @@
  * @since   1.9
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 use WP_REST_Response;
 use WP_REST_Server;

@@ -5,7 +5,7 @@
  * @package Statify
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 use DateTime;
 use WP_UnitTestCase;
@@ -37,7 +37,7 @@ class Test_Cron extends WP_UnitTestCase {
 		// Initialize normal cycle, configure storage period of 3 days.
 		$this->init_statify_widget( 3 );
 		$this->assertNotFalse(
-			has_action( 'statify_cleanup', array( 'Statify\Cron', 'cleanup_data' ) ),
+			has_action( 'statify_cleanup', array( 'Pluginkollektiv\Statify\Cron', 'cleanup_data' ) ),
 			'Statify cleanup cron job should be registered in normal cycle (always)'
 		);
 
@@ -45,7 +45,7 @@ class Test_Cron extends WP_UnitTestCase {
 		define( 'DOING_CRON', true );
 		Statify::init();
 		$this->assertNotFalse(
-			has_action( 'statify_cleanup', array( 'Statify\Cron', 'cleanup_data' ) ),
+			has_action( 'statify_cleanup', array( 'Pluginkollektiv\Statify\Cron', 'cleanup_data' ) ),
 			'Statify cleanup cron job was not registered'
 		);
 

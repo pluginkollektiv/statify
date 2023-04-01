@@ -90,7 +90,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Statify\\": "inc/"
+      "Pluginkollektiv\\Statify\\": "inc/"
     }
   },
   "config": {

@@ -5,7 +5,7 @@
  * @package Statify
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 use DateTime;
 use WP_UnitTestCase;
@@ -40,7 +40,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		$this->assertNotFalse(
 			has_action(
 				'template_redirect',
-				array( 'Statify\Frontend', 'track_visit' )
+				array( 'Pluginkollektiv\Statify\Frontend', 'track_visit' )
 			),
 			'Statify tracking action not registered'
 		);

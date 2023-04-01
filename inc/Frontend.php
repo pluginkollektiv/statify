@@ -8,7 +8,7 @@
  * @since     1.4.0
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * Statify Frontend
  *
  * @since 1.4.0
- * @since 2.0.0 renamed to Statify\Frontend
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Frontend
  */
 class Frontend extends Statify {
 

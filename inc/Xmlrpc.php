@@ -8,7 +8,7 @@
  * @since     1.1
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
@@ -17,9 +17,9 @@ defined( 'ABSPATH' ) || exit;
  * Statify XMLRPC
  *
  * @since 1.1
- * @since 2.0.0 renamed to Statify\XMLRPC
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Xmlrpc
  */
-class XMLRPC {
+class Xmlrpc {
 
 	/**
 	 * Enhancement from the XMLRPC-method.

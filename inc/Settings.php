@@ -8,7 +8,7 @@
  * @since     1.7
  */
 
-namespace Statify;
+namespace Pluginkollektiv\Statify;
 
 // Quit if accessed directly..
 defined( 'ABSPATH' ) || exit;
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * Statify Settings
  *
  * @since 1.7
- * @since 2.0.0 renamed to Statify\Settings
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Settings
  */
 class Settings {
 
