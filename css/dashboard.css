@@ -3,7 +3,6 @@
 #statify_chart {
 	color: #a7aaad;
 	flex: 0 0 100%;
-	direction: rtl;
 	height: 140px;
 	margin: 1em -0.5em;
 	overflow-x: auto;
@@ -11,16 +10,17 @@
 	text-align: center;
 }
 
+#statify_chart * {
+	direction: ltr;
+}
+
+body.rtl #statify_chart * {
+	direction: rtl;
+}
+
 #statify_chart .spinner {
 	float: none;
 	margin: 1em;
-}
-
-#statify_chart .ct-label.ct-vertical.ct-start {
-	-webkit-justify-content: flex-start;
-	justify-content: flex-start;
-	text-align: left;
-	text-anchor: start;
 }
 
 #statify_chart .ct-line {
