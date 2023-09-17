@@ -7,8 +7,10 @@
  * @package   Statify
  */
 
+namespace Pluginkollektiv\Statify;
+
 // Quit if accessed outside WP context.
-class_exists( 'Statify' ) || exit;
+class_exists( 'Pluginkollektiv\Statify\Statify' ) || exit;
 
 $limit       = (int) Statify::$_options['limit'];
 $show_totals = (int) Statify::$_options['show_totals'];

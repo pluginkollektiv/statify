@@ -1,6 +1,6 @@
 <?php
 /**
- * Statify: Statify_XMLRPC class
+ * Statify: XMLRPC class
  *
  * This file contains the derived class for the plugin's XMLRPC features.
  *
@@ -8,15 +8,18 @@
  * @since     1.1
  */
 
+namespace Pluginkollektiv\Statify;
+
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Statify_XMLRPC
+ * Statify XMLRPC
  *
  * @since 1.1
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Xmlrpc
  */
-class Statify_XMLRPC {
+class Xmlrpc {
 
 	/**
 	 * Enhancement from the XMLRPC-method.
@@ -70,7 +73,7 @@ class Statify_XMLRPC {
 		}
 
 		// Empty?
-		$data = Statify_Dashboard::get_stats();
+		$data = Dashboard::get_stats();
 		if ( ! $data ) {
 			return '{"error": "No data"}';
 		}

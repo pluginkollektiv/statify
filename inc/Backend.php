@@ -1,6 +1,6 @@
 <?php
 /**
- * Statify: Statify_Backend class
+ * Statify: Backend class
  *
  * This file contains the derived class for the plugin's backend features.
  *
@@ -8,15 +8,18 @@
  * @since     1.4.0
  */
 
+namespace Pluginkollektiv\Statify;
+
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Statify_Backend
+ * Statify Backend
  *
  * @since 1.4.0
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Backend
  */
-class Statify_Backend {
+class Backend {
 
 	/**
 	 * Add plugin meta links

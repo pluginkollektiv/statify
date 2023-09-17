@@ -5,6 +5,10 @@
  * @package Statify
  */
 
+namespace Pluginkollektiv\Statify;
+
+use WP_UnitTestCase;
+
 /**
  * Class Test_Statify.
  * Tests for Statify core class.
@@ -19,7 +23,7 @@ class Test_Statify extends WP_UnitTestCase {
 		parent::set_up();
 
 		// "Install" Statify, i.e. create tables and options.
-		Statify_Install::init();
+		Install::init();
 	}
 
 	/**

@@ -5,6 +5,11 @@
  * @package Statify
  */
 
+namespace Pluginkollektiv\Statify;
+
+use DateTime;
+use WP_UnitTestCase;
+
 /**
  * Class Test_Tracking.
  * Tests for non-JavaScript tracking and tracking-related mechanisms.
@@ -19,7 +24,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		parent::set_up();
 
 		// "Install" Statify, i.e. create tables and options.
-		Statify_Install::init();
+		Install::init();
 	}
 
 	/**
@@ -35,7 +40,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		$this->assertNotFalse(
 			has_action(
 				'template_redirect',
-				array( 'Statify_Frontend', 'track_visit' )
+				array( 'Pluginkollektiv\Statify\Frontend', 'track_visit' )
 			),
 			'Statify tracking action not registered'
 		);
@@ -45,7 +50,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		$_SERVER['HTTP_REFERER']    = 'https://statify.pluginkollektiv.org/';
 		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36';
 
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 
 		$this->assertNotNull( $stats, 'Stats should be filled after tracking' );
@@ -68,7 +73,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		$_SERVER['REQUEST_URI']     = '/';
 		$_SERVER['HTTP_REFERER']    = 'https://statify.pluginkollektiv.org/documentation/';
 		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0';
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 
 		$stats = $this->get_stats();
 		$this->assertNotNull( $stats, 'Stats should be filled after tracking' );
@@ -88,7 +93,7 @@ class Test_Tracking extends WP_UnitTestCase {
 
 		// Request to invalid target should not be tracked.
 		$_SERVER['REQUEST_URI'] = '';
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertEquals( 2, $stats['visits'][0]['count'], 'Unexpected visit count' );
 
@@ -97,7 +102,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		$_SERVER['REQUEST_URI']  = '/?foo=bar';
 		$_SERVER['HTTP_REFERER'] = home_url();
 
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertEquals( 3, $stats['visits'][0]['count'], 'Unexpected visit count' );
 		$this->assertEquals( 2, count( $stats['target'] ), 'Unexpected number of targets' );
@@ -109,8 +114,8 @@ class Test_Tracking extends WP_UnitTestCase {
 
 		// If JavaScript tracking is enabled, the regular request should not be tracked.
 		$_SERVER['REQUEST_URI'] = '/';
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK, false );
-		Statify_Frontend::track_visit();
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK, false );
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertEquals( 3, $stats['visits'][0]['count'], 'Unexpected visit count' );
 	}
@@ -132,31 +137,31 @@ class Test_Tracking extends WP_UnitTestCase {
 		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36';
 
 		$wp_query->is_robots = true;
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNull( $stats, 'Robots should not be tracked' );
 
 		$wp_query->is_robots    = false;
 		$wp_query->is_trackback = true;
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNull( $stats, 'Trackbacks should not be tracked.' );
 
 		$wp_query->is_trackback = false;
 		$wp_query->is_preview   = true;
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNull( $stats, 'Previews should not be tracked.' );
 
 		$wp_query->is_preview = false;
 		$wp_query->is_404     = true;
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNull( $stats, '404 should not be tracked.' );
 
 		$wp_query->is_404  = false;
 		$wp_query->is_feed = true;
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNull( $stats, 'Feeds should not be tracked.' );
 
@@ -164,7 +169,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		$wp_query->is_feed = false;
 		if ( function_exists( 'is_favicon' ) ) {
 			$wp_query->is_favicon = true;
-			Statify_Frontend::track_visit();
+			Frontend::track_visit();
 			$stats = $this->get_stats();
 			$this->assertNull( $stats, 'Favicons should not be tracked.' );
 			$wp_query->is_favicon = false;
@@ -173,12 +178,12 @@ class Test_Tracking extends WP_UnitTestCase {
 		// Sitemap XML and XSL for WP 5.5 and above.
 		if ( version_compare( $wp_version, '5.5', '>=' ) ) {
 			set_query_var( 'sitemap', 'index' );
-			Statify_Frontend::track_visit();
+			Frontend::track_visit();
 			$stats = $this->get_stats();
 			$this->assertNull( $stats, 'Sitemap XML should not be tracked.' );
 			set_query_var( 'sitemap', null );
 			set_query_var( 'sitemap-stylesheet', 'sitemap' );
-			Statify_Frontend::track_visit();
+			Frontend::track_visit();
 			$stats = $this->get_stats();
 			$this->assertNull( $stats, 'Sitemap XSL should not be tracked.' );
 		}
@@ -241,7 +246,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		foreach ( $bot_uas as $bot_ua ) {
 			$_SERVER['HTTP_USER_AGENT'] = $bot_ua;
 
-			Statify_Frontend::track_visit();
+			Frontend::track_visit();
 			$stats = $this->get_stats();
 			$this->assertNull( $stats, 'Bot exclusion failed for user agent: ' . $bot_ua );
 		}
@@ -260,19 +265,19 @@ class Test_Tracking extends WP_UnitTestCase {
 			"example.com\nstatify.pluginkollektiv.org\nexample.net"
 		);
 
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT, false, true );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_DEFAULT, false, true );
 
 		// Basically a valid request.
 		$_SERVER['REQUEST_URI']     = '/';
 		$_SERVER['HTTP_REFERER']    = 'https://statify.pluginkollektiv.org/';
 		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36';
 
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNull( $stats, 'Tracking for blacklisted referrer succeeded' );
 
 		$this->init_statify_tracking();
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNotNull( $stats, 'Blacklist evaluated when not enabled' );
 	}
@@ -303,7 +308,7 @@ class Test_Tracking extends WP_UnitTestCase {
 			}
 		);
 
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertEquals( 1, $stats['visits'][0]['count'], 'Filter result NULL should not affect counting' );
 		$this->assertNull( $capture, 'Initial filter should receive NULL value as previous result' );
@@ -311,7 +316,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		// Explicitly blacklist request.
 		$filter_result = true;
 
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertEquals( 1, $stats['visits'][0]['count'], 'Filter result FALSE should prevent request from being tracked' );
 
@@ -319,14 +324,14 @@ class Test_Tracking extends WP_UnitTestCase {
 		$filter_result    = null;
 		$wp_query->is_404 = true;
 
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertEquals( 1, $stats['visits'][0]['count'], 'Filter result NULL should not affect built-in filters' );
 
 		// We now explicitly NOT skip the request.
 		$filter_result = false;
 
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertEquals( 2, $stats['visits'][0]['count'], 'Filter result TRUE should force counting' );
 	}
@@ -356,7 +361,7 @@ class Test_Tracking extends WP_UnitTestCase {
 			2
 		);
 
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNotNull( $stats['visits'][0]['count'], 'Request not tracked' );
 		$this->assertNotEmpty( $capture, 'Hook stativy__visit_saved has not fired' );
@@ -385,14 +390,14 @@ class Test_Tracking extends WP_UnitTestCase {
 		$_SERVER['HTTP_REFERER']    = 'https://statify.pluginkollektiv.org/';
 		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36';
 
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNull( $stats, 'Logged-in user should not be tracked' );
 
 		// Re-initialize Statify, enabling logged-in user tracking.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT, true );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_DEFAULT, true );
 
-		Statify_Frontend::track_visit();
+		Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertNotNull( $stats, 'Logged-in user should be tracked' );
 	}

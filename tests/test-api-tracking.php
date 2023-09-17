@@ -5,6 +5,12 @@
  * @package Statify
  */
 
+namespace Pluginkollektiv\Statify;
+
+use DateTime;
+use WP_REST_Request;
+use WP_UnitTestCase;
+
 /**
  * Class Test_Api_Tracking.
  * Tests for JavaScript based tracking using WP API.
@@ -19,7 +25,7 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 		parent::set_up();
 
 		// "Install" Statify, i.e. create tables and options.
-		Statify_Install::init();
+		Install::init();
 	}
 
 	/**
@@ -35,16 +41,16 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 
 		do_action( 'rest_api_init' );
 		$this->assertArrayNotHasKey(
-			'/' . Statify_Api::REST_NAMESPACE . '/' . Statify_Api::REST_ROUTE_TRACK,
+			'/' . Api::REST_NAMESPACE . '/' . Api::REST_ROUTE_TRACK,
 			$wp_rest_server->get_routes(),
 			'REST route should not have been registered with JS disabled'
 		);
 
 		// Enable JS tracking.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK );
 		do_action( 'rest_api_init' );
 		$this->assertArrayHasKey(
-			'/' . Statify_Api::REST_NAMESPACE . '/' . Statify_Api::REST_ROUTE_TRACK,
+			'/' . Api::REST_NAMESPACE . '/' . Api::REST_ROUTE_TRACK,
 			$wp_rest_server->get_routes(),
 			'REST route should have been registered with JS enabled'
 		);
@@ -59,7 +65,7 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 		// Initialize a valid Statify tracking request.
 		$request = new WP_REST_Request(
 			'POST',
-			'/' . Statify_Api::REST_NAMESPACE . '/' . Statify_Api::REST_ROUTE_TRACK
+			'/' . Api::REST_NAMESPACE . '/' . Api::REST_ROUTE_TRACK
 		);
 		$request->set_header( 'Content-Type', 'appliction/json;charset=utf-8' );
 		$request->set_param( 'target', '/' );
@@ -67,7 +73,7 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 		$request->set_param( 'nonce', wp_create_nonce( 'statify_track' ) );
 
 		// Initialize Statify with JS tracking enabled.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK );
 		do_action( 'rest_api_init' );
 
 		$response = $wp_rest_server->dispatch( $request );
@@ -108,7 +114,7 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 		$this->assertEquals( 1, $stats['visits'][0]['count'], 'Visit count should not be higher after AJAX request failed' );
 
 		// Now disable JS tracking.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_DEFAULT );
 
 		// The REST routes for testing are not reset, so the endpoint is evaluated and does not return 404 here.
 		$response = $wp_rest_server->dispatch( $request );
@@ -118,7 +124,7 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 		$this->assertEquals( 1, $stats['referrer'][0]['count'], 'Unexpected referrer count' );
 
 		// Re-enable JS without nonce.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK );
 
 		$response = $wp_rest_server->dispatch( $request );
 		$this->assertEquals( 204, $response->get_status(), 'API request should return 204 with JS enabled' );
@@ -136,7 +142,7 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 
 		/* Allow tracking for logged-in users.
 		   This also check the overruled check, i.e. the login status is not reset without nonce. */
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK, true );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK, true );
 		$response = $wp_rest_server->dispatch( $request );
 		$this->assertEquals( 204, $response->get_status(), 'API request should return 204 with JS enabled and logged in' );
 		$stats = $this->get_stats();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Statify: Statify_Deactivate class
+ * Statify: Deactivate class
  *
  * This file contains the derived class for the plugin's deactivation actions.
  *
@@ -8,15 +8,18 @@
  * @since     1.4.0
  */
 
+namespace Pluginkollektiv\Statify;
+
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Statify_Deactivate
+ * Statify Deactivate
  *
  * @since 1.4.0
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Deactivate
  */
-class Statify_Deactivate {
+class Deactivate {
 
 	/**
 	 * Plugin deactivation actions

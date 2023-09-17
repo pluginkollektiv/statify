@@ -1,12 +1,14 @@
 <?php
 /**
- * Statify: Statify_Table class
+ * Statify: Table class
  *
  * This file contains class for the plugin's DB table handling.
  *
  * @package   Statify
  * @since     0.6
  */
+
+namespace Pluginkollektiv\Statify;
 
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
@@ -15,8 +17,9 @@ defined( 'ABSPATH' ) || exit;
  * Statify Table
  *
  * @since 0.6
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Table
  */
-class Statify_Table {
+class Table {
 
 	/**
 	 * Definition of the custom table.

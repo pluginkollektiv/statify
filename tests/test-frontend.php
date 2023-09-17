@@ -5,6 +5,10 @@
  * @package Statify
  */
 
+namespace Pluginkollektiv\Statify;
+
+use WP_UnitTestCase;
+
 /**
  * Class Test_Frontend.
  * Tests for frontend integration.
@@ -17,22 +21,22 @@ class Test_Frontend extends WP_UnitTestCase {
 	 */
 	public function test_wp_footer() {
 		// Disable JS tracking.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_DEFAULT );
 		$this->assertNotFalse(
-			has_action( 'wp_footer', array( 'Statify_Frontend', 'wp_footer' ) ),
+			has_action( 'wp_footer', array( 'Pluginkollektiv\Statify\Frontend', 'wp_footer' ) ),
 			'Statify footer action not registered'
 		);
 
-		Statify_Frontend::wp_footer();
+		Frontend::wp_footer();
 		$this->assertFalse(
 			wp_script_is( 'statify-js', 'enqueued' ),
 			'Statify JS should not be enqueued if JS tracking is disabled'
 		);
 
 		// Enable JS tracking.
-		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK );
+		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK );
 
-		Statify_Frontend::wp_footer();
+		Frontend::wp_footer();
 		$this->assertTrue(
 			wp_script_is( 'statify-js', 'enqueued' ),
 			'Statify JS must be equeued if JS tracking is enabled'
@@ -54,12 +58,12 @@ class Test_Frontend extends WP_UnitTestCase {
 		$this->assertNotFalse(
 			has_action(
 				'query_vars',
-				array( 'Statify_Frontend', 'query_vars' )
+				array( 'Pluginkollektiv\Statify\Frontend', 'query_vars' )
 			),
 			'Statify query_vars action not registered'
 		);
 
-		$vars = Statify_Frontend::query_vars( array() );
+		$vars = Frontend::query_vars( array() );
 		$this->assertCount( 2, $vars, 'Unexpected number of query vars' );
 		$this->assertContains( 'statify_referrer', $vars, 'Referrer variable not declared' );
 		$this->assertContains( 'statify_target', $vars, 'Target variable not declared' );

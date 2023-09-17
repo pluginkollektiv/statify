@@ -8,6 +8,8 @@
  * @since     0.1.0
  */
 
+namespace Pluginkollektiv\Statify;
+
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
@@ -15,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * Statify.
  *
  * @since 0.1.0
+ * @since 2.0.0 moved to Pluginkollektiv\Statify namespace
  */
 class Statify {
 	const TRACKING_METHOD_DEFAULT = 0;
@@ -41,7 +44,7 @@ class Statify {
 		}
 
 		// Table init.
-		Statify_Table::init();
+		Table::init();
 
 		// Plugin options.
 		self::$_options = wp_parse_args(
@@ -62,31 +65,31 @@ class Statify {
 		);
 
 		// Cron.
-		add_action( 'statify_cleanup', array( 'Statify_Cron', 'cleanup_data' ) );
+		add_action( 'statify_cleanup', array( 'Pluginkollektiv\\Statify\Cron', 'cleanup_data' ) );
 
 		if ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {  // XMLRPC.
-			add_filter( 'xmlrpc_methods', array( 'Statify_XMLRPC', 'xmlrpc_methods' ) );
+			add_filter( 'xmlrpc_methods', array( 'Pluginkollektiv\\Statify\Xmlrpc', 'xmlrpc_methods' ) );
 		} elseif ( is_admin() ) {   // Backend.
-			add_action( 'wp_initialize_site', array( 'Statify_Install', 'init_site' ) );
-			add_action( 'wp_uninitialize_site', array( 'Statify_Uninstall', 'init_site' ) );
-			add_action( 'wp_dashboard_setup', array( 'Statify_Dashboard', 'init' ) );
-			add_filter( 'plugin_row_meta', array( 'Statify_Backend', 'add_meta_link' ), 10, 2 );
-			add_filter( 'plugin_action_links_' . STATIFY_BASE, array( 'Statify_Backend', 'add_action_link' ) );
-			add_action( 'admin_init', array( 'Statify_Settings', 'register_settings' ) );
-			add_action( 'admin_menu', array( 'Statify_Settings', 'add_admin_menu' ) );
-			add_action( 'update_option_statify', array( 'Statify_Settings', 'action_update_options' ), 10, 2 );
+			add_action( 'wp_initialize_site', array( 'Pluginkollektiv\\Statify\Install', 'init_site' ) );
+			add_action( 'wp_uninitialize_site', array( 'Pluginkollektiv\\Statify\Uninstall', 'init_site' ) );
+			add_action( 'wp_dashboard_setup', array( 'Pluginkollektiv\\Statify\Dashboard', 'init' ) );
+			add_filter( 'plugin_row_meta', array( 'Pluginkollektiv\\Statify\Backend', 'add_meta_link' ), 10, 2 );
+			add_filter( 'plugin_action_links_' . STATIFY_BASE, array( 'Pluginkollektiv\\Statify\Backend', 'add_action_link' ) );
+			add_action( 'admin_init', array( 'Pluginkollektiv\\Statify\Settings', 'register_settings' ) );
+			add_action( 'admin_menu', array( 'Pluginkollektiv\\Statify\Settings', 'add_admin_menu' ) );
+			add_action( 'update_option_statify', array( 'Pluginkollektiv\\Statify\Settings', 'action_update_options' ), 10, 2 );
 		} else {    // Frontend.
-			add_action( 'template_redirect', array( 'Statify_Frontend', 'track_visit' ) );
-			add_filter( 'query_vars', array( 'Statify_Frontend', 'query_vars' ) );
-			add_action( 'wp_footer', array( 'Statify_Frontend', 'wp_footer' ) );
+			add_action( 'template_redirect', array( 'Pluginkollektiv\\Statify\Frontend', 'track_visit' ) );
+			add_filter( 'query_vars', array( 'Pluginkollektiv\\Statify\Frontend', 'query_vars' ) );
+			add_action( 'wp_footer', array( 'Pluginkollektiv\\Statify\Frontend', 'wp_footer' ) );
 			if ( function_exists( 'amp_is_request' ) || function_exists( 'is_amp_endpoint' ) ) {
 				// Automattic AMP plugin present.
-				add_filter( 'amp_analytics_entries', array( 'Statify_Frontend', 'amp_analytics_entries' ) );
-				add_filter( 'amp_post_template_analytics', array( 'Statify_Frontend', 'amp_post_template_analytics' ) );
+				add_filter( 'amp_analytics_entries', array( 'Pluginkollektiv\\Statify\Frontend', 'amp_analytics_entries' ) );
+				add_filter( 'amp_post_template_analytics', array( 'Pluginkollektiv\\Statify\Frontend', 'amp_post_template_analytics' ) );
 			}
 			// Initialize REST API.
 			if ( self::is_javascript_tracking_enabled() ) {
-				add_filter( 'rest_api_init', array( 'Statify_Api', 'init' ) );
+				add_filter( 'rest_api_init', array( 'Pluginkollektiv\\Statify\Api', 'init' ) );
 			}
 		}
 	}
@@ -101,7 +104,7 @@ class Statify {
 	 *
 	 * @since  0.1.0
 	 * @since  1.7.0 $is_snippet parameter added.
-	 * @since  2.0.0 Migration from Statify_Frontend::track_visit to Statify::track with multiple parameters.
+	 * @since  2.0.0 Migration from Frontend::track_visit to Statify::track with multiple parameters.
 	 */
 	protected static function track( $referrer, $target ) {
 		// Fallbacks for uninitialized or omitted target and referrer values.
@@ -234,7 +237,7 @@ class Statify {
 	 * @return boolean $skip_hook TRUE if NO tracking is desired.
 	 *
 	 * @since  1.2.6
-	 * @since  2.0.0 Migration from Statify_Frontend to Statify class.
+	 * @since  2.0.0 Migration from Frontend to Statify class.
 	 */
 	private static function skip_tracking() {
 		if ( function_exists( 'apply_filters_deprecated' ) ) {
@@ -279,7 +282,7 @@ class Statify {
 	 * @return boolean $is_bot TRUE if user agent is a bot, FALSE if not.
 	 *
 	 * @since 1.7.0
-	 * @since 2.0.0 Migration from Statify_Frontend to Statify class, removed $user_agent parameter.
+	 * @since 2.0.0 Migration from Frontend to Statify class, removed $user_agent parameter.
 	 */
 	private static function is_bot() {
 		$crawler_detect = new \Jaybizzle\CrawlerDetect\CrawlerDetect();
@@ -294,7 +297,7 @@ class Statify {
 	 * @return boolean  $skip_hook TRUE if NO tracking is desired
 	 *
 	 * @since 1.6.1
-	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
+	 * @since 1.9.0 Migration from Frontend to Statify class.
 	 */
 	protected static function is_internal() {
 		// Skip for preview, 404 calls, feed, search, favicon and sitemap access.
@@ -310,7 +313,7 @@ class Statify {
 	 * @return  boolean TRUE of referrer matches disallowed keys entry and should thus be excluded.
 	 *
 	 * @since 1.5.0
-	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
+	 * @since 1.9.0 Migration from Frontend to Statify class.
 	 */
 	private static function check_referrer() {
 		// Return false if the disallowed-keys filter (formerly blacklist) is inactive.
@@ -353,7 +356,7 @@ class Statify {
 	 * @return array
 	 *
 	 * @since 1.7.3 Renamed to "get_disallowed_keys" to match WP 5.5. wording.
-	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
+	 * @since 1.9.0 Migration from Frontend to Statify class.
 	 */
 	private static function get_disallowed_keys() {
 		$disallowed_keys = get_option( 'disallowed_keys' );

@@ -7,8 +7,10 @@
  * @package   Statify
  */
 
+namespace Pluginkollektiv\Statify;
+
 // Quit if accessed outside WP context.
-class_exists( 'Statify' ) || exit; ?>
+class_exists( 'Pluginkollektiv\Statify\Statify' ) || exit; ?>
 
 <?php if ( current_user_can( 'manage_options' ) ) : ?>
 <p class="meta-links settings-link">

@@ -5,6 +5,11 @@
  * @package Statify
  */
 
+namespace Pluginkollektiv\Statify;
+
+use DateTime;
+use WP_UnitTestCase;
+
 /**
  * Class Test_Dashboard.
  * Tests for dashboard integration.
@@ -21,9 +26,11 @@ class Test_Dashboard extends WP_UnitTestCase {
 		set_current_screen( 'dashboard' );
 
 		// "Install" Statify, i.e. create tables and options.
-		Statify_Install::init();
+		Install::init();
 
-		if ( ! function_exists( 'wp_add_dashboard_widget' ) ) {
+		/* This function is typically defined in the root namespace. However, the hierarchy prefers this overridden
+		   instance here, so it will be used for testing purposes. */
+		if ( ! function_exists( 'Pluginkollektiv\Statify\wp_add_dashboard_widget' ) ) {
 			global $widget_capture;
 			$widget_capture = array();
 
@@ -57,13 +64,13 @@ class Test_Dashboard extends WP_UnitTestCase {
 
 		// Anonymous users do not have the "edit_dashboard" capability, i.e. can't see the stats.
 		wp_set_current_user( 0 );
-		Statify_Dashboard::init();
+		Dashboard::init();
 		$this->assertFalse(
-			has_action( 'admin_print_styles', array( Statify_Dashboard::class, 'add_style' ) ),
+			has_action( 'admin_print_styles', array( Dashboard::class, 'add_style' ) ),
 			'Styles unexpectedly added'
 		);
 		$this->assertFalse(
-			has_action( 'admin_print_scripts', array( Statify_Dashboard::class, 'add_js' ) ),
+			has_action( 'admin_print_scripts', array( Dashboard::class, 'add_js' ) ),
 			'Scripts unexpectedly added'
 		);
 
@@ -71,26 +78,26 @@ class Test_Dashboard extends WP_UnitTestCase {
 		wp_get_current_user()->add_cap( 'edit_dashboard' );
 		wp_set_current_user( 1 );
 
-		Statify_Dashboard::init();
+		Dashboard::init();
 		$this->assertCount( 5, $widget_capture, 'No widget registered' );
 		$this->assertEquals( 'statify_dashboard', $widget_capture['widget_id'], 'Unexpected widget ID' );
 		$this->assertEquals( 'Statify', $widget_capture['widget_name'], 'Unexpected widget name' );
 		$this->assertEquals(
-			array( Statify_Dashboard::class, 'print_frontview' ),
+			array( Dashboard::class, 'print_frontview' ),
 			$widget_capture['callback'],
 			'Unexpected widget callback'
 		);
 		$this->assertEquals(
-			array( Statify_Dashboard::class, 'print_backview' ),
+			array( Dashboard::class, 'print_backview' ),
 			$widget_capture['control_callback'],
 			'Unexpected control callback'
 		);
 		$this->assertNotFalse(
-			has_action( 'admin_print_styles', array( Statify_Dashboard::class, 'add_style' ) ),
+			has_action( 'admin_print_styles', array( Dashboard::class, 'add_style' ) ),
 			'Styles not added'
 		);
 		$this->assertNotFalse(
-			has_action( 'admin_print_scripts', array( Statify_Dashboard::class, 'add_js' ) ),
+			has_action( 'admin_print_scripts', array( Dashboard::class, 'add_js' ) ),
 			'Scripts not added'
 		);
 	}
@@ -119,7 +126,7 @@ class Test_Dashboard extends WP_UnitTestCase {
 		$widget_capture = array();
 		$override       = true;
 
-		Statify_Dashboard::init();
+		Dashboard::init();
 		$this->assertCount( 5, $widget_capture, 'Widget should not have been registered' );
 		$this->assertFalse( $original_capture, 'Expected original result to be FALSE' );
 
@@ -128,7 +135,7 @@ class Test_Dashboard extends WP_UnitTestCase {
 		wp_get_current_user()->add_cap( 'edit_dashboard' );
 		$override = false;
 
-		Statify_Dashboard::init();
+		Dashboard::init();
 		$this->assertEmpty( $widget_capture, 'Widget should not have been registered' );
 		$this->assertTrue( $original_capture, 'Expected original result to be TRUE' );
 	}
@@ -254,13 +261,13 @@ class Test_Dashboard extends WP_UnitTestCase {
 
 		// Finally we add another entry in the database, but utilize the transient cache (4min should be enough for the test case).
 		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://example.com/', '/example/', 1 );
-		$stats4 = Statify_Dashboard::get_stats();
+		$stats4 = Dashboard::get_stats();
 		$this->assertEquals( $stats3, $stats4, 'Stats expected to be equal, is the transient cache active?' );
 
 		// Add more data and force reload. We now should see that fallback ordering by URL works.
 		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://example.com/', '/', 1 );
 		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://example.net/', '/', 1 );
-		$stats5 = Statify_Dashboard::get_stats( true );
+		$stats5 = Dashboard::get_stats( true );
 		$this->assertEquals( 18, $stats5['visit_totals']['since_beginning']['count'], 'Unexpected total since beginning' );
 		$this->assertEquals( 2, $stats5['referrer'][1]['count'], 'Unexpected 2nd referrer count' );
 		$this->assertEquals( 'example.com', $stats5['referrer'][1]['host'], 'Unexpected 2nd referrer hostname' );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Statify: Statify_API class
+ * Statify: API class
  *
  * This file contains methods for REST API integration.
  *
@@ -8,15 +8,20 @@
  * @since   1.9
  */
 
+namespace Pluginkollektiv\Statify;
+
+use WP_REST_Response;
+use WP_REST_Server;
+
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Statify REST API integration.
  *
- * @since 1.9
+ * @since 2.0.0
  */
-class Statify_Api extends Statify {
+class Api extends Statify {
 	/**
 	 * REST endpoints
 	 *
@@ -122,7 +127,7 @@ class Statify_Api extends Statify {
 	public static function get_stats( $request ) {
 		$refresh = '1' === $request->get_param( 'refresh' );
 
-		$stats  = Statify_Dashboard::get_stats( $refresh );
+		$stats  = Dashboard::get_stats( $refresh );
 
 		$visits          = $stats['visits'];
 		$stats['visits'] = array();

@@ -33,6 +33,9 @@
         <exclude name="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized"/>
         <!-- Precision alignment is used in HTML views -->
         <exclude name="WordPress.WhiteSpace.PrecisionAlignment.Found" />
+        <!-- PSR-4 autoloader -->
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
     </rule>
 
     <!-- Include sniffs for PHP cross-version compatibility. -->

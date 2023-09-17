@@ -1,6 +1,6 @@
 <?php
 /**
- * Statify: Statify_Settings class
+ * Statify: Settings class
  *
  * This file contains the plugin's settings capabilities.
  *
@@ -8,15 +8,18 @@
  * @since     1.7
  */
 
+namespace Pluginkollektiv\Statify;
+
 // Quit if accessed directly..
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class Statify_Settings
+ * Statify Settings
  *
  * @since 1.7
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Settings
  */
-class Statify_Settings {
+class Settings {
 
 	/**
 	 * Registers all options using the WP Settings API.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Statify: Statify_Dashboard class
+ * Statify: Dashboard class
  *
  * This file contains the derived class for the plugin's dashboard features.
  *
@@ -8,15 +8,18 @@
  * @since     1.1
  */
 
+namespace Pluginkollektiv\Statify;
+
 // Quit if accessed outside WP context.
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Statify_Dashboard
+ * Statify Dashboard
  *
  * @since 1.1
+ * @since 2.0.0 renamed to Pluginkollektiv\Statify\Dashboard
  */
-class Statify_Dashboard extends Statify {
+class Dashboard extends Statify {
 
 	/**
 	 * Plugin version.
