@@ -6,6 +6,7 @@ coverage
 css/*.min.css
 js/*.min.js
 js/*.min.js.map
+lib
 phpunit.*.xml
 vendor/
 node_modules/
