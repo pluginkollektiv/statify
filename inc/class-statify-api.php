@@ -32,16 +32,18 @@ class Statify_Api extends Statify {
 	 * @return void
 	 */
 	public static function init() {
-		register_rest_route(
-			self::REST_NAMESPACE,
-			self::REST_ROUTE_TRACK,
-			array(
-				'methods'             => WP_REST_Server::CREATABLE,
-				'accept_json'         => true,
-				'callback'            => array( __CLASS__, 'track_visit' ),
-				'permission_callback' => '__return_true',
-			)
-		);
+		if ( Statify::is_javascript_tracking_enabled() ) {
+			register_rest_route(
+				self::REST_NAMESPACE,
+				self::REST_ROUTE_TRACK,
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'accept_json'         => true,
+					'callback'            => array( __CLASS__, 'track_visit' ),
+					'permission_callback' => '__return_true',
+				)
+			);
+		}
 
 		register_rest_route(
 			self::REST_NAMESPACE,
