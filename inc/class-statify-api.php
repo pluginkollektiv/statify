@@ -174,42 +174,83 @@ class Statify_Api extends Statify {
 	 * @since 2.0.0
 	 */
 	public static function get_extended( $request ) {
+		// Verify scope.
 		$scope = $request->get_param( 'scope' );
-		$post  = $request->get_param( 'post' );
-
-		$status = 200;
-		if ( 'year' === $scope ) {
-			$stats = Statify_Evaluation::get_views_for_all_years( $post );
-		} elseif ( 'month' === $scope ) {
-			$visits  = Statify_Evaluation::get_views_for_all_months( $post );
-			$stats   = array( 'visits' => array() );
-			$last_ym = 0;
-			foreach ( $visits as $ym => $v ) {
-				$ym         = explode( '-', $ym );
-				$year       = intval( $ym[0] );
-				$month      = intval( $ym[1] );
-				$year_month = $year * 12 + $month;
-				for ( $ym = $last_ym + 1; $last_ym > 0 && $ym < $year_month; $ym ++ ) {
-					// Fill gaps.
-					$y = intval( $ym / 12 );
-					if ( ! isset( $stats['visits'][ $y ] ) ) {
-						$stats['visits'][ $y ] = array();
-					}
-					$stats['visits'][ $y ][ $ym % 12 ] = 0;
-				}
-				if ( ! isset( $stats['visits'][ $year ] ) ) {
-					$stats['visits'][ $year ] = array();
-				}
-				$stats['visits'][ $year ][ $month ] = $v;
-				$last_ym                            = $year_month;
-			}
-		} elseif ( 'day' === $scope ) {
-			$stats = Statify_Evaluation::get_views_for_all_days( $post );
-		} else {
-			$stats  = array( 'error' => 'invalid scope (allowed: year, month, day)' );
-			$status = 400;
+		if ( ! in_array( $scope, array( 'year', 'month', 'day' ) ) ) {
+			return new WP_REST_Response(
+				array( 'error' => 'invalid scope (allowed: year, month, day)' ),
+				400
+			);
 		}
 
-		return new WP_REST_Response( $stats, $status );
+		// Retrieve from cache, if data is not post-specific.
+		$post  = $request->get_param( 'post' );
+		$stats = false;
+		if ( ! $post ) {
+			$stats = self::from_cache( $scope );
+		}
+
+		if ( ! $stats ) {
+			if ( 'year' === $scope ) {
+				$stats = Statify_Evaluation::get_views_for_all_years( $post );
+			} elseif ( 'month' === $scope ) {
+				$visits  = Statify_Evaluation::get_views_for_all_months( $post );
+				$stats   = array( 'visits' => array() );
+				$last_ym = 0;
+				foreach ( $visits as $ym => $v ) {
+					$ym         = explode( '-', $ym );
+					$year       = intval( $ym[0] );
+					$month      = intval( $ym[1] );
+					$year_month = $year * 12 + $month;
+					for ( $ym = $last_ym + 1; $last_ym > 0 && $ym < $year_month; $ym ++ ) {
+						// Fill gaps.
+						$y = intval( $ym / 12 );
+						if ( ! isset( $stats['visits'][ $y ] ) ) {
+							$stats['visits'][ $y ] = array();
+						}
+						$stats['visits'][ $y ][ $ym % 12 ] = 0;
+					}
+					if ( ! isset( $stats['visits'][ $year ] ) ) {
+						$stats['visits'][ $year ] = array();
+					}
+					$stats['visits'][ $year ][ $month ] = $v;
+					$last_ym                            = $year_month;
+				}
+			} elseif ( 'day' === $scope ) {
+				$stats = Statify_Evaluation::get_views_for_all_days( $post );
+			}
+
+			// Update cache, if data is not post-specific.
+			if ( ! $post ) {
+				self::update_cache( $scope, $stats );
+			}
+		}
+
+		return new WP_REST_Response( $stats );
+	}
+
+	/**
+	 * Retrieve data from cache.
+	 *
+	 * @param string $scope Scope (year, month, day).
+	 *
+	 * @return array|false Transient data or FALSE.
+	 */
+	private static function from_cache( $scope ) {
+		return get_transient( 'statify_data_' . $scope );
+	}
+
+	/**
+	 * Update data cache.
+	 *
+	 * @param string $scope Scope (year, month, day).
+	 * @param array  $data  Data.
+	 */
+	private static function update_cache( $scope, $data ) {
+		set_transient(
+			'statify_data_' . $scope,
+			$data,
+			30 * MINUTE_IN_SECONDS
+		);
 	}
 }
