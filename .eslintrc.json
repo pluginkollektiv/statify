@@ -1,5 +1,4 @@
 {
-  "extends": "plugin:@wordpress/eslint-plugin/es5",
   "env": {
     "browser": true,
     "jquery": true
@@ -9,5 +8,22 @@
     "statifyAjax": "readonly",
     "statifyDashboard": "readonly",
     "wp": "readonly"
-  }
+  },
+  "overrides": [
+    {
+      "files": "js/snippet.js",
+      "extends": "plugin:@wordpress/eslint-plugin/es5"
+    },
+    {
+      "files": "*.test.js",
+      "env": {
+        "jest": true
+      }
+    },
+    {
+      "files": "*.js",
+      "excludedFiles": "js/snippet.js",
+      "extends": "plugin:@wordpress/eslint-plugin/recommended"
+    }
+  ]
 }
