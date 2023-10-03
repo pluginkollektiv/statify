@@ -155,8 +155,8 @@
 	/**
 	 * Render top list table.
 	 *
-	 * @param {HTMLTableElement}               table Table element.
-	 * @param {{count: number, url: string}[]} data  Data to display.
+	 * @param {HTMLTableElement}                              table Table element.
+	 * @param {{count: number, url: string, host: ?string}[]} data  Data to display.
 	 */
 	function renderTopList(table, data) {
 		// Get pre-existing rows.
@@ -172,7 +172,7 @@
 				'<td class="t"><a href="' +
 				r.url +
 				'" target="_blank"  rel="noopener noreferrer">' +
-				r.host +
+				(r.host || r.url) +
 				'</td>';
 			if (rows.length > idx) {
 				table.replaceChild(row, rows[idx]);
