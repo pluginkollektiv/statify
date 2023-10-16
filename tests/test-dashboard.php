@@ -138,7 +138,15 @@ class Test_Dashboard extends WP_UnitTestCase {
 	 */
 	public function test_get_stats() {
 		// Initially the database is empty.
-		$this->assertNull( $this->get_stats(), 'Expected NULL stats for empty database' );
+		$this->assertEquals(
+			array(
+				'referrer' => array(),
+				'target'   => array(),
+				'visits'   => array(),
+			),
+			$this->get_stats(),
+			'Expected empty dataset for empty database'
+		);
 
 		// Now insert data for the last 3 days.
 		$date1 = new DateTime();

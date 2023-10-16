@@ -48,7 +48,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
 
-		$this->assertNotNull( $stats, 'Stats should be filled after tracking' );
+		$this->assertNotEmptyStats( $stats, 'Stats should be filled after tracking' );
 
 		$this->assertEquals( 1, count( $stats['visits'] ), 'Unexpected number of days with visits' );
 		$this->assertEquals( ( new DateTime() )->format( 'Y-m-d' ), $stats['visits'][0]['date'], 'Unexpected date of tracking' );
@@ -71,7 +71,7 @@ class Test_Tracking extends WP_UnitTestCase {
 		Statify_Frontend::track_visit();
 
 		$stats = $this->get_stats();
-		$this->assertNotNull( $stats, 'Stats should be filled after tracking' );
+		$this->assertNotEmptyStats( $stats, 'Stats should be filled after tracking' );
 
 		$this->assertEquals( 1, count( $stats['visits'] ), 'Unexpected number of days with visits' );
 		$this->assertEquals( ( new DateTime() )->format( 'Y-m-d' ), $stats['visits'][0]['date'], 'Unexpected date of tracking' );
@@ -134,31 +134,31 @@ class Test_Tracking extends WP_UnitTestCase {
 		$wp_query->is_robots = true;
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
-		$this->assertNull( $stats, 'Robots should not be tracked' );
+		$this->assertEmptyStats( $stats, 'Robots should not be tracked' );
 
 		$wp_query->is_robots    = false;
 		$wp_query->is_trackback = true;
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
-		$this->assertNull( $stats, 'Trackbacks should not be tracked.' );
+		$this->assertEmptyStats( $stats, 'Trackbacks should not be tracked.' );
 
 		$wp_query->is_trackback = false;
 		$wp_query->is_preview   = true;
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
-		$this->assertNull( $stats, 'Previews should not be tracked.' );
+		$this->assertEmptyStats( $stats, 'Previews should not be tracked.' );
 
 		$wp_query->is_preview = false;
 		$wp_query->is_404     = true;
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
-		$this->assertNull( $stats, '404 should not be tracked.' );
+		$this->assertEmptyStats( $stats, '404 should not be tracked.' );
 
 		$wp_query->is_404  = false;
 		$wp_query->is_feed = true;
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
-		$this->assertNull( $stats, 'Feeds should not be tracked.' );
+		$this->assertEmptyStats( $stats, 'Feeds should not be tracked.' );
 
 		// Favicon is available for WP 5.4 and above only.
 		$wp_query->is_feed = false;
@@ -166,7 +166,7 @@ class Test_Tracking extends WP_UnitTestCase {
 			$wp_query->is_favicon = true;
 			Statify_Frontend::track_visit();
 			$stats = $this->get_stats();
-			$this->assertNull( $stats, 'Favicons should not be tracked.' );
+			$this->assertEmptyStats( $stats, 'Favicons should not be tracked.' );
 			$wp_query->is_favicon = false;
 		}
 
@@ -175,12 +175,12 @@ class Test_Tracking extends WP_UnitTestCase {
 			set_query_var( 'sitemap', 'index' );
 			Statify_Frontend::track_visit();
 			$stats = $this->get_stats();
-			$this->assertNull( $stats, 'Sitemap XML should not be tracked.' );
+			$this->assertEmptyStats( $stats, 'Sitemap XML should not be tracked.' );
 			set_query_var( 'sitemap', null );
 			set_query_var( 'sitemap-stylesheet', 'sitemap' );
 			Statify_Frontend::track_visit();
 			$stats = $this->get_stats();
-			$this->assertNull( $stats, 'Sitemap XSL should not be tracked.' );
+			$this->assertEmptyStats( $stats, 'Sitemap XSL should not be tracked.' );
 		}
 	}
 
@@ -243,7 +243,7 @@ class Test_Tracking extends WP_UnitTestCase {
 
 			Statify_Frontend::track_visit();
 			$stats = $this->get_stats();
-			$this->assertNull( $stats, 'Bot exclusion failed for user agent: ' . $bot_ua );
+			$this->assertEmptyStats( $stats, 'Bot exclusion failed for user agent: ' . $bot_ua );
 		}
 	}
 
@@ -269,12 +269,12 @@ class Test_Tracking extends WP_UnitTestCase {
 
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
-		$this->assertNull( $stats, 'Tracking for blacklisted referrer succeeded' );
+		$this->assertEmptyStats( $stats, 'Tracking for blacklisted referrer succeeded' );
 
 		$this->init_statify_tracking();
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
-		$this->assertNotNull( $stats, 'Blacklist evaluated when not enabled' );
+		$this->assertNotEmptyStats( $stats, 'Blacklist evaluated when not enabled' );
 	}
 
 	/**
@@ -387,14 +387,14 @@ class Test_Tracking extends WP_UnitTestCase {
 
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
-		$this->assertNull( $stats, 'Logged-in user should not be tracked' );
+		$this->assertEmptyStats( $stats, 'Logged-in user should not be tracked' );
 
 		// Re-initialize Statify, enabling logged-in user tracking.
 		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT, Statify::SKIP_USERS_NONE );
 
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
-		$this->assertNotNull( $stats, 'Logged-in user should be tracked' );
+		$this->assertNotEmptyStats( $stats, 'Logged-in user should be tracked' );
 		$this->assertEquals( 1, $stats['visits'][0]['count'], 'Logged-in user should be tracked' );
 
 		// Exclude administrators.
@@ -409,5 +409,40 @@ class Test_Tracking extends WP_UnitTestCase {
 		Statify_Frontend::track_visit();
 		$stats = $this->get_stats();
 		$this->assertEquals( 2, $stats['visits'][0]['count'], 'Regular user should be tracked' );
+	}
+
+	/**
+	 * Assert that given value is an empty stats result.
+	 *
+	 * @param array  $actual  Actual value to test.
+	 * @param string $message Reason (optional).
+	 *
+	 * @return void
+	 */
+	private function assertEmptyStats( $actual, $message = '' ) {
+		$this->assertEquals(
+			array(
+				'referrer' => array(),
+				'target'   => array(),
+				'visits'   => array(),
+			),
+			$actual,
+			$message
+		);
+	}
+
+	/**
+	 * Assert that given value is not an empty stats result.
+	 *
+	 * @param array  $actual  Actual value to test.
+	 * @param string $message Reason (optional).
+	 *
+	 * @return void
+	 */
+	private function assertNotEmptyStats( $actual, $message = '' ) {
+		$this->assertTrue(
+			! empty( $actual ) && isset( $actual['visits'] ) && count( $actual['visits'] ) > 0,
+			$message
+		);
 	}
 }
