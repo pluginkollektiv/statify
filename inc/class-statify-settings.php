@@ -413,8 +413,7 @@ class Statify_Settings {
 			}
 		}
 
-		// Sanitize user roles.
-		$res['show_widget_roles'] = array();
+		// Sanitize user roles (preserve NULL, if unset).
 		if ( isset( $options['show_widget_roles'] ) ) {
 			$available_roles = apply_filters( 'statify__available_roles', wp_roles()->roles );
 			foreach ( $options['show_widget_roles'] as $saved_role ) {
