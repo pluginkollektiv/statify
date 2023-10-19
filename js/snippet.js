@@ -8,6 +8,7 @@
 		data = {
 			referrer: document.referrer,
 			target: location.pathname + location.search,
+			meta: statifyAjax.tracking_meta,
 		};
 		if ( 'nonce' in statifyAjax ) {
 			data.nonce = statifyAjax.nonce;

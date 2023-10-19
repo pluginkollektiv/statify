@@ -108,7 +108,9 @@ class Statify_Api extends Statify {
 				$target = filter_var( $target, FILTER_SANITIZE_URL );
 			}
 
-			Statify::track( $referrer, $target );
+			$meta = $request->get_param( 'meta' );
+
+			Statify::track( $referrer, $target, $meta );
 		}
 
 		return new WP_REST_Response( null, 204 );

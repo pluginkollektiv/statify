@@ -44,8 +44,8 @@ class Statify {
 			return;
 		}
 
-		// Table init.
-		Statify_Table::init();
+		// Initialize the database schema.
+		Statify_Schema::init();
 
 		// Plugin options.
 		self::$_options = wp_parse_args(
@@ -94,10 +94,30 @@ class Statify {
 	}
 
 	/**
+	 * Returns meta fields which should be tracked.
+	 *
+	 * @return array
+	 */
+	public static function get_metafields() {
+		$meta = array(
+			array(
+				'key' => 'title',
+				'callback' => 'wp_get_document_title',
+				'sanitize_callback' => 'sanitize_text_field',
+			),
+		);
+
+		$meta = apply_filters( 'statify__get_metafields', $meta );
+
+		return is_array( $meta ) ? $meta : array();
+	}
+
+	/**
 	 * Track the page view.
 	 *
 	 * @param string|null $referrer Referrer URL.
 	 * @param string|null $target   Target URL.
+	 * @param array       $meta     Meta field data.
 	 *
 	 * @return void
 	 *
@@ -105,7 +125,7 @@ class Statify {
 	 * @since  1.7.0 $is_snippet parameter added.
 	 * @since  2.0.0 Migration from Statify_Frontend::track_visit to Statify::track with multiple parameters.
 	 */
-	protected static function track( $referrer, $target ) {
+	protected static function track( $referrer, $target, $meta = array() ) {
 		// Fallbacks for uninitialized or omitted target and referrer values.
 		if ( is_null( $target ) ) {
 			$target = '/';
@@ -134,7 +154,7 @@ class Statify {
 		// Relative target URL.
 		$target = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $target ) );
 
-		/* Global vars */
+		// Global vars.
 		global $wp_rewrite;
 
 		// Trim target URL.
@@ -147,11 +167,40 @@ class Statify {
 			'created'  => current_time( 'Y-m-d' ),
 			'referrer' => $referrer,
 			'target'   => $target,
+			'hits'     => 1,
 		);
 
 		// Insert.
 		global $wpdb;
 		$wpdb->insert( $wpdb->statify, $data );
+
+		// Meta fields.
+		if ( is_array( $meta ) ) {
+			$statify_id = $wpdb->insert_id;
+
+			foreach ( self::get_metafields() as $field ) {
+				if ( isset( $field['key'] ) && array_key_exists( $field['key'], $meta ) ) {
+					$value = $meta[ $field['key'] ];
+
+					// Sanitizing.
+					$sanitize_function = isset( $field['sanitize_callback'] ) && is_callable( $field['sanitize_callback'] )
+						? $field['sanitize_callback']
+						: 'sanitize_text_field';
+
+					$value = call_user_func( $sanitize_function, $value );
+
+					// Init rows.
+					$data = array(
+						'statify_id' => $statify_id,
+						'meta_key' => $field['meta_key'],
+						'meta_value' => $value,
+					);
+
+					// Insert.
+					$wpdb->insert( $wpdb->statifymeta, $data );
+				}
+			}
+		}
 
 		/**
 		 * Fires after a visit was stored in the database
@@ -394,5 +443,24 @@ class Statify {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Retrieves statify metadata for the given statify ID.
+	 *
+	 * @param int    $statify_id Statify ID.
+	 * @param string $meta_key   Optional. The meta key to retrieve. By default,
+	 *                           returns data for all keys. Default empty.
+	 * @param bool   $single     Optional. Whether to return a single value.
+	 *                           This parameter has no effect if `$key` is not specified.
+	 *                           Default false.
+	 *
+	 * @return mixed An array of values if `$single` is false.
+	 *               The value of the meta field if `$single` is true.
+	 *               False for an invalid `$statify_id` (non-numeric, zero, or negative value).
+	 *               An empty string if a valid but non-existing statify ID is passed.
+	 */
+	public static function get_meta( $statify_id, $meta_key = '', $single = false ) {
+		return get_metadata( 'statify', $statify_id, $meta_key, $single );
 	}
 }
