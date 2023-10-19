@@ -154,7 +154,7 @@ class Statify {
 		// Relative target URL.
 		$target = user_trailingslashit( str_replace( home_url( '/', 'relative' ), '/', $target ) );
 
-		/* Global vars */
+		// Global vars.
 		global $wp_rewrite;
 
 		// Trim target URL.
