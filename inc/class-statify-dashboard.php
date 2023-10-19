@@ -283,16 +283,14 @@ class Statify_Dashboard extends Statify {
 		// Prepare data.
 		if ( ! empty( $data['visits'] ) ) {
 			$data['visits'] = array_reverse( $data['visits'] );
-		} else {
-			$data = null;
-		}
 
-		// Make cache.
-		set_transient(
-			'statify_data',
-			$data,
-			MINUTE_IN_SECONDS * 15
-		);
+			// Make cache.
+			set_transient(
+				'statify_data',
+				$data,
+				MINUTE_IN_SECONDS * 15
+			);
+		}
 
 		return $data;
 	}
