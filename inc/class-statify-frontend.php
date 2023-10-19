@@ -19,6 +19,29 @@ defined( 'ABSPATH' ) || exit;
 class Statify_Frontend extends Statify {
 
 	/**
+	 * Returns key value pair array with tracking metadata.
+	 *
+	 * @return array
+	 */
+	private static function load_metadata() {
+		$meta = array();
+
+		foreach ( Statify::get_metafields() as $field ) {
+			// Get values.
+			if (
+				isset( $field['key'] ) &&
+				is_string( $field['key'] ) &&
+				isset( $field['callback'] ) &&
+				is_callable( $field['callback'] )
+			) {
+				$meta[ $field['key'] ] = call_user_func( $field['callback'] );
+			}
+		}
+
+		return $meta;
+	}
+
+	/**
 	 * Track the page view
 	 *
 	 * @since    0.1.0
@@ -44,7 +67,7 @@ class Statify_Frontend extends Statify {
 			$referrer = filter_var( wp_unslash( $_SERVER['HTTP_REFERER'] ), FILTER_SANITIZE_URL );
 		}
 
-		Statify::track( $referrer, $target );
+		Statify::track( $referrer, $target, self::load_metadata() );
 	}
 
 	/**
@@ -94,9 +117,10 @@ class Statify_Frontend extends Statify {
 			true
 		);
 
-		// Add endpoint to script.
+		// Add endpoint and tracking meta data to script.
 		$script_data = array(
 			'url' => esc_url_raw( rest_url( Statify_Api::REST_NAMESPACE . '/' . Statify_Api::REST_ROUTE_TRACK ) ),
+			'tracking_meta' => self::load_metadata(),
 		);
 		if ( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK === self::$_options['snippet'] ) {
 			$script_data['nonce'] = wp_create_nonce( 'statify_track' );

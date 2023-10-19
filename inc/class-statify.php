@@ -94,10 +94,30 @@ class Statify {
 	}
 
 	/**
+	 * Returns meta fields which should be tracked.
+	 *
+	 * @return array
+	 */
+	public static function get_metafields() {
+		$meta = array(
+			array(
+				'key' => 'title',
+				'callback' => 'wp_get_document_title',
+				'sanitize_callback' => 'sanitize_text_field',
+			),
+		);
+
+		$meta = apply_filters( 'statify__get_metafields', $meta );
+
+		return is_array( $meta ) ? $meta : array();
+	}
+
+	/**
 	 * Track the page view.
 	 *
 	 * @param string|null $referrer Referrer URL.
 	 * @param string|null $target   Target URL.
+	 * @param array       $meta     Meta field data.
 	 *
 	 * @return void
 	 *
@@ -105,7 +125,7 @@ class Statify {
 	 * @since  1.7.0 $is_snippet parameter added.
 	 * @since  2.0.0 Migration from Statify_Frontend::track_visit to Statify::track with multiple parameters.
 	 */
-	protected static function track( $referrer, $target ) {
+	protected static function track( $referrer, $target, $meta = array() ) {
 		// Fallbacks for uninitialized or omitted target and referrer values.
 		if ( is_null( $target ) ) {
 			$target = '/';
@@ -153,6 +173,34 @@ class Statify {
 		// Insert.
 		global $wpdb;
 		$wpdb->insert( $wpdb->statify, $data );
+
+		// Meta fields.
+		if ( is_array( $meta ) ) {
+			$statify_id = $wpdb->insert_id;
+
+			foreach ( self::get_metafields() as $field ) {
+				if ( isset( $field['key'] ) && array_key_exists( $field['key'], $meta ) ) {
+					$value = $meta[ $field['key'] ];
+
+					// Sanitizing.
+					$sanitize_function = isset( $field['sanitize_callback'] ) && is_callable( $field['sanitize_callback'] )
+						? $field['sanitize_callback']
+						: 'sanitize_text_field';
+
+					$value = call_user_func( $sanitize_function, $value );
+
+					// Init rows.
+					$data = array(
+						'statify_id' => $statify_id,
+						'meta_key' => $field['meta_key'],
+						'meta_value' => $value,
+					);
+
+					// Insert.
+					$wpdb->insert( $wpdb->statifymeta, $data );
+				}
+			}
+		}
 
 		/**
 		 * Fires after a visit was stored in the database
