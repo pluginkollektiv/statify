@@ -183,11 +183,25 @@ class Statify_Api extends Statify {
 			);
 		}
 
+		// Parse year, if provided.
+		$yr = $request->get_param( 'year' );
+		if ( ! empty( $yr ) ) {
+			$yr = intval( $yr );
+			if ( $yr <= 0 ) {
+				return new WP_REST_Response(
+					array( 'error' => 'invalid year' ),
+					400
+				);
+			}
+		} else {
+			$yr = 0;
+		}
+
 		// Retrieve from cache, if data is not post-specific.
 		$post  = $request->get_param( 'post' );
 		$stats = false;
 		if ( ! $post ) {
-			$stats = self::from_cache( $scope );
+			$stats = self::from_cache( $scope, $yr );
 		}
 
 		if ( ! $stats ) {
@@ -217,12 +231,12 @@ class Statify_Api extends Statify {
 					$last_ym                            = $year_month;
 				}
 			} elseif ( 'day' === $scope ) {
-				$stats = Statify_Evaluation::get_views_for_all_days( $post );
+				$stats = Statify_Evaluation::get_views_for_all_days( $yr, $post );
 			}
 
 			// Update cache, if data is not post-specific.
 			if ( ! $post ) {
-				self::update_cache( $scope, $stats );
+				self::update_cache( $scope, $yr, $stats );
 			}
 		}
 
@@ -233,22 +247,24 @@ class Statify_Api extends Statify {
 	 * Retrieve data from cache.
 	 *
 	 * @param string $scope Scope (year, month, day).
+	 * @param int    $index Optional index (e.g. year).
 	 *
 	 * @return array|false Transient data or FALSE.
 	 */
-	private static function from_cache( $scope ) {
-		return get_transient( 'statify_data_' . $scope );
+	private static function from_cache( $scope, $index = 0 ) {
+		return get_transient( 'statify_data_' . $scope . ( $index > 0 ? '_' . $index : '' ) );
 	}
 
 	/**
 	 * Update data cache.
 	 *
 	 * @param string $scope Scope (year, month, day).
+	 * @param int    $index Optional index (e.g. year).
 	 * @param array  $data  Data.
 	 */
-	private static function update_cache( $scope, $data ) {
+	private static function update_cache( $scope, $index, $data ) {
 		set_transient(
-			'statify_data_' . $scope,
+			'statify_data_' . $scope . ( $index > 0 ? '_' . $index : '' ),
 			$data,
 			30 * MINUTE_IN_SECONDS
 		);

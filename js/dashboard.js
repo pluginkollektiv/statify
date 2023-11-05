@@ -12,9 +12,11 @@
 	);
 	const refreshBtn = document.getElementById('statify_refresh');
 
+	const chartElemDaily = document.getElementById('statify_chart_daily');
 	const chartElemMonthly = document.getElementById('statify_chart_monthly');
 	const chartElemYearly = document.getElementById('statify_chart_yearly');
 	const yearlyTable = document.getElementById('statify-table-yearly');
+	const dailyTable = document.getElementById('statify-table-daily');
 
 	/**
 	 * Update the dashboard widget
@@ -64,11 +66,40 @@
 	/**
 	 * Render monthly statistics.
 	 *
+	 * @param {number} year Year to load data for.
+	 *
+	 * @return {Promise<{[key: string]: number}>} Data promise from API.
+	 */
+	function loadDaily(year) {
+		year = encodeURIComponent(year);
+
+		// Load data from API.
+		return wp.apiFetch({
+			path: `/statify/v1/stats/extended?scope=day&year=${year}`,
+		});
+	}
+
+	/**
+	 * Render monthly statistics.
+	 *
 	 * @return {Promise<{visits: {[key: string]: {[key: string]: number}}}>} Data promise from API.
 	 */
 	function loadMonthly() {
 		// Load data from API.
 		return wp.apiFetch({ path: '/statify/v1/stats/extended?scope=month' });
+	}
+
+	/**
+	 * Render daily statistics.
+	 *
+	 * @param {HTMLElement}             root Root element.
+	 * @param {{[key: string]: number}} data Data from API.
+	 */
+	function renderDaily(root, data) {
+		const labels = Object.keys(data);
+		const values = Object.values(data);
+
+		render(root, labels, values);
 	}
 
 	/**
@@ -308,11 +339,107 @@
 			}
 
 			col = document.createElement('TD');
+			col.classList.add('statify-table-sum');
 			col.innerText = sum;
 			row.appendChild(col);
 
 			tbody.insertBefore(row, tbody.firstChild);
 		}
+	}
+
+	/**
+	 * Render yearly table.
+	 *
+	 * @param {HTMLElement} table Root element.
+	 * @param {any}         data  Data from API.
+	 */
+	function renderDailyTable(table, data) {
+		const rows = Array.from(table.querySelectorAll('tbody > tr'));
+		const cols = rows.map((row) => Array.from(row.querySelectorAll('td')));
+		let out = cols.slice(0, 31);
+
+		const sum = Array(12).fill(0);
+		const vls = Array(12).fill(0);
+		const min = Array(12).fill(Number.MAX_SAFE_INTEGER);
+		const max = Array(12).fill(0);
+
+		for (const [day, count] of Object.entries(data)) {
+			const d = new Date(day);
+			const m = d.getMonth();
+			sum[m] += count;
+			++vls[m];
+			min[m] = Math.min(min[m], count);
+			max[m] = Math.max(max[m], count);
+			out[d.getDate() - 1][m].innerText = count;
+		}
+
+		out =
+			cols[
+				rows.findIndex((row) =>
+					row.classList.contains('statify-table-sum')
+				)
+			];
+		const avg =
+			cols[
+				rows.findIndex((row) =>
+					row.classList.contains('statify-table-avg')
+				)
+			];
+		for (const [m, s] of sum.entries()) {
+			if (vls[m] > 0) {
+				out[m].innerText = s;
+				avg[m].innerText = Math.round(s / vls[m]);
+			} else {
+				out[m].innerText = '-';
+				avg[m].innerText = '-';
+			}
+		}
+
+		out =
+			cols[
+				rows.findIndex((row) =>
+					row.classList.contains('statify-table-min')
+				)
+			];
+		for (const [m, s] of min.entries()) {
+			out[m].innerText = vls[m] > 0 ? s : '-';
+		}
+
+		out =
+			cols[
+				rows.findIndex((row) =>
+					row.classList.contains('statify-table-max')
+				)
+			];
+		for (const [m, s] of max.entries()) {
+			out[m].innerText = vls[m] > 0 ? s : '-';
+		}
+
+		for (const row of rows) {
+			row.classList.remove('placeholder');
+		}
+	}
+
+	/**
+	 * Convert daily to monthly data.
+	 *
+	 * @param {{[key: string]: number}} data Daily data.
+	 * @return {{visits: {[key: string]: {[key: string]: number}}}} Monthly data.
+	 */
+	function dailyToMonthly(data) {
+		const monthly = { visits: {} };
+		for (const [day, count] of Object.entries(data)) {
+			const date = new Date(day);
+			const year = date.getFullYear();
+			const month = date.getMonth();
+
+			if (!(year in monthly.visits)) {
+				monthly.visits[year] = {};
+			}
+			monthly.visits[year][month] =
+				count + (monthly.visits[year][month] || 0);
+		}
+		return monthly;
 	}
 
 	// Abort if config or target element is not present.
@@ -332,7 +459,19 @@
 			updateDashboard(false);
 		}
 
-		if (chartElemMonthly) {
+		if (chartElemDaily) {
+			loadDaily(chartElemDaily.dataset.year).then((data) => {
+				renderDaily(chartElemDaily, data);
+
+				if (chartElemMonthly) {
+					renderMonthly(chartElemMonthly, dailyToMonthly(data));
+				}
+
+				if (dailyTable) {
+					renderDailyTable(dailyTable, data);
+				}
+			});
+		} else if (chartElemMonthly) {
 			loadMonthly()
 				.then((data) => {
 					renderMonthly(chartElemMonthly, data);

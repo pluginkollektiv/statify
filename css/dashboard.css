@@ -61,7 +61,8 @@ body.rtl .statify-chart * {
 
 
 .statify-table th,
-.statify-table td:last-child {
+.statify-table tr.statify-table-sum td,
+.statify-table td.statify-table-sum {
 	font-weight: 700;
 }
 

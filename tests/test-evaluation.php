@@ -73,6 +73,7 @@ class Test_Evaluation extends WP_UnitTestCase {
 	 * Test views for all days.
 	 */
 	public function test_get_views_for_all_days() {
+		$this->insert_test_data( '2022-10-20', '', '/test/' );
 		$this->insert_test_data( '2023-03-23', '', '/', 3 );
 		$this->insert_test_data( '2023-03-23', '', '/test/' );
 		$this->insert_test_data( '2023-03-25', '', '/' );
@@ -80,17 +81,37 @@ class Test_Evaluation extends WP_UnitTestCase {
 
 		self::assertSame(
 			array(
+				'2022-10-20' => 1,
 				'2023-03-23' => 4,
 				'2023-03-25' => 3,
 			),
-			Statify_Evaluation::get_views_for_all_days()
+			Statify_Evaluation::get_views_for_all_days(),
+			'unexpected results without anyfilter'
+		);
+		self::assertSame(
+			array(
+				'2022-10-20' => 1,
+				'2023-03-23' => 1,
+				'2023-03-25' => 2,
+			),
+			Statify_Evaluation::get_views_for_all_days( 0, '/test/' ),
+			'unexpected results with post filter'
+		);
+		self::assertSame(
+			array(
+				'2023-03-23' => 4,
+				'2023-03-25' => 3,
+			),
+			Statify_Evaluation::get_views_for_all_days( 2023 ),
+			'unexpected results with year filter'
 		);
 		self::assertSame(
 			array(
 				'2023-03-23' => 1,
 				'2023-03-25' => 2,
 			),
-			Statify_Evaluation::get_views_for_all_days( '/test/' )
+			Statify_Evaluation::get_views_for_all_days( 2023, '/test/' ),
+			'unexpected results with year and post filter'
 		);
 	}
 

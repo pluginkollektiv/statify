@@ -126,36 +126,37 @@ class Statify_Evaluation extends Statify {
 	 * Returns the views for all days.
 	 * If the given URL is not the empty string, the result is restricted to the given post.
 	 *
-	 * @param string $post_url the URL of the post to select for (or the empty string for all posts).
+	 * @param int    $single_year single year.
+	 * @param string $post_url    the URL of the post to select for (or the empty string for all posts).
 	 *
 	 * @return array an array with date as key and views as value
 	 */
-	public static function get_views_for_all_days( $post_url = '' ) {
+	public static function get_views_for_all_days( $single_year = 0, $post_url = '' ) {
 		global $wpdb;
 
-		if ( empty( $post_url ) ) {
-			// For all posts.
-			$results = $wpdb->get_results(
-				'SELECT `created` as `date`, COUNT(`created`) as `count`' .
-				" FROM `$wpdb->statify`" .
-				' GROUP BY `created`' .
-				' ORDER BY `created`',
-				ARRAY_A
-			);
-		} else {
-			// Only for selected posts.
-			$results = $wpdb->get_results(
-				$wpdb->prepare(
-					'SELECT `created` as `date`, COUNT(`created`) as `count`' .
-					" FROM `$wpdb->statify`" .
-					' WHERE `target` = %s' .
-					' GROUP BY `created`' .
-					' ORDER BY `created`',
-					$post_url
-				),
-				ARRAY_A
-			);
+		$query = 'SELECT `created` as `date`, COUNT(`created`) as `count`' .
+					" FROM `$wpdb->statify`";
+		$args = array();
+
+		if ( $single_year > 0 ) {
+			$query .= ' WHERE YEAR(`created`) = %d';
+			$args[] = $single_year;
 		}
+
+		if ( ! empty( $post_url ) ) {
+			$query .= ( $single_year > 0 ? ' AND' : ' WHERE' ) . ' `target` = %s';
+			$args[] = $post_url;
+		}
+
+		$query .= ' GROUP BY `created`' .
+					' ORDER BY `created`';
+
+		if ( ! empty( $args ) ) {
+			$query = $wpdb->prepare( $query, $args );
+		}
+
+		$results = $wpdb->get_results( $query, ARRAY_A );
+
 		$views_for_all_days = array();
 		foreach ( $results as $result ) {
 			$views_for_all_days[ $result['date'] ] = intval( $result['count'] );
