@@ -68,9 +68,7 @@ class Statify {
 		// Cron.
 		add_action( 'statify_cleanup', array( 'Statify_Cron', 'cleanup_data' ) );
 
-		if ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {  // XMLRPC.
-			add_filter( 'xmlrpc_methods', array( 'Statify_XMLRPC', 'xmlrpc_methods' ) );
-		} elseif ( is_admin() ) {   // Backend.
+		if ( is_admin() ) {   // Backend.
 			add_action( 'wp_initialize_site', array( 'Statify_Install', 'init_site' ) );
 			add_action( 'wp_uninitialize_site', array( 'Statify_Uninstall', 'init_site' ) );
 			add_action( 'wp_dashboard_setup', array( 'Statify_Dashboard', 'init' ) );
