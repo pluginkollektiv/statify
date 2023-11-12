@@ -42,7 +42,9 @@ body.rtl #statify_chart * {
 	border: 1px solid #000;
 	background-color: #fff;
 	border-radius: 0.2em;
+	left: 0;
 	padding: 0.1em 0.5em;
+	top: 0;
 }
 
 .statify-chartist-tooltip::before {
