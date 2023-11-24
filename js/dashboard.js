@@ -1,4 +1,3 @@
-/* global wp */
 {
 	// Initialize
 	const chartElem = document.getElementById('statify_chart');
@@ -54,7 +53,9 @@
 			.catch(() => {
 				// Failed to load.
 				chartElem.innerHTML =
-					'<p>' + wp.i18n.__( 'Error loading data.', 'statify' ) + '</p>';
+					'<p>' +
+					wp.i18n.__('Error loading data.', 'statify') +
+					'</p>';
 			});
 	}
 
@@ -73,7 +74,8 @@
 		let fullWidth = true;
 		let pointRadius = 4;
 		if (labels.length === 0) {
-			root.innerHTML = '<p>' + wp.i18n.__( 'No data available.', 'statify' ) + '</p>';
+			root.innerHTML =
+				'<p>' + wp.i18n.__('No data available.', 'statify') + '</p>';
 			return;
 		} else if (root.clientWidth < labels.length * 4) {
 			// Make chart scrollable, if 2px points are overlapping.
@@ -206,7 +208,7 @@
 			data.today +
 			'</td>' +
 			'<td class="t">' +
-			wp.i18n.__( 'today', 'statify' ) +
+			wp.i18n.__('today', 'statify') +
 			'</td>';
 		if (rows.length > 0) {
 			table.replaceChild(row, rows[0]);
@@ -221,7 +223,7 @@
 			'<td class="t">' +
 			wp.i18n.sprintf(
 				/* translators: %s: Date. */
-				wp.i18n.__( 'since %s', 'statify' ),
+				wp.i18n.__('since %s', 'statify'),
 				data.since
 			) +
 			'</td>';
