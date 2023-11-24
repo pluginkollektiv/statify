@@ -21,7 +21,7 @@ $show_totals = (int) Statify::$_options['show_totals'];
 <?php if ( $limit > 0 ) : ?>
 
 	<div class="table referrer">
-		<p class="sub"><?php esc_html_e( 'Top referers', 'statify' ); ?></p>
+		<p class="sub"><?php esc_html_e( 'Top referrers', 'statify' ); ?></p>
 		<table>
 			<tbody>
 				<?php for ( $i = 0; $i < $limit; $i++ ) { ?>
