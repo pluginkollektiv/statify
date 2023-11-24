@@ -219,9 +219,11 @@
 			data.alltime +
 			'</td>' +
 			'<td class="t">' +
-			wp.i18n.__( 'since', 'statify' ) +
-			' ' +
-			data.since +
+			wp.i18n.sprintf(
+				/* translators: %s: Date. */
+				wp.i18n.__( 'since %s', 'statify' ),
+				data.since
+			) +
 			'</td>';
 		if (rows.length > 1) {
 			table.replaceChild(row, rows[1]);
