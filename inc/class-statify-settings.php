@@ -91,7 +91,7 @@ class Statify_Settings {
 		);
 		add_settings_field(
 			'statify-show-widget-roles',
-			__( 'Which user role(s) should see the statify dashboard widget?', 'statify' ),
+			__( 'Which user role(s) should see the Statify dashboard widget?', 'statify' ),
 			array( __CLASS__, 'options_show_widget_roles' ),
 			'statify',
 			'statify-dashboard'
