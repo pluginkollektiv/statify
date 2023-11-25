@@ -16,6 +16,8 @@ jobs:
             wordpress: '6.1'
           - php: '8.2'
             wordpress: '6.2'
+          - php: '8.3'
+            wordpress: '6.4'
           - php: '8.2'
             wordpress: 'latest'
           - php: '8.2'
