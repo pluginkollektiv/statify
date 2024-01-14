@@ -18,9 +18,9 @@ jobs:
             wordpress: '6.2'
           - php: '8.3'
             wordpress: '6.4'
-          - php: '8.2'
+          - php: '8.3'
             wordpress: 'latest'
-          - php: '8.2'
+          - php: '8.3'
             wordpress: 'nightly'
     steps:
       - name: Checkout
@@ -33,9 +33,9 @@ jobs:
           php-version: ${{matrix.php}}
           tools: composer
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
       - name: Setup DB
         uses: shogo82148/actions-setup-mysql@v1
         with:
@@ -61,10 +61,10 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: '8.2'
           tools: composer
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
       - name: Install
