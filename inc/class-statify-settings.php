@@ -276,7 +276,7 @@ class Statify_Settings {
 			?>
 			<p><label for="statify-<?php echo esc_html( $input_id ); ?>-<?php echo esc_html( $role ); ?>">
 			<?php
-			echo sprintf(
+			printf(
 				'<input id="statify-%1$s-%2$s" type="checkbox" name="statify[%3$s][]" value="%2$s" %4$s>',
 				esc_html( $input_id ),
 				esc_html( $role ),
@@ -469,5 +469,4 @@ class Statify_Settings {
 
 		<?php
 	}
-
 }
