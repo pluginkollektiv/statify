@@ -6,7 +6,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - php: '5.6'
+          - php: '7.2'
             wordpress: '4.7'
           - php: '7.4'
             wordpress: '5.9'
