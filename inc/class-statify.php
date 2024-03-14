@@ -237,9 +237,6 @@ class Statify {
 	 * @since  2.0.0 Migration from Statify_Frontend to Statify class.
 	 */
 	private static function skip_tracking() {
-		if ( function_exists( 'apply_filters_deprecated' ) ) {
-			apply_filters_deprecated( 'statify_skip_tracking', array( '' ), '1.5.0', 'statify__skip_tracking' );
-		}
 		// Skip tracking via Hook.
 		$skip_hook = apply_filters( 'statify__skip_tracking', null );
 		if ( null !== $skip_hook ) {
