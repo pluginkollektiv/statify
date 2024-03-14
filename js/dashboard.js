@@ -53,7 +53,9 @@
 			.catch(() => {
 				// Failed to load.
 				chartElem.innerHTML =
-					'<p>' + statifyDashboard.i18n.error + '</p>';
+					'<p>' +
+					wp.i18n.__('Error loading data.', 'statify') +
+					'</p>';
 			});
 	}
 
@@ -72,7 +74,8 @@
 		let fullWidth = true;
 		let pointRadius = 4;
 		if (labels.length === 0) {
-			root.innerHTML = '<p>' + statifyDashboard.i18n.nodata + '</p>';
+			root.innerHTML =
+				'<p>' + wp.i18n.__('No data available.', 'statify') + '</p>';
 			return;
 		} else if (root.clientWidth < labels.length * 4) {
 			// Make chart scrollable, if 2px points are overlapping.
@@ -137,12 +140,16 @@
 						cx: [d.x],
 						cy: [d.y],
 						r: [pointRadius],
-						'ct:value':
-							d.value.y +
-							' ' +
-							(d.value.y > 1
-								? statifyDashboard.i18n.pageviews
-								: statifyDashboard.i18n.pageview),
+						'ct:value': wp.i18n.sprintf(
+							/* translators: %s: Number of page views. */
+							wp.i18n._n(
+								'%s Page view',
+								'%s Page views',
+								d.value.y,
+								'statify'
+							),
+							d.value.y
+						),
 						'ct:meta': labels[d.index],
 					},
 					'ct-point'
@@ -201,7 +208,7 @@
 			data.today +
 			'</td>' +
 			'<td class="t">' +
-			statifyDashboard.i18n.today +
+			wp.i18n.__('today', 'statify') +
 			'</td>';
 		if (rows.length > 0) {
 			table.replaceChild(row, rows[0]);
@@ -214,9 +221,11 @@
 			data.alltime +
 			'</td>' +
 			'<td class="t">' +
-			statifyDashboard.i18n.since +
-			' ' +
-			data.since +
+			wp.i18n.sprintf(
+				/* translators: %s: Date. */
+				wp.i18n.__('since %s', 'statify'),
+				data.since
+			) +
 			'</td>';
 		if (rows.length > 1) {
 			table.replaceChild(row, rows[1]);
@@ -228,8 +237,8 @@
 		}
 	}
 
-	// Abort if config or target element is not present.
-	if (typeof statifyDashboard !== 'undefined' && chartElem) {
+	// Abort if target element is not present.
+	if (chartElem) {
 		// Bind update function to "refresh" button.
 		if (refreshBtn) {
 			refreshBtn.addEventListener('click', (evt) => {
