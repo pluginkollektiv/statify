@@ -416,6 +416,7 @@ class Statify_Settings {
 		// Sanitize user roles (preserve NULL, if unset).
 		if ( isset( $options['show_widget_roles'] ) ) {
 			$available_roles = apply_filters( 'statify__available_roles', wp_roles()->roles );
+			$res['show_widget_roles'] = array();
 			foreach ( $options['show_widget_roles'] as $saved_role ) {
 				if ( in_array( $saved_role, array_keys( $available_roles ), true ) ) {
 					array_push( $res['show_widget_roles'], $saved_role );
