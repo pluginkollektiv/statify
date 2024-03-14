@@ -135,9 +135,15 @@ class Statify {
 		/* Global vars */
 		global $wp_rewrite;
 
-		// Trim target URL.
+		// Trim target URL, i.e. remove query parameters..
 		if ( $wp_rewrite->permalink_structure ) {
-			$target = wp_parse_url( $target, PHP_URL_PATH );
+			$parsed_target = wp_parse_url( $target );
+			$target = isset( $parsed_target['path'] ) ? $parsed_target['path'] : null;
+
+			// Re-add AMP parameter to preserve that information (only applicable for JS tracking).
+			if ( isset( $parsed_target['query'] ) && 'amp/' === $parsed_target['query'] ) {
+				add_query_arg( 'amp', '', $target );
+			}
 		}
 
 		// Init rows.
