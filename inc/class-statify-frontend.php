@@ -21,17 +21,15 @@ class Statify_Frontend extends Statify {
 	/**
 	 * Track the page view
 	 *
-	 * @since    0.1.0
-	 * @since    1.7.0 $is_snippet parameter added.
-	 * @version  1.7.0
+	 * @since 0.1.0
+	 * @since 1.7.0 $is_snippet parameter added.
+	 * @since 2.0.0 Removed $is_snippet parameter.
 	 *
-	 * @param boolean $is_snippet [deprecated] Is tracking triggered via JS (default: false).
-	 *
-	 * @return boolean
+	 * @return void
 	 */
-	public static function track_visit( $is_snippet = false ) {
+	public static function track_visit() {
 		if ( self::is_javascript_tracking_enabled() ) {
-			return false;
+			return;
 		}
 
 		// Set target & referrer.
