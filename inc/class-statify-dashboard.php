@@ -19,14 +19,6 @@ defined( 'ABSPATH' ) || exit;
 class Statify_Dashboard extends Statify {
 
 	/**
-	 * Plugin version.
-	 *
-	 * @since  1.4.0
-	 * @var    string
-	 */
-	protected static $_plugin_version;
-
-	/**
 	 * Dashboard widget initialize
 	 *
 	 * @since   0.1.0
@@ -48,9 +40,6 @@ class Statify_Dashboard extends Statify {
 			wp_normalize_path( sprintf( '%s/lang', STATIFY_DIR ) )
 		);
 
-		// Plugin version.
-		self::_get_version();
-
 		// Add dashboard widget.
 		wp_add_dashboard_widget(
 			'statify_dashboard',
@@ -60,94 +49,11 @@ class Statify_Dashboard extends Statify {
 		);
 
 		// Init CSS.
-		add_action( 'admin_print_styles', array( __CLASS__, 'add_style' ) );
+		add_action( 'admin_print_styles', array( 'Statify', 'add_style' ) );
 
 		// Init JS.
-		add_action( 'admin_print_scripts', array( __CLASS__, 'add_js' ) );
+		add_action( 'admin_print_scripts', array( 'Statify', 'add_js' ) );
 	}
-
-	/**
-	 * Print CSS
-	 *
-	 * @since   0.1.0
-	 * @version 1.4.0
-	 */
-	public static function add_style() {
-
-		// Register CSS.
-		wp_register_style(
-			'chartist_css',
-			plugins_url( '/css/chartist.min.css', STATIFY_FILE ),
-			array(),
-			self::$_plugin_version
-		);
-		wp_register_style(
-			'chartist_tooltip_css',
-			plugins_url( '/css/chartist-plugin-tooltip.min.css', STATIFY_FILE ),
-			array(),
-			self::$_plugin_version
-		);
-		wp_register_style(
-			'statify',
-			plugins_url( '/css/dashboard.min.css', STATIFY_FILE ),
-			array(),
-			self::$_plugin_version
-		);
-
-		// Load CSS.
-		wp_enqueue_style( 'chartist_css' );
-		wp_enqueue_style( 'chartist_tooltip_css' );
-		wp_enqueue_style( 'statify' );
-	}
-
-	/**
-	 * Print JavaScript
-	 *
-	 * @since    0.1.0
-	 * @version  1.4.0
-	 */
-	public static function add_js() {
-
-		// Register JS.
-		wp_register_script(
-			'chartist_js',
-			plugins_url( 'js/chartist.min.js', STATIFY_FILE ),
-			array(),
-			self::$_plugin_version,
-			true
-		);
-		wp_register_script(
-			'chartist_tooltip_js',
-			plugins_url( 'js/chartist-plugin-tooltip.min.js', STATIFY_FILE ),
-			array( 'chartist_js' ),
-			self::$_plugin_version,
-			true
-		);
-		wp_register_script(
-			'statify_chart_js',
-			plugins_url( 'js/dashboard.min.js', STATIFY_FILE ),
-			array( 'wp-api-fetch', 'chartist_tooltip_js' ),
-			self::$_plugin_version,
-			true
-		);
-
-		// Localize strings.
-		wp_localize_script(
-			'statify_chart_js',
-			'statifyDashboard',
-			array(
-				'i18n'  => array(
-					'error'        => esc_html__( 'Error loading data.', 'statify' ),
-					'nodata'       => esc_html__( 'No data available.', 'statify' ),
-					'pageview'     => esc_html__( 'Pageview', 'statify' ),
-					'pageviews'    => esc_html__( 'Pageviews', 'statify' ),
-					'since'        => esc_html__( 'since', 'statify' ),
-					'today'        => esc_html__( 'today', 'statify' ),
-				),
-			)
-		);
-	}
-
 
 	/**
 	 * Print widget frontview.
@@ -240,22 +146,6 @@ class Statify_Dashboard extends Statify {
 		// Update values.
 		update_option( 'statify', $options );
 	}
-
-
-	/**
-	 * Set plugin version from plugin meta data
-	 *
-	 * @since    1.4.0
-	 * @version  1.4.0
-	 */
-	private static function _get_version() {
-
-		// Get plugin meta.
-		$meta = get_plugin_data( STATIFY_FILE );
-
-		self::$_plugin_version = $meta['Version'];
-	}
-
 
 	/**
 	 * Get stats from cache

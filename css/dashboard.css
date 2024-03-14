@@ -1,6 +1,6 @@
 /* @group Front page */
 
-#statify_chart {
+.statify-chart {
 	color: #a7aaad;
 	flex: 0 0 100%;
 	height: 140px;
@@ -10,32 +10,38 @@
 	text-align: center;
 }
 
-#statify_chart * {
+.statify-chart * {
 	direction: ltr;
 }
 
-body.rtl #statify_chart * {
+body.rtl .statify-chart * {
 	direction: rtl;
 }
 
-#statify_chart .spinner {
+.statify-chart .spinner {
 	float: none;
 	margin: 1em;
 }
 
-#statify_chart .ct-line {
+.statify-chart .ct-line {
 	stroke: #3582c4;
 	stroke-width: 2px;
 }
 
-#statify_chart .ct-point {
+.statify-chart .ct-point {
 	fill: #fff;
 	stroke: #3582c4;
 	stroke-width: 1.5px;
 }
 
-#statify_chart .ct-area {
+.statify-chart .ct-area {
 	fill: #3582c4;
+}
+
+.statify-chart .ct-label.ct-horizontal.ct-end {
+	align-items: center;
+	justify-content: center;
+	margin-left: -50%;
 }
 
 .statify-chartist-tooltip {
@@ -52,6 +58,25 @@ body.rtl #statify_chart * {
 .statify-chartist-tooltip .chartist-tooltip-meta {
 	color: #3582c4;
 }
+
+
+.statify-table th,
+.statify-table tr.statify-table-sum td,
+.statify-table td.statify-table-sum {
+	font-weight: 700;
+}
+
+.statify-table tr.placeholder {
+	background-color: #fff;
+}
+
+.statify-table tr.placeholder td span {
+	background-color: #f5f5f5;
+	border-radius: 1em;
+	display: inline-block;
+	width: 80%;
+}
+
 
 #statify_dashboard .postbox-title-action a,
 #statify_dashboard .settings-link a {
@@ -135,6 +160,23 @@ body.rtl #statify_chart * {
 	float: right;
 	margin: 0;
 	line-height: 28px;
+}
+
+.statify-chart-container {
+	background: #fff;
+	margin: 1em 0;
+	padding: 1em;
+}
+
+.statify-chart-container .statify-chart {
+	height: 280px;
+	margin: 10px 20px;
+}
+
+.statify-chart-title {
+	text-align: center;
+	font-size: 1.5em;
+	padding: 0.5em 0;
 }
 
 /* @end group */

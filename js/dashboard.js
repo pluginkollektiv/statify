@@ -12,6 +12,12 @@
 	);
 	const refreshBtn = document.getElementById('statify_refresh');
 
+	const chartElemDaily = document.getElementById('statify_chart_daily');
+	const chartElemMonthly = document.getElementById('statify_chart_monthly');
+	const chartElemYearly = document.getElementById('statify_chart_yearly');
+	const yearlyTable = document.getElementById('statify-table-yearly');
+	const dailyTable = document.getElementById('statify-table-daily');
+
 	/**
 	 * Update the dashboard widget
 	 *
@@ -31,7 +37,7 @@
 				const labels = Object.keys(data.visits);
 				const values = Object.values(data.visits);
 
-				render(chartElem, labels, values);
+				render(chartElem, labels, values, false);
 
 				// Render top lists.
 				if (referrerTable) {
@@ -58,13 +64,91 @@
 	}
 
 	/**
+	 * Render monthly statistics.
+	 *
+	 * @param {number} year Year to load data for.
+	 *
+	 * @return {Promise<{[key: string]: number}>} Data promise from API.
+	 */
+	function loadDaily(year) {
+		year = encodeURIComponent(year);
+
+		// Load data from API.
+		return wp.apiFetch({
+			path: `/statify/v1/stats/extended?scope=day&year=${year}`,
+		});
+	}
+
+	/**
+	 * Render monthly statistics.
+	 *
+	 * @return {Promise<{visits: {[key: string]: {[key: string]: number}}}>} Data promise from API.
+	 */
+	function loadMonthly() {
+		// Load data from API.
+		return wp.apiFetch({ path: '/statify/v1/stats/extended?scope=month' });
+	}
+
+	/**
+	 * Render daily statistics.
+	 *
+	 * @param {HTMLElement}             root Root element.
+	 * @param {{[key: string]: number}} data Data from API.
+	 */
+	function renderDaily(root, data) {
+		const labels = Object.keys(data);
+		const values = Object.values(data);
+
+		render(root, labels, values);
+	}
+
+	/**
+	 * Render monthly statistics.
+	 *
+	 * @param {HTMLElement}                                        root Root element.
+	 * @param {{visits: {[key: string]: {[key: string]: number}}}} data Data from API.
+	 */
+	function renderMonthly(root, data) {
+		const labels = Object.keys(data.visits).flatMap((y) =>
+			Object.keys(data.visits[y]).map(
+				(m) => statifyDashboard.i18n.months[m - 1] + ' ' + y
+			)
+		);
+		const values = Object.values(data.visits).flatMap((y) =>
+			Object.values(y)
+		);
+
+		render(root, labels, values);
+	}
+
+	/**
+	 * Render yearly statistics.
+	 *
+	 * @param {HTMLElement}                                        root Root element.
+	 * @param {{visits: {[key: string]: {[key: string]: number}}}} data Data from API.
+	 */
+	function renderYearly(root, data) {
+		const labels = Object.keys(data.visits);
+		const values = Object.values(data.visits).flatMap((y) =>
+			Object.values(y).reduce((a, b) => a + b, 0)
+		);
+
+		render(root, labels, values);
+	}
+
+	/**
 	 * Render statistics chart.
 	 *
-	 * @param {HTMLElement} root   Root element.
-	 * @param {string[]}    labels Labels.
-	 * @param {number[]}    values Values.
+	 * @param {HTMLElement} root     Root element.
+	 * @param {string[]}    labels   Labels.
+	 * @param {number[]}    values   Values.
+	 * @param {boolean}     showAxis Show X axis?
 	 */
-	function render(root, labels, values) {
+	function render(root, labels, values, showAxis) {
+		if (typeof showAxis === 'undefined') {
+			showAxis = true;
+		}
+
 		// Remove the loading content.
 		root.innerHTML = '';
 
@@ -100,8 +184,8 @@
 				width: fullWidth ? undefined : 5 * labels.length,
 				axisX: {
 					showGrid: false,
-					showLabel: false,
-					offset: 0,
+					showLabel: showAxis,
+					offset: showAxis ? 30 : 0,
 				},
 				axisY: {
 					showGrid: true,
@@ -228,19 +312,183 @@
 		}
 	}
 
-	// Abort if config or target element is not present.
-	if (typeof statifyDashboard !== 'undefined' && chartElem) {
-		// Bind update function to "refresh" button.
-		if (refreshBtn) {
-			refreshBtn.addEventListener('click', (evt) => {
-				evt.preventDefault();
-				updateDashboard(true);
+	/**
+	 * Render yearly table.
+	 *
+	 * @param {HTMLElement} table Root element.
+	 * @param {any}         data  Data from API.
+	 */
+	function renderYearlyTable(table, data) {
+		const tbody = table.querySelector('tbody');
 
-				return false;
-			});
+		tbody.innerHTML = '';
+
+		for (const year in data.visits) {
+			const row = document.createElement('TR');
+			let col = document.createElement('TH');
+			let sum = 0;
+			col.scope = 'row';
+			col.innerText = year;
+			row.appendChild(col);
+
+			for (let month = 1; month <= 12; month++) {
+				col = document.createElement('TD');
+				col.innerText = data.visits[year][month - 1] || '-';
+				row.appendChild(col);
+				sum += data.visits[year][month - 1] || 0;
+			}
+
+			col = document.createElement('TD');
+			col.classList.add('statify-table-sum');
+			col.innerText = sum;
+			row.appendChild(col);
+
+			tbody.insertBefore(row, tbody.firstChild);
+		}
+	}
+
+	/**
+	 * Render yearly table.
+	 *
+	 * @param {HTMLElement} table Root element.
+	 * @param {any}         data  Data from API.
+	 */
+	function renderDailyTable(table, data) {
+		const rows = Array.from(table.querySelectorAll('tbody > tr'));
+		const cols = rows.map((row) => Array.from(row.querySelectorAll('td')));
+		let out = cols.slice(0, 31);
+
+		const sum = Array(12).fill(0);
+		const vls = Array(12).fill(0);
+		const min = Array(12).fill(Number.MAX_SAFE_INTEGER);
+		const max = Array(12).fill(0);
+
+		for (const [day, count] of Object.entries(data)) {
+			const d = new Date(day);
+			const m = d.getMonth();
+			sum[m] += count;
+			++vls[m];
+			min[m] = Math.min(min[m], count);
+			max[m] = Math.max(max[m], count);
+			out[d.getDate() - 1][m].innerText = count;
 		}
 
-		// Initial update.
-		updateDashboard(false);
+		out =
+			cols[
+				rows.findIndex((row) =>
+					row.classList.contains('statify-table-sum')
+				)
+			];
+		const avg =
+			cols[
+				rows.findIndex((row) =>
+					row.classList.contains('statify-table-avg')
+				)
+			];
+		for (const [m, s] of sum.entries()) {
+			if (vls[m] > 0) {
+				out[m].innerText = s;
+				avg[m].innerText = Math.round(s / vls[m]);
+			} else {
+				out[m].innerText = '-';
+				avg[m].innerText = '-';
+			}
+		}
+
+		out =
+			cols[
+				rows.findIndex((row) =>
+					row.classList.contains('statify-table-min')
+				)
+			];
+		for (const [m, s] of min.entries()) {
+			out[m].innerText = vls[m] > 0 ? s : '-';
+		}
+
+		out =
+			cols[
+				rows.findIndex((row) =>
+					row.classList.contains('statify-table-max')
+				)
+			];
+		for (const [m, s] of max.entries()) {
+			out[m].innerText = vls[m] > 0 ? s : '-';
+		}
+
+		for (const row of rows) {
+			row.classList.remove('placeholder');
+		}
+	}
+
+	/**
+	 * Convert daily to monthly data.
+	 *
+	 * @param {{[key: string]: number}} data Daily data.
+	 * @return {{visits: {[key: string]: {[key: string]: number}}}} Monthly data.
+	 */
+	function dailyToMonthly(data) {
+		const monthly = { visits: {} };
+		for (const [day, count] of Object.entries(data)) {
+			const date = new Date(day);
+			const year = date.getFullYear();
+			const month = date.getMonth();
+
+			if (!(year in monthly.visits)) {
+				monthly.visits[year] = {};
+			}
+			monthly.visits[year][month] =
+				count + (monthly.visits[year][month] || 0);
+		}
+		return monthly;
+	}
+
+	// Abort if config or target element is not present.
+	if (typeof statifyDashboard !== 'undefined') {
+		if (chartElem) {
+			// Bind update function to "refresh" button.
+			if (refreshBtn) {
+				refreshBtn.addEventListener('click', (evt) => {
+					evt.preventDefault();
+					updateDashboard(true);
+
+					return false;
+				});
+			}
+
+			// Initial update.
+			updateDashboard(false);
+		}
+
+		if (chartElemDaily) {
+			loadDaily(chartElemDaily.dataset.year).then((data) => {
+				renderDaily(chartElemDaily, data);
+
+				if (chartElemMonthly) {
+					renderMonthly(chartElemMonthly, dailyToMonthly(data));
+				}
+
+				if (dailyTable) {
+					renderDailyTable(dailyTable, data);
+				}
+			});
+		} else if (chartElemMonthly) {
+			loadMonthly()
+				.then((data) => {
+					renderMonthly(chartElemMonthly, data);
+
+					if (chartElemYearly) {
+						renderYearly(chartElemYearly, data);
+					}
+
+					if (yearlyTable) {
+						renderYearlyTable(yearlyTable, data);
+					}
+				})
+				.catch(() => {
+					// Failed to load.
+					chartElem.innerHTML =
+						'<p>' + statifyDashboard.i18n.error + '</p>';
+				});
+		}
 	}
 }

@@ -34,6 +34,13 @@ class Statify {
 	public static $_options;
 
 	/**
+	 * Plugin version.
+	 *
+	 * @var string|null $plugin_version
+	 */
+	private static $plugin_version;
+
+	/**
 	 * Plugin initialization.
 	 *
 	 * @since    1.7 Replaces previously used instance() and __construct().
@@ -76,6 +83,8 @@ class Statify {
 			add_filter( 'plugin_action_links_' . STATIFY_BASE, array( 'Statify_Backend', 'add_action_link' ) );
 			add_action( 'admin_init', array( 'Statify_Settings', 'register_settings' ) );
 			add_action( 'admin_menu', array( 'Statify_Settings', 'add_admin_menu' ) );
+			add_action( 'admin_init', array( 'Statify_Evaluation', 'add_capability' ) );
+			add_action( 'admin_menu', array( 'Statify_Evaluation', 'add_menu' ) );
 			add_action( 'update_option_statify', array( 'Statify_Settings', 'action_update_options' ), 10, 2 );
 		} else {    // Frontend.
 			add_action( 'template_redirect', array( 'Statify_Frontend', 'track_visit' ) );
@@ -223,6 +232,107 @@ class Statify {
 
 		// Filter user_can_see_stats.
 		return apply_filters( 'statify__user_can_see_stats', $can_see );
+	}
+
+	/**
+	 * Print JavaScript.
+	 *
+	 * @since 2.0.0 Moved to Statify class
+	 */
+	public static function add_js() {
+		// Register JS.
+		wp_register_script(
+			'chartist_js',
+			plugins_url( 'js/chartist.min.js', STATIFY_FILE ),
+			array(),
+			self::get_version(),
+			true
+		);
+		wp_register_script(
+			'chartist_tooltip_js',
+			plugins_url( 'js/chartist-plugin-tooltip.min.js', STATIFY_FILE ),
+			array( 'chartist_js' ),
+			self::get_version(),
+			true
+		);
+		wp_register_script(
+			'statify_chart_js',
+			plugins_url( 'js/dashboard.js', STATIFY_FILE ),
+			array( 'wp-api-fetch', 'chartist_tooltip_js' ),
+			self::get_version(),
+			true
+		);
+
+		// Localize strings.
+		wp_localize_script(
+			'statify_chart_js',
+			'statifyDashboard',
+			array(
+				'i18n'  => array(
+					'error'        => esc_html__( 'Error loading data.', 'statify' ),
+					'nodata'       => esc_html__( 'No data available.', 'statify' ),
+					'pageview'     => esc_html__( 'Pageview', 'statify' ),
+					'pageviews'    => esc_html__( 'Pageviews', 'statify' ),
+					'since'        => esc_html__( 'since', 'statify' ),
+					'today'        => esc_html__( 'today', 'statify' ),
+					'months'       => array_map(
+						function ( $m ) {
+							return date_i18n( 'M', strtotime( '0000-' . $m . '-01' ) );
+						},
+						range( 1, 12 )
+					),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Print CSS
+	 *
+	 * @since 0.1.0
+	 * @since 2.0.0 Moved to Statify class
+	 */
+	public static function add_style() {
+
+		// Register CSS.
+		wp_register_style(
+			'chartist_css',
+			plugins_url( '/css/chartist.min.css', STATIFY_FILE ),
+			array(),
+			self::get_version()
+		);
+		wp_register_style(
+			'chartist_tooltip_css',
+			plugins_url( '/css/chartist-plugin-tooltip.min.css', STATIFY_FILE ),
+			array(),
+			self::get_version()
+		);
+		wp_register_style(
+			'statify',
+			plugins_url( '/css/dashboard.min.css', STATIFY_FILE ),
+			array(),
+			self::get_version()
+		);
+
+		// Load CSS.
+		wp_enqueue_style( 'chartist_css' );
+		wp_enqueue_style( 'chartist_tooltip_css' );
+		wp_enqueue_style( 'statify' );
+	}
+
+	/**
+	 * Set plugin version from plugin meta data
+	 *
+	 * @since 1.4.0
+	 * @since 2.0.0 Moved up to Statify class.
+	 */
+	protected static function get_version() {
+		if ( ! isset( self::$plugin_version ) ) {
+			$meta = get_plugin_data( STATIFY_FILE );
+			self::$plugin_version = $meta['Version'];
+		}
+
+		return self::$plugin_version;
 	}
 
 	/**

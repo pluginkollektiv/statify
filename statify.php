@@ -67,6 +67,7 @@ function statify_autoload( $class ) {
 		'Statify',
 		'Statify_Api',
 		'Statify_Backend',
+		'Statify_Evaluation',
 		'Statify_Frontend',
 		'Statify_Dashboard',
 		'Statify_Install',
