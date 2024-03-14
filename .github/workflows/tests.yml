@@ -7,7 +7,7 @@ jobs:
       matrix:
         include:
           - php: '7.2'
-            wordpress: '4.7'
+            wordpress: '5.1'
           - php: '7.4'
             wordpress: '5.9'
           - php: '8.0'

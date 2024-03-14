@@ -20,7 +20,7 @@
     <exclude-pattern>vendor/*</exclude-pattern>
 
     <!-- WordPress coding standards -->
-    <config name="minimum_supported_wp_version" value="4.7" />
+    <config name="minimum_supported_wp_version" value="5.1" />
     <rule ref="WordPress">
         <exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog_switch_to_blog" />
         <exclude name="WordPress.VIP.DirectDatabaseQuery.NoCaching" />
