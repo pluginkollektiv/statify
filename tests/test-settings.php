@@ -25,7 +25,7 @@ class Test_Settings extends WP_UnitTestCase {
 			'snippet'           => 0,
 			'blacklist'         => 0,
 			'show_totals'       => 0,
-			'show_widget_roles' => null, // Just for documentation, the default is calculated later.
+			'show_widget_roles' => null,
 			'skip'              => array(
 				'logged_in' => Statify::SKIP_USERS_ALL,
 			),
@@ -64,6 +64,61 @@ class Test_Settings extends WP_UnitTestCase {
 				)
 			),
 			'string values should be sanitized to numbers or 1/0 for boolean flags'
+		);
+
+		self::assertSame(
+			array(
+				'days'        => 14,
+				'days_show'   => 14,
+				'limit'       => 100,
+				'today'       => 0,
+				'blacklist'   => 0,
+				'show_totals' => 0,
+			),
+			Statify_Settings::sanitize_options( array( 'limit' => 101 ) ),
+			'limit was not capped at 100'
+		);
+
+		self::assertSame(
+			array(
+				'days'        => 14,
+				'days_show'   => 14,
+				'limit'       => 3,
+				'snippet'     => 1,
+				'today'       => 0,
+				'blacklist'   => 0,
+				'show_totals' => 0,
+				'skip'        => array(
+					'logged_in' => 0,
+				),
+			),
+			Statify_Settings::sanitize_options(
+				array(
+					'snippet' => '1',
+					'skip'    => array(
+						'logged_in' => '0',
+					),
+				)
+			),
+			'valid "snippet" and "logged_in" settings not passed through'
+		);
+
+		self::assertSame(
+			array(
+				'days'        => 14,
+				'days_show'   => 14,
+				'limit'       => 3,
+				'today'       => 0,
+				'blacklist'   => 0,
+				'show_totals' => 0,
+			),
+			Statify_Settings::sanitize_options(
+				array(
+					'snippet'   => 3,
+					'logged_in' => -1,
+				)
+			),
+			'illegal "snippet" and "logged_in" settings not removed'
 		);
 
 		self::assertSame(
