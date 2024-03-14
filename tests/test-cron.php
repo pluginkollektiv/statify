@@ -29,6 +29,8 @@ class Test_Cron extends WP_UnitTestCase {
 	 * @preserveGlobalState disabled
 	 */
 	public function test_cronjob() {
+		global $wpdb;
+
 		// Initialize normal cycle, configure storage period of 3 days.
 		$this->init_statify_widget( 3 );
 		$this->assertNotFalse(
@@ -61,7 +63,8 @@ class Test_Cron extends WP_UnitTestCase {
 			$this->assertEquals( 2, $v['count'], 'Unexpected visit count' );
 		}
 
-		// Run the cron job.
+		// Run the cron job without aggregation.
+		add_filter( 'statify__skip_aggregation', '__return_true' );
 		Statify_Cron::cleanup_data();
 
 		// Verify that 2 days have been deleted.
@@ -72,5 +75,66 @@ class Test_Cron extends WP_UnitTestCase {
 			$this->assertContains( $v['date'], $remaining_dates, 'Unexpected remaining date in stats' );
 			$this->assertEquals( 2, $v['count'], 'Unexpected visit count' );
 		}
+		$this->assertEquals(
+			6,
+			$wpdb->get_var( "SELECT COUNT(*) FROM `$wpdb->statify`" ),
+			'Unexpected number of entries after cleanup without aggregation'
+		);
+
+		// Run the cron job with aggregation (default).
+		remove_filter( 'statify__skip_aggregation', '__return_true' );
+		Statify_Cron::cleanup_data();
+		$this->assertEquals(
+			3,
+			$wpdb->get_var( "SELECT COUNT(*) FROM `$wpdb->statify`" ),
+			'Unexpected number of entries after cleanup with aggregation'
+		);
+	}
+
+	/**
+	 * Test Statify Cron Job execution.
+	 *
+	 * @runInSeparateProcess Must not preserve global constant.
+	 * @preserveGlobalState disabled
+	 */
+	public function test_aggregation() {
+		global $wpdb;
+
+		// Insert test data: 2 days with 3 and 4 distinct combinations of referrer and target.
+		$date  = new DateTime();
+		$this->insert_test_data( $date->format( 'Y-m-d' ), '', '', 2 );
+		$this->insert_test_data( $date->format( 'Y-m-d' ), 'https://statify.pluginkollektiv.org/', '/', 3 );
+		$this->insert_test_data( $date->format( 'Y-m-d' ), 'https://statify.pluginkollektiv.org/', '/test/', 4 );
+		$this->insert_test_data( $date->format( 'Y-m-d' ), 'https://pluginkollektiv.org/', '/', 5 );
+		$date->modify( '-1 days' );
+		$this->insert_test_data( $date->format( 'Y-m-d' ), 'https://statify.pluginkollektiv.org/', '/', 4 );
+		$this->insert_test_data( $date->format( 'Y-m-d' ), 'https://statify.pluginkollektiv.org/', '/test/', 3 );
+		$this->insert_test_data( $date->format( 'Y-m-d' ), 'https://pluginkollektiv.org/', '/', 2 );
+
+		// Get baseline.
+		$this->assertEquals( 23, $wpdb->get_var( "SELECT COUNT(*) FROM `$wpdb->statify`" ), 'Unexpected number of entries before aggregation' );
+		$stats = $this->get_stats();
+
+		// Trigger aggregation.
+		Statify_Cron::aggregate_data();
+
+		// Verify results.
+		$this->assertEquals( 7, $wpdb->get_var( "SELECT COUNT(*) FROM `$wpdb->statify`" ), 'Unexpected number of entries after aggregation' );
+		$stats2 = $this->get_stats();
+		$this->assertEquals( $stats, $stats2, 'Statistics data should be the same after aggregation' );
+		// Check one single row explicitly.
+		$this->assertEquals(
+			3,
+			$wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT hits FROM `$wpdb->statify` WHERE created = %s AND referrer = %s AND target = %s",
+					$date->format( 'Y-m-d' ),
+					'https://statify.pluginkollektiv.org/',
+					'/test/'
+				)
+			),
+			'Unexpected hit count after aggregation'
+		);
+
 	}
 }

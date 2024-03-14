@@ -47,7 +47,6 @@ class Statify_Table {
 	 * @version 1.2.4
 	 */
 	public static function create() {
-
 		global $wpdb;
 
 		// If existent.
@@ -65,6 +64,7 @@ class Statify_Table {
 			  `created` date NOT NULL default '0000-00-00',
 			  `referrer` varchar(255) NOT NULL default '',
 			  `target` varchar(255) NOT NULL default '',
+			  `hits` integer NOT NULL default 1,
 			  PRIMARY KEY  (`id`),
 			  KEY `referrer` (`referrer`),
 			  KEY `target` (`target`),
