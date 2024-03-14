@@ -134,8 +134,10 @@ class Test_Api_Tracking extends WP_UnitTestCase {
 		$this->assertEquals( 1, count( $stats['referrer'] ), 'Unexpected number of referrers when logged in' );
 		$this->assertEquals( 2, $stats['referrer'][0]['count'], 'Referrer count should not have increased when logged in' );
 
-		/* Allow tracking for logged-in users.
-		   This also check the overruled check, i.e. the login status is not reset without nonce. */
+		/*
+		 * Allow tracking for logged-in users.
+		 * This also check the overruled check, i.e. the login status is not reset without nonce.
+		 */
 		$this->init_statify_tracking( Statify::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK, Statify::SKIP_USERS_NONE );
 		$response = $wp_rest_server->dispatch( $request );
 		$this->assertEquals( 204, $response->get_status(), 'API request should return 204 with JS enabled and logged in' );

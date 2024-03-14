@@ -31,14 +31,12 @@ class Test_Statify extends WP_UnitTestCase {
 		wp_get_current_user()->remove_all_caps();
 		self::assertFalse( Statify::user_can_see_stats(), 'Anonymous user must not see stats' );
 
-		// With default capability
+		// With default capability.
 		wp_get_current_user()->add_cap( 'edit_dashboard' );
 		self::assertTrue( Statify::user_can_see_stats(), 'User should see stats with default capabilities' );
 
 		// With custom roles.
-		$this->init_statify( array(
-			'show_widget_roles' => array( 'author' ),
-		) );
+		$this->init_statify( array( 'show_widget_roles' => array( 'author' ) ) );
 		self::assertFalse( Statify::user_can_see_stats(), 'User must not see stats with custom role filter' );
 
 		// Now the user has this specific role.

@@ -99,7 +99,7 @@ trait Statify_Test_Support {
 			'target'   => $target,
 		);
 
-		for ( $i = 0; $i < $count; $i ++ ) {
+		for ( $i = 0; $i < $count; $i++ ) {
 			$wpdb->insert( $wpdb->statify, $data );
 		}
 	}
