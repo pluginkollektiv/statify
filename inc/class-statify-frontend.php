@@ -27,7 +27,7 @@ class Statify_Frontend extends Statify {
 	 *
 	 * @return void
 	 */
-	public static function track_visit() {
+	public static function track_visit(): void {
 		if ( self::is_javascript_tracking_enabled() ) {
 			return;
 		}
@@ -55,7 +55,7 @@ class Statify_Frontend extends Statify {
 	 *
 	 * @return  array  $vars  Output with plugin variables
 	 */
-	public static function query_vars( $vars ) {
+	public static function query_vars( array $vars ): array {
 		$vars[] = 'statify_referrer';
 		$vars[] = 'statify_target';
 
@@ -69,7 +69,7 @@ class Statify_Frontend extends Statify {
 	 * @since    1.1.0
 	 * @version  1.4.1
 	 */
-	public static function wp_footer() {
+	public static function wp_footer(): void {
 		// JS tracking disabled or AMP is used for the current request.
 		if (
 			! self::is_javascript_tracking_enabled() ||
@@ -109,11 +109,7 @@ class Statify_Frontend extends Statify {
 	 *
 	 * @param array $analytics_entries Analytics entries.
 	 */
-	public static function amp_analytics_entries( $analytics_entries ) {
-		if ( ! is_array( $analytics_entries ) ) {
-			$analytics_entries = array();
-		}
-
+	public static function amp_analytics_entries( array $analytics_entries ): array {
 		// Analytics script is only relevant, if "JS" tracking is enabled, to prevent double tracking.
 		if ( self::is_javascript_tracking_enabled() ) {
 			$analytics_entries['statify'] = array(
@@ -132,11 +128,7 @@ class Statify_Frontend extends Statify {
 	 *
 	 * @param array $analytics Analytics.
 	 */
-	public static function amp_post_template_analytics( $analytics ) {
-		if ( ! is_array( $analytics ) ) {
-			$analytics = array();
-		}
-
+	public static function amp_post_template_analytics( array $analytics ): array {
 		// Analytics script is only relevant, if "JS" tracking is enabled, to prevent double tracking.
 		if ( self::is_javascript_tracking_enabled() ) {
 			$analytics['statify'] = array(
@@ -154,7 +146,7 @@ class Statify_Frontend extends Statify {
 	 *
 	 * @return array Configuration array.
 	 */
-	private static function make_amp_config() {
+	private static function make_amp_config(): array {
 		$cfg = array(
 			'requests'       => array(
 				'pageview' => rest_url( Statify_Api::REST_NAMESPACE . '/' . Statify_Api::REST_ROUTE_TRACK ),

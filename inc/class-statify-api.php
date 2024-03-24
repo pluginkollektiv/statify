@@ -31,7 +31,7 @@ class Statify_Api extends Statify {
 	 *
 	 * @return void
 	 */
-	public static function init() {
+	public static function init(): void {
 		if ( Statify::is_javascript_tracking_enabled() ) {
 			register_rest_route(
 				self::REST_NAMESPACE,
@@ -88,7 +88,7 @@ class Statify_Api extends Statify {
 	 *
 	 * @return WP_REST_Response The response.
 	 */
-	public static function track_visit( $request ) {
+	public static function track_visit( WP_REST_Request $request ): WP_REST_Response {
 		// Only do something if snippet use is actually configured.
 		if ( Statify::is_javascript_tracking_enabled() ) {
 			// Nonce verification, if necessary. We do not rely on the WP REST default mechanisms.
@@ -121,7 +121,7 @@ class Statify_Api extends Statify {
 	 *
 	 * @return WP_REST_Response The response.
 	 */
-	public static function get_stats( $request ) {
+	public static function get_stats( WP_REST_Request $request ): WP_REST_Response {
 		$refresh = '1' === $request->get_param( 'refresh' );
 
 		$stats  = Statify_Dashboard::get_stats( $refresh );

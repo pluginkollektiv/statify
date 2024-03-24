@@ -31,7 +31,7 @@ class Statify_Dashboard extends Statify {
 	 *
 	 * @since   0.1.0
 	 */
-	public static function init() {
+	public static function init(): void {
 
 		// Filter user_can_see_stats.
 		if ( ! self::user_can_see_stats() ) {
@@ -72,7 +72,7 @@ class Statify_Dashboard extends Statify {
 	 * @since   0.1.0
 	 * @version 1.4.0
 	 */
-	public static function add_style() {
+	public static function add_style(): void {
 
 		// Register CSS.
 		wp_register_style(
@@ -106,7 +106,7 @@ class Statify_Dashboard extends Statify {
 	 * @since    0.1.0
 	 * @version  1.4.0
 	 */
-	public static function add_js() {
+	public static function add_js(): void {
 
 		// Register JS.
 		wp_register_script(
@@ -155,7 +155,7 @@ class Statify_Dashboard extends Statify {
 	 * @since    0.1.0
 	 * @version  1.4.0
 	 */
-	public static function print_frontview() {
+	public static function print_frontview(): void {
 
 		// Load JS.
 		wp_enqueue_script( 'chartist_js' );
@@ -174,7 +174,7 @@ class Statify_Dashboard extends Statify {
 	 * @since    0.4.0
 	 * @version  1.4.0
 	 */
-	public static function print_backview() {
+	public static function print_backview(): void {
 
 		// Capability check.
 		if ( ! current_user_can( 'edit_dashboard' ) ) {
@@ -203,7 +203,7 @@ class Statify_Dashboard extends Statify {
 	 *
 	 * @return void
 	 */
-	private static function _save_widget_options() {
+	private static function _save_widget_options(): void {
 		// Check the nonce field from the dashboard form.
 		if ( ! check_admin_referer( 'statify-dashboard' ) ) {
 			return;
@@ -248,7 +248,7 @@ class Statify_Dashboard extends Statify {
 	 * @since    1.4.0
 	 * @version  1.4.0
 	 */
-	private static function _get_version() {
+	private static function _get_version(): void {
 
 		// Get plugin meta.
 		$meta = get_plugin_data( STATIFY_FILE );
@@ -267,7 +267,7 @@ class Statify_Dashboard extends Statify {
 	 *
 	 * @return  array  $data  stats data from cache or database
 	 */
-	public static function get_stats( $force_refresh = false ) {
+	public static function get_stats( bool $force_refresh = false ): array {
 
 		// Get from cache if enabled.
 		if ( ! $force_refresh ) {
@@ -304,7 +304,7 @@ class Statify_Dashboard extends Statify {
 	 *
 	 * @return  array  DB results
 	 */
-	private static function _select_data() {
+	private static function _select_data(): array {
 
 		// Global.
 		global $wpdb;

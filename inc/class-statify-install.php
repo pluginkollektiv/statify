@@ -26,7 +26,7 @@ class Statify_Install {
 	 *
 	 * @param bool $network_wide Whether the plugin was activated network-wide or not.
 	 */
-	public static function init( $network_wide = false ) {
+	public static function init( bool $network_wide = false ): void {
 
 		if ( $network_wide && is_multisite() ) {
 			$sites = get_sites();
@@ -53,9 +53,9 @@ class Statify_Install {
 	 *
 	 * @param int $site_id Site ID.
 	 */
-	public static function init_site( $site_id ) {
+	public static function init_site( int $site_id ): void {
 
-		switch_to_blog( (int) $site_id );
+		switch_to_blog( $site_id );
 
 		self::_apply();
 
@@ -68,7 +68,7 @@ class Statify_Install {
 	 * @since   0.1.0
 	 * @version 1.4.0
 	 */
-	private static function _apply() {
+	private static function _apply(): void {
 
 		// Cleanup any leftover transients.
 		delete_transient( 'statify_data' );
