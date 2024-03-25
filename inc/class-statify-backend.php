@@ -29,7 +29,7 @@ class Statify_Backend {
 	 *
 	 * @return  array           Merged links
 	 */
-	public static function add_meta_link( $input, $file ) {
+	public static function add_meta_link( array $input, string $file ): array {
 
 		// Other plugins?
 		if ( STATIFY_BASE !== $file ) {
@@ -55,7 +55,7 @@ class Statify_Backend {
 	 *
 	 * @return  array           Merged links
 	 */
-	public static function add_action_link( $input ) {
+	public static function add_action_link( array $input ): array {
 
 		// Rights?
 		if ( ! current_user_can( 'manage_options' ) ) {

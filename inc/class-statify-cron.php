@@ -24,7 +24,7 @@ class Statify_Cron extends Statify {
 	 * @since    0.3.0
 	 * @version  1.4.0
 	 */
-	public static function cleanup_data() {
+	public static function cleanup_data(): void {
 
 		// Global.
 		global $wpdb;

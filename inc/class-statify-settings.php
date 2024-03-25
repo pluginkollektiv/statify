@@ -23,7 +23,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function register_settings() {
+	public static function register_settings(): void {
 		register_setting( 'statify', 'statify', array( __CLASS__, 'sanitize_options' ) );
 
 		// Global settings.
@@ -127,7 +127,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function options_days() {
+	public static function options_days(): void {
 		?>
 		<input id="statify-days" name="statify[days]" type="number" min="1" value="<?php echo esc_attr( Statify::$_options['days'] ); ?>">
 		<?php esc_html_e( 'days', 'statify' ); ?>
@@ -140,7 +140,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function options_snippet() {
+	public static function options_snippet(): void {
 		?>
 		<p>
 			<?php self::show_snippet_option( Statify::TRACKING_METHOD_DEFAULT, __( 'Default tracking', 'statify' ) ); ?>
@@ -162,7 +162,7 @@ class Statify_Settings {
 	 * @param int    $value the value for the input radio.
 	 * @param string $label the label.
 	 */
-	private static function show_snippet_option( $value, $label ) {
+	private static function show_snippet_option( int $value, string $label ): void {
 		?>
 			<label>
 				<input name="statify[snippet]" type="radio" value="<?php echo esc_html( $value ); ?>" <?php checked( Statify::$_options['snippet'], $value ); ?>>
@@ -176,7 +176,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function header_dashboard() {
+	public static function header_dashboard(): void {
 		?>
 		<p>
 			<?php esc_html_e( 'The following options affect the admin dashboard widget.', 'statify' ); ?>
@@ -189,7 +189,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function options_days_show() {
+	public static function options_days_show(): void {
 		?>
 		<input id="statify-days-show" name="statify[days_show]" type="number" min="1" value="<?php echo esc_attr( Statify::$_options['days_show'] ); ?>">
 		<?php esc_html_e( 'days', 'statify' ); ?>
@@ -202,7 +202,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function options_limit() {
+	public static function options_limit(): void {
 		?>
 		<input id="statify-limit" name="statify[limit]" type="number" min="1" max="100" value="<?php echo esc_attr( Statify::$_options['limit'] ); ?>">
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: 3)
@@ -214,7 +214,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function options_today() {
+	public static function options_today(): void {
 		?>
 		<input  id="statify-today" type="checkbox" name="statify[today]" value="1" <?php checked( Statify::$_options['today'], 1 ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
@@ -226,7 +226,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function options_show_totals() {
+	public static function options_show_totals(): void {
 		?>
 		<input  id="statify-show-totals" type="checkbox" name="statify[show_totals]" value="1" <?php checked( Statify::$_options['show_totals'], 1 ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
@@ -240,7 +240,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function options_show_widget_roles() {
+	public static function options_show_widget_roles(): void {
 		$all_roles = apply_filters( 'statify__available_roles', wp_roles()->roles );
 
 		// Backwards compatibility for older statify versions without this option.
@@ -266,12 +266,12 @@ class Statify_Settings {
 	 *
 	 * @param string $input_id the name for the input element id.
 	 * @param string $name the name for the input element name attribute.
-	 * @param array  $available_roles the list of all available roles to be listes with checkbox.
+	 * @param array  $available_roles the list of all available roles to be listed with checkbox.
 	 * @param array  $saved_roles the list of all role names that should be checked.
 	 *
 	 * @return void
 	 */
-	private static function show_roles_list( $input_id, $name, $available_roles, $saved_roles = array() ) {
+	private static function show_roles_list( string $input_id, string $name, array $available_roles, array $saved_roles = array() ): void {
 		foreach ( $available_roles as $role => $role_object ) {
 			?>
 			<p><label for="statify-<?php echo esc_html( $input_id ); ?>-<?php echo esc_html( $role ); ?>">
@@ -295,7 +295,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function header_skip() {
+	public static function header_skip(): void {
 		?>
 		<p>
 			<?php echo wp_kses( __( 'The following options define cases in which a view will <strong>not</strong> be tracked.', 'statify' ), array( 'strong' => array() ) ); ?>
@@ -308,7 +308,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function options_skip_blacklist() {
+	public static function options_skip_blacklist(): void {
 		?>
 		<input id="statify-skip-referrer" type="checkbox" name="statify[blacklist]" value="1"<?php checked( Statify::$_options['blacklist'] ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
@@ -321,7 +321,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function options_skip_logged_in() {
+	public static function options_skip_logged_in(): void {
 		?>
 		<select id="statify-skip-logged_in" name="statify[skip][logged_in]">
 			<option value="0" <?php selected( Statify::$_options['skip']['logged_in'], 0 ); ?>><?php esc_html_e( 'Track all users', 'statify' ); ?></option>
@@ -345,7 +345,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function action_update_options( $old_value, $value ) {
+	public static function action_update_options( array $old_value, array $value ): void {
 		// Delete transient.
 		delete_transient( 'statify_data' );
 
@@ -364,7 +364,7 @@ class Statify_Settings {
 	 *
 	 * @return array Validated and sanitized options.
 	 */
-	public static function sanitize_options( $options ) {
+	public static function sanitize_options( array $options ): array {
 
 		// Sanitize numeric values.
 		$res = array();
@@ -432,7 +432,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function add_admin_menu() {
+	public static function add_admin_menu(): void {
 		add_options_page(
 			__( 'Statify', 'statify' ),
 			__( 'Statify', 'statify' ),
@@ -447,7 +447,7 @@ class Statify_Settings {
 	 *
 	 * @return void
 	 */
-	public static function create_settings_page() {
+	public static function create_settings_page(): void {
 		?>
 
 		<div class="wrap">

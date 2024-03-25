@@ -38,7 +38,7 @@ class Statify {
 	 *
 	 * @since    1.7 Replaces previously used instance() and __construct().
 	 */
-	public static function init() {
+	public static function init(): void {
 		// Nothing to do on autosave.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
@@ -103,7 +103,7 @@ class Statify {
 	 * @since  1.7.0 $is_snippet parameter added.
 	 * @since  2.0.0 Migration from Statify_Frontend::track_visit to Statify::track with multiple parameters.
 	 */
-	protected static function track( $referrer, $target ) {
+	protected static function track( ?string $referrer, ?string $target ): void {
 		// Fallbacks for uninitialized or omitted target and referrer values.
 		if ( is_null( $target ) ) {
 			$target = '/';
@@ -173,7 +173,7 @@ class Statify {
 	 *
 	 * @since 1.7.3
 	 */
-	public static function parse_date( $date ) {
+	public static function parse_date( string $date ): string {
 		if ( function_exists( 'wp_date' ) ) { // Exists since WP 5.3.
 			return wp_date( get_option( 'date_format' ), strtotime( $date ) );
 		}
@@ -186,7 +186,7 @@ class Statify {
 	 *
 	 * @return bool true if and only if one of the JavaScript tracking options is enabled.
 	 */
-	public static function is_javascript_tracking_enabled() {
+	public static function is_javascript_tracking_enabled(): bool {
 		return in_array(
 			self::$_options['snippet'],
 			array(
@@ -207,7 +207,7 @@ class Statify {
 	 * @hook  boolean  statify__user_can_see_stats
 	 * @see   https://wordpress.org/plugins/statify/
 	 */
-	public static function user_can_see_stats() {
+	public static function user_can_see_stats(): bool {
 		if ( isset( self::$_options['show_widget_roles'] ) ) {
 			$statify_roles = self::$_options['show_widget_roles'];
 			$current_user = wp_get_current_user();
@@ -236,7 +236,7 @@ class Statify {
 	 * @since  1.2.6
 	 * @since  2.0.0 Migration from Statify_Frontend to Statify class.
 	 */
-	private static function skip_tracking() {
+	private static function skip_tracking(): bool {
 		if ( function_exists( 'apply_filters_deprecated' ) ) {
 			apply_filters_deprecated( 'statify_skip_tracking', array( '' ), '1.5.0', 'statify__skip_tracking' );
 		}
@@ -283,7 +283,7 @@ class Statify {
 	 * @since 1.7.0
 	 * @since 2.0.0 Migration from Statify_Frontend to Statify class, removed $user_agent parameter.
 	 */
-	private static function is_bot() {
+	private static function is_bot(): bool {
 		$crawler_detect = new \Jaybizzle\CrawlerDetect\CrawlerDetect();
 
 		// Check the user agent of the current 'visitor' via the user agent and http_from header.
@@ -298,7 +298,7 @@ class Statify {
 	 * @since 1.6.1
 	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
 	 */
-	protected static function is_internal() {
+	protected static function is_internal(): bool {
 		// Skip for preview, 404 calls, feed, search, favicon and sitemap access.
 		return is_preview() || is_404() || is_feed() || is_search()
 			|| ( function_exists( 'is_favicon' ) && is_favicon() )
@@ -314,7 +314,7 @@ class Statify {
 	 * @since 1.5.0
 	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
 	 */
-	private static function check_referrer() {
+	private static function check_referrer(): bool {
 		// Return false if the disallowed-keys filter (formerly blacklist) is inactive.
 		if ( ! self::$_options['blacklist'] ) {
 			return false;
@@ -357,7 +357,7 @@ class Statify {
 	 * @since 1.7.3 Renamed to "get_disallowed_keys" to match WP 5.5. wording.
 	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
 	 */
-	private static function get_disallowed_keys() {
+	private static function get_disallowed_keys(): array {
 		$disallowed_keys = get_option( 'disallowed_keys' );
 
 		if ( false === $disallowed_keys ) {
@@ -383,7 +383,7 @@ class Statify {
 	 *
 	 * @return boolean
 	 */
-	private static function strposa( $haystack, array $needle, $offset = 0 ) {
+	private static function strposa( string $haystack, array $needle, int $offset = 0 ): bool {
 
 		foreach ( $needle as $query ) {
 			if ( strpos( $haystack, $query, $offset ) !== false ) {

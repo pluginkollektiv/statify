@@ -24,7 +24,7 @@ class Statify_Uninstall {
 	 * @since   0.1.0
 	 * @version 0.1.0
 	 */
-	public static function init() {
+	public static function init(): void {
 		if ( is_multisite() ) {
 			$old   = get_current_blog_id();
 			$sites = get_sites();
@@ -50,7 +50,7 @@ class Statify_Uninstall {
 	 *
 	 * @param int $site_id Site ID.
 	 */
-	public static function init_site( $site_id ) {
+	public static function init_site( int $site_id ): void {
 
 		switch_to_blog( $site_id );
 
@@ -65,7 +65,7 @@ class Statify_Uninstall {
 	 * @since   0.1.0
 	 * @version 1.4.0
 	 */
-	private static function _apply() {
+	private static function _apply(): void {
 
 		// Delete options.
 		delete_option( 'statify' );
