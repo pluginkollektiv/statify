@@ -367,13 +367,15 @@
 
 			tbody.insertBefore(row, tbody.firstChild);
 		}
+
+		addExportButton(table);
 	}
 
 	/**
 	 * Render yearly table.
 	 *
-	 * @param {HTMLElement} table Root element.
-	 * @param {any}         data  Data from API.
+	 * @param {HTMLTableElement} table Root element.
+	 * @param {any}              data  Data from API.
 	 */
 	function renderDailyTable(table, data) {
 		const rows = Array.from(table.querySelectorAll('tbody > tr'));
@@ -440,6 +442,8 @@
 		for (const row of rows) {
 			row.classList.remove('placeholder');
 		}
+
+		addExportButton(table);
 	}
 
 	/**
@@ -512,5 +516,44 @@
 					wp.i18n.__('Error loading data.', 'statify') +
 					'</p>';
 			});
+	}
+
+	/**
+	 * Add a CSV export button to a table.
+	 *
+	 * @param {HTMLTableElement} table Table to process
+	 */
+	function addExportButton(table) {
+		const exportBtn = document.createElement('a');
+		exportBtn.classList.add('button');
+		exportBtn.href = '#';
+
+		// Generate filename from table caption.
+		exportBtn.download =
+			statifyDashboard.i18n.sitename +
+			'-' +
+			table.caption.innerText.replaceAll(/\s+/g, '_') +
+			'-export-' +
+			new Date()
+				.toISOString()
+				.replace('T', '_')
+				.replaceAll(':', '-')
+				.substring(0, 16) +
+			'.csv';
+
+		// Generate CSV on demand.
+		exportBtn.innerText = wp.i18n.__('Export (CSV)', 'statify');
+		exportBtn.addEventListener('click', () => {
+			exportBtn.href =
+				'data:text/csv;charset=utf-8,' +
+				Array.from(table.rows)
+					.map((row) =>
+						Array.from(row.cells)
+							.map((col) => col.innerText)
+							.join(',')
+					)
+					.join('\r\n');
+		});
+		table.after(exportBtn);
 	}
 }

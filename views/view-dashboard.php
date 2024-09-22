@@ -91,6 +91,7 @@ $years = Statify_Evaluation::get_years();
 	<section>
 		<h3><?php esc_html_e( 'Monthly / Yearly Views', 'statify' ); ?></h3>
 		<table id="statify-table-yearly" class="wp-list-table widefat striped statify-table">
+			<caption class="screen-reader-text"><?php esc_html_e( 'Monthly Views', 'statify' ); ?></caption>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Year', 'statify' ); ?></th>
@@ -134,6 +135,15 @@ $years = Statify_Evaluation::get_years();
 			?>
 		</h3>
 		<table id="statify-table-daily" class="wp-list-table widefat striped statify-table">
+			<caption class="screen-reader-text">
+				<?php
+				printf(
+					/* translators: %s is replaced by a year number (e.g. 2023) */
+					esc_html__( 'Daily Views %s', 'statify' ),
+					esc_html( $selected_year )
+				);
+				?>
+			</caption>
 			<thead>
 			<tr>
 				<th><?php esc_html_e( 'Day', 'statify' ); ?></th>

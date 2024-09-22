@@ -79,6 +79,10 @@ body.rtl .statify-chart * {
 	width: 80%;
 }
 
+.statify-table + a.button {
+	margin: 1em 0 0 1em;
+}
+
 
 #statify_dashboard .postbox-title-action a,
 #statify_dashboard .settings-link a {
