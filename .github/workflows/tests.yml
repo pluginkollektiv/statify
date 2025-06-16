@@ -45,7 +45,7 @@ jobs:
       - name: Setup DB
         uses: shogo82148/actions-setup-mysql@v1
         with:
-          mysql-version: 'mysql-5.7'
+          mysql-version: 'mysql-8.0'
           root-password: "root"
       - name: Install
         run: |
