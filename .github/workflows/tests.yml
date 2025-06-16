@@ -47,6 +47,8 @@ jobs:
         with:
           mysql-version: 'mysql-8.0'
           root-password: "root"
+          my-cnf: |
+            default_authentication_plugin=mysql_native_password
       - name: Install
         run: |
           composer install --no-interaction
