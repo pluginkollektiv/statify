@@ -87,7 +87,7 @@ class Statify {
 				add_filter( 'amp_post_template_analytics', array( 'Statify_Frontend', 'amp_post_template_analytics' ) );
 			}
 			// Initialize REST API.
-			add_filter( 'rest_api_init', array( 'Statify_Api', 'init' ) );
+			add_action( 'rest_api_init', array( 'Statify_Api', 'init' ) );
 		}
 	}
 
