@@ -127,6 +127,22 @@ class Statify_Evaluation extends Statify {
 			$views_for_all_days[ $result['date'] ] = intval( $result['count'] );
 		}
 
+		// Fill gaps with zeros.
+		if ( count( $views_for_all_days ) > 1 ) {
+			$period = new DatePeriod(
+				new DateTime( array_keys( $views_for_all_days )[0] ),
+				DateInterval::createFromDateString( '1 day' ),
+				new DateTime( array_keys( $views_for_all_days )[ count( $views_for_all_days ) - 1 ] )
+			);
+			foreach ( $period as $date ) {
+				$date = $date->format( 'Y-m-d' );
+				if ( ! array_key_exists( $date, $views_for_all_days ) ) {
+					$views_for_all_days[ $date ] = 0;
+				}
+			}
+			ksort( $views_for_all_days );
+		}
+
 		return $views_for_all_days;
 	}
 
@@ -168,6 +184,22 @@ class Statify_Evaluation extends Statify {
 		$views_for_all_months = array();
 		foreach ( $results as $result ) {
 			$views_for_all_months[ $result['date'] ] = intval( $result['count'] );
+		}
+
+		// Fill gaps with zeros.
+		if ( count( $views_for_all_months ) > 1 ) {
+			$period = new DatePeriod(
+				new DateTime( array_keys( $views_for_all_months )[0] ),
+				DateInterval::createFromDateString( '1 month' ),
+				new DateTime( array_keys( $views_for_all_months )[ count( $views_for_all_months ) - 1 ] )
+			);
+			foreach ( $period as $date ) {
+				$date = $date->format( 'Y-m' );
+				if ( ! array_key_exists( $date, $views_for_all_months ) ) {
+					$views_for_all_months[ $date ] = 0;
+				}
+			}
+			ksort( $views_for_all_months );
 		}
 
 		return $views_for_all_months;

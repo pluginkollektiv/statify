@@ -355,7 +355,8 @@
 
 			for (let month = 1; month <= 12; month++) {
 				col = document.createElement('TD');
-				col.innerText = data.visits[year][month - 1] || '-';
+				col.innerText =
+					month in data.visits[year] ? data.visits[year][month] : '-';
 				row.appendChild(col);
 				sum += data.visits[year][month - 1] || 0;
 			}
