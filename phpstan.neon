@@ -1,0 +1,8 @@
+parameters:
+  level: 3
+  paths:
+    - inc/
+    - views/
+    - statify.php
+  ignoreErrors:
+    - '/^Constant STATIFY_BASE not found\.$/'

@@ -24,6 +24,7 @@
 /package-lock.json
 /composer.lock
 /phpcs.xml
+/phpstan.neon
 /phpunit.xml
 /phpunit.coverage.xml
 /phpunit.report.xml

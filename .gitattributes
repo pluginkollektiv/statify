@@ -24,6 +24,7 @@
 /composer.lock export-ignore
 /composer-php5.lock export-ignore
 /phpcs.xml export-ignore
+/phpstan.neon export-ignore
 /phpunit.xml export-ignore
 /phpunit.coverage.xml export-ignore
 /phpunit.report.xml export-ignore
