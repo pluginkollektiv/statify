@@ -18,6 +18,10 @@
 	const yearlyTable = document.getElementById('statify-table-yearly');
 	const dailyTable = document.getElementById('statify-table-daily');
 
+	// Controls.
+	const postInput = document.getElementById('statify-dashboard-post');
+	const postList = document.getElementById('statify-dashboard-posts');
+
 	/**
 	 * Update the dashboard widget
 	 *
@@ -85,8 +89,12 @@
 	 * @return {Promise<{visits: {[key: string]: {[key: string]: number}}}>} Data promise from API.
 	 */
 	function loadMonthly() {
-		// Load data from API.
-		return wp.apiFetch({ path: '/statify/v1/stats/extended?scope=month' });
+		let path = '/statify/v1/stats/extended?scope=month';
+		const post = new URLSearchParams(window.location.search).get('post');
+		if (post) {
+			path += '&post=' + encodeURIComponent(post);
+		}
+		return wp.apiFetch({ path });
 	}
 
 	/**
@@ -517,6 +525,18 @@
 					wp.i18n.__('Error loading data.', 'statify') +
 					'</p>';
 			});
+	}
+
+	if (postInput && postList) {
+		// Load data from API.
+		wp.apiFetch({ path: '/statify/v1/posts' }).then((data) =>
+			data.forEach((post) => {
+				const opt = document.createElement('option');
+				opt.value = post.url;
+				opt.innerText = post.title;
+				postList.appendChild(opt);
+			})
+		);
 	}
 
 	/**

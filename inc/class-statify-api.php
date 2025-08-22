@@ -27,6 +27,7 @@ class Statify_Api extends Statify {
 	const REST_ROUTE_STATS = 'stats';
 	const REST_ROUTE_RESET = 'reset';
 	const REST_ROUTE_STATS_EXTENDED = 'stats/extended';
+	const REST_ROUTE_POSTS = 'posts';
 
 	/**
 	 * Initialize REST API routes.
@@ -75,6 +76,16 @@ class Statify_Api extends Statify {
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( __CLASS__, 'get_extended' ),
+				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_POSTS,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( __CLASS__, 'get_posts' ),
 				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
 			)
 		);
@@ -283,6 +294,33 @@ class Statify_Api extends Statify {
 	}
 
 	/**
+	 * Get post URLs.
+	 *
+	 * @return WP_REST_Response The response.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function get_posts(): WP_REST_Response {
+		$posts = self::from_cache( 'posts' );
+
+		if ( ! $posts ) {
+			$posts = array_map(
+				function ( $url ) {
+					return array(
+						'url'   => $url,
+						'title' => self::post_title( $url ),
+					);
+				},
+				Statify_Evaluation::get_post_urls()
+			);
+
+			self::update_cache( 'posts', 0, $posts );
+		}
+
+		return new WP_REST_Response( $posts );
+	}
+
+	/**
 	 * Retrieve data from cache.
 	 *
 	 * @param string $scope Scope (year, month, day).
@@ -307,5 +345,27 @@ class Statify_Api extends Statify {
 			$data,
 			30 * MINUTE_IN_SECONDS
 		);
+	}
+
+	/**
+	 * Get post title by URL.
+	 *
+	 * @param string $url Target URL.
+	 *
+	 * @return string Post title, fallback to URL of not available.
+	 */
+	private static function post_title( string $url ): string {
+		if ( '' === $url ) {
+			return __( 'all posts', 'statify' );
+		}
+		if ( '/' === $url ) {
+			return __( 'Home Page', 'statify' );
+		}
+		$post_id = url_to_postid( $url );
+		if ( 0 === $post_id ) {
+			return esc_url( $url );
+		}
+
+		return get_the_title( $post_id );
 	}
 }

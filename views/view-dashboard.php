@@ -16,6 +16,12 @@ if ( isset( $_GET['year'] ) ) {
 }
 $years = Statify_Evaluation::get_years();
 
+if ( isset( $_GET['post'] ) ) {
+	$selected_post = sanitize_text_field( wp_unslash( $_GET['post'] ) );
+} else {
+	$selected_post = null;
+}
+
 ?>
 <div class="wrap">
 	<h1><?php esc_html_e( 'Statify', 'statify' ); ?></h1>
@@ -34,6 +40,21 @@ $years = Statify_Evaluation::get_years();
 	</nav>
 
 	<h2><?php esc_html_e( 'Overview', 'statify' ); ?></a></h2>
+
+	<form id="statify-dashboard-controls">
+		<input type="hidden" name="page" value="statify_dashboard">
+		<?php
+		if ( ! empty( $selected_year ) ) {
+			echo '<input type="hidden" name="year" value="' . esc_attr( $selected_year ) . '">';
+		}
+		?>
+		<label for="statify-dashboard-post"><?php esc_html_e( 'Post/Page', 'statify' ); ?></label>
+		<input id="statify-dashboard-post" name="post" type="text" list="statify-dashboard-posts" value="<?php echo esc_attr( $selected_post ); ?>">
+		<datalist id="statify-dashboard-posts">
+			<option value=""></option>
+		</datalist>
+		<button type="submit" class="button-secondary"><?php esc_html_e( 'Select post/page', 'statify' ); ?></button>
+	</form>
 
 	<?php if ( ! empty( $selected_year ) ) : ?>
 	<section>
