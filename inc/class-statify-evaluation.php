@@ -53,18 +53,43 @@ class Statify_Evaluation extends Statify {
 			'dashicons-chart-area',
 			50
 		);
+
+		add_submenu_page(
+			'statify_dashboard',
+			__( 'Content', 'statify' ) . ' &mdash; ' . __( 'Statify', 'statify' ),
+			__( 'Content', 'statify' ),
+			'see_statify_evaluation',
+			'statify_content',
+			array( __CLASS__, 'show_content' )
+		);
 	}
 
 	/**
 	 * Show the dashboard page.
 	 */
 	public static function show_dashboard(): void {
+		self::show_view( 'dashboard' );
+	}
+
+	/**
+	 * Show the content page.
+	 */
+	public static function show_content(): void {
+		self::show_view( 'content' );
+	}
+
+	/**
+	 * Load a specific page view.
+	 *
+	 * @param string $view The view to load.
+	 */
+	private static function show_view( string $view ): void {
 		self::add_js();
 		self::add_style();
 		wp_enqueue_script( 'chartist_js' );
 		wp_enqueue_script( 'statify_chart_js' );
 
-		load_template( wp_normalize_path( STATIFY_DIR . '/views/view-dashboard.php' ) );
+		load_template( wp_normalize_path( STATIFY_DIR . '/views/view-' . $view . '.php' ) );
 	}
 
 	/**
@@ -257,7 +282,7 @@ class Statify_Evaluation extends Statify {
 	public static function get_views_of_most_popular_posts( string $start = '', string $end = '' ): array {
 		global $wpdb;
 
-		if ( empty( $start ) && empty( $end ) ) {
+		if ( empty( $start ) || empty( $end ) ) {
 			$results = $wpdb->get_results(
 				'SELECT COUNT(`target`) as `count`, `target` as `url`' .
 				" FROM `$wpdb->statify`" .
@@ -271,7 +296,7 @@ class Statify_Evaluation extends Statify {
 				$wpdb->prepare(
 					'SELECT COUNT(`target`) as `count`, `target` as `url`' .
 					" FROM `$wpdb->statify`" .
-					' WHERE `created` >= %s AND `created` <= %s' .
+					' WHERE `created` BETWEEN %s AND %s' .
 					' GROUP BY `target`' .
 					' ORDER BY `count` DESC',
 					$start,

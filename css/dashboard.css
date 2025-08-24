@@ -38,10 +38,18 @@ body.rtl .statify-chart * {
 	fill: #3582c4;
 }
 
+.statify-chart .ct-bar {
+	stroke: #3582c4;
+}
+
 .statify-chart .ct-label.ct-horizontal.ct-end {
 	align-items: center;
 	justify-content: center;
 	margin-left: -50%;
+}
+
+.statify-chart .ct-chart-bar .ct-label.ct-horizontal.ct-end {
+	margin-left: initial;
 }
 
 .statify-chartist-tooltip {
@@ -179,10 +187,20 @@ body.rtl .statify-chart * {
 	margin: 10px 20px;
 }
 
+.statify-chart-container .statify-legend {
+	column-gap: 2em;
+	column-width: 20em;
+	list-style-type: decimal;
+}
+
 .statify-chart-title {
 	text-align: center;
 	font-size: 1.5em;
 	padding: 0.5em 0;
+}
+
+#statify-dashboard-controls {
+	margin: 1em 0;
 }
 
 /* @end group */

@@ -27,6 +27,7 @@ class Statify_Api extends Statify {
 	const REST_ROUTE_STATS = 'stats';
 	const REST_ROUTE_RESET = 'reset';
 	const REST_ROUTE_STATS_EXTENDED = 'stats/extended';
+	const REST_ROUTE_STATS_POSTS = 'stats/posts';
 	const REST_ROUTE_POSTS = 'posts';
 
 	/**
@@ -76,6 +77,16 @@ class Statify_Api extends Statify {
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( __CLASS__, 'get_extended' ),
+				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_STATS_POSTS,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( __CLASS__, 'get_stats_posts' ),
 				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
 			)
 		);
@@ -301,7 +312,7 @@ class Statify_Api extends Statify {
 	 * @since 2.0.0
 	 */
 	public static function get_posts(): WP_REST_Response {
-		$posts = self::from_cache( 'posts' );
+		$posts = self::from_cache( 'post_urls' );
 
 		if ( ! $posts ) {
 			$posts = array_map(
@@ -314,34 +325,114 @@ class Statify_Api extends Statify {
 				Statify_Evaluation::get_post_urls()
 			);
 
-			self::update_cache( 'posts', 0, $posts );
+			self::update_cache( 'post_urls', 0, $posts );
 		}
 
 		return new WP_REST_Response( $posts );
 	}
 
 	/**
+	 * Get stats per post.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return WP_REST_Response The response.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function get_stats_posts( WP_REST_Request $request ): WP_REST_Response {
+		// Post type requested?
+		$type = $request->get_param( 'type' );
+		if ( empty( $type ) || 'popular' === $type ) {
+			$type = '';
+		} elseif ( ! in_array( $type, Statify_Evaluation::get_post_types(), true ) ) {
+			return new WP_REST_Response( array( 'error' => 'invalid post type' ), 400 );
+		}
+
+		$start = self::get_date( $request, 'start' );
+		$end   = self::get_date( $request, 'end' );
+		$cache = empty( $start ) && empty( $end );
+		$data  = false;
+
+		if ( $cache ) {
+			// Retrieve typed data from cache.
+			$data = self::from_cache( 'posts', $type );
+		}
+		if ( ! $data ) {
+			// Retrieve data from cache for all types or generate it.
+			if ( $cache ) {
+				$data = self::from_cache( 'posts' );
+			}
+			if ( ! $data ) {
+				$data = array_map(
+					function ( $d ) {
+						$url  = $d['url'];
+						$type = self::post_type( $url );
+						return array(
+							'count'    => intval( $d['count'] ),
+							'url'      => $url,
+							'title'    => self::post_title( $url ),
+							'type'     => $type,
+							'typeName' => self::type_name( $type ),
+						);
+					},
+					Statify_Evaluation::get_views_of_most_popular_posts( $start, $end )
+				);
+
+				if ( $cache ) {
+					// Cache complete data.
+					self::update_cache( 'posts', '', $data );
+				}
+			}
+
+			if ( $cache ) {
+				// Cache complete data.
+				self::update_cache( 'posts', '', $data );
+			}
+
+			// Filter by type.
+			if ( ! empty( $type ) ) {
+				$data = array_values(
+					array_filter(
+						$data,
+						function ( $d ) use ( $type ) {
+							return $d['type'] === $type;
+						}
+					)
+				);
+
+				if ( $cache ) {
+					// Cache typed data.
+					self::update_cache( 'posts', $type, $data );
+				}
+			}
+		}
+
+		return new WP_REST_Response( $data );
+	}
+
+	/**
 	 * Retrieve data from cache.
 	 *
 	 * @param string $scope Scope (year, month, day).
-	 * @param int    $index Optional index (e.g. year).
+	 * @param string $index Optional index (e.g. year).
 	 *
 	 * @return array|false Transient data or FALSE.
 	 */
-	private static function from_cache( string $scope, int $index = 0 ) {
-		return get_transient( 'statify_data_' . $scope . ( $index > 0 ? '_' . $index : '' ) );
+	private static function from_cache( string $scope, string $index = '' ) {
+		return get_transient( 'statify_data_' . $scope . ( ! empty( $index ) ? '_' . $index : '' ) );
 	}
 
 	/**
 	 * Update data cache.
 	 *
 	 * @param string $scope Scope (year, month, day).
-	 * @param int    $index Optional index (e.g. year).
+	 * @param string $index Optional index (e.g. year).
 	 * @param array  $data  Data.
 	 */
-	private static function update_cache( string $scope, int $index, array $data ): void {
+	private static function update_cache( string $scope, string $index, array $data ): void {
 		set_transient(
-			'statify_data_' . $scope . ( $index > 0 ? '_' . $index : '' ),
+			'statify_data_' . $scope . ( ! empty( $index ) ? '_' . $index : '' ),
 			$data,
 			30 * MINUTE_IN_SECONDS
 		);
@@ -367,5 +458,50 @@ class Statify_Api extends Statify {
 		}
 
 		return get_the_title( $post_id );
+	}
+
+	/**
+	 * Get post type by URL.
+	 *
+	 * @param string $url URL.
+	 *
+	 * @return string Post type, empty string if not available.
+	 */
+	private static function post_type( string $url ): string {
+		$post_id = url_to_postid( $url );
+		if ( 0 === $post_id ) {
+			return '';
+		}
+		return get_post_type( $post_id );
+	}
+
+	/**
+	 * Get name of a given post type (e.g. "Post" for "post")
+	 *
+	 * @param string $type Post type.
+	 *
+	 * @return string Type name.
+	 */
+	private static function type_name( string $type ): string {
+		if ( empty( $type ) ) {
+			return '';
+		}
+		return get_post_type_object( $type )->labels->singular_name;
+	}
+
+	/**
+	 * Get ISO date parameter from request.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 * @param string          $param   Parameter name.
+	 *
+	 * @return string ISO date string or empty, if missing/invalid.
+	 */
+	private static function get_date( WP_REST_Request $request, string $param ): string {
+		$val = $request->get_param( $param );
+		if ( empty( $val ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $val ) ) {
+			return '';
+		}
+		return $val;
 	}
 }

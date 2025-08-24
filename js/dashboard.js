@@ -15,12 +15,17 @@
 	const chartElemDaily = document.getElementById('statify_chart_daily');
 	const chartElemMonthly = document.getElementById('statify_chart_monthly');
 	const chartElemYearly = document.getElementById('statify_chart_yearly');
+	const chartElemContent = document.getElementById('statify_chart_content');
 	const yearlyTable = document.getElementById('statify-table-yearly');
 	const dailyTable = document.getElementById('statify-table-daily');
+	const contentTable = document.getElementById('statify-table-posts');
 
 	// Controls.
 	const postInput = document.getElementById('statify-dashboard-post');
 	const postList = document.getElementById('statify-dashboard-posts');
+	const dateRangeSelect = document.getElementById(
+		'statify-content-daterange'
+	);
 
 	/**
 	 * Update the dashboard widget
@@ -70,7 +75,7 @@
 	}
 
 	/**
-	 * Render monthly statistics.
+	 * Load monthly statistics.
 	 *
 	 * @param {number} year Year to load data for.
 	 *
@@ -84,7 +89,7 @@
 	}
 
 	/**
-	 * Render monthly statistics.
+	 * Load monthly statistics.
 	 *
 	 * @return {Promise<{visits: {[key: string]: {[key: string]: number}}}>} Data promise from API.
 	 */
@@ -95,6 +100,27 @@
 			path += '&post=' + encodeURIComponent(post);
 		}
 		return wp.apiFetch({ path });
+	}
+
+	/**
+	 * Load statistics per post.
+	 *
+	 * @return {Promise<Array<{count: number, title: string, type: string, typeName: string, url: string}>>} Data promise from API.
+	 */
+	function loadPerPost() {
+		const param = new URLSearchParams();
+		const search = new URLSearchParams(window.location.search);
+		['type', 'start', 'end'].forEach((p) => {
+			const v = search.get(p);
+			if (v) {
+				param.set(p, v);
+			}
+		});
+
+		return wp.apiFetch({
+			path:
+				'/statify/v1/stats/posts' + (param.size > 0 ? '?' + param : ''),
+		});
 	}
 
 	/**
@@ -248,8 +274,8 @@
 						'ct:value': wp.i18n.sprintf(
 							/* translators: %s: Number of page views. */
 							wp.i18n._n(
-								'%s Page view',
-								'%s Page views',
+								'%s view',
+								'%s views',
 								d.value.y,
 								'statify'
 							),
@@ -262,6 +288,86 @@
 				d.element.replace(circle);
 			}
 		});
+	}
+
+	/**
+	 * Render bar chart.
+	 *
+	 * @param {HTMLElement} root          Root element.
+	 * @param {string[]}    labels        Labels.
+	 * @param {number[]}    values        Values.
+	 * @param {boolean}     numericLabels Transform labels into numbers and add legend? (default: false)
+	 */
+	function renderBarChart(root, labels, values, numericLabels = false) {
+		// Remove the loading content.
+		root.innerHTML = '';
+
+		if (labels.length === 0) {
+			root.innerHTML =
+				'<p>' + wp.i18n.__('No data available.', 'statify') + '</p>';
+			return;
+		}
+
+		if (numericLabels) {
+			const container = root.parentElement;
+			let legend = container.querySelector('.statify-legend');
+			if (legend) {
+				legend.innerHTML = '';
+			} else {
+				legend = document.createElement('OL');
+				legend.classList.add('statify-legend');
+				container.appendChild(legend);
+			}
+
+			labels.forEach((l) => {
+				const li = document.createElement('LI');
+				li.innerText = l;
+				legend.appendChild(li);
+			});
+
+			values = values.map((v, i) => {
+				return { meta: labels[i], value: v };
+			});
+			labels = labels.map((l, i) => i + 1);
+		}
+
+		// Draw chart.
+		new Chartist.BarChart(
+			root,
+			{
+				labels,
+				series: [values],
+			},
+			{
+				low: 0,
+				showArea: true,
+				// fullWidth: true,
+				// width: fullWidth ? undefined : 5 * labels.length,
+				axisX: {
+					showGrid: false,
+				},
+				axisY: {
+					showGrid: true,
+					showLabel: true,
+					low: 0,
+					onlyInteger: true,
+				},
+				plugins: [
+					Chartist.plugins.tooltip({
+						appendToBody: true,
+						anchorToPoint: true,
+						class: 'statify-chartist-tooltip',
+						transformTooltipTextFnc(y) {
+							return wp.i18n.sprintf(
+								/* translators: %s: Number of page views. */
+								wp.i18n._n('%s view', '%s views', y, 'statify'),
+								y
+							);
+						},
+					}),
+				],
+			}
+		);
 	}
 
 	/**
@@ -456,6 +562,61 @@
 	}
 
 	/**
+	 * Render content table.
+	 *
+	 * @param {HTMLTableElement}                                                                   table Root element.
+	 * @param {Array<{count: number, title: string, type: string, typeName: string, url: string}>} data  Data from API.
+	 */
+	function renderContentTable(table, data) {
+		const tbody = table.querySelector('tbody');
+		const sumRow = table.querySelectorAll('tfoot > tr > td');
+		const rows = Array.from(tbody.querySelectorAll('tr'));
+		const showType = table.querySelectorAll('thead > tr > th').length > 4;
+
+		const total = data.map((d) => d.count).reduce((a, b) => a + b, 0);
+
+		data.forEach((d, idx) => {
+			const row = document.createElement('TR');
+			let col = document.createElement('TD');
+			const link = document.createElement('A');
+			link.href = d.url;
+			link.innerText = d.title;
+			col.append(link);
+			row.appendChild(col);
+			col = document.createElement('TD');
+			col.innerText = d.url;
+			row.appendChild(col);
+			if (showType) {
+				col = document.createElement('TD');
+				col.innerText = d.typeName;
+				row.appendChild(col);
+			}
+			col = document.createElement('TD');
+			col.classList.add('right');
+			col.innerText = d.count.toString();
+			row.appendChild(col);
+			col = document.createElement('TD');
+			col.classList.add('right');
+			col.innerText = ((d.count / total) * 100).toFixed(2) + ' %';
+			row.appendChild(col);
+
+			if (rows.length > idx) {
+				tbody.replaceChild(row, rows[idx]);
+			} else {
+				tbody.appendChild(row);
+			}
+		});
+		for (let i = data.length; i < rows.length; i++) {
+			tbody.removeChild(rows[i]);
+		}
+
+		sumRow[sumRow.length - 2].innerText = total;
+		sumRow[sumRow.length - 1].innerText = '100.00 %';
+
+		addExportButton(table);
+	}
+
+	/**
 	 * Convert daily to monthly data.
 	 *
 	 * @param {{[key: string]: number}} data Daily data.
@@ -525,6 +686,17 @@
 					wp.i18n.__('Error loading data.', 'statify') +
 					'</p>';
 			});
+	} else if (contentTable) {
+		loadPerPost().then((data) => {
+			renderContentTable(contentTable, data);
+			if (chartElemContent) {
+				// Limit number of records.
+				data = data.slice(0, 24);
+				const labels = data.map((d) => d.title);
+				const values = data.map((d) => d.count);
+				renderBarChart(chartElemContent, labels, values, true);
+			}
+		});
 	}
 
 	if (postInput && postList) {
@@ -537,6 +709,10 @@
 				postList.appendChild(opt);
 			})
 		);
+	}
+
+	if (dateRangeSelect) {
+		augmentDateRangeControls();
 	}
 
 	/**
@@ -576,5 +752,89 @@
 					.join('\r\n');
 		});
 		table.after(exportBtn);
+	}
+
+	function augmentDateRangeControls() {
+		const start = document.getElementById('statify-content-datestart');
+		const end = document.getElementById('statify-content-dateend');
+		if (start && end) {
+			const isoDate = (y, m, d) =>
+				new Date(Date.UTC(y, m, d)).toISOString().split('T')[0];
+
+			dateRangeSelect.addEventListener('change', (evt) => {
+				const now = new Date(),
+					y = now.getFullYear(),
+					m = now.getMonth(),
+					d = now.getDate(),
+					day = now.getDay(),
+					monday = d - day + (day === 0 ? -6 : 1);
+
+				switch (evt.target.value) {
+					case '':
+						start.value = '';
+						end.value = '';
+						break;
+					case 'lastYear':
+						start.value = isoDate(y - 1, 0, 1);
+						end.value = isoDate(y - 1, 11, 31);
+						break;
+					case 'lastWeek':
+						start.value = isoDate(y, m, monday - 7);
+						end.value = isoDate(y, m, monday - 1);
+						break;
+					case 'yesterday':
+						start.value = isoDate(y, m, d - 1);
+						end.value = isoDate(y, m, d - 1);
+						break;
+					case 'today':
+						start.value = isoDate(y, m, d);
+						end.value = isoDate(y, m, d);
+						break;
+					case 'thisWeek':
+						start.value = isoDate(y, m, monday);
+						end.value = isoDate(y, m, monday + 6);
+						break;
+					case 'last28days':
+						start.value = isoDate(y, m, d - 27);
+						end.value = isoDate(y, m, d);
+						break;
+					case 'lastMonth':
+						start.value = isoDate(y, m - 1, 1);
+						end.value = isoDate(y, m, 0);
+						break;
+					case 'thisMonth':
+						start.value = isoDate(y, m, 1);
+						end.value = isoDate(y, m + 1, 0);
+						break;
+					case '1stQuarter':
+						start.value = isoDate(y, 1, 1);
+						end.value = isoDate(y, 2, 31);
+						break;
+					case '2ndQuarter':
+						start.value = isoDate(y, 3, 1);
+						end.value = isoDate(y, 5, 30);
+						break;
+					case '3rdQuarter':
+						start.value = isoDate(y, 6, 1);
+						end.value = isoDate(y, 8, 30);
+						break;
+					case '4thQuarter':
+						start.value = isoDate(y, 9, 1);
+						end.value = isoDate(y, 11, 31);
+						break;
+					case 'thisYear':
+						start.value = isoDate(y, 0, 1);
+						end.value = isoDate(y, 11, 31);
+						break;
+				}
+			});
+
+			start.addEventListener('change', () => {
+				dateRangeSelect.value = 'custom';
+			});
+			end.addEventListener('change', () => {
+				dateRangeSelect.value = 'custom';
+			});
+		}
 	}
 }
