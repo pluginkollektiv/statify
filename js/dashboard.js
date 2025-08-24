@@ -16,9 +16,11 @@
 	const chartElemMonthly = document.getElementById('statify_chart_monthly');
 	const chartElemYearly = document.getElementById('statify_chart_yearly');
 	const chartElemContent = document.getElementById('statify_chart_content');
+	const chartElemReferrer = document.getElementById('statify_chart_referrer');
 	const yearlyTable = document.getElementById('statify-table-yearly');
 	const dailyTable = document.getElementById('statify-table-daily');
 	const contentTable = document.getElementById('statify-table-posts');
+	const referrersTable = document.getElementById('statify-table-referrer');
 
 	// Controls.
 	const postInput = document.getElementById('statify-dashboard-post');
@@ -120,6 +122,28 @@
 		return wp.apiFetch({
 			path:
 				'/statify/v1/stats/posts' + (param.size > 0 ? '?' + param : ''),
+		});
+	}
+
+	/**
+	 * Load statistics per referrer.
+	 *
+	 * @return {Promise<Array<{count: number, host: string, url: string}>>} Data promise from API.
+	 */
+	function loadPerReferrer() {
+		const param = new URLSearchParams();
+		const search = new URLSearchParams(window.location.search);
+		['post', 'start', 'end'].forEach((p) => {
+			const v = search.get(p);
+			if (v) {
+				param.set(p, v);
+			}
+		});
+
+		return wp.apiFetch({
+			path:
+				'/statify/v1/stats/referrers' +
+				(param.size > 0 ? '?' + param : ''),
 		});
 	}
 
@@ -617,6 +641,52 @@
 	}
 
 	/**
+	 * Render referrers table.
+	 *
+	 * @param {HTMLTableElement}                                  table Root element.
+	 * @param {Array<{count: number, host: string, url: string}>} data  Data from API.
+	 */
+	function renderReferrersTable(table, data) {
+		const tbody = table.querySelector('tbody');
+		const sumRow = table.querySelectorAll('tfoot > tr > td');
+		const rows = Array.from(tbody.querySelectorAll('tr'));
+
+		const total = data.map((d) => d.count).reduce((a, b) => a + b, 0);
+
+		data.forEach((d, idx) => {
+			const row = document.createElement('TR');
+			let col = document.createElement('TD');
+			const link = document.createElement('A');
+			link.href = d.url;
+			link.innerText = d.host;
+			col.append(link);
+			row.appendChild(col);
+			col = document.createElement('TD');
+			col.classList.add('right');
+			col.innerText = d.count.toString();
+			row.appendChild(col);
+			col = document.createElement('TD');
+			col.classList.add('right');
+			col.innerText = ((d.count / total) * 100).toFixed(2) + ' %';
+			row.appendChild(col);
+
+			if (rows.length > idx) {
+				tbody.replaceChild(row, rows[idx]);
+			} else {
+				tbody.appendChild(row);
+			}
+		});
+		for (let i = data.length; i < rows.length; i++) {
+			tbody.removeChild(rows[i]);
+		}
+
+		sumRow[sumRow.length - 2].innerText = total;
+		sumRow[sumRow.length - 1].innerText = '100.00 %';
+
+		addExportButton(table);
+	}
+
+	/**
 	 * Convert daily to monthly data.
 	 *
 	 * @param {{[key: string]: number}} data Daily data.
@@ -695,6 +765,17 @@
 				const labels = data.map((d) => d.title);
 				const values = data.map((d) => d.count);
 				renderBarChart(chartElemContent, labels, values, true);
+			}
+		});
+	} else if (referrersTable) {
+		loadPerReferrer().then((data) => {
+			renderReferrersTable(referrersTable, data);
+			if (chartElemReferrer) {
+				// Limit number of records.
+				data = data.slice(0, 24);
+				const labels = data.map((d) => d.host);
+				const values = data.map((d) => d.count);
+				renderBarChart(chartElemReferrer, labels, values, true);
 			}
 		});
 	}

@@ -62,6 +62,15 @@ class Statify_Evaluation extends Statify {
 			'statify_content',
 			array( __CLASS__, 'show_content' )
 		);
+
+		add_submenu_page(
+			'statify_dashboard',
+			__( 'Referrers', 'statify' ) . ' &mdash; ' . __( 'Statify', 'statify' ),
+			__( 'Referrers', 'statify' ),
+			'see_statify_evaluation',
+			'statify_referrers',
+			array( __CLASS__, 'show_referrers' )
+		);
 	}
 
 	/**
@@ -76,6 +85,13 @@ class Statify_Evaluation extends Statify {
 	 */
 	public static function show_content(): void {
 		self::show_view( 'content' );
+	}
+
+	/**
+	 * Show the referrers page.
+	 */
+	public static function show_referrers(): void {
+		self::show_view( 'referrers' );
 	}
 
 	/**
@@ -391,5 +407,29 @@ class Statify_Evaluation extends Statify {
 		);
 
 		return array_merge( array( 'post', 'page' ), get_post_types( $types_args ) );
+	}
+
+	/**
+	 * Get post title by URL.
+	 *
+	 * @param string|null $url Target URL.
+	 *
+	 * @return string Post title, fallback to URL of not available.
+	 */
+	public static function post_title( ?string $url ): string {
+		if ( empty( $url ) ) {
+			$title = __( 'all posts', 'statify' );
+		} elseif ( '/' === $url ) {
+			$title = __( 'Home Page', 'statify' );
+		} else {
+			$post_id = url_to_postid( $url );
+			if ( 0 === $post_id ) {
+				$title = esc_url( $url );
+			} else {
+				$title = get_the_title( $post_id );
+			}
+		}
+
+		return $title;
 	}
 }
