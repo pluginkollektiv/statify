@@ -113,7 +113,8 @@ class Statify {
 		}
 
 		// Invalid target?
-		if ( empty( $target ) || ! wp_validate_redirect( $target, false ) ) {
+		$target = wp_validate_redirect( $target );
+		if ( empty( $target ) ) {
 			return;
 		}
 
