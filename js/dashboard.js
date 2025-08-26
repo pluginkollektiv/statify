@@ -1,33 +1,114 @@
 {
-	// Initialize
-	const chartElem = document.getElementById('statify_chart');
-	const referrerTable = document.querySelector(
-		'#statify_dashboard .table.referrer table tbody'
-	);
-	const targetTable = document.querySelector(
-		'#statify_dashboard .table.target table tbody'
-	);
-	const totalsTable = document.querySelector(
-		'#statify_dashboard .table.total table tbody'
-	);
-	const refreshBtn = document.getElementById('statify_refresh');
+	// Initialize DOM elements.
+	const charts = {
+		// Dashboard Widget.
+		dashboard: document.getElementById('statify_chart'),
+		// Extended Evaluation.
+		daily: document.getElementById('statify_chart_daily'),
+		monthly: document.getElementById('statify_chart_monthly'),
+		yearly: document.getElementById('statify_chart_yearly'),
+		content: document.getElementById('statify_chart_content'),
+		referrer: document.getElementById('statify_chart_referrer'),
+	};
+	const tables = {
+		// Dashboard Widget.
+		referrer: document.querySelector(
+			'#statify_dashboard .table.referrer table tbody'
+		),
+		target: document.querySelector(
+			'#statify_dashboard .table.target table tbody'
+		),
+		totals: document.querySelector(
+			'#statify_dashboard .table.total table tbody'
+		),
+		// Extended Evaluation.
+		yearly: document.getElementById('statify-table-yearly'),
+		daily: document.getElementById('statify-table-daily'),
+		content: document.getElementById('statify-table-posts'),
+		referrers: document.getElementById('statify-table-referrer'),
+	};
+	const controls = {
+		// Dashboard Widget.
+		refreshBtn: document.getElementById('statify_refresh'),
+		// Extended Evaluation.
+		postInput: document.getElementById('statify-dashboard-post'),
+		postList: document.getElementById('statify-dashboard-posts'),
+		dateRangeSelect: document.getElementById('statify-content-daterange'),
+	};
 
-	const chartElemDaily = document.getElementById('statify_chart_daily');
-	const chartElemMonthly = document.getElementById('statify_chart_monthly');
-	const chartElemYearly = document.getElementById('statify_chart_yearly');
-	const chartElemContent = document.getElementById('statify_chart_content');
-	const chartElemReferrer = document.getElementById('statify_chart_referrer');
-	const yearlyTable = document.getElementById('statify-table-yearly');
-	const dailyTable = document.getElementById('statify-table-daily');
-	const contentTable = document.getElementById('statify-table-posts');
-	const referrersTable = document.getElementById('statify-table-referrer');
+	/* ------------------------------------------------------------------ */
 
-	// Controls.
-	const postInput = document.getElementById('statify-dashboard-post');
-	const postList = document.getElementById('statify-dashboard-posts');
-	const dateRangeSelect = document.getElementById(
-		'statify-content-daterange'
-	);
+	// Render available charts and tables.
+	if (charts.daily) {
+		loadDaily(charts.daily.dataset.year).then((data) => {
+			renderDaily(charts.daily, data);
+
+			if (charts.monthly) {
+				renderMonthly(charts.monthly, dailyToMonthly(data), false);
+			}
+
+			if (tables.daily) {
+				renderDailyTable(tables.daily, data);
+			}
+		});
+	} else if (charts.monthly) {
+		loadMonthly()
+			.then((data) => {
+				renderMonthly(charts.monthly, data);
+
+				if (charts.yearly) {
+					renderYearly(charts.yearly, data);
+				}
+
+				if (tables.yearly) {
+					renderYearlyTable(tables.yearly, data);
+				}
+			})
+			.catch(() => {
+				// Failed to load.
+				charts.dashboard.innerHTML = `<p>${wp.i18n.__('Error loading data.', 'statify')}</p>`;
+			});
+	} else if (tables.content) {
+		loadPerPost().then((data) => {
+			renderContentTable(tables.content, data);
+			if (charts.content) {
+				// Limit number of records.
+				data = data.slice(0, 24);
+				const labels = data.map((d) => d.title);
+				const values = data.map((d) => d.count);
+				renderBarChart(charts.content, labels, values, true);
+			}
+		});
+	} else if (tables.referrers) {
+		loadPerReferrer().then((data) => {
+			renderReferrersTable(tables.referrers, data);
+			if (charts.referrer) {
+				// Limit number of records.
+				data = data.slice(0, 24);
+				const labels = data.map((d) => d.host);
+				const values = data.map((d) => d.count);
+				renderBarChart(charts.referrer, labels, values, true);
+			}
+		});
+	}
+
+	// Augment available controls.
+	if (controls.postInput && controls.postList) {
+		fetchData('posts').then((data) =>
+			data.forEach((post) => {
+				const opt = document.createElement('option');
+				opt.value = post.url;
+				opt.innerText = post.title;
+				controls.postList.appendChild(opt);
+			})
+		);
+	}
+
+	if (controls.dateRangeSelect) {
+		augmentDateRangeControls();
+	}
+
+	/* ------------------------------------------------------------------ */
 
 	/**
 	 * Update the dashboard widget
@@ -36,43 +117,39 @@
 	 */
 	function updateDashboard(refresh) {
 		// Disable refresh button.
-		if (refreshBtn) {
-			refreshBtn.disabled = true;
+		if (controls.refreshBtn) {
+			controls.refreshBtn.disabled = true;
 		}
 
 		// Load data from API.
-		wp.apiFetch({
-			path: '/statify/v1/stats' + (refresh ? '?refresh=1' : ''),
-		})
+		fetchData('stats', refresh ? 'refresh=1' : null)
 			.then((data) => {
 				const labels = Object.keys(data.visits);
 				const values = Object.values(data.visits);
 
-				render(chartElem, labels, values, false);
+				render(charts.dashboard, labels, values, false);
 
 				// Render top lists.
-				if (referrerTable) {
-					renderTopList(referrerTable, data.referrer);
+				if (tables.referrer) {
+					renderTopList(tables.referrer, data.referrer);
 				}
-				if (targetTable) {
-					renderTopList(targetTable, data.target);
-				}
-
-				if (totalsTable) {
-					renderTotals(totalsTable, data.totals);
+				if (tables.target) {
+					renderTopList(tables.target, data.target);
 				}
 
-				// Re-enable refresh button.
-				if (refreshBtn) {
-					refreshBtn.disabled = false;
+				if (tables.totals) {
+					renderTotals(tables.totals, data.totals);
 				}
 			})
 			.catch(() => {
 				// Failed to load.
-				chartElem.innerHTML =
-					'<p>' +
-					wp.i18n.__('Error loading data.', 'statify') +
-					'</p>';
+				charts.dashboard.innerHTML = `<p>${wp.i18n.__('Error loading data.', 'statify')}</p>`;
+			})
+			.finally(() => {
+				// Re-enable refresh button.
+				if (controls.refreshBtn) {
+					controls.refreshBtn.disabled = false;
+				}
 			});
 	}
 
@@ -84,10 +161,10 @@
 	 * @return {Promise<{[key: string]: number}>} Data promise from API.
 	 */
 	function loadDaily(year) {
-		// Load data from API.
-		return wp.apiFetch({
-			path: `/statify/v1/stats/extended?scope=day&year=${encodeURIComponent(year)}`,
-		});
+		return fetchData(
+			'stats/extended',
+			new URLSearchParams({ scope: 'day', year })
+		);
 	}
 
 	/**
@@ -96,12 +173,12 @@
 	 * @return {Promise<{visits: {[key: string]: {[key: string]: number}}}>} Data promise from API.
 	 */
 	function loadMonthly() {
-		let path = '/statify/v1/stats/extended?scope=month';
+		const param = { scope: 'month' };
 		const post = new URLSearchParams(window.location.search).get('post');
 		if (post) {
-			path += '&post=' + encodeURIComponent(post);
+			param.post = post;
 		}
-		return wp.apiFetch({ path });
+		return fetchData('stats/extended', param);
 	}
 
 	/**
@@ -119,10 +196,7 @@
 			}
 		});
 
-		return wp.apiFetch({
-			path:
-				'/statify/v1/stats/posts' + (param.size > 0 ? '?' + param : ''),
-		});
+		return fetchData('stats/posts', param);
 	}
 
 	/**
@@ -140,11 +214,7 @@
 			}
 		});
 
-		return wp.apiFetch({
-			path:
-				'/statify/v1/stats/referrers' +
-				(param.size > 0 ? '?' + param : ''),
-		});
+		return fetchData('stats/referrers', param);
 	}
 
 	/**
@@ -221,15 +291,14 @@
 		showAxis = true,
 		labelInterpolationFnc = (l) => l
 	) {
-		// Remove the loading content.
+		// Remove the loading content or existing chart.
 		root.innerHTML = '';
 
 		// Adjust display according if there are too many values to display readable.
 		let fullWidth = true;
 		let pointRadius = 4;
 		if (labels.length === 0) {
-			root.innerHTML =
-				'<p>' + wp.i18n.__('No data available.', 'statify') + '</p>';
+			root.innerHTML = `<p>${wp.i18n.__('No data available.', 'statify')}</p>`;
 			return;
 		} else if (root.clientWidth < labels.length * 4) {
 			// Make chart scrollable, if 2px points are overlapping.
@@ -327,8 +396,7 @@
 		root.innerHTML = '';
 
 		if (labels.length === 0) {
-			root.innerHTML =
-				'<p>' + wp.i18n.__('No data available.', 'statify') + '</p>';
+			root.innerHTML = `<p>${wp.i18n.__('No data available.', 'statify')}</p>`;
 			return;
 		}
 
@@ -365,8 +433,6 @@
 			{
 				low: 0,
 				showArea: true,
-				// fullWidth: true,
-				// width: fullWidth ? undefined : 5 * labels.length,
 				axisX: {
 					showGrid: false,
 				},
@@ -401,32 +467,15 @@
 	 * @param {{count: number, url: string, host: ?string}[]} data  Data to display.
 	 */
 	function renderTopList(table, data) {
-		// Get pre-existing rows.
-		const rows = table.querySelectorAll('tr');
-
-		// Update or append rows.
-		data.forEach((r, idx) => {
+		const rows = data.map((r) => {
 			const row = document.createElement('TR');
 			row.innerHTML =
-				'<td class="b">' +
-				r.count +
-				'</td>' +
-				'<td class="t"><a href="' +
-				r.url +
-				'" target="_blank"  rel="noopener noreferrer">' +
-				(r.host || r.url) +
-				'</td>';
-			if (rows.length > idx) {
-				table.replaceChild(row, rows[idx]);
-			} else {
-				table.appendChild(row);
-			}
+				`<td class="b">${r.count}</td>` +
+				`<td class="t"><a href="${r.url}" target="_blank"  rel="noopener noreferrer">${r.host || r.url}</td>`;
+			return row;
 		});
 
-		// Remove excess rows.
-		for (let i = data.length; i < rows.length; i++) {
-			table.removeChild(rows[i]);
-		}
+		updateTable(table, rows);
 	}
 
 	/**
@@ -436,25 +485,14 @@
 	 * @param {{alltime: number, since: string, today: number}} data  Totals data.
 	 */
 	function renderTotals(table, data) {
-		const rows = table.querySelectorAll('tr');
-		let row = document.createElement('TR');
-		row.innerHTML =
-			'<td class="b">' +
-			data.today +
-			'</td>' +
-			'<td class="t">' +
-			wp.i18n.__('today', 'statify') +
-			'</td>';
-		if (rows.length > 0) {
-			table.replaceChild(row, rows[0]);
-		} else {
-			table.appendChild(row);
-		}
-		row = document.createElement('TR');
-		row.innerHTML =
-			'<td class="b">' +
-			data.alltime +
-			'</td>' +
+		const rowToday = document.createElement('TR');
+		rowToday.innerHTML =
+			`<td class="b">${data.today}</td>` +
+			`<td class="t">${wp.i18n.__('today', 'statify')}</td>`;
+
+		const rowAll = document.createElement('TR');
+		rowAll.innerHTML =
+			`<td class="b">${data.alltime}</td>` +
 			'<td class="t">' +
 			wp.i18n.sprintf(
 				/* translators: %s: Date. */
@@ -462,14 +500,8 @@
 				data.since
 			) +
 			'</td>';
-		if (rows.length > 1) {
-			table.replaceChild(row, rows[1]);
-		} else {
-			table.appendChild(row);
-		}
-		for (let i = 2; i < rows.length; i++) {
-			table.removeChild(rows[i]);
-		}
+
+		updateTable(table, [rowToday, rowAll]);
 	}
 
 	/**
@@ -521,10 +553,10 @@
 		const cols = rows.map((row) => Array.from(row.querySelectorAll('td')));
 		let out = cols.slice(0, 31);
 
-		const sum = Array(12).fill(0);
-		const vls = Array(12).fill(0);
-		const min = Array(12).fill(Number.MAX_SAFE_INTEGER);
-		const max = Array(12).fill(0);
+		const sum = new Array(12).fill(0);
+		const vls = new Array(12).fill(0);
+		const min = new Array(12).fill(Number.MAX_SAFE_INTEGER);
+		const max = new Array(12).fill(0);
 
 		for (const [day, count] of Object.entries(data)) {
 			const d = new Date(day);
@@ -594,12 +626,11 @@
 	function renderContentTable(table, data) {
 		const tbody = table.querySelector('tbody');
 		const sumRow = table.querySelectorAll('tfoot > tr > td');
-		const rows = Array.from(tbody.querySelectorAll('tr'));
 		const showType = table.querySelectorAll('thead > tr > th').length > 4;
 
 		const total = data.map((d) => d.count).reduce((a, b) => a + b, 0);
 
-		data.forEach((d, idx) => {
+		const rows = data.map((d) => {
 			const row = document.createElement('TR');
 			let col = document.createElement('TD');
 			const link = document.createElement('A');
@@ -624,15 +655,10 @@
 			col.innerText = ((d.count / total) * 100).toFixed(2) + ' %';
 			row.appendChild(col);
 
-			if (rows.length > idx) {
-				tbody.replaceChild(row, rows[idx]);
-			} else {
-				tbody.appendChild(row);
-			}
+			return row;
 		});
-		for (let i = data.length; i < rows.length; i++) {
-			tbody.removeChild(rows[i]);
-		}
+
+		updateTable(tbody, rows);
 
 		sumRow[sumRow.length - 2].innerText = total;
 		sumRow[sumRow.length - 1].innerText = '100.00 %';
@@ -649,11 +675,10 @@
 	function renderReferrersTable(table, data) {
 		const tbody = table.querySelector('tbody');
 		const sumRow = table.querySelectorAll('tfoot > tr > td');
-		const rows = Array.from(tbody.querySelectorAll('tr'));
 
 		const total = data.map((d) => d.count).reduce((a, b) => a + b, 0);
 
-		data.forEach((d, idx) => {
+		const rows = data.map((d) => {
 			const row = document.createElement('TR');
 			let col = document.createElement('TD');
 			const link = document.createElement('A');
@@ -669,21 +694,39 @@
 			col.classList.add('right');
 			col.innerText = ((d.count / total) * 100).toFixed(2) + ' %';
 			row.appendChild(col);
-
-			if (rows.length > idx) {
-				tbody.replaceChild(row, rows[idx]);
-			} else {
-				tbody.appendChild(row);
-			}
+			return row;
 		});
-		for (let i = data.length; i < rows.length; i++) {
-			tbody.removeChild(rows[i]);
-		}
+
+		updateTable(tbody, rows);
 
 		sumRow[sumRow.length - 2].innerText = total;
 		sumRow[sumRow.length - 1].innerText = '100.00 %';
 
 		addExportButton(table);
+	}
+
+	/**
+	 * Replace or append table rows.
+	 *
+	 * @param {HTMLTableElement|HTMLTableSectionElement} table   Target table or table body.
+	 * @param {HTMLTableRowElement[]}                    newRows New row elements.
+	 */
+	function updateTable(table, newRows) {
+		const existingRows = table.querySelectorAll('tr');
+
+		// Replace existing rows
+		newRows.forEach((newRow, idx) => {
+			if (idx < existingRows.length) {
+				table.replaceChild(newRow, existingRows[idx]);
+			} else {
+				table.appendChild(newRow);
+			}
+		});
+
+		// Remove excess rows
+		for (let i = newRows.length; i < existingRows.length; i++) {
+			existingRows[i].remove();
+		}
 	}
 
 	/**
@@ -709,10 +752,10 @@
 	}
 
 	// Abort if config or target element is not present.
-	if (chartElem) {
+	if (charts.dashboard) {
 		// Bind update function to "refresh" button.
-		if (refreshBtn) {
-			refreshBtn.addEventListener('click', (evt) => {
+		if (controls.refreshBtn) {
+			controls.refreshBtn.addEventListener('click', (evt) => {
 				evt.preventDefault();
 				updateDashboard(true);
 
@@ -722,78 +765,6 @@
 
 		// Initial update.
 		updateDashboard(false);
-	}
-
-	if (chartElemDaily) {
-		loadDaily(chartElemDaily.dataset.year).then((data) => {
-			renderDaily(chartElemDaily, data);
-
-			if (chartElemMonthly) {
-				renderMonthly(chartElemMonthly, dailyToMonthly(data), false);
-			}
-
-			if (dailyTable) {
-				renderDailyTable(dailyTable, data);
-			}
-		});
-	} else if (chartElemMonthly) {
-		loadMonthly()
-			.then((data) => {
-				renderMonthly(chartElemMonthly, data);
-
-				if (chartElemYearly) {
-					renderYearly(chartElemYearly, data);
-				}
-
-				if (yearlyTable) {
-					renderYearlyTable(yearlyTable, data);
-				}
-			})
-			.catch(() => {
-				// Failed to load.
-				chartElem.innerHTML =
-					'<p>' +
-					wp.i18n.__('Error loading data.', 'statify') +
-					'</p>';
-			});
-	} else if (contentTable) {
-		loadPerPost().then((data) => {
-			renderContentTable(contentTable, data);
-			if (chartElemContent) {
-				// Limit number of records.
-				data = data.slice(0, 24);
-				const labels = data.map((d) => d.title);
-				const values = data.map((d) => d.count);
-				renderBarChart(chartElemContent, labels, values, true);
-			}
-		});
-	} else if (referrersTable) {
-		loadPerReferrer().then((data) => {
-			renderReferrersTable(referrersTable, data);
-			if (chartElemReferrer) {
-				// Limit number of records.
-				data = data.slice(0, 24);
-				const labels = data.map((d) => d.host);
-				const values = data.map((d) => d.count);
-				renderBarChart(chartElemReferrer, labels, values, true);
-			}
-		});
-	}
-
-	if (postInput && postList) {
-		// Load data from API.
-		wp.apiFetch({ path: '/statify/v1/posts' }).then((data) =>
-			data.forEach((post) => {
-				const opt = document.createElement('option');
-				opt.value = post.url;
-				opt.innerText = post.title;
-				postList.appendChild(opt);
-			})
-		);
-	}
-
-	if (dateRangeSelect) {
-		augmentDateRangeControls();
 	}
 
 	/**
@@ -835,6 +806,10 @@
 		table.after(exportBtn);
 	}
 
+	/**
+	 * Augment date range controls.
+	 * Fill start/end based on selected range and revert to "custom" when changed manually.
+	 */
 	function augmentDateRangeControls() {
 		const start = document.getElementById('statify-content-datestart');
 		const end = document.getElementById('statify-content-dateend');
@@ -842,7 +817,7 @@
 			const isoDate = (y, m, d) =>
 				new Date(Date.UTC(y, m, d)).toISOString().split('T')[0];
 
-			dateRangeSelect.addEventListener('change', (evt) => {
+			controls.dateRangeSelect.addEventListener('change', (evt) => {
 				const now = new Date(),
 					y = now.getFullYear(),
 					m = now.getMonth(),
@@ -911,11 +886,24 @@
 			});
 
 			start.addEventListener('change', () => {
-				dateRangeSelect.value = 'custom';
+				controls.dateRangeSelect.value = 'custom';
 			});
 			end.addEventListener('change', () => {
-				dateRangeSelect.value = 'custom';
+				controls.dateRangeSelect.value = 'custom';
 			});
 		}
+	}
+
+	/**
+	 * Fetch data from Statify API.
+	 *
+	 * @param {string}                                             path  Relative API path.
+	 * @param {string|Record<string, string>|URLSearchParams|null} param Parameters (optional).
+	 * @return {Promise<any>} Response promise.
+	 */
+	function fetchData(path, param = undefined) {
+		return wp.apiFetch({
+			path: `/statify/v1/${path}${param ? '?' + new URLSearchParams(param) : ''}`,
+		});
 	}
 }
