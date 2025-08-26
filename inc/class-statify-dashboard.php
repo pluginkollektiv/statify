@@ -38,9 +38,6 @@ class Statify_Dashboard extends Statify {
 			return;
 		}
 
-		// Check if user can edit the widget.
-		$can_edit = self::user_can_see_stats();
-
 		// Load textdomain.
 		load_plugin_textdomain(
 			'statify',
@@ -56,7 +53,7 @@ class Statify_Dashboard extends Statify {
 			'statify_dashboard',
 			'Statify',
 			array( __CLASS__, 'print_frontview' ),
-			$can_edit ? array( __CLASS__, 'print_backview' ) : null
+			array( __CLASS__, 'print_backview' )
 		);
 
 		// Init CSS.
