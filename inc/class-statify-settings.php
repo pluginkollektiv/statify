@@ -30,7 +30,7 @@ class Statify_Settings {
 		add_settings_section(
 			'statify-global',
 			__( 'Global settings', 'statify' ),
-			null,
+			array( __CLASS__, 'header_global' ),
 			'statify'
 		);
 		add_settings_field(
@@ -120,6 +120,19 @@ class Statify_Settings {
 			'statify-skip',
 			array( 'label_for' => 'statify-skip-logged_in' )
 		);
+	}
+
+	/**
+	 * Section header for "Global settings" section.
+	 *
+	 * @return void
+	 */
+	public static function header_global(): void {
+		?>
+		<p>
+			<?php esc_html_e( 'Configure fundamental settings for tracking preferences and data retention.', 'statify' ); ?>
+		</p>
+		<?php
 	}
 
 	/**
