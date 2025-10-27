@@ -24,6 +24,7 @@ class Statify_Settings {
 	 * @return void
 	 */
 	public static function register_settings(): void {
+		self::enqueue_settings_assets();
 		register_setting( 'statify', 'statify', array( __CLASS__, 'sanitize_options' ) );
 
 		// Global settings.
@@ -119,6 +120,14 @@ class Statify_Settings {
 			'statify',
 			'statify-skip',
 			array( 'label_for' => 'statify-skip-logged_in' )
+		);
+
+		// Reset statistic.
+		add_settings_section(
+			'statify-reset',
+			__( 'Reset Statistics', 'statify' ),
+			array( __CLASS__, 'reset_data_section' ),
+			'statify'
 		);
 	}
 
@@ -347,6 +356,31 @@ class Statify_Settings {
 	}
 
 	/**
+	 * Section for reset statistics functionality.
+	 *
+	 * @return void
+	 */
+	public static function reset_data_section(): void {
+		?>
+		<div class="statify-danger-zone">
+			<h3>
+				<?php esc_html_e( '⚠️ Danger Zone', 'statify' ); ?>
+			</h3>
+			<p>
+				<?php esc_html_e( 'Permanently delete all statistics data. This action cannot be undone!', 'statify' ); ?>
+			</p>
+			<p>
+				<button type="button"
+						id="statify-reset-data"
+						class="button button-secondary">
+					<?php esc_html_e( 'Reset All Statistics', 'statify' ); ?>
+				</button>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Action to be triggered after Statify options have been saved.
 	 * Delete transient data to refresh the dashboard widget and flushes Cachify cache, if the plugin is available and
 	 * JS settings have changed.
@@ -482,5 +516,28 @@ class Statify_Settings {
 		</div>
 
 		<?php
+	}
+
+	/**
+	 * Enqueues settings assets.
+	 *
+	 * @return void
+	 */
+	public static function enqueue_settings_assets(): void {
+		wp_enqueue_style(
+			'statify-settings',
+			plugins_url( 'css/settings.css', STATIFY_FILE ),
+			array(),
+			STATIFY_VERSION
+		);
+
+		// Enqueue settings JavaScript.
+		wp_enqueue_script(
+			'statify-settings-js',
+			plugins_url( 'js/settings.js', STATIFY_FILE ),
+			array( 'wp-api-fetch', 'wp-i18n' ),
+			STATIFY_VERSION,
+			true
+		);
 	}
 }

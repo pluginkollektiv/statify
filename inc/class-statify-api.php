@@ -25,6 +25,7 @@ class Statify_Api extends Statify {
 	const REST_NAMESPACE   = 'statify/v1';
 	const REST_ROUTE_TRACK = 'track';
 	const REST_ROUTE_STATS = 'stats';
+	const REST_ROUTE_RESET = 'reset';
 
 	/**
 	 * Initialize REST API routes.
@@ -52,6 +53,18 @@ class Statify_Api extends Statify {
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( __CLASS__, 'get_stats' ),
 				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_RESET,
+			array(
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => array( __CLASS__, 'rest_reset_data' ),
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
 			)
 		);
 
@@ -150,5 +163,34 @@ class Statify_Api extends Statify {
 		}
 
 		return new WP_REST_Response( $stats );
+	}
+
+	/**
+	 * REST API callback to reset statistics data.
+	 *
+	 * @param WP_REST_Request $request The REST request object.
+	 *
+	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error on failure.
+	 */
+	public static function rest_reset_data( WP_REST_Request $request ) {
+		$result = Statify_Table::truncate();
+
+		if ( ! $result ) {
+			return new WP_Error(
+				'reset_failed',
+				__( 'Failed to reset statistics data.', 'statify' ),
+				array( 'status' => 500 )
+			);
+		}
+
+		delete_transient( 'statify_data' );
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'message' => __( 'Statistics data has been successfully reset.', 'statify' ),
+			),
+			200
+		);
 	}
 }

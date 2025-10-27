@@ -87,4 +87,17 @@ class Statify_Table {
 		// Remove.
 		$wpdb->query( "DROP TABLE IF EXISTS `$wpdb->statify`" );
 	}
+
+	/**
+	 * Clear Statify table.
+	 *
+	 * @since   2.0.0
+	 * @version 2.0.0
+	 */
+	public static function truncate(): bool {
+
+		global $wpdb;
+
+		return (bool) $wpdb->query( "TRUNCATE TABLE `$wpdb->statify`" );
+	}
 }
