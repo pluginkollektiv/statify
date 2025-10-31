@@ -59,10 +59,12 @@
       "@lint-css"
     ],
     "lint-css": [
-      "npx stylelint css/dashboard.css"
+      "npx stylelint css/dashboard.css",
+      "npx stylelint css/settings.css"
     ],
     "lint-js": [
       "npx eslint js/dashboard.js",
+      "npx eslint js/settings.js",
       "npx eslint js/snippet.js"
     ],
     "lint-php": [
@@ -73,7 +75,9 @@
     ],
     "minify": [
       "minifycss css/dashboard.css > css/dashboard.min.css",
+      "minifycss css/settings.css > css/settings.min.css",
       "minifyjs js/dashboard.js > js/dashboard.min.js",
+      "minifyjs js/settings.js > js/settings.min.js",
       "minifyjs js/snippet.js > js/snippet.min.js",
       "minifycss vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.css > css/chartist-plugin-tooltip.min.css"
     ],

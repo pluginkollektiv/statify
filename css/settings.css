@@ -1,0 +1,35 @@
+/* Danger Zone Section */
+.statify-danger-zone {
+    border: 2px solid #d63638;
+    padding: 15px;
+    background: #fff;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.statify-danger-zone h3 {
+    margin-top: 0;
+    color: #b32d2e;
+    font-size: 1.1em;
+}
+
+.statify-danger-zone p {
+    margin-bottom: 10px;
+}
+
+.statify-danger-zone .button {
+    color: #d63638;
+    border-color: #b32d2e;
+}
+
+.statify-danger-zone .button:hover,
+.statify-danger-zone .button:focus {
+    background: #d63638;
+	border-color: #b32d2e;
+	box-shadow: 0 0 0 1px #b32d2e;
+    color: #fff;
+}
+
+.statify-danger-zone .button:disabled {
+    cursor: not-allowed;
+}
