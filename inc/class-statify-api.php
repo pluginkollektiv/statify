@@ -61,7 +61,7 @@ class Statify_Api extends Statify {
 			self::REST_ROUTE_RESET,
 			array(
 				'methods'             => WP_REST_Server::CREATABLE,
-				'callback'            => array( __CLASS__, 'rest_reset_data' ),
+				'callback'            => array( __CLASS__, 'reset_data' ),
 				'permission_callback' => function () {
 					return current_user_can( 'manage_options' );
 				},
@@ -172,7 +172,7 @@ class Statify_Api extends Statify {
 	 *
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error on failure.
 	 */
-	public static function rest_reset_data( WP_REST_Request $request ) {
+	public static function reset_data( WP_REST_Request $request ) {
 		$result = Statify_Table::truncate();
 
 		if ( ! $result ) {
