@@ -246,18 +246,35 @@
 	 * @param {boolean}                                            showYear Show year in label? (default: true)
 	 */
 	function renderMonthly(root, data, showYear = true) {
-		const labels = Object.keys(data.visits).flatMap((y) =>
-			Object.keys(data.visits[y]).map(
-				(m) =>
-					statifyDashboard.i18n.months[m - 1] +
-					(showYear ? ' ' + y : '')
-			)
-		);
 		const values = Object.values(data.visits).flatMap((y) =>
 			Object.values(y)
 		);
 
-		render(root, labels, values);
+		let labelFunc = (l) => l;
+		let labels;
+		if (showYear && Object.keys(data.visits).length > 2) {
+			labels = Object.keys(data.visits).flatMap((y) =>
+				Object.keys(data.visits[y]).map((m) => `${y}-${m}-01`)
+			);
+			labelFunc = (date) => {
+				const d = new Date(date);
+				const m = d.getMonth();
+				if (m === 0) {
+					return String(d.getFullYear());
+				}
+				return '';
+			};
+		} else {
+			labels = Object.keys(data.visits).flatMap((y) =>
+				Object.keys(data.visits[y]).map(
+					(m) =>
+						statifyDashboard.i18n.months[m - 1] +
+						(showYear ? ' ' + y : '')
+				)
+			);
+		}
+
+		render(root, labels, values, true, labelFunc);
 	}
 
 	/**
