@@ -533,7 +533,7 @@ class Statify_Settings {
 
 		// Enqueue settings JavaScript.
 		wp_enqueue_script(
-			'statify-settings-js',
+			'statify-settings',
 			plugins_url( 'js/settings.js', STATIFY_FILE ),
 			array( 'wp-api-fetch', 'wp-i18n' ),
 			STATIFY_VERSION,
