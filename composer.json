@@ -10,8 +10,6 @@
   ],
   "require": {
     "php": "^7.4|^8",
-    "npm-asset/chartist": "^1.5.0",
-    "npm-asset/chartist-plugin-tooltips-updated": "1.0.0",
     "jaybizzle/crawler-detect": "^1.3"
   },
   "require-dev": {
@@ -27,12 +25,6 @@
     "wp-coding-standards/wpcs": "^3.3",
     "yoast/phpunit-polyfills": "^1.1"
   },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://asset-packagist.org"
-    }
-  ],
   "scripts": {
     "post-install-cmd": [
       "@build"
@@ -41,31 +33,13 @@
       "@build"
     ],
     "build": [
-      "@copy-assets",
-      "@minify"
+      "@copy-assets"
     ],
     "copy-assets": [
       "SlowProg\\CopyFile\\ScriptHandler::copy"
     ],
-    "cs": [
-      "@lint-php"
-    ],
     "csfix": [
       "phpcbf --standard=phpcs.xml"
-    ],
-    "lint-all": [
-      "@lint-php",
-      "@lint-js",
-      "@lint-css"
-    ],
-    "lint-css": [
-      "npx stylelint css/dashboard.css",
-      "npx stylelint css/settings.css"
-    ],
-    "lint-js": [
-      "npx eslint js/dashboard.js",
-      "npx eslint js/settings.js",
-      "npx eslint js/snippet.js"
     ],
     "lint-php": [
       "phpcs --standard=phpcs.xml -s"
@@ -73,30 +47,16 @@
     "lint-tests": [
       "phpcs --standard=tests/phpcs.xml tests"
     ],
-    "minify": [
-      "minifycss css/dashboard.css > css/dashboard.min.css",
-      "minifycss css/settings.css > css/settings.min.css",
-      "minifyjs js/dashboard.js > js/dashboard.min.js",
-      "minifyjs js/settings.js > js/settings.min.js",
-      "minifyjs js/snippet.js > js/snippet.min.js",
-      "minifycss vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.css > css/chartist-plugin-tooltip.min.css"
-    ],
     "phpstan": [
       "phpstan analyse --memory-limit=1G"
     ],
     "test": [
       "phpunit"
-    ],
-    "test-js": [
-      "npx nyc --reporter=text mocha tests/js/*.test.js"
     ]
   },
   "extra": {
     "copy-file": {
-      "vendor/jaybizzle/crawler-detect/src/": "lib/Jaybizzle/CrawlerDetect/",
-      "vendor/npm-asset/chartist/dist/index.css": "css/chartist.min.css",
-      "vendor/npm-asset/chartist/dist/index.umd.js": "js/chartist.min.js",
-      "vendor/npm-asset/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.min.js": "js/"
+      "vendor/jaybizzle/crawler-detect/src/": "lib/Jaybizzle/CrawlerDetect/"
     }
   },
   "config": {
