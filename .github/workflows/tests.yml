@@ -58,7 +58,7 @@ jobs:
           COMPOSER: ${{ matrix.composer }}
         run: composer test
       - name: JS unit tests
-        run: npx nyc --reporter=text mocha tests/js/*.test.js
+        run: npx nyc --reporter=text node --test tests/js/*.test.js
   quality:
     runs-on: ubuntu-latest
     steps:
