@@ -24,22 +24,22 @@ body.rtl .statify-chart * {
 }
 
 .statify-chart .ct-line {
-	stroke: #3582c4;
+	stroke: var(--wp-admin-theme-color-darker-10, #3582c4);
 	stroke-width: 2px;
 }
 
 .statify-chart .ct-point {
 	fill: #fff;
-	stroke: #3582c4;
+	stroke: var(--wp-admin-theme-color-darker-10, #3582c4);
 	stroke-width: 1.5px;
 }
 
 .statify-chart .ct-area {
-	fill: #3582c4;
+	fill: var(--wp-admin-theme-color, #3582c4);
 }
 
 .statify-chart .ct-bar {
-	stroke: #3582c4;
+	stroke: var(--wp-admin-theme-color-darker-10, #3582c4);
 }
 
 .statify-chart .ct-label.ct-horizontal.ct-end {
@@ -66,7 +66,7 @@ body.rtl .statify-chart * {
 }
 
 .statify-chartist-tooltip .chartist-tooltip-meta {
-	color: #3582c4;
+	color: var(--wp-admin-theme-color-darker-20, #3582c4);
 }
 
 
