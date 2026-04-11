@@ -167,11 +167,8 @@ class Statify_Dashboard extends Statify {
 		// Get from DB.
 		$data = self::select_data();
 
-		// Prepare data.
+		// Store in cache.
 		if ( ! empty( $data['visits'] ) ) {
-			$data['visits'] = array_reverse( $data['visits'] );
-
-			// Make cache.
 			set_transient(
 				'statify_data',
 				$data,
@@ -205,12 +202,15 @@ class Statify_Dashboard extends Statify {
 		$current_date = current_time( 'Y-m-d' );
 
 		$data = array(
-			'visits'   => $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT `created` as `date`, COUNT(`created`) as `count` FROM `$wpdb->statify` GROUP BY `created` ORDER BY `created` DESC LIMIT %d",
-					$days_show
+			'visits'   => self::fill_gaps(
+				$wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT `created` as `date`, COUNT(*) as `count` FROM `$wpdb->statify` WHERE `created` BETWEEN CURDATE() - INTERVAL %d DAY AND CURDATE() GROUP BY `created` ORDER BY `created` ASC",
+						$days_show - 1
+					),
+					ARRAY_A
 				),
-				ARRAY_A
+				$days_show
 			),
 		);
 
@@ -268,5 +268,40 @@ class Statify_Dashboard extends Statify {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Fill gaps in statistics data array.
+	 * We only fill gaps inbeteen datapoints and between the latest datapoint and "today".
+	 *
+	 * @param array $data {
+	 *     Data from database.
+	 *
+	 *     @type string $date  The date (Y-m-d).
+	 *     @type int    $count Count.
+	 * }
+	 * @param int   $days Number of days to show.
+	 * @return array Array with filled gaps.
+	 */
+	private static function fill_gaps( array $data, int $days ): array {
+		if ( empty( $data ) || count( $data ) == $days ) {
+			return $data;
+		}
+
+		$result = array();
+		$lookup = array_column( $data, 'count', 'date' );
+		$append = false;
+		for ( $i = $days - 1; $i >= 0; $i-- ) {
+			$date = ( new DateTime( "-$i days" ) )->format( 'Y-m-d' );
+			if ( $append || isset( $lookup[ $date ] ) ) {
+				$append   = true;
+				$result[] = array(
+					'date'  => $date,
+					'count' => intval( $lookup[ $date ] ?? 0 ),
+				);
+			}
+		}
+
+		return $result;
 	}
 }
