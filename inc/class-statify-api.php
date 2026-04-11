@@ -5,7 +5,7 @@
  * This file contains methods for REST API integration.
  *
  * @package Statify
- * @since   1.9
+ * @since   2.0.0
  */
 
 // Quit if accessed outside WP context.
@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Statify REST API integration.
  *
- * @since 1.9
+ * @since 2.0.0
  */
 class Statify_Api extends Statify {
 	/**

@@ -117,6 +117,29 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+### 2.0.0
+* JavaScript tracking now uses WP REST API instead of AJAX
+* Integrated additional dashboards from _Extended Evaluation for Statify_
+* Visibility of statistics can now be configured for different roles
+* Improvements for bot detection
+* It is now possible to exclude administrators from tracking
+* Added feature to reset all statistics
+* Use WordPress admin theme colors in the dashboard widgets
+* Improved the field explanation for "Disallowed Comment Keys"
+* Updated deprecated WordPress hooks
+* Use wp-i18n for frontend translation
+* Order of top targets/referrers is now consistent if the number of visits is equal
+* Prevent layout shift when showing tooltips in the dashboard widget
+* Fixed user role error on saving settings
+* Fixed RTL layout in the dashboard widget
+* Fix dashboard widget for days without visitors
+* Removed XML-RPC integration
+* Removed deprecated `statify_skip_tracking` filter
+* Requires PHP 7.4 or higher
+* Requires WordPress 5.1 or higher
+* Tests up to WordPress 7.0
+
+
 ### 1.8.5
 * Updated build environment
 * Minor code style corrections
@@ -185,6 +208,15 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 ## Upgrade Notice ##
 
+### 2.0.0 ###
+
+This is a major release with some breaking changes.
+
+JavaScript based tracking is now using a WP REST API endpoint instead of AJAX. Please make sure you allow access for regular users, if there area any custom restrictions configured.
+
+Minimum system requirements are now WordPress 5.1 and PHP 7.4.
+
+
 ### 1.8.4 ###
 This is a maintenance release targeting WordPress 6.1 and PHP 8.1 compatibility. It is recommended for all users.
 
@@ -205,3 +237,6 @@ Some minor improvements. The most important one: This version offers to deactiva
 1. Statify dashboard widget
 2. Statify dashboard widget settings
 3. Statify settings page
+4. Statify tracking configuration
+5. Monthly views per year
+6. Top referrers for last week

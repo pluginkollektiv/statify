@@ -399,7 +399,7 @@ class Statify {
 	 * @return boolean  $skip_hook TRUE if NO tracking is desired
 	 *
 	 * @since 1.6.1
-	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
+	 * @since 2.0.0 Migration from Statify_Frontend to Statify class.
 	 */
 	protected static function is_internal(): bool {
 		// Skip for preview, 404 calls, feed, search, favicon and sitemap access.
@@ -415,7 +415,7 @@ class Statify {
 	 * @return  boolean TRUE of referrer matches disallowed keys entry and should thus be excluded.
 	 *
 	 * @since 1.5.0
-	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
+	 * @since 2.0.0 Migration from Statify_Frontend to Statify class.
 	 */
 	private static function check_referrer(): bool {
 		// Return false if the disallowed-keys filter (formerly blacklist) is inactive.
@@ -458,7 +458,7 @@ class Statify {
 	 * @return array
 	 *
 	 * @since 1.7.3 Renamed to "get_disallowed_keys" to match WP 5.5. wording.
-	 * @since 1.9.0 Migration from Statify_Frontend to Statify class.
+	 * @since 2.0.0 Migration from Statify_Frontend to Statify class.
 	 */
 	private static function get_disallowed_keys(): array {
 		$disallowed_keys = get_option( 'disallowed_keys' );

@@ -1,13 +1,16 @@
 <?php
 /**
- * Plugin Name: Statify
- * Description: Compact, easy-to-use and privacy-compliant stats plugin for WordPress.
- * Text Domain: statify
- * Author:      pluginkollektiv
- * Author URI:  https://pluginkollektiv.org/
- * Plugin URI:  https://statify.pluginkollektiv.org/
- * License:     GPLv3 or later
- * Version:     1.9.0
+ * Plugin Name:       Statify
+ * Plugin URI:        https://statify.pluginkollektiv.org/
+ * Description:       Compact, easy-to-use and privacy-compliant stats plugin for WordPress.
+ * Version:           2.0.0-beta.1
+ * Requires at least: 5.1
+ * Requires PHP:      7.4
+ * Author:            pluginkollektiv
+ * Author URI:        https://pluginkollektiv.org/
+ * License:           GPLv3 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain:       statify
  *
  * @package WordPress
  */
@@ -20,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
 define( 'STATIFY_FILE', __FILE__ );
 define( 'STATIFY_DIR', __DIR__ );
 define( 'STATIFY_BASE', plugin_basename( __FILE__ ) );
-define( 'STATIFY_VERSION', '1.9.0' );
+define( 'STATIFY_VERSION', '2.0.0' );
 
 
 /* Hooks */
