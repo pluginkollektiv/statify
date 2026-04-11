@@ -149,7 +149,7 @@ class Statify_Api extends Statify {
 		// Only do something if snippet use is actually configured.
 		if ( Statify::is_javascript_tracking_enabled() ) {
 			// Nonce verification, if necessary. We do not rely on the WP REST default mechanisms.
-			if ( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK === self::$_options['snippet'] ) {
+			if ( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK === self::$options['snippet'] ) {
 				$nonce = $request->get_param( 'nonce' );
 				if ( empty( $nonce ) || false === wp_verify_nonce( $nonce, 'statify_track' ) ) {
 					return new WP_REST_Response( null, 403 );

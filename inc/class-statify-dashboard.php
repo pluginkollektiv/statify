@@ -88,7 +88,7 @@ class Statify_Dashboard extends Statify {
 		if ( ! empty( $_POST['statify'] ) ) {
 			check_admin_referer( 'statify-dashboard' );
 
-			self::_save_widget_options();
+			self::save_widget_options();
 		}
 
 		// Load view.
@@ -106,18 +106,18 @@ class Statify_Dashboard extends Statify {
 	 *
 	 * @return void
 	 */
-	private static function _save_widget_options(): void {
+	private static function save_widget_options(): void {
 		// Check the nonce field from the dashboard form.
 		if ( ! check_admin_referer( 'statify-dashboard' ) ) {
 			return;
 		}
 
 		// We only do a partial update, so initialize with current values.
-		$options = Statify::$_options;
+		$options = Statify::$options;
 
 		// Parse numeric values.
 		foreach ( array( 'days', 'days_show', 'limit' ) as $option_name ) {
-			$options[ $option_name ] = Statify::$_options[ $option_name ];
+			$options[ $option_name ] = Statify::$options[ $option_name ];
 			if ( isset( $_POST['statify'][ $option_name ] ) && (int) $_POST['statify'][ $option_name ] > 0 ) {
 				$options[ $option_name ] = (int) $_POST['statify'][ $option_name ];
 			}
@@ -165,7 +165,7 @@ class Statify_Dashboard extends Statify {
 		}
 
 		// Get from DB.
-		$data = self::_select_data();
+		$data = self::select_data();
 
 		// Prepare data.
 		if ( ! empty( $data['visits'] ) ) {
@@ -191,16 +191,16 @@ class Statify_Dashboard extends Statify {
 	 *
 	 * @return  array  DB results
 	 */
-	private static function _select_data(): array {
+	private static function select_data(): array {
 
 		// Global.
 		global $wpdb;
 
 		// Init values.
-		$days_show   = (int) self::$_options['days_show'];
-		$limit       = (int) self::$_options['limit'];
-		$today       = (int) self::$_options['today'];
-		$show_totals = (int) self::$_options['show_totals'];
+		$days_show   = (int) self::$options['days_show'];
+		$limit       = (int) self::$options['limit'];
+		$today       = (int) self::$options['today'];
+		$show_totals = (int) self::$options['show_totals'];
 
 		$current_date = current_time( 'Y-m-d' );
 

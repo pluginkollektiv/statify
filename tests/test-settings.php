@@ -17,7 +17,7 @@ class Test_Settings extends WP_UnitTestCase {
 	 */
 	public function test_sanitize_options() {
 		// Reset options to default.
-		Statify::$_options = array(
+		Statify::$options = array(
 			'days'              => 14,
 			'days_show'         => 14,
 			'limit'             => 3,

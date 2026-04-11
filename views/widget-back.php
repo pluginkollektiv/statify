@@ -25,21 +25,21 @@ class_exists( 'Statify' ) || exit; ?>
 <div>
 	<label>
 		<input name="statify[days_show]" type="number" min="1"
-			   value="<?php echo esc_attr( Statify::$_options['days_show'] ); ?>">
+			   value="<?php echo esc_attr( Statify::$options['days_show'] ); ?>">
 		<?php esc_html_e( 'days', 'statify' ); ?> -
 		<?php esc_html_e( 'Period of data display in Dashboard', 'statify' ); ?>
 	</label>
 	<label>
 		<input name="statify[limit]" type="number" min="1" max="100"
-			   value="<?php echo esc_attr( Statify::$_options['limit'] ); ?>">
+			   value="<?php echo esc_attr( Statify::$options['limit'] ); ?>">
 		<?php esc_html_e( 'Number of entries in top lists', 'statify' ); ?>
 	</label>
 	<label>
-		<input type="checkbox" name="statify[today]" value="1" <?php checked( Statify::$_options['today'], 1 ); ?>>
+		<input type="checkbox" name="statify[today]" value="1" <?php checked( Statify::$options['today'], 1 ); ?>>
 		<?php esc_html_e( 'Entries in top lists only for today', 'statify' ); ?>
 	</label>
 	<label>
-		<input type="checkbox" name="statify[show_totals]" value="1" <?php checked( Statify::$_options['show_totals'], 1 ); ?>>
+		<input type="checkbox" name="statify[show_totals]" value="1" <?php checked( Statify::$options['show_totals'], 1 ); ?>>
 		<?php esc_html_e( 'Show totals', 'statify' ); ?>
 	</label>
 </div>

@@ -28,10 +28,11 @@ class Statify {
 	/**
 	 * Plugin options.
 	 *
-	 * @since  1.4.0
-	 * @var    array $_options
+	 * @since 1.4.0
+	 * @since 2.0.0 removed underscore from variable name.
+	 * @var   array $options
 	 */
-	public static $_options;
+	public static $options;
 
 	/**
 	 * Plugin version.
@@ -55,7 +56,7 @@ class Statify {
 		Statify_Table::init();
 
 		// Plugin options.
-		self::$_options = wp_parse_args(
+		self::$options = wp_parse_args(
 			get_option( 'statify' ),
 			array(
 				'days'              => 14,
@@ -198,7 +199,7 @@ class Statify {
 	 */
 	public static function is_javascript_tracking_enabled(): bool {
 		return in_array(
-			self::$_options['snippet'],
+			self::$options['snippet'],
 			array(
 				self::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK,
 				self::TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK,
@@ -218,8 +219,8 @@ class Statify {
 	 * @see   https://wordpress.org/plugins/statify/
 	 */
 	public static function user_can_see_stats(): bool {
-		if ( isset( self::$_options['show_widget_roles'] ) ) {
-			$statify_roles = self::$_options['show_widget_roles'];
+		if ( isset( self::$options['show_widget_roles'] ) ) {
+			$statify_roles = self::$options['show_widget_roles'];
 			$current_user = wp_get_current_user();
 			$user_roles = $current_user->roles;
 
@@ -367,9 +368,9 @@ class Statify {
 		}
 
 		// Skip logged in users, if enabled.
-		if ( ( self::SKIP_USERS_ALL === self::$_options['skip']['logged_in'] && is_user_logged_in() ) ||
+		if ( ( self::SKIP_USERS_ALL === self::$options['skip']['logged_in'] && is_user_logged_in() ) ||
 			// Only skip administrators.
-			 ( self::SKIP_USERS_ADMIN === self::$_options['skip']['logged_in'] && current_user_can( 'manage_options' ) ) ) {
+			( self::SKIP_USERS_ADMIN === self::$options['skip']['logged_in'] && current_user_can( 'manage_options' ) ) ) {
 			return true;
 		}
 
@@ -418,7 +419,7 @@ class Statify {
 	 */
 	private static function check_referrer(): bool {
 		// Return false if the disallowed-keys filter (formerly blacklist) is inactive.
-		if ( ! self::$_options['blacklist'] ) {
+		if ( ! self::$options['blacklist'] ) {
 			return false;
 		}
 

@@ -59,8 +59,8 @@ trait Statify_Test_Support {
 	protected function init_statify( $args = array() ) {
 		$options = get_option( 'statify' );
 
-		if ( false === $options && isset( Statify::$_options ) ) {
-			$options = Statify::$_options;
+		if ( false === $options && isset( Statify::$options ) ) {
+			$options = Statify::$options;
 		}
 
 		$options = wp_parse_args( $args, $options );

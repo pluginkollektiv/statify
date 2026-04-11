@@ -10,8 +10,8 @@
 // Quit if accessed outside WP context.
 class_exists( 'Statify' ) || exit;
 
-$limit       = (int) Statify::$_options['limit'];
-$show_totals = (int) Statify::$_options['show_totals'];
+$limit       = (int) Statify::$options['limit'];
+$show_totals = (int) Statify::$options['show_totals'];
 ?>
 
 	<div id="statify_chart" class="statify-chart">

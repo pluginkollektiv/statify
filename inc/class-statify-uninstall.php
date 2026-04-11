@@ -34,13 +34,13 @@ class Statify_Uninstall {
 				$site = (array) $site;
 
 				switch_to_blog( $site['blog_id'] );
-				self::_apply();
+				self::apply();
 			}
 
 			switch_to_blog( $old );
 		}
 
-		self::_apply();
+		self::apply();
 	}
 
 	/**
@@ -54,7 +54,7 @@ class Statify_Uninstall {
 
 		switch_to_blog( $old_site->site_id );
 
-		self::_apply();
+		self::apply();
 
 		restore_current_blog();
 	}
@@ -65,7 +65,7 @@ class Statify_Uninstall {
 	 * @since   0.1.0
 	 * @version 1.4.0
 	 */
-	private static function _apply(): void {
+	private static function apply(): void {
 
 		// Delete options.
 		delete_option( 'statify' );

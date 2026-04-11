@@ -151,7 +151,7 @@ class Statify_Settings {
 	 */
 	public static function options_days(): void {
 		?>
-		<input id="statify-days" name="statify[days]" type="number" min="1" value="<?php echo esc_attr( Statify::$_options['days'] ); ?>">
+		<input id="statify-days" name="statify[days]" type="number" min="1" value="<?php echo esc_attr( Statify::$options['days'] ); ?>">
 		<?php esc_html_e( 'days', 'statify' ); ?>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: 14)
 		<?php
@@ -187,7 +187,7 @@ class Statify_Settings {
 	private static function show_snippet_option( int $value, string $label ): void {
 		?>
 			<label>
-				<input name="statify[snippet]" type="radio" value="<?php echo esc_html( $value ); ?>" <?php checked( Statify::$_options['snippet'], $value ); ?>>
+				<input name="statify[snippet]" type="radio" value="<?php echo esc_html( $value ); ?>" <?php checked( Statify::$options['snippet'], $value ); ?>>
 				<?php echo esc_html( $label ); ?>
 			</label>
 		<?php
@@ -213,7 +213,7 @@ class Statify_Settings {
 	 */
 	public static function options_days_show(): void {
 		?>
-		<input id="statify-days-show" name="statify[days_show]" type="number" min="1" value="<?php echo esc_attr( Statify::$_options['days_show'] ); ?>">
+		<input id="statify-days-show" name="statify[days_show]" type="number" min="1" value="<?php echo esc_attr( Statify::$options['days_show'] ); ?>">
 		<?php esc_html_e( 'days', 'statify' ); ?>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: 14)
 		<?php
@@ -226,7 +226,7 @@ class Statify_Settings {
 	 */
 	public static function options_limit(): void {
 		?>
-		<input id="statify-limit" name="statify[limit]" type="number" min="1" max="100" value="<?php echo esc_attr( Statify::$_options['limit'] ); ?>">
+		<input id="statify-limit" name="statify[limit]" type="number" min="1" max="100" value="<?php echo esc_attr( Statify::$options['limit'] ); ?>">
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: 3)
 		<?php
 	}
@@ -238,7 +238,7 @@ class Statify_Settings {
 	 */
 	public static function options_today(): void {
 		?>
-		<input  id="statify-today" type="checkbox" name="statify[today]" value="1" <?php checked( Statify::$_options['today'], 1 ); ?>>
+		<input  id="statify-today" type="checkbox" name="statify[today]" value="1" <?php checked( Statify::$options['today'], 1 ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
 		<?php
 	}
@@ -250,7 +250,7 @@ class Statify_Settings {
 	 */
 	public static function options_show_totals(): void {
 		?>
-		<input  id="statify-show-totals" type="checkbox" name="statify[show_totals]" value="1" <?php checked( Statify::$_options['show_totals'], 1 ); ?>>
+		<input  id="statify-show-totals" type="checkbox" name="statify[show_totals]" value="1" <?php checked( Statify::$options['show_totals'], 1 ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
 		<?php
 	}
@@ -266,7 +266,7 @@ class Statify_Settings {
 		$all_roles = apply_filters( 'statify__available_roles', wp_roles()->roles );
 
 		// Backwards compatibility for older statify versions without this option.
-		if ( ! isset( Statify::$_options['show_widget_roles'] ) ) {
+		if ( ! isset( Statify::$options['show_widget_roles'] ) ) {
 			// Loop over all roles to find these with the capability edit_dashboard.
 			$saved_roles = array();
 
@@ -277,7 +277,7 @@ class Statify_Settings {
 				}
 			}
 		} else {
-			$saved_roles = Statify::$_options['show_widget_roles'];
+			$saved_roles = Statify::$options['show_widget_roles'];
 		}
 
 		self::show_roles_list( 'show-widget-roles', 'show_widget_roles', $all_roles, $saved_roles );
@@ -332,7 +332,7 @@ class Statify_Settings {
 	 */
 	public static function options_skip_blacklist(): void {
 		?>
-		<input id="statify-skip-referrer" type="checkbox" name="statify[blacklist]" value="1"<?php checked( Statify::$_options['blacklist'] ); ?>>
+		<input id="statify-skip-referrer" type="checkbox" name="statify[blacklist]" value="1"<?php checked( Statify::$options['blacklist'] ); ?>>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
 		<p class="description"><?php esc_html_e( 'Enabling this option excludes any views with referrers listed in the list of "Disallowed Comment Keys" field in the "Discussion" settings.', 'statify' ); ?></p>
 		<?php
@@ -346,9 +346,9 @@ class Statify_Settings {
 	public static function options_skip_logged_in(): void {
 		?>
 		<select id="statify-skip-logged_in" name="statify[skip][logged_in]">
-			<option value="0" <?php selected( Statify::$_options['skip']['logged_in'], 0 ); ?>><?php esc_html_e( 'Track all users', 'statify' ); ?></option>
-			<option value="1" <?php selected( Statify::$_options['skip']['logged_in'], 1 ); ?>><?php esc_html_e( 'Skip all users', 'statify' ); ?></option>
-			<option value="2" <?php selected( Statify::$_options['skip']['logged_in'], 2 ); ?>><?php esc_html_e( 'Skip administrators', 'statify' ); ?></option>
+			<option value="0" <?php selected( Statify::$options['skip']['logged_in'], 0 ); ?>><?php esc_html_e( 'Track all users', 'statify' ); ?></option>
+			<option value="1" <?php selected( Statify::$options['skip']['logged_in'], 1 ); ?>><?php esc_html_e( 'Skip all users', 'statify' ); ?></option>
+			<option value="2" <?php selected( Statify::$options['skip']['logged_in'], 2 ); ?>><?php esc_html_e( 'Skip administrators', 'statify' ); ?></option>
 		</select>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Skip all users', 'statify' ); ?>)
 		<p class="description"><?php esc_html_e( 'This option specified whether logged-in users and/or administrators should be excluded from tracking.', 'statify' ); ?></p>
@@ -416,7 +416,7 @@ class Statify_Settings {
 		// Sanitize numeric values.
 		$res = array();
 		foreach ( array( 'days', 'days_show', 'limit' ) as $o ) {
-			$res[ $o ] = Statify::$_options[ $o ];
+			$res[ $o ] = Statify::$options[ $o ];
 			if ( isset( $options[ $o ] ) && (int) $options[ $o ] > 0 ) {
 				$res[ $o ] = (int) $options[ $o ];
 			}

@@ -37,12 +37,12 @@ class Statify_Install {
 				$site = (array) $site;
 
 				switch_to_blog( $site['blog_id'] );
-				self::_apply();
+				self::apply();
 			}
 
 			restore_current_blog();
 		} else {
-			self::_apply();
+			self::apply();
 		}
 	}
 
@@ -57,7 +57,7 @@ class Statify_Install {
 
 		switch_to_blog( $new_site->site_id );
 
-		self::_apply();
+		self::apply();
 
 		restore_current_blog();
 	}
@@ -68,7 +68,7 @@ class Statify_Install {
 	 * @since   0.1.0
 	 * @version 1.4.0
 	 */
-	private static function _apply(): void {
+	private static function apply(): void {
 
 		// Cleanup any leftover transients.
 		delete_transient( 'statify_data' );

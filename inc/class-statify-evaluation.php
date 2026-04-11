@@ -24,8 +24,8 @@ class Statify_Evaluation extends Statify {
 	 * Add capability to see evaluations.
 	 */
 	public static function add_capability(): void {
-		if ( isset( self::$_options['show_widget_roles'] ) ) {
-			foreach ( self::$_options['show_widget_roles'] as $role_name ) {
+		if ( isset( self::$options['show_widget_roles'] ) ) {
+			foreach ( self::$options['show_widget_roles'] as $role_name ) {
 				$role = get_role( $role_name );
 				if ( $role ) {
 					$role->add_cap( self::CAPABILITY_SEE_STATS );

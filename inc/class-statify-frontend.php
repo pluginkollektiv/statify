@@ -96,7 +96,7 @@ class Statify_Frontend extends Statify {
 		$script_data = array(
 			'url' => esc_url_raw( rest_url( Statify_Api::REST_NAMESPACE . '/' . Statify_Api::REST_ROUTE_TRACK ) ),
 		);
-		if ( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK === self::$_options['snippet'] ) {
+		if ( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK === self::$options['snippet'] ) {
 			$script_data['nonce'] = wp_create_nonce( 'statify_track' );
 		}
 		wp_localize_script( 'statify-js', 'statifyAjax', $script_data );
@@ -168,7 +168,7 @@ class Statify_Frontend extends Statify {
 			),
 		);
 
-		if ( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK === self::$_options['snippet'] ) {
+		if ( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK === self::$options['snippet'] ) {
 			$cfg['extraUrlParams']['nonce'] = wp_create_nonce( 'statify_track' );
 		}
 
