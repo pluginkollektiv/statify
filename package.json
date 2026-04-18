@@ -2,7 +2,7 @@
   "private": true,
   "dependencies": {
     "chartist": "^1.5.0",
-    "chartist-plugin-tooltips-updated": "^1.0.0"
+    "@stklcode/chartist-plugin-tooltips": "^2.0.0"
   },
   "devDependencies": {
     "@wordpress/eslint-plugin": "^25.0.0",
@@ -18,7 +18,7 @@
     "build": "npm run copy-assets && npm run minify",
     "copy-assets": "vendor-copy",
     "minify": "npm run minify:js && npm run minify:css",
-    "minify:css": "esbuild css/dashboard.css css/settings.css node_modules/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.css --minify --outdir=css --outbase=. --entry-names=[name].min",
+    "minify:css": "esbuild css/dashboard.css css/settings.css --minify --outdir=css --outbase=. --entry-names=[name].min",
     "minify:js": "esbuild js/dashboard.js js/settings.js js/snippet.js --minify --outdir=js --outbase=js --entry-names=[name].min",
     "lint": "npm run lint-css && npm run lint-js",
     "lint-css": "stylelint css/dashboard.css css/settings.css",
@@ -35,7 +35,11 @@
       "to": "js/chartist.min.js"
     },
     {
-      "from": "node_modules/chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.min.js",
+      "from": "node_modules/@stklcode/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css",
+      "to": "css/chartist-plugin-tooltip.min.css"
+    },
+    {
+      "from": "node_modules/@stklcode/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.umd.js",
       "to": "js/chartist-plugin-tooltip.min.js"
     }
   ]

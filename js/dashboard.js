@@ -363,10 +363,13 @@
 					offset: 30,
 				},
 				plugins: [
-					Chartist.plugins.tooltip({
-						appendToBody: true,
-						class: 'statify-chartist-tooltip',
-					}),
+					[
+						ChartistPluginTooltip,
+						{
+							appendToBody: true,
+							class: 'statify-chartist-tooltip',
+						},
+					],
 				],
 			}
 		);
@@ -460,18 +463,26 @@
 					onlyInteger: true,
 				},
 				plugins: [
-					Chartist.plugins.tooltip({
-						appendToBody: true,
-						anchorToPoint: true,
-						class: 'statify-chartist-tooltip',
-						transformTooltipTextFnc(y) {
-							return wp.i18n.sprintf(
-								/* translators: %s: Number of page views. */
-								wp.i18n._n('%s view', '%s views', y, 'statify'),
-								y
-							);
+					[
+						ChartistPluginTooltip,
+						{
+							appendToBody: true,
+							anchorToPoint: true,
+							class: 'statify-chartist-tooltip',
+							transformTooltipTextFnc(y) {
+								return wp.i18n.sprintf(
+									/* translators: %s: Number of page views. */
+									wp.i18n._n(
+										'%s view',
+										'%s views',
+										y,
+										'statify'
+									),
+									y
+								);
+							},
 						},
-					}),
+					],
 				],
 			}
 		);
