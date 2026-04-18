@@ -43,7 +43,7 @@ describe('Statify Snippet', () => {
 		assert.deepEqual(
 			requests[0].requestHeaders,
 			{
-				'Content-Type': 'application/json;charset=utf-8',
+				'Content-Type': 'application/json',
 			},
 			'Unexpected request headers'
 		);
