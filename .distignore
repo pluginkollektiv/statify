@@ -12,7 +12,6 @@
 
 # Files
 /.distignore
-/.eslintrc.json
 /.gitattributes
 /.gitignore
 /.phpunit.result.cache
@@ -20,6 +19,7 @@
 /.sonarcloud.properties
 /composer.json
 /composer-php5.json
+/eslint.config.mjs
 /package.json
 /package-lock.json
 /composer.lock
