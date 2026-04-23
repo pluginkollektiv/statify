@@ -142,25 +142,32 @@ class Statify_Evaluation extends Statify {
 	public static function get_views_for_all_days( int $single_year = 0, ?string $post_url = '' ): array {
 		global $wpdb;
 
-		$query = "SELECT `created` as `date`, COUNT(`created`) as `count` FROM `$wpdb->statify`";
-		$args = array();
+		$query = "SELECT `created` AS `date`, COUNT(*) AS `count` FROM `$wpdb->statify`";
+		$where = array();
+		$args  = array();
 
 		if ( $single_year > 0 ) {
-			$query .= ' WHERE YEAR(`created`) = %d';
-			$args[] = $single_year;
+			$where[] = 'YEAR(`created`) = %d';
+			$args[]  = $single_year;
 		}
 
 		if ( ! empty( $post_url ) ) {
-			$query .= ( $single_year > 0 ? ' AND' : ' WHERE' ) . ' `target` = %s';
-			$args[] = $post_url;
+			$where[] = '`target` = %s';
+			$args[]  = $post_url;
+		}
+
+		if ( ! empty( $where ) ) {
+			$query .= ' WHERE ' . implode( ' AND ', $where );
 		}
 
 		$query .= ' GROUP BY `created` ORDER BY `created`';
 
 		if ( ! empty( $args ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Query is dynamic but does not contain user input.
 			$query = $wpdb->prepare( $query, $args );
 		}
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Query is either prepared or does not contain any placeholders.
 		$results = $wpdb->get_results( $query, ARRAY_A );
 
 		$views_for_all_days = array();
@@ -201,7 +208,7 @@ class Statify_Evaluation extends Statify {
 		if ( empty( $post_url ) ) {
 			// For all posts.
 			$results = $wpdb->get_results(
-				"SELECT DATE_FORMAT(`created`, '%Y-%m') as `date`, COUNT(`created`) as `count`" .
+				"SELECT DATE_FORMAT(`created`, '%Y-%m') AS `date`, COUNT(*) AS `count`" .
 				" FROM `$wpdb->statify`" .
 				' GROUP BY `date`' .
 				' ORDER BY `date`',
@@ -212,7 +219,7 @@ class Statify_Evaluation extends Statify {
 			$results = $wpdb->get_results(
 				$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnsupportedPlaceholder
-					"SELECT DATE_FORMAT(`created`, '%Y-%m') as `date`, COUNT(`created`) as `count`
+					"SELECT DATE_FORMAT(`created`, '%Y-%m') AS `date`, COUNT(*) AS `count`
                 FROM `$wpdb->statify`
                 WHERE `target` = %s
                 GROUP BY `date`
@@ -261,7 +268,7 @@ class Statify_Evaluation extends Statify {
 		if ( empty( $post_url ) ) {
 			// For all posts.
 			$results = $wpdb->get_results(
-				'SELECT YEAR(`created`) as `date`, COUNT(`created`) as `count`' .
+				'SELECT YEAR(`created`) AS `date`, COUNT(*) AS `count`' .
 				" FROM `$wpdb->statify`" .
 				' GROUP BY `date`',
 				ARRAY_A
@@ -270,7 +277,7 @@ class Statify_Evaluation extends Statify {
 			// Only for selected posts.
 			$results = $wpdb->get_results(
 				$wpdb->prepare(
-					'SELECT YEAR(`created`) as `date`, COUNT(`created`) as `count`' .
+					'SELECT YEAR(`created`) AS `date`, COUNT(*) AS `count`' .
 					" FROM `$wpdb->statify`" .
 					' WHERE `target` = %s' .
 					' GROUP BY `date`',
@@ -300,7 +307,7 @@ class Statify_Evaluation extends Statify {
 
 		if ( empty( $start ) || empty( $end ) ) {
 			$results = $wpdb->get_results(
-				'SELECT COUNT(`target`) as `count`, `target` as `url`' .
+				'SELECT COUNT(`target`) AS `count`, `target` AS `url`' .
 				" FROM `$wpdb->statify`" .
 				' WHERE `target` IS NOT NULL' .
 				' GROUP BY `target`' .
@@ -310,7 +317,7 @@ class Statify_Evaluation extends Statify {
 		} else {
 			$results = $wpdb->get_results(
 				$wpdb->prepare(
-					'SELECT COUNT(`target`) as `count`, `target` as `url`' .
+					'SELECT COUNT(`target`) AS `count`, `target` AS `url`' .
 					" FROM `$wpdb->statify`" .
 					' WHERE `created` BETWEEN %s AND %s' .
 					' GROUP BY `target`' .
@@ -360,16 +367,18 @@ class Statify_Evaluation extends Statify {
 			$param = array( $post_url, $start, $end );
 		}
 
-		$stmt = 'SELECT COUNT(`referrer`) as `count`, `referrer` as `url`,' .
-			" SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) as `host`" .
+		$stmt = 'SELECT COUNT(`referrer`) AS `count`, `referrer` AS `url`,' .
+			" SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) AS `host`" .
 			" FROM `$wpdb->statify`" .
 			' WHERE ' . $where .
 			' GROUP BY `host`' .
 			' ORDER BY `count` DESC';
 
 		if ( ! empty( $param ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Query is dynamic but does not contain user input.
 			$stmt = $wpdb->prepare( $stmt, $param );
 		}
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Query is either prepared or does not contain any placeholders.
 		$results = $wpdb->get_results( $stmt, ARRAY_A );
 
 		foreach ( $results as &$result ) {
