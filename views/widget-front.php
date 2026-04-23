@@ -7,8 +7,8 @@
  * @package   Statify
  */
 
-// Quit if accessed outside WP context.
-class_exists( 'Statify' ) || exit;
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
 
 $limit       = (int) Statify::$options['limit'];
 $show_totals = (int) Statify::$options['show_totals'];

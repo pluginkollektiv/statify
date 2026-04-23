@@ -7,8 +7,8 @@
  * @package   Statify
  */
 
-// Quit if accessed outside WP context.
-class_exists( 'Statify' ) || exit; ?>
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit; ?>
 
 <?php if ( current_user_can( 'manage_options' ) ) : ?>
 <p class="meta-links settings-link">
