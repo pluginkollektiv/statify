@@ -55,4 +55,6 @@ $show_totals = (int) Statify::$options['show_totals'];
 	</div>
 <?php endif; ?>
 
-	<button type="button" class="button button-primary" id="statify_refresh"><?php esc_html_e( 'Refresh', 'statify' ); ?></button>
+	<div class="controls">
+		<button type="button" class="button button-primary" id="statify_refresh"><?php esc_html_e( 'Refresh', 'statify' ); ?></button>
+	</div>

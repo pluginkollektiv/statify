@@ -130,7 +130,8 @@ body.rtl .statify-chart * {
 	flex: 1 0 50%;
 }
 
-#statify_dashboard .table.total {
+#statify_dashboard .table.total,
+#statify_dashboard .controls  {
 	flex: 0 0 100%;
 }
 
@@ -146,9 +147,10 @@ body.rtl .statify-chart * {
 }
 
 #statify_dashboard td.b {
-	text-align: right;
-	padding-right: 4px;
 	color: #646970;
+	padding-right: 4px;
+	text-align: right;
+	vertical-align: top;
 }
 
 #statify_dashboard label {
