@@ -36,6 +36,15 @@
 		dateRangeSelect: document.getElementById('statify-content-daterange'),
 	};
 
+	// Initialize number format.
+	const numberFormat = new Intl.NumberFormat(
+		wp.i18n.getLocaleData()['']?.lang || 'en'
+	);
+	const numberFormatPercent = new Intl.NumberFormat(
+		wp.i18n.getLocaleData()['']?.lang || 'en',
+		{ style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 }
+	);
+
 	/* ------------------------------------------------------------------ */
 
 	// Render available charts and tables.
@@ -366,6 +375,7 @@
 						maxValue,
 					],
 					offset: 30,
+					labelInterpolationFnc: (v) => numberFormat.format(v),
 				},
 				plugins: [
 					[
@@ -397,7 +407,7 @@
 								d.value.y,
 								'statify'
 							),
-							d.value.y
+							numberFormat.format(d.value.y)
 						),
 						'ct:meta': labels[d.index],
 					},
@@ -466,6 +476,7 @@
 					showLabel: true,
 					low: 0,
 					onlyInteger: true,
+					labelInterpolationFnc: (v) => numberFormat.format(v),
 				},
 				plugins: [
 					[
@@ -483,7 +494,7 @@
 										y,
 										'statify'
 									),
-									y
+									numberFormat.format(y)
 								);
 							},
 						},
@@ -504,7 +515,7 @@
 			const row = document.createElement('TR');
 			let col = document.createElement('TD');
 			col.classList.add('b');
-			col.innerText = r.count.toString();
+			col.innerText = numberFormat.format(r.count);
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('t');
@@ -531,7 +542,7 @@
 		const rowToday = document.createElement('TR');
 		let col = document.createElement('TD');
 		col.classList.add('b');
-		col.innerText = data.today.toString();
+		col.innerText = numberFormat.format(data.today);
 		rowToday.appendChild(col);
 		col = document.createElement('TD');
 		col.classList.add('t');
@@ -541,7 +552,7 @@
 		const rowAll = document.createElement('TR');
 		col = document.createElement('TD');
 		col.classList.add('b');
-		col.innerText = data.alltime.toString();
+		col.innerText = numberFormat.format(data.alltime);
 		rowAll.appendChild(col);
 		col = document.createElement('TD');
 		col.classList.add('t');
@@ -577,14 +588,16 @@
 			for (let month = 1; month <= 12; month++) {
 				col = document.createElement('TD');
 				col.innerText =
-					month in data.visits[year] ? data.visits[year][month] : '-';
+					month in data.visits[year]
+						? numberFormat.format(data.visits[year][month])
+						: '-';
 				row.appendChild(col);
 				sum += data.visits[year][month] || 0;
 			}
 
 			col = document.createElement('TD');
 			col.classList.add('statify-table-sum');
-			col.innerText = sum;
+			col.innerText = numberFormat.format(sum);
 			row.appendChild(col);
 
 			tbody.insertBefore(row, tbody.firstChild);
@@ -616,7 +629,7 @@
 			++vls[m];
 			min[m] = Math.min(min[m], count);
 			max[m] = Math.max(max[m], count);
-			out[d.getDate() - 1][m].innerText = count;
+			out[d.getDate() - 1][m].innerText = numberFormat.format(count);
 		}
 
 		out =
@@ -633,8 +646,8 @@
 			];
 		for (const [m, s] of sum.entries()) {
 			if (vls[m] > 0) {
-				out[m].innerText = s;
-				avg[m].innerText = Math.round(s / vls[m]);
+				out[m].innerText = numberFormat.format(s);
+				avg[m].innerText = numberFormat.format(Math.round(s / vls[m]));
 			} else {
 				out[m].innerText = '-';
 				avg[m].innerText = '-';
@@ -648,7 +661,7 @@
 				)
 			];
 		for (const [m, s] of min.entries()) {
-			out[m].innerText = vls[m] > 0 ? s : '-';
+			out[m].innerText = vls[m] > 0 ? numberFormat.format(s) : '-';
 		}
 
 		out =
@@ -658,7 +671,7 @@
 				)
 			];
 		for (const [m, s] of max.entries()) {
-			out[m].innerText = vls[m] > 0 ? s : '-';
+			out[m].innerText = vls[m] > 0 ? numberFormat.format(s) : '-';
 		}
 
 		for (const row of rows) {
@@ -699,11 +712,11 @@
 			}
 			col = document.createElement('TD');
 			col.classList.add('right');
-			col.innerText = d.count.toString();
+			col.innerText = numberFormat.format(d.count);
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('right');
-			col.innerText = ((d.count / total) * 100).toFixed(2) + ' %';
+			col.innerText = numberFormatPercent.format(d.count / total);
 			row.appendChild(col);
 
 			return row;
@@ -711,8 +724,8 @@
 
 		updateTable(tbody, rows);
 
-		sumRow[sumRow.length - 2].innerText = total;
-		sumRow[sumRow.length - 1].innerText = '100.00 %';
+		sumRow[sumRow.length - 2].innerText = numberFormat.format(total);
+		sumRow[sumRow.length - 1].innerText = numberFormatPercent.format(1);
 
 		addExportButton(table);
 	}
@@ -739,19 +752,19 @@
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('right');
-			col.innerText = d.count.toString();
+			col.innerText = numberFormat.format(d.count);
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('right');
-			col.innerText = ((d.count / total) * 100).toFixed(2) + ' %';
+			col.innerText = numberFormatPercent.format(d.count / total);
 			row.appendChild(col);
 			return row;
 		});
 
 		updateTable(tbody, rows);
 
-		sumRow[sumRow.length - 2].innerText = total;
-		sumRow[sumRow.length - 1].innerText = '100.00 %';
+		sumRow[sumRow.length - 2].innerText = numberFormat.format(total);
+		sumRow[sumRow.length - 1].innerText = numberFormatPercent.format(1);
 
 		addExportButton(table);
 	}
