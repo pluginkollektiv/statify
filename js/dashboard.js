@@ -66,7 +66,10 @@
 			})
 			.catch(() => {
 				// Failed to load.
-				charts.dashboard.innerHTML = `<p>${wp.i18n.__('Error loading data.', 'statify')}</p>`;
+				msg(
+					charts.monthly,
+					wp.i18n.__('Error loading data.', 'statify')
+				);
 			});
 	} else if (tables.content) {
 		loadPerPost().then((data) => {
@@ -142,8 +145,10 @@
 				}
 			})
 			.catch(() => {
-				// Failed to load.
-				charts.dashboard.innerHTML = `<p>${wp.i18n.__('Error loading data.', 'statify')}</p>`;
+				msg(
+					charts.dashboard,
+					wp.i18n.__('Error loading data.', 'statify')
+				);
 			})
 			.finally(() => {
 				// Re-enable refresh button.
@@ -226,14 +231,14 @@
 	function renderDaily(root, data) {
 		const labels = Object.keys(data);
 		const values = Object.values(data);
-		const usedLabels = [];
+		const usedLabels = new Set();
 
 		render(root, labels, values, true, (day) => {
 			const mon = new Date(day).getMonth();
-			if (usedLabels.includes(mon)) {
+			if (usedLabels.has(mon)) {
 				return '';
 			}
-			usedLabels.push(mon);
+			usedLabels.add(mon);
 			return statifyDashboard.i18n.months[mon];
 		});
 	}
@@ -315,7 +320,7 @@
 		let fullWidth = true;
 		let pointRadius = 4;
 		if (labels.length === 0) {
-			root.innerHTML = `<p>${wp.i18n.__('No data available.', 'statify')}</p>`;
+			msg(root, wp.i18n.__('No data available.', 'statify'));
 			return;
 		} else if (root.clientWidth < labels.length * 4) {
 			// Make chart scrollable, if 2px points are overlapping.
@@ -416,7 +421,7 @@
 		root.innerHTML = '';
 
 		if (labels.length === 0) {
-			root.innerHTML = `<p>${wp.i18n.__('No data available.', 'statify')}</p>`;
+			msg(root, wp.i18n.__('No data available.', 'statify'));
 			return;
 		}
 
@@ -497,9 +502,19 @@
 	function renderTopList(table, data) {
 		const rows = data.map((r) => {
 			const row = document.createElement('TR');
-			row.innerHTML =
-				`<td class="b">${r.count}</td>` +
-				`<td class="t"><a href="${r.url}" target="_blank"  rel="noopener noreferrer">${r.host || r.url}</td>`;
+			let col = document.createElement('TD');
+			col.classList.add('b');
+			col.innerText = r.count.toString();
+			row.appendChild(col);
+			col = document.createElement('TD');
+			col.classList.add('t');
+			const link = document.createElement('A');
+			link.href = r.url;
+			link.target = '_blank';
+			link.rel = 'noopener noreferrer';
+			link.innerText = r.host || r.url;
+			col.appendChild(link);
+			row.appendChild(col);
 			return row;
 		});
 
@@ -514,20 +529,28 @@
 	 */
 	function renderTotals(table, data) {
 		const rowToday = document.createElement('TR');
-		rowToday.innerHTML =
-			`<td class="b">${data.today}</td>` +
-			`<td class="t">${wp.i18n.__('today', 'statify')}</td>`;
+		let col = document.createElement('TD');
+		col.classList.add('b');
+		col.innerText = data.today.toString();
+		rowToday.appendChild(col);
+		col = document.createElement('TD');
+		col.classList.add('t');
+		col.innerText = wp.i18n.__('today', 'statify');
+		rowToday.appendChild(col);
 
 		const rowAll = document.createElement('TR');
-		rowAll.innerHTML =
-			`<td class="b">${data.alltime}</td>` +
-			'<td class="t">' +
-			wp.i18n.sprintf(
-				/* translators: %s: Date. */
-				wp.i18n.__('since %s', 'statify'),
-				data.since
-			) +
-			'</td>';
+		col = document.createElement('TD');
+		col.classList.add('b');
+		col.innerText = data.alltime.toString();
+		rowAll.appendChild(col);
+		col = document.createElement('TD');
+		col.classList.add('t');
+		col.innerText = wp.i18n.sprintf(
+			/* translators: %s: Date. */
+			wp.i18n.__('since %s', 'statify'),
+			data.since
+		);
+		rowAll.appendChild(col);
 
 		updateTable(table, [rowToday, rowAll]);
 	}
@@ -556,7 +579,7 @@
 				col.innerText =
 					month in data.visits[year] ? data.visits[year][month] : '-';
 				row.appendChild(col);
-				sum += data.visits[year][month - 1] || 0;
+				sum += data.visits[year][month] || 0;
 			}
 
 			col = document.createElement('TD');
@@ -891,7 +914,7 @@
 						end.value = isoDate(y, m + 1, 0);
 						break;
 					case '1stQuarter':
-						start.value = isoDate(y, 1, 1);
+						start.value = isoDate(y, 0, 1);
 						end.value = isoDate(y, 2, 31);
 						break;
 					case '2ndQuarter':
@@ -933,5 +956,19 @@
 		return wp.apiFetch({
 			path: `/statify/v1/${path}${param ? '?' + new URLSearchParams(param) : ''}`,
 		});
+	}
+
+	/**
+	 * Show a text message.
+	 *
+	 * @param {HTMLElement} element Element to add the message to.
+	 * @param {string}      text    Text message.
+	 * @private
+	 */
+	function msg(element, text) {
+		const p = document.createElement('p');
+		p.innerText = text;
+		element.innerHTML = '';
+		element.appendChild(p);
 	}
 }
