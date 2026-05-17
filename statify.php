@@ -3,7 +3,7 @@
  * Plugin Name:       Statify
  * Plugin URI:        https://statify.pluginkollektiv.org/
  * Description:       Compact, easy-to-use and privacy-compliant stats plugin for WordPress.
- * Version:           2.0.0-beta.1
+ * Version:           2.0.0-beta.2
  * Requires at least: 5.1
  * Requires PHP:      7.4
  * Author:            pluginkollektiv

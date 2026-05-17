@@ -130,6 +130,7 @@ You can find the full changelog in [our GitHub repository](https://github.com/pl
 * Use wp-i18n for frontend translation
 * Order of top targets/referrers is now consistent if the number of visits is equal
 * Prevent layout shift when showing tooltips in the dashboard widget
+* Added localized number format to charts and tables
 * Fixed user role error on saving settings
 * Fixed RTL layout in the dashboard widget
 * Fix dashboard widget for days without visitors

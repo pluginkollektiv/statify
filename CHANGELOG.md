@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.0-beta.2
+
+* Fixed refresh button layout with long referrers or targets (#318) (#320)
+* Added localized number format to js-rendered charts and tables (#319) (#321)
+* Minor corrections in dashboard script (#322)
+
 ## 2.0.0-beta.1
 
 * JavaScript tracking now uses WP REST API instead of AJAX (#219) (#226)
