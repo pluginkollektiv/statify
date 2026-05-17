@@ -16,7 +16,7 @@
 /.sonarcloud.properties export-ignore
 /.stylelintrc.json export-ignore
 /composer.json export-ignore
-/composer-php5.json export-ignore
+/composer.lock export-ignore
 /dist export-ignore
 /eslint.config.mjs  export-ignore
 /package.json export-ignore

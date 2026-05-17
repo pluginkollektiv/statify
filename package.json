@@ -5,10 +5,10 @@
     "@stklcode/chartist-plugin-tooltips": "^2.0.0"
   },
   "devDependencies": {
-    "@wordpress/eslint-plugin": "^25.0.0",
-    "@wordpress/stylelint-config": "^23.36.0",
+    "@wordpress/eslint-plugin": "^25.2.0",
+    "@wordpress/stylelint-config": "^23.38.0",
     "esbuild": "^0.28.0",
-    "eslint": "^10.2.1",
+    "eslint": "^10.4.0",
     "nyc": "^18.0.0",
     "sinon": "^19.0.5",
     "stylelint": "^16.26.1",
