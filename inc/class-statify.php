@@ -270,15 +270,7 @@ class Statify {
 			'statify_chart_js',
 			'statifyDashboard',
 			array(
-				'i18n'  => array(
-					'sitename' => sanitize_key( get_bloginfo( 'name' ) ),
-					'months'   => array_map(
-						function ( $m ) {
-							return date_i18n( 'M', strtotime( '0000-' . $m . '-01' ) );
-						},
-						range( 1, 12 )
-					),
-				),
+				'sitename' => sanitize_key( get_bloginfo( 'name' ) ),
 			)
 		);
 	}

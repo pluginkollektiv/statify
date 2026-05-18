@@ -37,13 +37,23 @@
 	};
 
 	// Initialize number format.
-	const numberFormat = new Intl.NumberFormat(
-		wp.i18n.getLocaleData()['']?.lang || 'en'
-	);
-	const numberFormatPercent = new Intl.NumberFormat(
-		wp.i18n.getLocaleData()['']?.lang || 'en',
-		{ style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 }
-	);
+	const lang = wp.i18n.getLocaleData()['']?.lang || 'en';
+	const numberFormat = new Intl.NumberFormat(lang);
+	const numberFormatPercent = new Intl.NumberFormat(lang, {
+		style: 'percent',
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	});
+	const dateFormatYMD = new Intl.DateTimeFormat(lang, {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+	});
+	const dateFormatYM = new Intl.DateTimeFormat(lang, {
+		year: 'numeric',
+		month: 'short',
+	});
+	const dateFormatM = new Intl.DateTimeFormat(lang, { month: 'short' });
 
 	/* ------------------------------------------------------------------ */
 
@@ -242,14 +252,22 @@
 		const values = Object.values(data);
 		const usedLabels = new Set();
 
-		render(root, labels, values, true, (day) => {
-			const mon = new Date(day).getMonth();
-			if (usedLabels.has(mon)) {
-				return '';
-			}
-			usedLabels.add(mon);
-			return statifyDashboard.i18n.months[mon];
-		});
+		render(
+			root,
+			labels,
+			values,
+			true,
+			(day) => {
+				const date = new Date(day);
+				const mon = date.getMonth();
+				if (usedLabels.has(mon)) {
+					return '';
+				}
+				usedLabels.add(mon);
+				return dateFormatM.format(date);
+			},
+			(date) => dateFormatYMD.format(new Date(date))
+		);
 	}
 
 	/**
@@ -265,30 +283,46 @@
 		);
 
 		let labelFunc = (l) => l;
-		let labels;
-		if (showYear && Object.keys(data.visits).length > 2) {
-			labels = Object.keys(data.visits).flatMap((y) =>
-				Object.keys(data.visits[y]).map((m) => `${y}-${m}-01`)
-			);
-			labelFunc = (date) => {
-				const d = new Date(date);
-				const m = d.getMonth();
-				if (m === 0) {
-					return String(d.getFullYear());
-				}
-				return '';
-			};
+		let metaFunc = (l) => l;
+		let labels = Object.keys(data.visits);
+		if (showYear) {
+			if (labels.length > 2) {
+				labels = labels.flatMap((y) =>
+					Object.keys(data.visits[y]).map(
+						(m) => `${y}-${m.padStart(2, '0')}-01`
+					)
+				);
+				/**
+				 * Interpolate labels by year if we show more than 2 years.
+				 *
+				 * @param {string} date Date string
+				 * @return {string} Year string
+				 */
+				labelFunc = (date) => {
+					const d = new Date(date);
+					const m = d.getMonth();
+					if (m === 0) {
+						return String(d.getFullYear());
+					}
+					return '';
+				};
+				metaFunc = (date) => dateFormatYM.format(new Date(date));
+			} else {
+				labels = labels.flatMap((y) =>
+					Object.keys(data.visits[y]).map((m) =>
+						dateFormatYM.format(new Date(y, m))
+					)
+				);
+			}
 		} else {
-			labels = Object.keys(data.visits).flatMap((y) =>
-				Object.keys(data.visits[y]).map(
-					(m) =>
-						statifyDashboard.i18n.months[m - 1] +
-						(showYear ? ' ' + y : '')
+			labels = labels.flatMap((y) =>
+				Object.keys(data.visits[y]).map((m) =>
+					dateFormatM.format(new Date(y, m - 1))
 				)
 			);
 		}
 
-		render(root, labels, values, true, labelFunc);
+		render(root, labels, values, true, labelFunc, metaFunc);
 	}
 
 	/**
@@ -314,13 +348,15 @@
 	 * @param {number[]}                values                Values.
 	 * @param {boolean}                 showAxis              Show X axis? (default: true)
 	 * @param {function(string):string} labelInterpolationFnc Label interpolation function. (optional)
+	 * @param {function(string):string} labelToMetaFunc       Meta data (tooltip label) function. (optional)
 	 */
 	function render(
 		root,
 		labels,
 		values,
 		showAxis = true,
-		labelInterpolationFnc = (l) => l
+		labelInterpolationFnc = (l) => l,
+		labelToMetaFunc = (l) => l
 	) {
 		// Remove the loading content or existing chart.
 		root.innerHTML = '';
@@ -409,7 +445,7 @@
 							),
 							numberFormat.format(d.value.y)
 						),
-						'ct:meta': labels[d.index],
+						'ct:meta': labelToMetaFunc(labels[d.index]),
 					},
 					'ct-point'
 				);
@@ -843,7 +879,7 @@
 
 		// Generate filename from table caption.
 		exportBtn.download =
-			statifyDashboard.i18n.sitename +
+			statifyDashboard.sitename +
 			'-' +
 			table.caption.innerText.replaceAll(/\s+/g, '_') +
 			'-export-' +
