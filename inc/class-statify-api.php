@@ -186,7 +186,7 @@ class Statify_Api extends Statify {
 		$visits          = $stats['visits'];
 		$stats['visits'] = array();
 		foreach ( $visits as $v ) {
-			$stats['visits'][ Statify::parse_date( $v['date'] ) ] = intval( $v['count'] );
+			$stats['visits'][ $v['date'] ] = intval( $v['count'] );
 		}
 
 		foreach ( $stats['referrer'] as &$r ) {
@@ -201,7 +201,7 @@ class Statify_Api extends Statify {
 			$stats['totals'] = array(
 				'today'   => intval( $stats['visit_totals']['today'] ),
 				'alltime' => intval( $stats['visit_totals']['since_beginning']['count'] ),
-				'since'   => Statify::parse_date( $stats['visit_totals']['since_beginning']['date'] ),
+				'since'   => $stats['visit_totals']['since_beginning']['date'],
 			);
 			unset( $stats['visit_totals'] );
 		}

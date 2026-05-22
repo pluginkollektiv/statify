@@ -149,7 +149,9 @@
 				const labels = Object.keys(data.visits);
 				const values = Object.values(data.visits);
 
-				render(charts.dashboard, labels, values, false);
+				render(charts.dashboard, labels, values, false, (date) =>
+					dateFormatYMD.format(new Date(date))
+				);
 
 				// Render top lists.
 				if (tables.referrer) {
@@ -257,6 +259,7 @@
 			labels,
 			values,
 			true,
+			(date) => dateFormatYMD.format(new Date(date)),
 			(day) => {
 				const date = new Date(day);
 				const mon = date.getMonth();
@@ -265,8 +268,7 @@
 				}
 				usedLabels.add(mon);
 				return dateFormatM.format(date);
-			},
-			(date) => dateFormatYMD.format(new Date(date))
+			}
 		);
 	}
 
@@ -322,7 +324,7 @@
 			);
 		}
 
-		render(root, labels, values, true, labelFunc, metaFunc);
+		render(root, labels, values, true, metaFunc, labelFunc);
 	}
 
 	/**
@@ -347,16 +349,16 @@
 	 * @param {string[]}                labels                Labels.
 	 * @param {number[]}                values                Values.
 	 * @param {boolean}                 showAxis              Show X axis? (default: true)
-	 * @param {function(string):string} labelInterpolationFnc Label interpolation function. (optional)
 	 * @param {function(string):string} labelToMetaFunc       Meta data (tooltip label) function. (optional)
+	 * @param {function(string):string} labelInterpolationFnc Label interpolation function. (optional)
 	 */
 	function render(
 		root,
 		labels,
 		values,
 		showAxis = true,
-		labelInterpolationFnc = (l) => l,
-		labelToMetaFunc = (l) => l
+		labelToMetaFunc = (l) => l,
+		labelInterpolationFnc = (l) => l
 	) {
 		// Remove the loading content or existing chart.
 		root.innerHTML = '';
@@ -595,7 +597,7 @@
 		col.innerText = wp.i18n.sprintf(
 			/* translators: %s: Date. */
 			wp.i18n.__('since %s', 'statify'),
-			data.since
+			dateFormatYMD.format(new Date(data.since))
 		);
 		rowAll.appendChild(col);
 
