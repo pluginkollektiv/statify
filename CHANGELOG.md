@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.0-beta.3
+
+* Localize date formats in dashboard scripts (#324) (#325)
+* Minor improvements in dashboard script (#326)
+
 ## 2.0.0-beta.2
 
 * Fixed refresh button layout with long referrers or targets (#318) (#320)
