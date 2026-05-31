@@ -180,7 +180,7 @@
 	}
 
 	/**
-	 * Load monthly statistics.
+	 * Load daily statistics.
 	 *
 	 * @param {number} year Year to load data for.
 	 *
@@ -335,7 +335,7 @@
 	 */
 	function renderYearly(root, data) {
 		const labels = Object.keys(data.visits);
-		const values = Object.values(data.visits).flatMap((y) =>
+		const values = Object.values(data.visits).map((y) =>
 			Object.values(y).reduce((a, b) => a + b, 0)
 		);
 
