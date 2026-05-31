@@ -120,7 +120,7 @@
 			data.forEach((post) => {
 				const opt = document.createElement('option');
 				opt.value = post.url;
-				opt.innerText = post.title;
+				opt.textContent = post.title;
 				controls.postList.appendChild(opt);
 			})
 		);
@@ -486,7 +486,7 @@
 
 			labels.forEach((l) => {
 				const li = document.createElement('LI');
-				li.innerText = l;
+				li.textContent = l;
 				legend.appendChild(li);
 			});
 
@@ -553,7 +553,7 @@
 			const row = document.createElement('TR');
 			let col = document.createElement('TD');
 			col.classList.add('b');
-			col.innerText = numberFormat.format(r.count);
+			col.textContent = numberFormat.format(r.count);
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('t');
@@ -561,7 +561,7 @@
 			link.href = r.url;
 			link.target = '_blank';
 			link.rel = 'noopener noreferrer';
-			link.innerText = r.host || r.url;
+			link.textContent = r.host || r.url;
 			col.appendChild(link);
 			row.appendChild(col);
 			return row;
@@ -580,21 +580,21 @@
 		const rowToday = document.createElement('TR');
 		let col = document.createElement('TD');
 		col.classList.add('b');
-		col.innerText = numberFormat.format(data.today);
+		col.textContent = numberFormat.format(data.today);
 		rowToday.appendChild(col);
 		col = document.createElement('TD');
 		col.classList.add('t');
-		col.innerText = wp.i18n.__('today', 'statify');
+		col.textContent = wp.i18n.__('today', 'statify');
 		rowToday.appendChild(col);
 
 		const rowAll = document.createElement('TR');
 		col = document.createElement('TD');
 		col.classList.add('b');
-		col.innerText = numberFormat.format(data.alltime);
+		col.textContent = numberFormat.format(data.alltime);
 		rowAll.appendChild(col);
 		col = document.createElement('TD');
 		col.classList.add('t');
-		col.innerText = wp.i18n.sprintf(
+		col.textContent = wp.i18n.sprintf(
 			/* translators: %s: Date. */
 			wp.i18n.__('since %s', 'statify'),
 			dateFormatYMD.format(new Date(data.since))
@@ -620,12 +620,12 @@
 			let col = document.createElement('TH');
 			let sum = 0;
 			col.scope = 'row';
-			col.innerText = year;
+			col.textContent = year;
 			row.appendChild(col);
 
 			for (let month = 1; month <= 12; month++) {
 				col = document.createElement('TD');
-				col.innerText =
+				col.textContent =
 					month in data.visits[year]
 						? numberFormat.format(data.visits[year][month])
 						: '-';
@@ -635,7 +635,7 @@
 
 			col = document.createElement('TD');
 			col.classList.add('statify-table-sum');
-			col.innerText = numberFormat.format(sum);
+			col.textContent = numberFormat.format(sum);
 			row.appendChild(col);
 
 			tbody.insertBefore(row, tbody.firstChild);
@@ -667,7 +667,7 @@
 			++vls[m];
 			min[m] = Math.min(min[m], count);
 			max[m] = Math.max(max[m], count);
-			out[d.getDate() - 1][m].innerText = numberFormat.format(count);
+			out[d.getDate() - 1][m].textContent = numberFormat.format(count);
 		}
 
 		out =
@@ -684,11 +684,13 @@
 			];
 		for (const [m, s] of sum.entries()) {
 			if (vls[m] > 0) {
-				out[m].innerText = numberFormat.format(s);
-				avg[m].innerText = numberFormat.format(Math.round(s / vls[m]));
+				out[m].textContent = numberFormat.format(s);
+				avg[m].textContent = numberFormat.format(
+					Math.round(s / vls[m])
+				);
 			} else {
-				out[m].innerText = '-';
-				avg[m].innerText = '-';
+				out[m].textContent = '-';
+				avg[m].textContent = '-';
 			}
 		}
 
@@ -699,7 +701,7 @@
 				)
 			];
 		for (const [m, s] of min.entries()) {
-			out[m].innerText = vls[m] > 0 ? numberFormat.format(s) : '-';
+			out[m].textContent = vls[m] > 0 ? numberFormat.format(s) : '-';
 		}
 
 		out =
@@ -709,7 +711,7 @@
 				)
 			];
 		for (const [m, s] of max.entries()) {
-			out[m].innerText = vls[m] > 0 ? numberFormat.format(s) : '-';
+			out[m].textContent = vls[m] > 0 ? numberFormat.format(s) : '-';
 		}
 
 		for (const row of rows) {
@@ -737,24 +739,24 @@
 			let col = document.createElement('TD');
 			const link = document.createElement('A');
 			link.href = d.url;
-			link.innerText = d.title;
+			link.textContent = d.title;
 			col.append(link);
 			row.appendChild(col);
 			col = document.createElement('TD');
-			col.innerText = d.url;
+			col.textContent = d.url;
 			row.appendChild(col);
 			if (showType) {
 				col = document.createElement('TD');
-				col.innerText = d.typeName;
+				col.textContent = d.typeName;
 				row.appendChild(col);
 			}
 			col = document.createElement('TD');
 			col.classList.add('right');
-			col.innerText = numberFormat.format(d.count);
+			col.textContent = numberFormat.format(d.count);
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('right');
-			col.innerText = numberFormatPercent.format(d.count / total);
+			col.textContent = numberFormatPercent.format(d.count / total);
 			row.appendChild(col);
 
 			return row;
@@ -762,8 +764,8 @@
 
 		updateTable(tbody, rows);
 
-		sumRow[sumRow.length - 2].innerText = numberFormat.format(total);
-		sumRow[sumRow.length - 1].innerText = numberFormatPercent.format(1);
+		sumRow[sumRow.length - 2].textContent = numberFormat.format(total);
+		sumRow[sumRow.length - 1].textContent = numberFormatPercent.format(1);
 
 		addExportButton(table);
 	}
@@ -785,24 +787,24 @@
 			let col = document.createElement('TD');
 			const link = document.createElement('A');
 			link.href = d.url;
-			link.innerText = d.host;
+			link.textContent = d.host;
 			col.append(link);
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('right');
-			col.innerText = numberFormat.format(d.count);
+			col.textContent = numberFormat.format(d.count);
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('right');
-			col.innerText = numberFormatPercent.format(d.count / total);
+			col.textContent = numberFormatPercent.format(d.count / total);
 			row.appendChild(col);
 			return row;
 		});
 
 		updateTable(tbody, rows);
 
-		sumRow[sumRow.length - 2].innerText = numberFormat.format(total);
-		sumRow[sumRow.length - 1].innerText = numberFormatPercent.format(1);
+		sumRow[sumRow.length - 2].textContent = numberFormat.format(total);
+		sumRow[sumRow.length - 1].textContent = numberFormatPercent.format(1);
 
 		addExportButton(table);
 	}
@@ -893,7 +895,7 @@
 			'.csv';
 
 		// Generate CSV on demand.
-		exportBtn.innerText = wp.i18n.__('Export (CSV)', 'statify');
+		exportBtn.textContent = wp.i18n.__('Export (CSV)', 'statify');
 		exportBtn.addEventListener('click', () => {
 			exportBtn.href =
 				'data:text/csv;charset=utf-8,' +
@@ -1018,7 +1020,7 @@
 	 */
 	function msg(element, text) {
 		const p = document.createElement('p');
-		p.innerText = text;
+		p.textContent = text;
 		element.innerHTML = '';
 		element.appendChild(p);
 	}
