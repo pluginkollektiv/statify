@@ -557,12 +557,16 @@
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('t');
-			const link = document.createElement('A');
-			link.href = r.url;
-			link.target = '_blank';
-			link.rel = 'noopener noreferrer';
-			link.textContent = r.host || r.url;
-			col.appendChild(link);
+			if (/^https?:\/\//i.test(r.url)) {
+				const link = document.createElement('A');
+				link.href = r.url;
+				link.target = '_blank';
+				link.rel = 'noopener noreferrer';
+				link.textContent = r.host || r.url;
+				col.appendChild(link);
+			} else {
+				col.textContent = r.host || r.url;
+			}
 			row.appendChild(col);
 			return row;
 		});
