@@ -629,16 +629,22 @@
 
 			for (let month = 1; month <= 12; month++) {
 				col = document.createElement('TD');
-				col.textContent =
-					month in data.visits[year]
-						? numberFormat.format(data.visits[year][month])
-						: '-';
+				if (month in data.visits[year]) {
+					col.dataset.raw = String(data.visits[year][month]);
+					col.textContent = numberFormat.format(
+						data.visits[year][month]
+					);
+				} else {
+					col.dataset.raw = '';
+					col.textContent = '-';
+				}
 				row.appendChild(col);
 				sum += data.visits[year][month] || 0;
 			}
 
 			col = document.createElement('TD');
 			col.classList.add('statify-table-sum');
+			col.dataset.raw = String(sum);
 			col.textContent = numberFormat.format(sum);
 			row.appendChild(col);
 
@@ -671,6 +677,7 @@
 			++vls[m];
 			min[m] = Math.min(min[m], count);
 			max[m] = Math.max(max[m], count);
+			out[d.getDate() - 1][m].dataset.raw = String(count);
 			out[d.getDate() - 1][m].textContent = numberFormat.format(count);
 		}
 
@@ -688,12 +695,16 @@
 			];
 		for (const [m, s] of sum.entries()) {
 			if (vls[m] > 0) {
+				out[m].dataset.raw = String(s);
 				out[m].textContent = numberFormat.format(s);
+				avg[m].dataset.raw = String(Math.round(s / vls[m]));
 				avg[m].textContent = numberFormat.format(
 					Math.round(s / vls[m])
 				);
 			} else {
+				out[m].dataset.raw = '';
 				out[m].textContent = '-';
+				avg[m].dataset.raw = '';
 				avg[m].textContent = '-';
 			}
 		}
@@ -705,6 +716,7 @@
 				)
 			];
 		for (const [m, s] of min.entries()) {
+			out[m].dataset.raw = String(s);
 			out[m].textContent = vls[m] > 0 ? numberFormat.format(s) : '-';
 		}
 
@@ -715,6 +727,7 @@
 				)
 			];
 		for (const [m, s] of max.entries()) {
+			out[m].dataset.raw = vls[m];
 			out[m].textContent = vls[m] > 0 ? numberFormat.format(s) : '-';
 		}
 
@@ -756,10 +769,14 @@
 			}
 			col = document.createElement('TD');
 			col.classList.add('right');
+			col.dataset.raw = String(d.count);
 			col.textContent = numberFormat.format(d.count);
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('right');
+			col.dataset.raw = String(
+				Math.round((d.count / total) * 10000) / 100
+			);
 			col.textContent = numberFormatPercent.format(d.count / total);
 			row.appendChild(col);
 
@@ -768,7 +785,9 @@
 
 		updateTable(tbody, rows);
 
+		sumRow[sumRow.length - 2].dataset.raw = String(total);
 		sumRow[sumRow.length - 2].textContent = numberFormat.format(total);
+		sumRow[sumRow.length - 1].dataset.raw = '1';
 		sumRow[sumRow.length - 1].textContent = numberFormatPercent.format(1);
 
 		addExportButton(table);
@@ -906,7 +925,11 @@
 				Array.from(table.rows)
 					.map((row) =>
 						Array.from(row.cells)
-							.map((col) => col.innerText)
+							.map(
+								(col) =>
+									col.dataset.raw ??
+									`"${col.innerText.replaceAll('"', '""')}"`
+							)
 							.join(',')
 					)
 					.join('\r\n');
