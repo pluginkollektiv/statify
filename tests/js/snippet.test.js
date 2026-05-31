@@ -1,6 +1,6 @@
 const { describe, it, beforeEach, afterEach } = require('node:test');
 const assert = require('node:assert/strict');
-const sinon = require('sinon');
+const fakeXhr = require('nise').fakeXhr;
 
 describe('Statify Snippet', () => {
 	let requests = [];
@@ -19,7 +19,7 @@ describe('Statify Snippet', () => {
 			search: '?arg=value',
 		};
 
-		xhrMock = sinon.useFakeXMLHttpRequest();
+		xhrMock = fakeXhr.useFakeXMLHttpRequest();
 		requests = [];
 		xhrMock.onCreate = (xhr) => requests.push(xhr);
 		global.XMLHttpRequest = xhrMock;
