@@ -1,6 +1,6 @@
 # Statify #
 * Contributors:      pluginkollektiv
-* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
+* Donate link:       https://www.paypal.com/donate/?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              analytics, pageviews, privacy, statistics, stats
 * Requires at least: 5.1
 * Tested up to:      6.9
