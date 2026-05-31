@@ -3,7 +3,7 @@
 * Donate link:       https://www.paypal.com/donate/?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              analytics, pageviews, privacy, statistics, stats
 * Requires at least: 5.1
-* Tested up to:      6.9
+* Tested up to:      7.0
 * Requires PHP:      7.4
 * Stable tag:        1.8.5
 * License:           GPLv3 or later
