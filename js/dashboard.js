@@ -312,7 +312,7 @@
 			} else {
 				labels = labels.flatMap((y) =>
 					Object.keys(data.visits[y]).map((m) =>
-						dateFormatYM.format(new Date(y, m))
+						dateFormatYM.format(new Date(y, m - 1))
 					)
 				);
 			}
