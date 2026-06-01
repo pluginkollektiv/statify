@@ -34,7 +34,7 @@ $selected_post_title = Statify_Evaluation::post_title( $selected_post );
 if ( ! empty( $date_start ) && ! empty( $date_end ) && $date_start !== $date_end ) {
 	$section_title = sprintf(
 		/* translators: 1: start date, 2: end date, 3: post title or "all posts" */
-		__( 'Referrers from other websites from %1$s to %3$s for %3$s', 'statify' ),
+		__( 'Referrers from other websites from %1$s to %2$s for %3$s', 'statify' ),
 		Statify::parse_date( $date_start ),
 		Statify::parse_date( $date_end ),
 		$selected_post_title
