@@ -557,7 +557,7 @@
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('t');
-			if (/^https?:\/\//i.test(r.url)) {
+			if (/^((https?:)?\/)?\//i.test(r.url)) {
 				const link = document.createElement('A');
 				link.href = r.url;
 				link.target = '_blank';
