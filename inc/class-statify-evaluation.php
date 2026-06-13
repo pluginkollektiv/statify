@@ -41,21 +41,25 @@ class Statify_Evaluation extends Statify {
 	}
 
 	/**
-	 * Create an item and submenu items in the WordPress admin menu.
+	 * Create the Statify entry and its sub pages in the WordPress admin menu.
+	 *
+	 * The evaluation is shown as a single "Statify" entry below the Dashboard
+	 * menu. The content and referrers pages are registered as routable sub pages
+	 * as well, but hidden from the menu so that only one entry is displayed. The
+	 * in-page navigation (see show_navigation()) switches between them.
 	 */
 	public static function add_menu(): void {
-		add_menu_page(
+		add_submenu_page(
+			'index.php',
 			__( 'Statify', 'statify' ),
 			'Statify',
 			'see_statify_evaluation',
 			'statify_dashboard',
-			array( __CLASS__, 'show_dashboard' ),
-			'dashicons-chart-area',
-			50
+			array( __CLASS__, 'show_dashboard' )
 		);
 
 		add_submenu_page(
-			'statify_dashboard',
+			'index.php',
 			__( 'Content', 'statify' ) . ' &mdash; ' . __( 'Statify', 'statify' ),
 			__( 'Content', 'statify' ),
 			'see_statify_evaluation',
@@ -64,13 +68,113 @@ class Statify_Evaluation extends Statify {
 		);
 
 		add_submenu_page(
-			'statify_dashboard',
+			'index.php',
 			__( 'Referrers', 'statify' ) . ' &mdash; ' . __( 'Statify', 'statify' ),
 			__( 'Referrers', 'statify' ),
 			'see_statify_evaluation',
 			'statify_referrers',
 			array( __CLASS__, 'show_referrers' )
 		);
+
+		// Only the main "Statify" entry should be visible in the menu; the other
+		// pages stay accessible via their in-page navigation.
+		remove_submenu_page( 'index.php', 'statify_content' );
+		remove_submenu_page( 'index.php', 'statify_referrers' );
+
+		// Keep the "Statify" entry highlighted while on the hidden sub pages.
+		add_filter( 'parent_file', array( __CLASS__, 'set_active_menu' ) );
+		add_filter( 'submenu_file', array( __CLASS__, 'set_active_submenu' ) );
+	}
+
+	/**
+	 * Render the navigation tabs shared by all evaluation pages.
+	 *
+	 * @param string $current The page slug of the currently active tab.
+	 */
+	public static function show_navigation( string $current ): void {
+		$pages = array(
+			'statify_dashboard' => __( 'Overview', 'statify' ),
+			'statify_content'   => __( 'Content', 'statify' ),
+			'statify_referrers' => __( 'Referrers', 'statify' ),
+		);
+		?>
+		<nav class="statify-page-nav nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Statify evaluation', 'statify' ); ?>">
+			<?php foreach ( $pages as $slug => $label ) : ?>
+			<a href="<?php echo esc_url( admin_url( 'index.php?page=' . $slug ) ); ?>"
+			   class="nav-tab<?php echo ( $current === $slug ) ? ' nav-tab-active' : ''; ?>">
+				<?php echo esc_html( $label ); ?>
+			</a>
+			<?php endforeach; ?>
+		</nav>
+		<?php
+	}
+
+	/**
+	 * Render a secondary navigation as a list of links (WordPress subsubsub style).
+	 *
+	 * Used below the primary tab navigation to switch between e.g. years or post
+	 * types without repeating the tab styling of the primary navigation.
+	 *
+	 * @param array  $items      List of items, each an array with the keys 'url',
+	 *                           'label' and (optionally) 'current'.
+	 * @param string $aria_label Accessible label for the navigation element.
+	 */
+	public static function show_subnavigation( array $items, string $aria_label ): void {
+		if ( empty( $items ) ) {
+			return;
+		}
+
+		$last_key = array_key_last( $items );
+		?>
+		<nav class="statify-subnav wp-clearfix" aria-label="<?php echo esc_attr( $aria_label ); ?>">
+			<ul class="subsubsub">
+				<?php foreach ( $items as $key => $item ) : ?>
+				<li>
+					<a href="<?php echo esc_url( $item['url'] ); ?>"<?php echo empty( $item['current'] ) ? '' : ' class="current" aria-current="page"'; ?>><?php echo esc_html( $item['label'] ); ?></a><?php echo ( $key === $last_key ) ? '' : ' |'; ?>
+				</li>
+				<?php endforeach; ?>
+			</ul>
+		</nav>
+		<?php
+	}
+
+	/**
+	 * Keep the Dashboard menu open while on one of the hidden sub pages.
+	 *
+	 * @param string $parent_file The current parent menu file.
+	 * @return string The (possibly adjusted) parent menu file.
+	 */
+	public static function set_active_menu( string $parent_file ): string {
+		if ( self::is_hidden_subpage() ) {
+			$parent_file = 'index.php';
+		}
+
+		return $parent_file;
+	}
+
+	/**
+	 * Keep the "Statify" entry highlighted while on one of the hidden sub pages.
+	 *
+	 * @param string|null $submenu_file The current submenu file.
+	 * @return string|null The (possibly adjusted) submenu file.
+	 */
+	public static function set_active_submenu( $submenu_file ) {
+		if ( self::is_hidden_subpage() ) {
+			$submenu_file = 'statify_dashboard';
+		}
+
+		return $submenu_file;
+	}
+
+	/**
+	 * Whether the current request is one of the menu-hidden sub pages.
+	 *
+	 * @return bool True if the content or referrers page is being displayed.
+	 */
+	private static function is_hidden_subpage(): bool {
+		global $plugin_page;
+
+		return 'statify_content' === $plugin_page || 'statify_referrers' === $plugin_page;
 	}
 
 	/**
