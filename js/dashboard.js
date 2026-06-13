@@ -532,8 +532,8 @@
 	/**
 	 * Render top list table.
 	 *
-	 * @param {HTMLTableElement}                              table Table element.
-	 * @param {{count: number, url: string, host: ?string}[]} data  Data to display.
+	 * @param {HTMLTableElement}                                              table Table element.
+	 * @param {{count: number, url: string, host: ?string, title: ?string}[]} data  Data to display.
 	 */
 	function renderTopList(table, data) {
 		const rows = data.map((r) => {
@@ -544,15 +544,16 @@
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('t');
+			const label = r.title || r.host || r.url;
 			if (/^((https?:)?\/)?\//i.test(r.url)) {
 				const link = document.createElement('A');
 				link.href = r.url;
 				link.target = '_blank';
 				link.rel = 'noopener noreferrer';
-				link.textContent = r.host || r.url;
+				link.textContent = label;
 				col.appendChild(link);
 			} else {
-				col.textContent = r.host || r.url;
+				col.textContent = label;
 			}
 			row.appendChild(col);
 			return row;
