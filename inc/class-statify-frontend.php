@@ -153,7 +153,7 @@ class Statify_Frontend extends Statify {
 			),
 			'extraUrlParams' => array(
 				'referrer' => '${documentReferrer}',
-				'target'   => '${canonicalPath}amp/',
+				'target'   => '${canonicalPath}',
 			),
 			'triggers'       => array(
 				'trackPageview' => array(
