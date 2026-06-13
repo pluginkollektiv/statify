@@ -44,9 +44,8 @@ class Statify_Evaluation extends Statify {
 	 * Create the Statify entry and its sub pages in the WordPress admin menu.
 	 *
 	 * The evaluation is shown as a single "Statify" entry below the Dashboard
-	 * menu. The content and referrers pages are registered as routable sub pages
-	 * as well, but hidden from the menu so that only one entry is displayed. The
-	 * in-page navigation (see show_navigation()) switches between them.
+	 * menu. The content and referrers pages are not registered as sub pages,
+	 * but accessible via in-page navigation.
 	 */
 	public static function add_menu(): void {
 		add_submenu_page(
@@ -57,33 +56,6 @@ class Statify_Evaluation extends Statify {
 			'statify_dashboard',
 			array( __CLASS__, 'show_dashboard' )
 		);
-
-		add_submenu_page(
-			'index.php',
-			__( 'Content', 'statify' ) . ' &mdash; ' . __( 'Statify', 'statify' ),
-			__( 'Content', 'statify' ),
-			'see_statify_evaluation',
-			'statify_content',
-			array( __CLASS__, 'show_content' )
-		);
-
-		add_submenu_page(
-			'index.php',
-			__( 'Referrers', 'statify' ) . ' &mdash; ' . __( 'Statify', 'statify' ),
-			__( 'Referrers', 'statify' ),
-			'see_statify_evaluation',
-			'statify_referrers',
-			array( __CLASS__, 'show_referrers' )
-		);
-
-		// Only the main "Statify" entry should be visible in the menu; the other
-		// pages stay accessible via their in-page navigation.
-		remove_submenu_page( 'index.php', 'statify_content' );
-		remove_submenu_page( 'index.php', 'statify_referrers' );
-
-		// Keep the "Statify" entry highlighted while on the hidden sub pages.
-		add_filter( 'parent_file', array( __CLASS__, 'set_active_menu' ) );
-		add_filter( 'submenu_file', array( __CLASS__, 'set_active_submenu' ) );
 	}
 
 	/**
@@ -93,15 +65,15 @@ class Statify_Evaluation extends Statify {
 	 */
 	public static function show_navigation( string $current ): void {
 		$pages = array(
-			'statify_dashboard' => __( 'Overview', 'statify' ),
-			'statify_content'   => __( 'Content', 'statify' ),
-			'statify_referrers' => __( 'Referrers', 'statify' ),
+			'dashboard' => __( 'Overview', 'statify' ),
+			'content'   => __( 'Content', 'statify' ),
+			'referrers' => __( 'Referrers', 'statify' ),
 		);
 		?>
 		<nav class="statify-page-nav nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Statify evaluation', 'statify' ); ?>">
-			<?php foreach ( $pages as $slug => $label ) : ?>
-			<a href="<?php echo esc_url( admin_url( 'index.php?page=' . $slug ) ); ?>"
-			   class="nav-tab<?php echo ( $current === $slug ) ? ' nav-tab-active' : ''; ?>">
+			<?php foreach ( $pages as $view => $label ) : ?>
+			<a href="<?php echo esc_url( admin_url( 'index.php?page=statify_dashboard&view=' . $view ) ); ?>"
+			   class="nav-tab<?php echo ( $current === $view ) ? ' nav-tab-active' : ''; ?>">
 				<?php echo esc_html( $label ); ?>
 			</a>
 			<?php endforeach; ?>
@@ -139,63 +111,17 @@ class Statify_Evaluation extends Statify {
 	}
 
 	/**
-	 * Keep the Dashboard menu open while on one of the hidden sub pages.
-	 *
-	 * @param string $parent_file The current parent menu file.
-	 * @return string The (possibly adjusted) parent menu file.
-	 */
-	public static function set_active_menu( string $parent_file ): string {
-		if ( self::is_hidden_subpage() ) {
-			$parent_file = 'index.php';
-		}
-
-		return $parent_file;
-	}
-
-	/**
-	 * Keep the "Statify" entry highlighted while on one of the hidden sub pages.
-	 *
-	 * @param string|null $submenu_file The current submenu file.
-	 * @return string|null The (possibly adjusted) submenu file.
-	 */
-	public static function set_active_submenu( $submenu_file ) {
-		if ( self::is_hidden_subpage() ) {
-			$submenu_file = 'statify_dashboard';
-		}
-
-		return $submenu_file;
-	}
-
-	/**
-	 * Whether the current request is one of the menu-hidden sub pages.
-	 *
-	 * @return bool True if the content or referrers page is being displayed.
-	 */
-	private static function is_hidden_subpage(): bool {
-		global $plugin_page;
-
-		return 'statify_content' === $plugin_page || 'statify_referrers' === $plugin_page;
-	}
-
-	/**
 	 * Show the dashboard page.
 	 */
 	public static function show_dashboard(): void {
-		self::show_view( 'dashboard' );
-	}
-
-	/**
-	 * Show the content page.
-	 */
-	public static function show_content(): void {
-		self::show_view( 'content' );
-	}
-
-	/**
-	 * Show the referrers page.
-	 */
-	public static function show_referrers(): void {
-		self::show_view( 'referrers' );
+		$view = 'dashboard';
+		if ( isset( $_GET['view'] ) ) {
+			$view = sanitize_key( wp_unslash( $_GET['view'] ) );
+			if ( ! in_array( $view, array( 'dashboard', 'content', 'referrers' ), true ) ) {
+				$view = 'dashboard';
+			}
+		}
+		self::show_view( $view );
 	}
 
 	/**

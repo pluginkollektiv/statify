@@ -27,7 +27,7 @@ if ( isset( $_GET['post'] ) ) {
 	<h1><?php esc_html_e( 'Statify', 'statify' ); ?></h1>
 
 	<?php
-	Statify_Evaluation::show_navigation( 'statify_dashboard' );
+	Statify_Evaluation::show_navigation( 'dashboard' );
 
 	$subnav_items = array(
 		array(

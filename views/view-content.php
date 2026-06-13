@@ -58,18 +58,18 @@ if ( ! empty( $date_start ) && ! empty( $date_end ) && $date_start !== $date_end
 	<h1><?php esc_html_e( 'Statify', 'statify' ); ?> - <?php esc_html_e( 'Content', 'statify' ); ?></h1>
 
 	<?php
-	Statify_Evaluation::show_navigation( 'statify_content' );
+	Statify_Evaluation::show_navigation( 'content' );
 
 	$subnav_items = array(
 		array(
-			'url'     => admin_url( 'index.php?page=statify_content' ),
+			'url'     => admin_url( 'index.php?page=statify_dashboard&view=content' ),
 			'label'   => __( 'Most Popular Content', 'statify' ),
 			'current' => ( 'popular' === $selected_type ),
 		),
 	);
 	foreach ( $post_types as $pt ) {
 		$subnav_items[] = array(
-			'url'     => admin_url( 'index.php?page=statify_content&type=' . $pt ),
+			'url'     => admin_url( 'index.php?page=statify_dashboard&view=content&type=' . $pt ),
 			'label'   => get_post_type_object( $pt )->labels->name,
 			'current' => ( $selected_type === $pt ),
 		);
@@ -78,7 +78,8 @@ if ( ! empty( $date_start ) && ! empty( $date_end ) && $date_start !== $date_end
 	?>
 
 	<form id="statify-dashboard-controls">
-		<input type="hidden" name="page" value="statify_content">
+		<input type="hidden" name="page" value="statify_dashboard">
+		<input type="hidden" name="view" value="content">
 		<?php
 		if ( 'popular' !== $selected_type ) {
 			echo '<input type="hidden" name="type" value="' . esc_attr( $selected_type ) . '">';

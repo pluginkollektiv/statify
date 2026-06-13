@@ -57,10 +57,11 @@ if ( ! empty( $date_start ) && ! empty( $date_end ) && $date_start !== $date_end
 <div class="wrap">
 	<h1><?php esc_html_e( 'Statify', 'statify' ); ?> - <?php esc_html_e( 'Referrers from other websites', 'statify' ); ?></h1>
 
-	<?php Statify_Evaluation::show_navigation( 'statify_referrers' ); ?>
+	<?php Statify_Evaluation::show_navigation( 'referrers' ); ?>
 
 	<form id="statify-dashboard-controls">
-		<input type="hidden" name="page" value="statify_referrers">
+		<input type="hidden" name="page" value="statify_dashboard">
+		<input type="hidden" name="view" value="referrers">
 		<label for="statify-content-daterange"><?php esc_html_e( 'Date range', 'statify' ); ?></label>
 		<select id="statify-content-daterange" name="range">
 			<option value=""><?php esc_html_e( 'default (all the time)', 'statify' ); ?></option>
