@@ -28,8 +28,6 @@
 		referrers: document.getElementById('statify-table-referrer'),
 	};
 	const controls = {
-		// Dashboard Widget.
-		refreshBtn: document.getElementById('statify_refresh'),
 		// Extended Evaluation.
 		postInput: document.getElementById('statify-dashboard-post'),
 		postList: document.getElementById('statify-dashboard-posts'),
@@ -138,11 +136,6 @@
 	 * @param {boolean} refresh Force refresh.
 	 */
 	function updateDashboard(refresh) {
-		// Disable refresh button.
-		if (controls.refreshBtn) {
-			controls.refreshBtn.disabled = true;
-		}
-
 		// Load data from API.
 		fetchData('stats', refresh ? 'refresh=1' : null)
 			.then((data) => {
@@ -170,12 +163,6 @@
 					charts.dashboard,
 					wp.i18n.__('Error loading data.', 'statify')
 				);
-			})
-			.finally(() => {
-				// Re-enable refresh button.
-				if (controls.refreshBtn) {
-					controls.refreshBtn.disabled = false;
-				}
 			});
 	}
 
@@ -880,16 +867,6 @@
 
 	// Abort if config or target element is not present.
 	if (charts.dashboard) {
-		// Bind update function to "refresh" button.
-		if (controls.refreshBtn) {
-			controls.refreshBtn.addEventListener('click', (evt) => {
-				evt.preventDefault();
-				updateDashboard(true);
-
-				return false;
-			});
-		}
-
 		// Initial update.
 		updateDashboard(false);
 	}
