@@ -51,7 +51,7 @@ class Statify_Evaluation extends Statify {
 		add_submenu_page(
 			'index.php',
 			__( 'Statify', 'statify' ),
-			'Statify',
+			__( 'Statify', 'statify' ),
 			'see_statify_evaluation',
 			'statify_dashboard',
 			array( __CLASS__, 'show_dashboard' )
