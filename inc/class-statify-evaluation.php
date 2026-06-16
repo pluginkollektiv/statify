@@ -102,7 +102,7 @@ class Statify_Evaluation extends Statify {
 			<ul class="subsubsub">
 				<?php foreach ( $items as $key => $item ) : ?>
 				<li>
-					<a href="<?php echo esc_url( $item['url'] ); ?>"<?php echo empty( $item['current'] ) ? '' : ' class="current" aria-current="page"'; ?>><?php echo esc_html( $item['label'] ); ?></a><?php echo ( $key === $last_key ) ? '' : ' |'; ?>
+					<a href="<?php echo esc_url( $item['url'] ); ?>"<?php echo empty( $item['current'] ) ? '' : ' class="current" aria-current="page"'; ?>><?php echo esc_html( $item['label'] ); ?></a>
 				</li>
 				<?php endforeach; ?>
 			</ul>
