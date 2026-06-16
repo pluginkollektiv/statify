@@ -252,6 +252,15 @@ class Statify_Dashboard extends Statify {
 			);
 		}
 
+		// Resolve post titles for the top targets.
+		// This runs over at most `limit` rows and is cached together with the
+		// rest of the widget data (see get_stats()), so the lookups happen only
+		// once per cache lifetime instead of on every dashboard render.
+		foreach ( $data['target'] as &$target ) {
+			$target['title'] = Statify_Evaluation::post_title( $target['url'] );
+		}
+		unset( $target );
+
 		if ( $show_totals ) {
 			$data['visit_totals'] = array(
 				'today'           => $wpdb->get_var(
