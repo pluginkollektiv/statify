@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.0-beta.4
+
+* Fixed `sprintf` placeholder typi in referrers date range heading (#329)
+* Fixed off-by-one error in date formatting (#328) (#330)
+* Allow relative URLs to be linked in dashboard widget (#331)
+* Remove refresh button (#332) (#333)
+* Remove "amp/" suffix from target URLs (#183) (#335)
+* Show post titles instead of URLs in widget (#78) (#336)
+* Move new menu item to dashboard sub menu (#334)
+* Update jaybizzle/crawler-detect to v1.4 (#337)
+* Make widget title translatable (#338)
+
 ## 2.0.0-beta.3
 
 * Localize date formats in dashboard scripts (#324) (#325)
