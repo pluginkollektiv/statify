@@ -204,4 +204,9 @@ body.rtl .statify-chart * {
 	margin: 1em 0;
 }
 
+.statify-subnav li:not(:last-child)::after {
+	content: "|";
+	margin: 0 0.2em;
+}
+
 /* @end group */

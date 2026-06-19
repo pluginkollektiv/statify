@@ -41,57 +41,85 @@ class Statify_Evaluation extends Statify {
 	}
 
 	/**
-	 * Create an item and submenu items in the WordPress admin menu.
+	 * Create the Statify entry and its sub pages in the WordPress admin menu.
+	 *
+	 * The evaluation is shown as a single "Statify" entry below the Dashboard
+	 * menu. The content and referrers pages are not registered as sub pages,
+	 * but accessible via in-page navigation.
 	 */
 	public static function add_menu(): void {
-		add_menu_page(
+		add_submenu_page(
+			'index.php',
 			__( 'Statify', 'statify' ),
-			'Statify',
+			__( 'Statify', 'statify' ),
 			'see_statify_evaluation',
 			'statify_dashboard',
-			array( __CLASS__, 'show_dashboard' ),
-			'dashicons-chart-area',
-			50
+			array( __CLASS__, 'show_dashboard' )
 		);
+	}
 
-		add_submenu_page(
-			'statify_dashboard',
-			__( 'Content', 'statify' ) . ' &mdash; ' . __( 'Statify', 'statify' ),
-			__( 'Content', 'statify' ),
-			'see_statify_evaluation',
-			'statify_content',
-			array( __CLASS__, 'show_content' )
+	/**
+	 * Render the navigation tabs shared by all evaluation pages.
+	 *
+	 * @param string $current The page slug of the currently active tab.
+	 */
+	public static function show_navigation( string $current ): void {
+		$pages = array(
+			'dashboard' => __( 'Overview', 'statify' ),
+			'content'   => __( 'Content', 'statify' ),
+			'referrers' => __( 'Referrers', 'statify' ),
 		);
+		?>
+		<nav class="statify-page-nav nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Statify evaluation', 'statify' ); ?>">
+			<?php foreach ( $pages as $view => $label ) : ?>
+			<a href="<?php echo esc_url( admin_url( 'index.php?page=statify_dashboard&view=' . $view ) ); ?>"
+			   class="nav-tab<?php echo ( $current === $view ) ? ' nav-tab-active' : ''; ?>">
+				<?php echo esc_html( $label ); ?>
+			</a>
+			<?php endforeach; ?>
+		</nav>
+		<?php
+	}
 
-		add_submenu_page(
-			'statify_dashboard',
-			__( 'Referrers', 'statify' ) . ' &mdash; ' . __( 'Statify', 'statify' ),
-			__( 'Referrers', 'statify' ),
-			'see_statify_evaluation',
-			'statify_referrers',
-			array( __CLASS__, 'show_referrers' )
-		);
+	/**
+	 * Render a secondary navigation as a list of links (WordPress subsubsub style).
+	 *
+	 * Used below the primary tab navigation to switch between e.g. years or post
+	 * types without repeating the tab styling of the primary navigation.
+	 *
+	 * @param array  $items      List of items, each an array with the keys 'url',
+	 *                           'label' and (optionally) 'current'.
+	 * @param string $aria_label Accessible label for the navigation element.
+	 */
+	public static function show_subnavigation( array $items, string $aria_label ): void {
+		if ( empty( $items ) ) {
+			return;
+		}
+		?>
+		<nav class="statify-subnav wp-clearfix" aria-label="<?php echo esc_attr( $aria_label ); ?>">
+			<ul class="subsubsub">
+				<?php foreach ( $items as $item ) : ?>
+				<li>
+					<a href="<?php echo esc_url( $item['url'] ); ?>"<?php echo empty( $item['current'] ) ? '' : ' class="current" aria-current="page"'; ?>><?php echo esc_html( $item['label'] ); ?></a>
+				</li>
+				<?php endforeach; ?>
+			</ul>
+		</nav>
+		<?php
 	}
 
 	/**
 	 * Show the dashboard page.
 	 */
 	public static function show_dashboard(): void {
-		self::show_view( 'dashboard' );
-	}
-
-	/**
-	 * Show the content page.
-	 */
-	public static function show_content(): void {
-		self::show_view( 'content' );
-	}
-
-	/**
-	 * Show the referrers page.
-	 */
-	public static function show_referrers(): void {
-		self::show_view( 'referrers' );
+		$view = 'dashboard';
+		if ( isset( $_GET['view'] ) ) {
+			$view = sanitize_key( wp_unslash( $_GET['view'] ) );
+			if ( ! in_array( $view, array( 'dashboard', 'content', 'referrers' ), true ) ) {
+				$view = 'dashboard';
+			}
+		}
+		self::show_view( $view );
 	}
 
 	/**

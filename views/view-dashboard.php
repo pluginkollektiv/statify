@@ -26,18 +26,25 @@ if ( isset( $_GET['post'] ) ) {
 <div class="wrap">
 	<h1><?php esc_html_e( 'Statify', 'statify' ); ?></h1>
 
-	<nav class="statify-dashboard-nav nav-tab-wrapper wp-clearfix" aria-label="<?php esc_html_e( 'Overview and Years', 'statify' ); ?>">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=statify_dashboard' ) ); ?>"
-		   class="nav-tab<?php echo ( empty( $selected_year ) ) ? ' nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Overview', 'statify' ); ?>
-		</a>
-		<?php foreach ( $years as $y ) : ?>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=statify_dashboard&year=' . $y ) ); ?>"
-		   class="nav-tab<?php echo ( $selected_year === $y ) ? ' nav-tab-active' : ''; ?>">
-			<?php echo esc_html( $y ); ?>
-		</a>
-		<?php endforeach; ?>
-	</nav>
+	<?php
+	Statify_Evaluation::show_navigation( 'dashboard' );
+
+	$subnav_items = array(
+		array(
+			'url'     => admin_url( 'index.php?page=statify_dashboard' ),
+			'label'   => __( 'Overview', 'statify' ),
+			'current' => empty( $selected_year ),
+		),
+	);
+	foreach ( $years as $y ) {
+		$subnav_items[] = array(
+			'url'     => admin_url( 'index.php?page=statify_dashboard&year=' . $y ),
+			'label'   => (string) $y,
+			'current' => ( $selected_year === $y ),
+		);
+	}
+	Statify_Evaluation::show_subnavigation( $subnav_items, __( 'Overview and Years', 'statify' ) );
+	?>
 
 	<h2><?php esc_html_e( 'Overview', 'statify' ); ?></a></h2>
 
