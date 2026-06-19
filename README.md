@@ -24,6 +24,10 @@ Visitor statistics for WordPress with focus on data protection, transparency and
 * If you think you’ve found a bug (e.g. you’re experiencing unexpected behavior), please post at the [support forums](https://wordpress.org/support/plugin/statify/) first.
 * If you want to translate this plugin you can do this [on WordPress Translate](https://translate.wordpress.org/projects/wp-plugins/statify/).
 
+## Responsible Disclosure ##
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.]( https://patchstack.com/database/vdp/49ecb4d5-27a2-4cac-b8a2-a647f4c29c86)
+
 ## Donations
 You can leave a donation
 [via Paypal](https://www.paypal.com/donate/?cmd=_donations&business=TD4AMD2D8EMZW).
