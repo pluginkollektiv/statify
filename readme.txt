@@ -113,6 +113,9 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 * [Statify Widget](https://wordpress.org/plugins/statify-widget/) to display most popular content
 * [Statify Blacklist](https://wordpress.org/plugins/statify-blacklist/) to define a customized blacklist for referrer spam
 
+### How can I report security bugs? ###
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.]( https://patchstack.com/database/vdp/49ecb4d5-27a2-4cac-b8a2-a647f4c29c86)
 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
