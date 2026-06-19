@@ -28,8 +28,6 @@
 		referrers: document.getElementById('statify-table-referrer'),
 	};
 	const controls = {
-		// Dashboard Widget.
-		refreshBtn: document.getElementById('statify_refresh'),
 		// Extended Evaluation.
 		postInput: document.getElementById('statify-dashboard-post'),
 		postList: document.getElementById('statify-dashboard-posts'),
@@ -138,11 +136,6 @@
 	 * @param {boolean} refresh Force refresh.
 	 */
 	function updateDashboard(refresh) {
-		// Disable refresh button.
-		if (controls.refreshBtn) {
-			controls.refreshBtn.disabled = true;
-		}
-
 		// Load data from API.
 		fetchData('stats', refresh ? 'refresh=1' : null)
 			.then((data) => {
@@ -170,12 +163,6 @@
 					charts.dashboard,
 					wp.i18n.__('Error loading data.', 'statify')
 				);
-			})
-			.finally(() => {
-				// Re-enable refresh button.
-				if (controls.refreshBtn) {
-					controls.refreshBtn.disabled = false;
-				}
 			});
 	}
 
@@ -545,8 +532,8 @@
 	/**
 	 * Render top list table.
 	 *
-	 * @param {HTMLTableElement}                              table Table element.
-	 * @param {{count: number, url: string, host: ?string}[]} data  Data to display.
+	 * @param {HTMLTableElement}                                              table Table element.
+	 * @param {{count: number, url: string, host: ?string, title: ?string}[]} data  Data to display.
 	 */
 	function renderTopList(table, data) {
 		const rows = data.map((r) => {
@@ -557,15 +544,16 @@
 			row.appendChild(col);
 			col = document.createElement('TD');
 			col.classList.add('t');
+			const label = r.title || r.host || r.url;
 			if (/^((https?:)?\/)?\//i.test(r.url)) {
 				const link = document.createElement('A');
 				link.href = r.url;
 				link.target = '_blank';
 				link.rel = 'noopener noreferrer';
-				link.textContent = r.host || r.url;
+				link.textContent = label;
 				col.appendChild(link);
 			} else {
-				col.textContent = r.host || r.url;
+				col.textContent = label;
 			}
 			row.appendChild(col);
 			return row;
@@ -880,16 +868,6 @@
 
 	// Abort if config or target element is not present.
 	if (charts.dashboard) {
-		// Bind update function to "refresh" button.
-		if (controls.refreshBtn) {
-			controls.refreshBtn.addEventListener('click', (evt) => {
-				evt.preventDefault();
-				updateDashboard(true);
-
-				return false;
-			});
-		}
-
 		// Initial update.
 		updateDashboard(false);
 	}
