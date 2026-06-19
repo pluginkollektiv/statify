@@ -95,12 +95,10 @@ class Statify_Evaluation extends Statify {
 		if ( empty( $items ) ) {
 			return;
 		}
-
-		$last_key = array_key_last( $items );
 		?>
 		<nav class="statify-subnav wp-clearfix" aria-label="<?php echo esc_attr( $aria_label ); ?>">
 			<ul class="subsubsub">
-				<?php foreach ( $items as $key => $item ) : ?>
+				<?php foreach ( $items as $item ) : ?>
 				<li>
 					<a href="<?php echo esc_url( $item['url'] ); ?>"<?php echo empty( $item['current'] ) ? '' : ' class="current" aria-current="page"'; ?>><?php echo esc_html( $item['label'] ); ?></a>
 				</li>
