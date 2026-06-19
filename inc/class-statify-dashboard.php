@@ -40,7 +40,7 @@ class Statify_Dashboard extends Statify {
 		// Add dashboard widget.
 		wp_add_dashboard_widget(
 			'statify_dashboard',
-			'Statify',
+			__( 'Statify', 'statify' ),
 			array( __CLASS__, 'print_frontview' ),
 			array( __CLASS__, 'print_backview' )
 		);
