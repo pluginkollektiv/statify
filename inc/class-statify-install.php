@@ -29,14 +29,11 @@ class Statify_Install {
 	public static function init( bool $network_wide = false ): void {
 
 		if ( $network_wide && is_multisite() ) {
-			$sites = get_sites();
+			$sites = get_sites( array( 'fields' => 'ids' ) );
 
 			// Create tables for each site in a network.
 			foreach ( $sites as $site ) {
-				// Convert object to array.
-				$site = (array) $site;
-
-				switch_to_blog( $site['blog_id'] );
+				switch_to_blog( $site );
 				self::apply();
 			}
 
@@ -55,7 +52,7 @@ class Statify_Install {
 	 */
 	public static function init_site( WP_Site $new_site ): void {
 
-		switch_to_blog( $new_site->site_id );
+		switch_to_blog( (int) $new_site->site_id );
 
 		self::apply();
 

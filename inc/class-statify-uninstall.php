@@ -27,13 +27,10 @@ class Statify_Uninstall {
 	public static function init(): void {
 		if ( is_multisite() ) {
 			$old   = get_current_blog_id();
-			$sites = get_sites();
+			$sites = get_sites( array( 'fields' => 'ids' ) );
 
 			foreach ( $sites as $site ) {
-				// Convert object to array.
-				$site = (array) $site;
-
-				switch_to_blog( $site['blog_id'] );
+				switch_to_blog( $site );
 				self::apply();
 			}
 
@@ -52,7 +49,7 @@ class Statify_Uninstall {
 	 */
 	public static function init_site( WP_Site $old_site ): void {
 
-		switch_to_blog( $old_site->site_id );
+		switch_to_blog( (int) $old_site->site_id );
 
 		self::apply();
 
