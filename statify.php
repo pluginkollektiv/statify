@@ -64,7 +64,7 @@ spl_autoload_register( 'statify_autoload' );
  *
  * @param string $class Name of an class-file name, without file extension.
  */
-function statify_autoload( $class ) {
+function statify_autoload( string $class ): void {
 
 	$plugin_classes = array(
 		'Statify',

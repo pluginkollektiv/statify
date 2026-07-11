@@ -187,7 +187,7 @@ class Statify_Settings {
 	private static function show_snippet_option( int $value, string $label ): void {
 		?>
 			<label>
-				<input name="statify[snippet]" type="radio" value="<?php echo esc_html( $value ); ?>" <?php checked( Statify::$options['snippet'], $value ); ?>>
+				<input name="statify[snippet]" type="radio" value="<?php echo esc_html( (string) $value ); ?>" <?php checked( Statify::$options['snippet'], $value ); ?>>
 				<?php echo esc_html( $label ); ?>
 			</label>
 		<?php

@@ -445,9 +445,9 @@ class Statify {
 	}
 
 	/**
-	 * Get a array from the disallowed_keys option of 'Settings' - 'Discussion' - 'Disallowed Comment Keys'.
+	 * Get an array from the disallowed_keys option of 'Settings' - 'Discussion' - 'Disallowed Comment Keys'.
 	 *
-	 * @return array
+	 * @return string[]
 	 *
 	 * @since 1.7.3 Renamed to "get_disallowed_keys" to match WP 5.5. wording.
 	 * @since 2.0.0 Migration from Statify_Frontend to Statify class.

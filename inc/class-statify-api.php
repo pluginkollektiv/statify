@@ -125,6 +125,8 @@ class Statify_Api extends Statify {
 	 *
 	 * @param WP_Error|null|true $errors WP_Error if authentication error, null if authentication
 	 *                                   method wasn't used, true if authentication succeeded.
+	 *
+	 * @return WP_Error|null|true True if our REST route was called, pass-through argument otherwise.
 	 */
 	public static function check_authentication( $errors ) {
 		$route = untrailingslashit( $GLOBALS['wp']->query_vars['rest_route'] );
@@ -336,7 +338,7 @@ class Statify_Api extends Statify {
 				Statify_Evaluation::get_post_urls()
 			);
 
-			self::update_cache( 'post_urls', 0, $posts );
+			self::update_cache( 'post_urls', '0', $posts );
 		}
 
 		return new WP_REST_Response( $posts );

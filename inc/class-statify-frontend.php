@@ -51,9 +51,9 @@ class Statify_Frontend extends Statify {
 	 * @since    1.1.0
 	 * @version  1.3.1
 	 *
-	 * @param   array $vars Input with existing variables.
+	 * @param string[] $vars Input with existing variables.
 	 *
-	 * @return  array  $vars  Output with plugin variables
+	 * @return string[] Output with plugin variables
 	 */
 	public static function query_vars( array $vars ): array {
 		$vars[] = 'statify_referrer';
