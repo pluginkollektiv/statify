@@ -18,43 +18,17 @@
 /* Quit */
 defined( 'ABSPATH' ) || exit;
 
-
 /*  Constants */
 define( 'STATIFY_FILE', __FILE__ );
 define( 'STATIFY_DIR', __DIR__ );
 define( 'STATIFY_BASE', plugin_basename( __FILE__ ) );
 define( 'STATIFY_VERSION', '2.0.0' );
 
-
 /* Hooks */
-add_action(
-	'plugins_loaded',
-	array(
-		'Statify',
-		'init',
-	)
-);
-register_activation_hook(
-	STATIFY_FILE,
-	array(
-		'Statify_Install',
-		'init',
-	)
-);
-register_deactivation_hook(
-	STATIFY_FILE,
-	array(
-		'Statify_Deactivate',
-		'init',
-	)
-);
-register_uninstall_hook(
-	STATIFY_FILE,
-	array(
-		'Statify_Uninstall',
-		'init',
-	)
-);
+add_action( 'plugins_loaded', array( 'Statify', 'init' ) );
+register_activation_hook( STATIFY_FILE, array( 'Statify_Install', 'init' ) );
+register_deactivation_hook( STATIFY_FILE, array( 'Statify_Deactivate', 'init' ) );
+register_uninstall_hook( STATIFY_FILE, array( 'Statify_Uninstall', 'init' ) );
 
 /* Autoload */
 spl_autoload_register( 'statify_autoload' );
