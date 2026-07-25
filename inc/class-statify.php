@@ -460,8 +460,6 @@ class Statify {
 			$disallowed_keys = get_option( 'blacklist_keys' ); // phpcs:ignore WordPress.WP.DeprecatedParameterValues.Found
 		}
 
-		$disallowed_keys = trim( $disallowed_keys );
-
 		if ( empty( $disallowed_keys ) ) {
 			return array();
 		}
