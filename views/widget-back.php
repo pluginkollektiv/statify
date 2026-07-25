@@ -8,7 +8,10 @@
  */
 
 // Exit if accessed directly.
-defined( 'ABSPATH' ) || exit; ?>
+defined( 'ABSPATH' ) || exit;
+
+// phpcs:disable Universal.WhiteSpace.PrecisionAlignment.Found
+?>
 
 <?php if ( current_user_can( 'manage_options' ) ) : ?>
 <p class="meta-links settings-link">

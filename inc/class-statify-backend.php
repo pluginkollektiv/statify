@@ -69,9 +69,11 @@ class Statify_Backend {
 				sprintf(
 					/* @lang  Disable language injection for Url query argument. */
 					'<a href="%s">%s</a>',
-					add_query_arg(
-						array( 'page' => 'statify-settings' ),
-						admin_url( '/options-general.php' )
+					esc_url(
+						add_query_arg(
+							array( 'page' => 'statify-settings' ),
+							admin_url( '/options-general.php' )
+						)
 					),
 					esc_html__( 'Settings', 'statify' )
 				),

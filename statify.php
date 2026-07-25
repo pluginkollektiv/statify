@@ -36,9 +36,9 @@ spl_autoload_register( 'statify_autoload' );
 /**
  * Include classes via autoload.
  *
- * @param string $class Name of an class-file name, without file extension.
+ * @param string $class_name Name of an class-file name, without file extension.
  */
-function statify_autoload( string $class ): void {
+function statify_autoload( string $class_name ): void {
 
 	$plugin_classes = array(
 		'Statify',
@@ -55,17 +55,17 @@ function statify_autoload( string $class ): void {
 		'Statify_Cron',
 	);
 
-	if ( in_array( $class, $plugin_classes, true ) ) {
+	if ( in_array( $class_name, $plugin_classes, true ) ) {
 		require_once sprintf(
 			'%s/inc/class-%s.php',
 			STATIFY_DIR,
-			strtolower( str_replace( '_', '-', $class ) )
+			strtolower( str_replace( '_', '-', $class_name ) )
 		);
-	} elseif ( 0 === strncmp( $class, 'Jaybizzle\\CrawlerDetect\\', 24 ) && ! class_exists( $class, false ) ) {
+	} elseif ( 0 === strncmp( $class_name, 'Jaybizzle\\CrawlerDetect\\', 24 ) && ! class_exists( $class_name, false ) ) {
 		require_once sprintf(
 			'%s/lib/%s.php',
 			STATIFY_DIR,
-			str_replace( '\\', DIRECTORY_SEPARATOR, $class )
+			str_replace( '\\', DIRECTORY_SEPARATOR, $class_name )
 		);
 	}
 }

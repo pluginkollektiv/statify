@@ -202,7 +202,7 @@ class Statify_Dashboard extends Statify {
 		$current_date = current_time( 'Y-m-d' );
 
 		$data = array(
-			'visits'   => self::fill_gaps(
+			'visits' => self::fill_gaps(
 				$wpdb->get_results(
 					$wpdb->prepare(
 						"SELECT `created` as `date`, COUNT(*) as `count` FROM `$wpdb->statify` WHERE `created` BETWEEN CURDATE() - INTERVAL %d DAY AND CURDATE() GROUP BY `created` ORDER BY `created` ASC",
@@ -223,6 +223,7 @@ class Statify_Dashboard extends Statify {
 				),
 				ARRAY_A
 			);
+
 			$data['referrer'] = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT COUNT(`referrer`) as `count`, `referrer` as `url`, SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) as `host` FROM `$wpdb->statify` WHERE `referrer` != '' AND created = %s GROUP BY `host` ORDER BY `count` DESC, `url` ASC LIMIT %d",
@@ -241,6 +242,7 @@ class Statify_Dashboard extends Statify {
 				),
 				ARRAY_A
 			);
+
 			$data['referrer'] = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT COUNT(`referrer`) as `count`, `referrer` as `url`, SUBSTRING_INDEX(SUBSTRING_INDEX(TRIM(LEADING 'www.' FROM(TRIM(LEADING 'https://' FROM TRIM(LEADING 'http://' FROM TRIM(`referrer`))))), '/', 1), ':', 1) as `host` FROM `$wpdb->statify` WHERE `referrer` != '' AND created > DATE_SUB(%s, INTERVAL %d DAY) GROUP BY `host` ORDER BY `count` DESC, `url` ASC LIMIT %d",
@@ -293,7 +295,7 @@ class Statify_Dashboard extends Statify {
 	 * @return array Array with filled gaps.
 	 */
 	private static function fill_gaps( array $data, int $days ): array {
-		if ( empty( $data ) || count( $data ) == $days ) {
+		if ( empty( $data ) || count( $data ) === $days ) {
 			return $data;
 		}
 

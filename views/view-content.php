@@ -9,6 +9,9 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable Universal.WhiteSpace.PrecisionAlignment.Found
+// phpcs:disable WordPress.Security.NonceVerification.Recommended -- we use $_GET parameters in various places
+
 $post_types = Statify_Evaluation::get_post_types();
 if ( isset( $_GET['type'] ) && in_array( wp_unslash( $_GET['type'] ), $post_types, true ) ) {
 	$selected_type = sanitize_text_field( wp_unslash( $_GET['type'] ) );

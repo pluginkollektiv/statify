@@ -17,12 +17,12 @@ defined( 'ABSPATH' ) || exit;
  * @since 0.1.0
  */
 class Statify {
-	const TRACKING_METHOD_DEFAULT = 0;
-	const TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK = 1;
+	const TRACKING_METHOD_DEFAULT                        = 0;
+	const TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK    = 1;
 	const TRACKING_METHOD_JAVASCRIPT_WITHOUT_NONCE_CHECK = 2;
 
-	const SKIP_USERS_NONE = 0;
-	const SKIP_USERS_ALL = 1;
+	const SKIP_USERS_NONE  = 0;
+	const SKIP_USERS_ALL   = 1;
 	const SKIP_USERS_ADMIN = 2;
 
 	/**
@@ -221,12 +221,12 @@ class Statify {
 	public static function user_can_see_stats(): bool {
 		if ( isset( self::$options['show_widget_roles'] ) ) {
 			$statify_roles = self::$options['show_widget_roles'];
-			$current_user = wp_get_current_user();
-			$user_roles = $current_user->roles;
+			$current_user  = wp_get_current_user();
+			$user_roles    = $current_user->roles;
 
 			// Filter user_can_see_stats.
 			$allowed_roles = array_intersect( $statify_roles, $user_roles );
-			$can_see = ! empty( $allowed_roles );
+			$can_see       = ! empty( $allowed_roles );
 		} else {
 			// Backwards compatibility for older statify versions without this option.
 			$can_see = current_user_can( 'edit_dashboard' );
@@ -316,7 +316,7 @@ class Statify {
 	 */
 	protected static function get_version(): string {
 		if ( ! isset( self::$plugin_version ) ) {
-			$meta = get_plugin_data( STATIFY_FILE );
+			$meta                 = get_plugin_data( STATIFY_FILE );
 			self::$plugin_version = $meta['Version'];
 		}
 
@@ -428,7 +428,7 @@ class Statify {
 			$referrer = $referrer['host'];
 		}
 
-		// Return false if there still is no referrer to checj.
+		// Return false if there still is no referrer to check.
 		if ( ! is_string( $referrer ) ) {
 			return false;
 		}
@@ -468,18 +468,17 @@ class Statify {
 	}
 
 	/**
-	 * Find the position of the first occurrence of a substring in a string about a array.
+	 * Check whether any of the given substrings occurs in a string.
 	 *
-	 * @param string  $haystack The string to search in.
-	 * @param array   $needle   The string to search for.
-	 * @param integer $offset   Search will start this number of characters counted from the beginning of the string.
+	 * @param string $haystack The string to search in.
+	 * @param array  $needle   The string to search for.
 	 *
 	 * @return boolean
 	 */
-	private static function strposa( string $haystack, array $needle, int $offset = 0 ): bool {
+	private static function strposa( string $haystack, array $needle ): bool {
 
 		foreach ( $needle as $query ) {
-			if ( strpos( $haystack, $query, $offset ) !== false ) {
+			if ( strpos( $haystack, $query ) !== false ) {
 				return true;
 			} // Stop on first true result.
 		}

@@ -9,6 +9,9 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable Universal.WhiteSpace.PrecisionAlignment.Found
+// phpcs:disable WordPress.Security.NonceVerification.Recommended -- we use $_GET parameters in various places
+
 if ( isset( $_GET['range'] ) ) {
 	$date_range = sanitize_text_field( wp_unslash( $_GET['range'] ) );
 } else {

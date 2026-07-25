@@ -22,14 +22,14 @@ class Statify_Api extends Statify {
 	 *
 	 * @var    string
 	 */
-	const REST_NAMESPACE = 'statify/v1';
-	const REST_ROUTE_TRACK = 'track';
-	const REST_ROUTE_STATS = 'stats';
-	const REST_ROUTE_RESET = 'reset';
-	const REST_ROUTE_STATS_EXTENDED = 'stats/extended';
-	const REST_ROUTE_STATS_POSTS = 'stats/posts';
+	const REST_NAMESPACE             = 'statify/v1';
+	const REST_ROUTE_TRACK           = 'track';
+	const REST_ROUTE_STATS           = 'stats';
+	const REST_ROUTE_RESET           = 'reset';
+	const REST_ROUTE_STATS_EXTENDED  = 'stats/extended';
+	const REST_ROUTE_STATS_POSTS     = 'stats/posts';
 	const REST_ROUTE_STATS_REFERRERS = 'stats/referrers';
-	const REST_ROUTE_POSTS = 'posts';
+	const REST_ROUTE_POSTS           = 'posts';
 
 	/**
 	 * Initialize REST API routes.
@@ -252,7 +252,7 @@ class Statify_Api extends Statify {
 	public static function get_extended( WP_REST_Request $request ): WP_REST_Response {
 		// Verify scope.
 		$scope = $request->get_param( 'scope' );
-		if ( ! in_array( $scope, array( 'year', 'month', 'day' ) ) ) {
+		if ( ! in_array( $scope, array( 'year', 'month', 'day' ), true ) ) {
 			return new WP_REST_Response(
 				array( 'error' => 'invalid scope (allowed: year, month, day)' ),
 				400
@@ -436,12 +436,12 @@ class Statify_Api extends Statify {
 	 */
 	public static function get_stats_referrers( WP_REST_Request $request ): WP_REST_Response {
 		// Single post requested?
-		$post  = $request->get_param( 'post' );
+		$post = $request->get_param( 'post' );
 
 		// Date filter.
 		$start = self::get_date( $request, 'start' );
 		$end   = self::get_date( $request, 'end' );
-		$data = false;
+		$data  = false;
 		if ( empty( $post ) && empty( $start ) && empty( $end ) ) {
 			// Retrieve data from cache.
 			$data = self::from_cache( 'referrers' );

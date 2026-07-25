@@ -272,7 +272,7 @@ class Statify_Settings {
 
 			foreach ( $all_roles as $role => $role_object ) {
 				$capabilities = $role_object['capabilities'];
-				if ( in_array( 'edit_dashboard', array_keys( $capabilities ) ) ) {
+				if ( in_array( 'edit_dashboard', array_keys( $capabilities ), true ) ) {
 					$saved_roles[] = $role;
 				}
 			}
@@ -303,7 +303,7 @@ class Statify_Settings {
 				esc_html( $input_id ),
 				esc_html( $role ),
 				esc_html( $name ),
-				checked( in_array( $role, $saved_roles ), true, false )
+				checked( in_array( $role, $saved_roles, true ), true, false )
 			);
 			echo esc_html( $role_object['name'] );
 			?>
@@ -463,6 +463,7 @@ class Statify_Settings {
 		// Sanitize user roles (preserve NULL, if unset).
 		if ( isset( $options['show_widget_roles'] ) ) {
 			$available_roles = apply_filters( 'statify__available_roles', wp_roles()->roles );
+
 			$res['show_widget_roles'] = array();
 			foreach ( $options['show_widget_roles'] as $saved_role ) {
 				if ( in_array( $saved_role, array_keys( $available_roles ), true ) ) {

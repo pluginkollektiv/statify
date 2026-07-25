@@ -69,6 +69,7 @@ class Statify_Evaluation extends Statify {
 			'content'   => __( 'Content', 'statify' ),
 			'referrers' => __( 'Referrers', 'statify' ),
 		);
+		// phpcs:disable Universal.WhiteSpace.PrecisionAlignment.Found
 		?>
 		<nav class="statify-page-nav nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Statify evaluation', 'statify' ); ?>">
 			<?php foreach ( $pages as $view => $label ) : ?>
@@ -79,6 +80,7 @@ class Statify_Evaluation extends Statify {
 			<?php endforeach; ?>
 		</nav>
 		<?php
+		// phpcs:enable Universal.WhiteSpace.PrecisionAlignment.Found
 	}
 
 	/**
@@ -113,12 +115,14 @@ class Statify_Evaluation extends Statify {
 	 */
 	public static function show_dashboard(): void {
 		$view = 'dashboard';
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET['view'] ) ) {
 			$view = sanitize_key( wp_unslash( $_GET['view'] ) );
 			if ( ! in_array( $view, array( 'dashboard', 'content', 'referrers' ), true ) ) {
 				$view = 'dashboard';
 			}
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 		self::show_view( $view );
 	}
 
@@ -150,6 +154,7 @@ class Statify_Evaluation extends Statify {
 			' ORDER BY `year` DESC',
 			ARRAY_A
 		);
+
 		$years = array();
 		foreach ( $results as $result ) {
 			$years[] = (int) $result['year'];
@@ -439,7 +444,7 @@ class Statify_Evaluation extends Statify {
 	 */
 	public static function get_post_types(): array {
 		$types_args = array(
-			'public' => true,
+			'public'   => true,
 			'_builtin' => false,
 		);
 
