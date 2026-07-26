@@ -19,6 +19,8 @@ jobs:
           - php: '8.4'
             wordpress: '6.9'
           - php: '8.5'
+            wordpress: '7.0'
+          - php: '8.5'
             wordpress: 'nightly'
     steps:
       - name: Checkout
@@ -61,7 +63,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.5'
           tools: composer
       - name: Setup Node
         uses: actions/setup-node@v7
