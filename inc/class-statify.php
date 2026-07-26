@@ -186,7 +186,7 @@ class Statify {
 	 */
 	public static function parse_date( string $date ): string {
 		if ( function_exists( 'wp_date' ) ) { // Exists since WP 5.3.
-			return wp_date( get_option( 'date_format' ), strtotime( $date ) );
+			return wp_date( get_option( 'date_format' ), strtotime( $date ) );  // @wp-since ignore
 		}
 
 		return date_i18n( get_option( 'date_format' ), strtotime( $date ) );
@@ -396,7 +396,7 @@ class Statify {
 	protected static function is_internal(): bool {
 		// Skip for preview, 404 calls, feed, search, favicon and sitemap access.
 		return is_preview() || is_404() || is_feed() || is_search()
-			|| ( function_exists( 'is_favicon' ) && is_favicon() )
+			|| ( function_exists( 'is_favicon' ) && is_favicon() )  // @wp-since ignore
 			|| '' !== get_query_var( 'sitemap' ) || '' !== get_query_var( 'sitemap-stylesheet' );
 	}
 

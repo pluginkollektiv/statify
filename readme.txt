@@ -5,7 +5,7 @@
 * Requires at least: 5.1
 * Tested up to:      7.0
 * Requires PHP:      7.4
-* Stable tag:        1.8.5
+* Stable tag:        2.0.0
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -123,6 +123,7 @@ You can find the full changelog in [our GitHub repository](https://github.com/pl
 ### 2.0.0
 * JavaScript tracking now uses WP REST API instead of AJAX
 * Integrated additional dashboards from _Extended Evaluation for Statify_
+* Show post titles instead of URLs in widget
 * Visibility of statistics can now be configured for different roles
 * Improvements for bot detection
 * It is now possible to exclude administrators from tracking
