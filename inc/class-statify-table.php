@@ -24,7 +24,7 @@ class Statify_Table {
 	 * @since   0.6.0
 	 * @version 1.2.4
 	 */
-	public static function init() {
+	public static function init(): void {
 
 		// Global.
 		global $wpdb;
@@ -46,7 +46,7 @@ class Statify_Table {
 	 * @since   0.6.0
 	 * @version 1.2.4
 	 */
-	public static function create() {
+	public static function create(): void {
 
 		global $wpdb;
 
@@ -80,11 +80,24 @@ class Statify_Table {
 	 * @since   0.6.0
 	 * @version 1.2.4
 	 */
-	public static function drop() {
+	public static function drop(): void {
 
 		global $wpdb;
 
 		// Remove.
 		$wpdb->query( "DROP TABLE IF EXISTS `$wpdb->statify`" );
+	}
+
+	/**
+	 * Clear Statify table.
+	 *
+	 * @since   2.0.0
+	 * @version 2.0.0
+	 */
+	public static function truncate(): bool {
+
+		global $wpdb;
+
+		return (bool) $wpdb->query( "TRUNCATE TABLE `$wpdb->statify`" );
 	}
 }

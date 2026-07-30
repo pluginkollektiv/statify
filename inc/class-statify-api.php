@@ -1,0 +1,533 @@
+<?php
+/**
+ * Statify: Statify_API class
+ *
+ * This file contains methods for REST API integration.
+ *
+ * @package Statify
+ * @since   2.0.0
+ */
+
+// Quit if accessed outside WP context.
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Statify REST API integration.
+ *
+ * @since 2.0.0
+ */
+class Statify_Api extends Statify {
+	/**
+	 * REST endpoints
+	 *
+	 * @var    string
+	 */
+	const REST_NAMESPACE             = 'statify/v1';
+	const REST_ROUTE_TRACK           = 'track';
+	const REST_ROUTE_STATS           = 'stats';
+	const REST_ROUTE_RESET           = 'reset';
+	const REST_ROUTE_STATS_EXTENDED  = 'stats/extended';
+	const REST_ROUTE_STATS_POSTS     = 'stats/posts';
+	const REST_ROUTE_STATS_REFERRERS = 'stats/referrers';
+	const REST_ROUTE_POSTS           = 'posts';
+
+	/**
+	 * Initialize REST API routes.
+	 *
+	 * @return void
+	 */
+	public static function init(): void {
+		if ( Statify::is_javascript_tracking_enabled() ) {
+			register_rest_route(
+				self::REST_NAMESPACE,
+				self::REST_ROUTE_TRACK,
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'accept_json'         => true,
+					'callback'            => array( __CLASS__, 'track_visit' ),
+					'permission_callback' => '__return_true',
+				)
+			);
+		}
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_STATS,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( __CLASS__, 'get_stats' ),
+				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_RESET,
+			array(
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => array( __CLASS__, 'reset_data' ),
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_STATS_EXTENDED,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( __CLASS__, 'get_extended' ),
+				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_STATS_POSTS,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( __CLASS__, 'get_stats_posts' ),
+				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_STATS_REFERRERS,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( __CLASS__, 'get_stats_referrers' ),
+				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_POSTS,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( __CLASS__, 'get_posts' ),
+				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
+			)
+		);
+
+		add_filter( 'rest_authentication_errors', array( __CLASS__, 'check_authentication' ), 5 );
+	}
+
+	/**
+	 * Filters REST API authentication errors.
+	 *
+	 * Override the default authentication check for the tracking endpoint.
+	 * Requests are unauthenticated by default, if no nonce is provided. Verification can be disabled in the plugin
+	 * configuration, and we still need the information, if tue current user is logged in.
+	 * We don't make any decision for other routes.
+	 *
+	 * @param WP_Error|null|true $errors WP_Error if authentication error, null if authentication
+	 *                                   method wasn't used, true if authentication succeeded.
+	 *
+	 * @return WP_Error|null|true True if our REST route was called, pass-through argument otherwise.
+	 */
+	public static function check_authentication( $errors ) {
+		$route = untrailingslashit( $GLOBALS['wp']->query_vars['rest_route'] );
+
+		if ( '/' . self::REST_NAMESPACE . '/' . self::REST_ROUTE_TRACK === $route ) {
+			// We disable verification for the tracking route.
+			return true;
+		}
+
+		// Don't change behavior for other routes.
+		return $errors;
+	}
+
+	/**
+	 * Track the page view via API.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return WP_REST_Response The response.
+	 */
+	public static function track_visit( WP_REST_Request $request ): WP_REST_Response {
+		// Only do something if snippet use is actually configured.
+		if ( Statify::is_javascript_tracking_enabled() ) {
+			// Nonce verification, if necessary. We do not rely on the WP REST default mechanisms.
+			if ( Statify::TRACKING_METHOD_JAVASCRIPT_WITH_NONCE_CHECK === self::$options['snippet'] ) {
+				$nonce = $request->get_param( 'nonce' );
+				if ( empty( $nonce ) || false === wp_verify_nonce( $nonce, 'statify_track' ) ) {
+					return new WP_REST_Response( null, 403 );
+				}
+			}
+
+			$referrer = $request->get_param( 'referrer' );
+			if ( null !== $referrer ) {
+				$referrer = filter_var( $referrer, FILTER_SANITIZE_URL );
+			}
+			$target = $request->get_param( 'target' );
+			if ( null !== $target ) {
+				$target = filter_var( $target, FILTER_SANITIZE_URL );
+			}
+
+			Statify::track( $referrer, $target );
+		}
+
+		return new WP_REST_Response( null, 204 );
+	}
+
+	/**
+	 * Get statistics.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return WP_REST_Response The response.
+	 */
+	public static function get_stats( WP_REST_Request $request ): WP_REST_Response {
+		$refresh = '1' === $request->get_param( 'refresh' );
+
+		$stats = Statify_Dashboard::get_stats( $refresh );
+
+		$visits          = $stats['visits'];
+		$stats['visits'] = array();
+		foreach ( $visits as $v ) {
+			$stats['visits'][ $v['date'] ] = intval( $v['count'] );
+		}
+
+		foreach ( $stats['referrer'] as &$r ) {
+			$r['count'] = intval( $r['count'] );
+		}
+
+		foreach ( $stats['target'] as &$t ) {
+			$t['count'] = intval( $t['count'] );
+		}
+
+		if ( isset( $stats['visit_totals'] ) ) {
+			$stats['totals'] = array(
+				'today'   => intval( $stats['visit_totals']['today'] ),
+				'alltime' => intval( $stats['visit_totals']['since_beginning']['count'] ),
+				'since'   => $stats['visit_totals']['since_beginning']['date'],
+			);
+			unset( $stats['visit_totals'] );
+		}
+
+		return new WP_REST_Response( $stats );
+	}
+
+	/**
+	 * REST API callback to reset statistics data.
+	 *
+	 * @param WP_REST_Request $request The REST request object.
+	 *
+	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error on failure.
+	 */
+	public static function reset_data( WP_REST_Request $request ) {
+		$result = Statify_Table::truncate();
+
+		if ( ! $result ) {
+			return new WP_Error(
+				'reset_failed',
+				__( 'Failed to reset statistics data.', 'statify' ),
+				array( 'status' => 500 )
+			);
+		}
+
+		delete_transient( 'statify_data' );
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'message' => __( 'Statistics data has been successfully reset.', 'statify' ),
+			),
+			200
+		);
+	}
+
+	/**
+	 * Get extended statistics.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return WP_REST_Response The response.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function get_extended( WP_REST_Request $request ): WP_REST_Response {
+		// Verify scope.
+		$scope = $request->get_param( 'scope' );
+		if ( ! in_array( $scope, array( 'year', 'month', 'day' ), true ) ) {
+			return new WP_REST_Response(
+				array( 'error' => 'invalid scope (allowed: year, month, day)' ),
+				400
+			);
+		}
+
+		// Parse year, if provided.
+		$yr = $request->get_param( 'year' ) ?? 0;
+		if ( ! empty( $yr ) ) {
+			$yr = intval( $yr );
+			if ( $yr <= 0 ) {
+				return new WP_REST_Response(
+					array( 'error' => 'invalid year' ),
+					400
+				);
+			}
+		}
+
+		// Retrieve from cache, if data is not post-specific.
+		$post  = $request->get_param( 'post' );
+		$stats = false;
+		if ( ! $post ) {
+			$stats = self::from_cache( $scope, $yr );
+		}
+
+		if ( ! $stats ) {
+			if ( 'year' === $scope ) {
+				$stats = Statify_Evaluation::get_views_for_all_years( $post );
+			} elseif ( 'month' === $scope ) {
+				$visits  = Statify_Evaluation::get_views_for_all_months( $post );
+				$stats   = array( 'visits' => array() );
+				$last_ym = 0;
+				foreach ( $visits as $ym => $v ) {
+					$ym         = explode( '-', $ym );
+					$year       = intval( $ym[0] );
+					$month      = intval( $ym[1] );
+					$year_month = $year * 12 + $month;
+					for ( $ym = $last_ym + 1; $last_ym > 0 && $ym < $year_month; $ym++ ) {
+						// Fill gaps.
+						$y = intval( $ym / 12 );
+						if ( ! isset( $stats['visits'][ $y ] ) ) {
+							$stats['visits'][ $y ] = array();
+						}
+						$stats['visits'][ $y ][ $ym % 12 ] = 0;
+					}
+					if ( ! isset( $stats['visits'][ $year ] ) ) {
+						$stats['visits'][ $year ] = array();
+					}
+					$stats['visits'][ $year ][ $month ] = $v;
+					$last_ym                            = $year_month;
+				}
+			} elseif ( 'day' === $scope ) {
+				$stats = Statify_Evaluation::get_views_for_all_days( $yr, $post );
+			}
+
+			// Update cache, if data is not post-specific.
+			if ( ! $post ) {
+				self::update_cache( $scope, $yr, $stats );
+			}
+		}
+
+		return new WP_REST_Response( $stats );
+	}
+
+	/**
+	 * Get post URLs.
+	 *
+	 * @return WP_REST_Response The response.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function get_posts(): WP_REST_Response {
+		$posts = self::from_cache( 'post_urls' );
+
+		if ( ! $posts ) {
+			$posts = array_map(
+				function ( $url ) {
+					return array(
+						'url'   => $url,
+						'title' => Statify_Evaluation::post_title( $url ),
+					);
+				},
+				Statify_Evaluation::get_post_urls()
+			);
+
+			self::update_cache( 'post_urls', '0', $posts );
+		}
+
+		return new WP_REST_Response( $posts );
+	}
+
+	/**
+	 * Get stats per post.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return WP_REST_Response The response.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function get_stats_posts( WP_REST_Request $request ): WP_REST_Response {
+		// Post type requested?
+		$type = $request->get_param( 'type' );
+		if ( empty( $type ) || 'popular' === $type ) {
+			$type = '';
+		} elseif ( ! in_array( $type, Statify_Evaluation::get_post_types(), true ) ) {
+			return new WP_REST_Response( array( 'error' => 'invalid post type' ), 400 );
+		}
+
+		// Date filter.
+		$start = self::get_date( $request, 'start' );
+		$end   = self::get_date( $request, 'end' );
+		$cache = empty( $start ) && empty( $end );
+		$data  = false;
+
+		if ( $cache ) {
+			// Retrieve typed data from cache.
+			$data = self::from_cache( 'posts', $type );
+		}
+		if ( ! $data ) {
+			// Retrieve data from cache for all types or generate it.
+			if ( $cache ) {
+				$data = self::from_cache( 'posts' );
+			}
+			if ( ! $data ) {
+				$data = array_map(
+					function ( $d ) {
+						$url  = $d['url'];
+						$type = self::post_type( $url );
+						return array(
+							'count'    => intval( $d['count'] ),
+							'url'      => $url,
+							'title'    => Statify_Evaluation::post_title( $url ),
+							'type'     => $type,
+							'typeName' => self::type_name( $type ),
+						);
+					},
+					Statify_Evaluation::get_views_of_most_popular_posts( $start, $end )
+				);
+
+				if ( $cache ) {
+					// Cache complete data.
+					self::update_cache( 'posts', '', $data );
+				}
+			}
+
+			if ( $cache ) {
+				// Cache complete data.
+				self::update_cache( 'posts', '', $data );
+			}
+
+			// Filter by type.
+			if ( ! empty( $type ) ) {
+				$data = array_values(
+					array_filter(
+						$data,
+						function ( $d ) use ( $type ) {
+							return $d['type'] === $type;
+						}
+					)
+				);
+
+				if ( $cache ) {
+					// Cache typed data.
+					self::update_cache( 'posts', $type, $data );
+				}
+			}
+		}
+
+		return new WP_REST_Response( $data );
+	}
+
+	/**
+	 * Get stats per referrers.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return WP_REST_Response The response.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function get_stats_referrers( WP_REST_Request $request ): WP_REST_Response {
+		// Single post requested?
+		$post = $request->get_param( 'post' );
+
+		// Date filter.
+		$start = self::get_date( $request, 'start' );
+		$end   = self::get_date( $request, 'end' );
+		$data  = false;
+		if ( empty( $post ) && empty( $start ) && empty( $end ) ) {
+			// Retrieve data from cache.
+			$data = self::from_cache( 'referrers' );
+		}
+		if ( ! $data ) {
+			// Generate data for all types.
+			$data = Statify_Evaluation::get_views_for_all_referrers( $post, $start, $end );
+
+			if ( empty( $post ) && empty( $start ) && empty( $end ) ) {
+				// Store in cache.
+				self::update_cache( 'referrers', '', $data );
+			}
+		}
+
+		return new WP_REST_Response( $data );
+	}
+
+	/**
+	 * Retrieve data from cache.
+	 *
+	 * @param string $scope Scope (year, month, day).
+	 * @param string $index Optional index (e.g. year).
+	 *
+	 * @return array|false Transient data or FALSE.
+	 */
+	private static function from_cache( string $scope, string $index = '' ) {
+		return get_transient( 'statify_data_' . $scope . ( ! empty( $index ) ? '_' . $index : '' ) );
+	}
+
+	/**
+	 * Update data cache.
+	 *
+	 * @param string $scope Scope (year, month, day).
+	 * @param string $index Optional index (e.g. year).
+	 * @param array  $data  Data.
+	 */
+	private static function update_cache( string $scope, string $index, array $data ): void {
+		set_transient(
+			'statify_data_' . $scope . ( ! empty( $index ) ? '_' . $index : '' ),
+			$data,
+			30 * MINUTE_IN_SECONDS
+		);
+	}
+
+	/**
+	 * Get post type by URL.
+	 *
+	 * @param string $url URL.
+	 *
+	 * @return string Post type, empty string if not available.
+	 */
+	private static function post_type( string $url ): string {
+		$post_id = url_to_postid( $url );
+		if ( 0 === $post_id ) {
+			return '';
+		}
+		return get_post_type( $post_id );
+	}
+
+	/**
+	 * Get name of a given post type (e.g. "Post" for "post")
+	 *
+	 * @param string $type Post type.
+	 *
+	 * @return string Type name.
+	 */
+	private static function type_name( string $type ): string {
+		if ( empty( $type ) ) {
+			return '';
+		}
+		return get_post_type_object( $type )->labels->singular_name;
+	}
+
+	/**
+	 * Get ISO date parameter from request.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 * @param string          $param   Parameter name.
+	 *
+	 * @return string ISO date string or empty, if missing/invalid.
+	 */
+	private static function get_date( WP_REST_Request $request, string $param ): string {
+		$val = $request->get_param( $param );
+		if ( empty( $val ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $val ) ) {
+			return '';
+		}
+		return $val;
+	}
+}

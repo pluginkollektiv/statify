@@ -55,7 +55,7 @@ class Test_Dashboard extends WP_UnitTestCase {
 	public function test_init() {
 		global $widget_capture;
 
-		// Anonymous users do not have die "edit_dashboard" capability, i.e. can't see the stats.
+		// Anonymous users do not have the "edit_dashboard" capability, i.e. can't see the stats.
 		wp_set_current_user( 0 );
 		Statify_Dashboard::init();
 		$this->assertFalse(
@@ -86,11 +86,11 @@ class Test_Dashboard extends WP_UnitTestCase {
 			'Unexpected control callback'
 		);
 		$this->assertNotFalse(
-			has_action( 'admin_print_styles', array( Statify_Dashboard::class, 'add_style' ) ),
+			has_action( 'admin_print_styles', array( Statify::class, 'add_style' ) ),
 			'Styles not added'
 		);
 		$this->assertNotFalse(
-			has_action( 'admin_print_scripts', array( Statify_Dashboard::class, 'add_js' ) ),
+			has_action( 'admin_print_scripts', array( Statify::class, 'add_js' ) ),
 			'Scripts not added'
 		);
 	}
@@ -138,12 +138,22 @@ class Test_Dashboard extends WP_UnitTestCase {
 	 */
 	public function test_get_stats() {
 		// Initially the database is empty.
-		$this->assertNull( $this->get_stats(), 'Expected NULL stats for empty database' );
+		$this->assertEquals(
+			array(
+				'referrer' => array(),
+				'target'   => array(),
+				'visits'   => array(),
+			),
+			$this->get_stats(),
+			'Expected empty dataset for empty database'
+		);
 
 		// Now insert data for the last 3 days.
 		$date1 = new DateTime();
 		$date2 = ( new DateTime() )->modify( '-1 days' );
 		$date3 = ( new DateTime() )->modify( '-2 days' );
+		$date4 = ( new DateTime() )->modify( '-3 days' );
+		$date5 = ( new DateTime() )->modify( '-4 days' );
 
 		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://statify.pluginkollektiv.org/', '/', 3 );
 		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://statify.pluginkollektiv.org/', '/test/', 4 );
@@ -156,22 +166,29 @@ class Test_Dashboard extends WP_UnitTestCase {
 		$this->insert_test_data( $date3->format( 'Y-m-d' ), 'https://pluginkollektiv.org/', '', 2 );
 		$this->insert_test_data( $date3->format( 'Y-m-d' ), '', '/', 1 );
 
+		$this->insert_test_data( $date5->format( 'Y-m-d' ), '', '/test/', 1 );
+
 		// Initialize with default configuration, all limits greater data dimension.
 		Statify::init();
 		$this->init_statify_widget( 14, 14, 3, false, false );
 		$stats = $this->get_stats();
 
-		$this->assertEquals( 3, count( $stats['visits'] ), 'Unexpected number of days with visits' );
-		$this->assertEquals( $date3->format( 'Y-m-d' ), $stats['visits'][0]['date'], 'Unexpected date of tracking 2 days ago' );
-		$this->assertEquals( 3, $stats['visits'][0]['count'], 'Unexpected number of visits 2 days ago' );
-		$this->assertEquals( $date2->format( 'Y-m-d' ), $stats['visits'][1]['date'], 'Unexpected date of tracking yesterday' );
-		$this->assertEquals( 4, $stats['visits'][1]['count'], 'Unexpected number of visits yesterday' );
-		$this->assertEquals( $date1->format( 'Y-m-d' ), $stats['visits'][2]['date'], 'Unexpected date of tracking today' );
-		$this->assertEquals( 8, $stats['visits'][2]['count'], 'Unexpected number of visits today' );
+		$this->assertEquals( 5, count( $stats['visits'] ), 'Unexpected number of days with visits' );
+
+		$this->assertEquals( $date5->format( 'Y-m-d' ), $stats['visits'][0]['date'], 'Unexpected date of tracking 4 days ago' );
+		$this->assertEquals( 1, $stats['visits'][0]['count'], 'Unexpected number of visits 4 days ago' );
+		$this->assertEquals( $date4->format( 'Y-m-d' ), $stats['visits'][1]['date'], 'Unexpected date of tracking 3 days ago' );
+		$this->assertEquals( 0, $stats['visits'][1]['count'], 'Unexpected number of visits 3 days ago' );
+		$this->assertEquals( $date3->format( 'Y-m-d' ), $stats['visits'][2]['date'], 'Unexpected date of tracking 2 days ago' );
+		$this->assertEquals( 3, $stats['visits'][2]['count'], 'Unexpected number of visits 2 days ago' );
+		$this->assertEquals( $date2->format( 'Y-m-d' ), $stats['visits'][3]['date'], 'Unexpected date of tracking yesterday' );
+		$this->assertEquals( 4, $stats['visits'][3]['count'], 'Unexpected number of visits yesterday' );
+		$this->assertEquals( $date1->format( 'Y-m-d' ), $stats['visits'][4]['date'], 'Unexpected date of tracking today' );
+		$this->assertEquals( 8, $stats['visits'][4]['count'], 'Unexpected number of visits today' );
 
 		$this->assertEquals( 3, count( $stats['target'] ), 'Unexpected number of top targets' );
 		$this->assertEquals( '/test/', $stats['target'][0]['url'], 'Unexpected 1st target path' );
-		$this->assertEquals( 6, $stats['target'][0]['count'], 'Unexpected 1st target count' );
+		$this->assertEquals( 7, $stats['target'][0]['count'], 'Unexpected 1st target count' );
 		$this->assertEquals( '/', $stats['target'][1]['url'], 'Unexpected 2nd target path' );
 		$this->assertEquals( 5, $stats['target'][1]['count'], 'Unexpected 2nd target count' );
 		$this->assertEquals( '', $stats['target'][2]['url'], 'Unexpected 3rd target path' );
@@ -179,8 +196,11 @@ class Test_Dashboard extends WP_UnitTestCase {
 
 		$this->assertEquals( 3, count( $stats['referrer'] ), 'Unexpected number of referrers' );
 		$this->assertEquals( 9, $stats['referrer'][0]['count'], 'Unexpected referrer URL' );
-		/* Top referrer URL is "https://statify.pluginkollektiv.org/". As we aggregate by host, the reported URL however
-		   depends on the DB server, so it might be ".../documentation/", too. Just check the prefix here. */
+
+		/*
+		 * Top referrer URL is "https://statify.pluginkollektiv.org/". As we aggregate by host, the reported URL however
+		 * depends on the DB server, so it might be ".../documentation/", too. Just check the prefix here.
+		 */
 		$this->assertEquals( 'https://statify.pluginkollektiv.org/', substr( $stats['referrer'][0]['url'], 0, 36 ), 'Unexpected 1st referrer URL' );
 		$this->assertEquals( 'statify.pluginkollektiv.org', $stats['referrer'][0]['host'], 'Unexpected 1st referrer hostname' );
 		$this->assertEquals( 4, $stats['referrer'][1]['count'], 'Unexpected 1st referrer URL' );
@@ -221,7 +241,7 @@ class Test_Dashboard extends WP_UnitTestCase {
 		$stats3 = $this->get_stats();
 
 		$this->assertEquals(
-			array_slice( $stats['visits'], 1 ),
+			array_slice( $stats['visits'], 3 ),
 			$stats3['visits'],
 			'Stats for 2 days should be equal to the slice of complete data'
 		);
@@ -236,8 +256,11 @@ class Test_Dashboard extends WP_UnitTestCase {
 
 		$this->assertEquals( 3, count( $stats3['referrer'] ), 'Unexpected number of referrers' );
 		$this->assertEquals( 9, $stats3['referrer'][0]['count'], 'Unexpected referrer URL' );
-		/* Top referrer URL is "https://statify.pluginkollektiv.org/". As we aggregate by host, the reported URL however
-		depends on the DB server, so it might be ".../documentation/", too. Just check the prefix here. */
+
+		/*
+		 * Top referrer URL is "https://statify.pluginkollektiv.org/". As we aggregate by host, the reported URL however
+		 * depends on the DB server, so it might be ".../documentation/", too. Just check the prefix here.
+		 */
 		$this->assertEquals( 'https://statify.pluginkollektiv.org/', substr( $stats['referrer'][0]['url'], 0, 36 ), 'Unexpected 1st referrer URL' );
 		$this->assertEquals( 'statify.pluginkollektiv.org', $stats3['referrer'][0]['host'], 'Unexpected 1st referrer hostname' );
 		$this->assertEquals( 2, $stats3['referrer'][1]['count'], 'Unexpected 1st referrer URL' );
@@ -249,12 +272,26 @@ class Test_Dashboard extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'visit_totals', $stats3, 'Totals should be provided, if configured' );
 		$this->assertEquals( 8, $stats3['visit_totals']['today'], 'Unexpected total for today' );
-		$this->assertEquals( 15, $stats3['visit_totals']['since_beginning']['count'], 'Unexpected total since beginning' );
-		$this->assertEquals( $date3->format( 'Y-m-d' ), $stats3['visit_totals']['since_beginning']['date'], 'Unexpected first date' );
+		$this->assertEquals( 16, $stats3['visit_totals']['since_beginning']['count'], 'Unexpected total since beginning' );
+		$this->assertEquals( $date5->format( 'Y-m-d' ), $stats3['visit_totals']['since_beginning']['date'], 'Unexpected first date' );
 
 		// Finally we add another entry in the database, but utilize the transient cache (4min should be enough for the test case).
 		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://example.com/', '/example/', 1 );
 		$stats4 = Statify_Dashboard::get_stats();
 		$this->assertEquals( $stats3, $stats4, 'Stats expected to be equal, is the transient cache active?' );
+
+		// Add more data and force reload. We now should see that fallback ordering by URL works.
+		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://example.com/', '/', 1 );
+		$this->insert_test_data( $date1->format( 'Y-m-d' ), 'https://example.net/', '/', 1 );
+		$stats5 = Statify_Dashboard::get_stats( true );
+		$this->assertEquals( 19, $stats5['visit_totals']['since_beginning']['count'], 'Unexpected total since beginning' );
+		$this->assertEquals( 2, $stats5['referrer'][1]['count'], 'Unexpected 2nd referrer count' );
+		$this->assertEquals( 'example.com', $stats5['referrer'][1]['host'], 'Unexpected 2nd referrer hostname' );
+		$this->assertEquals( 2, $stats5['referrer'][2]['count'], 'Unexpected 3rd referrer count' );
+		$this->assertEquals( 'pluginkollektiv.org', $stats5['referrer'][2]['host'], 'Unexpected 3rd referrer hostname' );
+		$this->assertEquals( 6, $stats5['target'][0]['count'], 'Unexpected 1st target count' );
+		$this->assertEquals( '/', $stats5['target'][0]['url'], 'Unexpected 1st target url' );
+		$this->assertEquals( 6, $stats5['target'][1]['count'], 'Unexpected 2nd target count' );
+		$this->assertEquals( '/test/', $stats5['target'][1]['url'], 'Unexpected 2nd target url' );
 	}
 }

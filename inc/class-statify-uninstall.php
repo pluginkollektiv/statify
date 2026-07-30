@@ -24,23 +24,20 @@ class Statify_Uninstall {
 	 * @since   0.1.0
 	 * @version 0.1.0
 	 */
-	public static function init() {
+	public static function init(): void {
 		if ( is_multisite() ) {
 			$old   = get_current_blog_id();
-			$sites = get_sites();
+			$sites = get_sites( array( 'fields' => 'ids' ) );
 
 			foreach ( $sites as $site ) {
-				// Convert object to array.
-				$site = (array) $site;
-
-				switch_to_blog( $site['blog_id'] );
-				self::_apply();
+				switch_to_blog( $site );
+				self::apply();
 			}
 
 			switch_to_blog( $old );
 		}
 
-		self::_apply();
+		self::apply();
 	}
 
 	/**
@@ -48,13 +45,13 @@ class Statify_Uninstall {
 	 *
 	 * @since 1.4.4
 	 *
-	 * @param int $site_id Site ID.
+	 * @param WP_Site $old_site Site object.
 	 */
-	public static function init_site( $site_id ) {
+	public static function init_site( WP_Site $old_site ): void {
 
-		switch_to_blog( $site_id );
+		switch_to_blog( (int) $old_site->site_id );
 
-		self::_apply();
+		self::apply();
 
 		restore_current_blog();
 	}
@@ -65,7 +62,7 @@ class Statify_Uninstall {
 	 * @since   0.1.0
 	 * @version 1.4.0
 	 */
-	private static function _apply() {
+	private static function apply(): void {
 
 		// Delete options.
 		delete_option( 'statify' );

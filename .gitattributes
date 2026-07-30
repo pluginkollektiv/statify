@@ -11,19 +11,20 @@
 
 # Files
 /.distignore export-ignore
-/.eslintrc.json export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
 /.sonarcloud.properties export-ignore
 /.stylelintrc.json export-ignore
 /composer.json export-ignore
-/composer-php5.json export-ignore
+/composer.lock export-ignore
 /dist export-ignore
+/eslint.config.mjs  export-ignore
 /package.json export-ignore
 /package-lock.json export-ignore
 /composer.lock export-ignore
 /composer-php5.lock export-ignore
 /phpcs.xml export-ignore
+/phpstan.neon export-ignore
 /phpunit.xml export-ignore
 /phpunit.coverage.xml export-ignore
 /phpunit.report.xml export-ignore

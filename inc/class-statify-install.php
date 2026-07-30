@@ -26,23 +26,20 @@ class Statify_Install {
 	 *
 	 * @param bool $network_wide Whether the plugin was activated network-wide or not.
 	 */
-	public static function init( $network_wide = false ) {
+	public static function init( bool $network_wide = false ): void {
 
 		if ( $network_wide && is_multisite() ) {
-			$sites = get_sites();
+			$sites = get_sites( array( 'fields' => 'ids' ) );
 
 			// Create tables for each site in a network.
 			foreach ( $sites as $site ) {
-				// Convert object to array.
-				$site = (array) $site;
-
-				switch_to_blog( $site['blog_id'] );
-				self::_apply();
+				switch_to_blog( $site );
+				self::apply();
 			}
 
 			restore_current_blog();
 		} else {
-			self::_apply();
+			self::apply();
 		}
 	}
 
@@ -51,13 +48,13 @@ class Statify_Install {
 	 *
 	 * @since 1.4.4
 	 *
-	 * @param int $site_id Site ID.
+	 * @param WP_Site $new_site Site object.
 	 */
-	public static function init_site( $site_id ) {
+	public static function init_site( WP_Site $new_site ): void {
 
-		switch_to_blog( (int) $site_id );
+		switch_to_blog( (int) $new_site->site_id );
 
-		self::_apply();
+		self::apply();
 
 		restore_current_blog();
 	}
@@ -68,7 +65,7 @@ class Statify_Install {
 	 * @since   0.1.0
 	 * @version 1.4.0
 	 */
-	private static function _apply() {
+	private static function apply(): void {
 
 		// Cleanup any leftover transients.
 		delete_transient( 'statify_data' );

@@ -1,47 +1,64 @@
 /* @group Front page */
 
-#statify_chart {
+.statify-chart {
 	color: #a7aaad;
 	flex: 0 0 100%;
-	direction: rtl;
 	height: 140px;
-	margin: 0 -4px;
+	margin: 1em -0.5em;
 	overflow-x: auto;
 	overflow-y: hidden;
 	text-align: center;
 }
 
-#statify_chart_data {
-	display: none;
+.statify-chart * {
+	direction: ltr;
 }
 
-#statify_chart .ct-label.ct-vertical.ct-start {
-	-webkit-justify-content: flex-start;
-	justify-content: flex-start;
-	text-align: left;
-	text-anchor: start;
+body.rtl .statify-chart * {
+	direction: rtl;
 }
 
-#statify_chart .ct-line {
-	stroke: #3582c4;
+.statify-chart .spinner {
+	float: none;
+	margin: 1em;
+}
+
+.statify-chart .ct-line {
+	stroke: var(--wp-admin-theme-color-darker-10, #3582c4);
 	stroke-width: 2px;
 }
 
-#statify_chart .ct-point {
+.statify-chart .ct-point {
 	fill: #fff;
-	stroke: #3582c4;
+	stroke: var(--wp-admin-theme-color-darker-10, #3582c4);
 	stroke-width: 1.5px;
 }
 
-#statify_chart .ct-area {
-	fill: #3582c4;
+.statify-chart .ct-area {
+	fill: var(--wp-admin-theme-color, #3582c4);
+}
+
+.statify-chart .ct-bar {
+	stroke: var(--wp-admin-theme-color-darker-10, #3582c4);
+}
+
+.statify-chart .ct-label.ct-horizontal.ct-end {
+	align-items: center;
+	justify-content: center;
+	margin-left: -50%;
+}
+
+.statify-chart .ct-chart-bar .ct-label.ct-horizontal.ct-end {
+	margin-left: initial;
 }
 
 .statify-chartist-tooltip {
 	border: 1px solid #000;
 	background-color: #fff;
 	border-radius: 0.2em;
+	left: 0;
 	padding: 0.1em 0.5em;
+	top: 0;
 }
 
 .statify-chartist-tooltip::before {
@@ -49,8 +66,31 @@
 }
 
 .statify-chartist-tooltip .chartist-tooltip-meta {
-	color: #3582c4;
+	color: var(--wp-admin-theme-color-darker-20, #3582c4);
 }
+
+
+.statify-table th,
+.statify-table tr.statify-table-sum td,
+.statify-table td.statify-table-sum {
+	font-weight: 700;
+}
+
+.statify-table tr.placeholder {
+	background-color: #fff;
+}
+
+.statify-table tr.placeholder td span {
+	background-color: #f5f5f5;
+	border-radius: 1em;
+	display: inline-block;
+	width: 80%;
+}
+
+.statify-table + a.button {
+	margin: 1em 0 0 1em;
+}
+
 
 #statify_dashboard .postbox-title-action a,
 #statify_dashboard .settings-link a {
@@ -64,7 +104,6 @@
 	flex-wrap: wrap;
 	height: 1%;
 	margin: 0;
-	padding-bottom: 0;
 	overflow: hidden;
 	position: relative;
 }
@@ -100,10 +139,17 @@
 	line-height: 1.4;
 }
 
+#statify_dashboard tr.placeholder td {
+	background-color: #f5f5f5;
+	border-radius: 1em;
+	width: 10em;
+}
+
 #statify_dashboard td.b {
-	text-align: right;
-	padding-right: 4px;
 	color: #646970;
+	padding-right: 4px;
+	text-align: right;
+	vertical-align: top;
 }
 
 #statify_dashboard label {
@@ -129,6 +175,38 @@
 	float: right;
 	margin: 0;
 	line-height: 28px;
+}
+
+.statify-chart-container {
+	background: #fff;
+	margin: 1em 0;
+	padding: 1em;
+}
+
+.statify-chart-container .statify-chart {
+	height: 280px;
+	margin: 10px 20px;
+}
+
+.statify-chart-container .statify-legend {
+	column-gap: 2em;
+	column-width: 20em;
+	list-style-type: decimal;
+}
+
+.statify-chart-title {
+	text-align: center;
+	font-size: 1.5em;
+	padding: 0.5em 0;
+}
+
+#statify-dashboard-controls {
+	margin: 1em 0;
+}
+
+.statify-subnav li:not(:last-child)::after {
+	content: "|";
+	margin: 0 0.2em;
 }
 
 /* @end group */

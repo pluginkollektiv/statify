@@ -1,10 +1,14 @@
-const sinon  = require( 'sinon' );
-const expect = require( 'chai' ).expect;
+const { describe, it, beforeEach, afterEach } = require('node:test');
+const assert = require('node:assert/strict');
+const fakeXhr = require('nise').fakeXhr;
 
-describe( 'Statify Snippet', function() {
-	beforeEach( () => {
-		global.statify_ajax = {
-			url: 'https://wp.example.com/admin-ajax.php',
+describe('Statify Snippet', () => {
+	let requests = [];
+	let xhrMock;
+
+	beforeEach(() => {
+		global.statifyAjax = {
+			url: 'https://wp.example.com/wp-json/statify/v1/track',
 			nonce: '0123456789',
 		};
 		global.document = {
@@ -13,34 +17,41 @@ describe( 'Statify Snippet', function() {
 		global.location = {
 			pathname: '/my/page/',
 			search: '?arg=value',
-		}
+		};
 
-		global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
-		this.requests = [];
-		global.XMLHttpRequest.onCreate = (xhr) => this.requests.push( xhr );
-	} );
+		xhrMock = fakeXhr.useFakeXMLHttpRequest();
+		requests = [];
+		xhrMock.onCreate = (xhr) => requests.push(xhr);
+		global.XMLHttpRequest = xhrMock;
+	});
 
-	afterEach( () => {
-		global.XMLHttpRequest.restore();
-	} );
+	afterEach(() => {
+		xhrMock.restore();
+		delete require.cache[require.resolve('../../js/snippet')];
+	});
 
-	it( 'should issue a single POST request to the AJAX endpoint', () => {
-		require( '../../js/snippet' );
+	it('should issue a single POST request to the REST endpoint', () => {
+		require('../../js/snippet');
 
-		expect( this.requests ).to.length( 1, 'Unexpected number of requests' );
-		expect( this.requests[0].method ).to.equal( 'POST', 'Unexpected method' );
-		expect( this.requests[0].url ).to.equal(
-			'https://wp.example.com/admin-ajax.php',
+		assert.equal(requests.length, 1, 'Unexpected number of requests');
+		assert.equal(requests[0].method, 'POST', 'Unexpected method');
+		assert.equal(
+			requests[0].url,
+			'https://wp.example.com/wp-json/statify/v1/track',
 			'Unexpected target URL'
 		);
-		expect( this.requests[0].requestHeaders ).to.deep.equal(
-			{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+		assert.deepEqual(
+			requests[0].requestHeaders,
+			{
+				'Content-Type': 'application/json',
+			},
 			'Unexpected request headers'
 		);
-		expect( this.requests[0].requestBody ).to.equal(
-			'_ajax_nonce=0123456789&action=statify_track&statify_referrer=https%3A%2F%2Freferrer.example.com%2Fsome%2Fpage%2F&statify_target=%2Fmy%2Fpage%2F%3Farg%3Dvalue',
+		assert.equal(
+			requests[0].requestBody,
+			'{"referrer":"https://referrer.example.com/some/page/","target":"/my/page/?arg=value","nonce":"0123456789"}',
 			'Unexpected request body'
 		);
-		expect( this.requests[0].async ).to.equal( true, 'Request should be async' );
-	} );
-} );
+		assert.equal(requests[0].async, true, 'Request should be async');
+	});
+});

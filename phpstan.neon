@@ -1,0 +1,12 @@
+parameters:
+  level: 5
+  paths:
+    - inc/
+    - views/
+    - statify.php
+  ignoreErrors:
+    - '/^Constant STATIFY_BASE not found\.$/'
+    - message: '/^Parameter \#1 \$text of function esc_(attr|html) expects string, int.* given\.$/'
+      path: views/view-dashboard.php
+  # Some WP built-ins contain pluggable behavior that might not be perfectly type-safe.
+  treatPhpDocTypesAsCertain: false

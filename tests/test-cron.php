@@ -47,7 +47,7 @@ class Test_Cron extends WP_UnitTestCase {
 		// Insert some test data, 2 entries over the last 5 days (including today).
 		$date  = new DateTime();
 		$dates = array();
-		for ( $i = 0; $i < 5; $i ++ ) {
+		for ( $i = 0; $i < 5; $i++ ) {
 			$dates[] = $date->format( 'Y-m-d' );
 			$this->insert_test_data( $date->format( 'Y-m-d' ), '', '', 2 );
 			$date->modify( '-1 days' );

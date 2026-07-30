@@ -24,12 +24,12 @@ class Statify_Backend {
 	 * @since    0.1.0
 	 * @version  1.4.0
 	 *
-	 * @param   array  $input Registered links.
-	 * @param   string $file  Current plugin file.
+	 * @param string[] $input Registered links.
+	 * @param string   $file  Current plugin file.
 	 *
-	 * @return  array           Merged links
+	 * @return string[] Merged links
 	 */
-	public static function add_meta_link( $input, $file ) {
+	public static function add_meta_link( array $input, string $file ): array {
 
 		// Other plugins?
 		if ( STATIFY_BASE !== $file ) {
@@ -51,11 +51,11 @@ class Statify_Backend {
 	 * @since   0.1.0
 	 * @version 1.4.0
 	 *
-	 * @param   array $input Registered links.
+	 * @param string[] $input Registered links.
 	 *
-	 * @return  array           Merged links
+	 * @return string[] Merged links
 	 */
-	public static function add_action_link( $input ) {
+	public static function add_action_link( array $input ): array {
 
 		// Rights?
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -69,9 +69,11 @@ class Statify_Backend {
 				sprintf(
 					/* @lang  Disable language injection for Url query argument. */
 					'<a href="%s">%s</a>',
-					add_query_arg(
-						array( 'page' => 'statify-settings' ),
-						admin_url( '/options-general.php' )
+					esc_url(
+						add_query_arg(
+							array( 'page' => 'statify-settings' ),
+							admin_url( '/options-general.php' )
+						)
 					),
 					esc_html__( 'Settings', 'statify' )
 				),

@@ -8,7 +8,7 @@
 		 v flag: Print verbose output.
 		 n flag: Do not print warnings.
 	-->
-    <arg value="psvn"/>
+    <arg value="psv"/>
 
     <!-- use colors in output -->
     <arg name="colors"/>
@@ -19,25 +19,31 @@
     <file>statify.php</file>
     <exclude-pattern>vendor/*</exclude-pattern>
 
-    <!-- Exclude minified Javascript files. -->
-    <exclude-pattern>*.min.js</exclude-pattern>
-
     <!-- WordPress coding standards -->
-    <config name="minimum_supported_wp_version" value="4.7" />
+    <config name="minimum_supported_wp_version" value="5.1" />
     <rule ref="WordPress">
-        <exclude name="WordPress.VIP.RestrictedFunctions.switch_to_blog_switch_to_blog" />
-        <exclude name="WordPress.VIP.DirectDatabaseQuery.NoCaching" />
-        <exclude name="WordPress.VIP.DirectDatabaseQuery.SchemaChange" />
-        <exclude name="WordPress.DB.PreparedSQL.NotPrepared" />
-        <!-- Sanitization of $_SERVER causes problems with some PHP implementations -->
-        <exclude name="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized"/>
-        <!-- Precision alignment is used in HTML views -->
-        <exclude name="WordPress.WhiteSpace.PrecisionAlignment.Found" />
-        <!-- PHP 5.2 compatibility -->
-        <exclude name="Modernize.FunctionCalls.Dirname.FileConstant"/>
+        <exclude name="WordPress.DB.DirectDatabaseQuery.DirectQuery" />
+        <exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching" />
+        <exclude name="WordPress.DB.DirectDatabaseQuery.SchemaChange" />
     </rule>
 
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="statify"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="see_statify_evaluation"/>
+			</property>
+		</properties>
+	</rule>
+
     <!-- Include sniffs for PHP cross-version compatibility. -->
-    <config name="testVersion" value="5.2-"/>
+    <config name="testVersion" value="7.4-"/>
     <rule ref="PHPCompatibilityWP"/>
 </ruleset>

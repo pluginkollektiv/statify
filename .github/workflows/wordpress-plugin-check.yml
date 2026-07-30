@@ -9,18 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.5'
           tools: composer
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Install
         run: |
@@ -28,7 +28,9 @@ jobs:
           npm ci --ignore-scripts
 
       - name: Build
-        run: composer build
+        run: |
+          composer build
+          npm run build
 
       - name: Package plugin
         run: |

@@ -24,7 +24,7 @@ class Statify_Cron extends Statify {
 	 * @since    0.3.0
 	 * @version  1.4.0
 	 */
-	public static function cleanup_data() {
+	public static function cleanup_data(): void {
 
 		// Global.
 		global $wpdb;
@@ -34,7 +34,7 @@ class Statify_Cron extends Statify {
 			$wpdb->prepare(
 				"DELETE FROM `$wpdb->statify` WHERE created <= SUBDATE(%s, %d)",
 				current_time( 'Y-m-d' ),
-				(int) self::$_options['days']
+				(int) self::$options['days']
 			)
 		);
 

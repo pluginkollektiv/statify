@@ -1,11 +1,11 @@
 # Statify #
 * Contributors:      pluginkollektiv
-* Donate link:       https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TD4AMD2D8EMZW
+* Donate link:       https://www.paypal.com/donate/?cmd=_donations&business=TD4AMD2D8EMZW
 * Tags:              analytics, pageviews, privacy, statistics, stats
-* Requires at least: 4.7
-* Tested up to:      6.9
-* Requires PHP:      5.2
-* Stable tag:        1.8.5
+* Requires at least: 5.1
+* Tested up to:      7.0
+* Requires PHP:      7.4
+* Stable tag:        2.0.0
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -113,9 +113,37 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 * [Statify Widget](https://wordpress.org/plugins/statify-widget/) to display most popular content
 * [Statify Blacklist](https://wordpress.org/plugins/statify-blacklist/) to define a customized blacklist for referrer spam
 
+### How can I report security bugs? ###
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.]( https://patchstack.com/database/vdp/49ecb4d5-27a2-4cac-b8a2-a647f4c29c86)
 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
+
+### 2.0.0
+* JavaScript tracking now uses WP REST API instead of AJAX
+* Integrated additional dashboards from _Extended Evaluation for Statify_
+* Show post titles instead of URLs in widget
+* Visibility of statistics can now be configured for different roles
+* Improvements for bot detection
+* It is now possible to exclude administrators from tracking
+* Added feature to reset all statistics
+* Use WordPress admin theme colors in the dashboard widgets
+* Improved the field explanation for "Disallowed Comment Keys"
+* Updated deprecated WordPress hooks
+* Use wp-i18n for frontend translation
+* Order of top targets/referrers is now consistent if the number of visits is equal
+* Prevent layout shift when showing tooltips in the dashboard widget
+* Added localized number format to charts and tables
+* Fixed user role error on saving settings
+* Fixed RTL layout in the dashboard widget
+* Fix dashboard widget for days without visitors
+* Removed XML-RPC integration
+* Removed deprecated `statify_skip_tracking` filter
+* Requires PHP 7.4 or higher
+* Requires WordPress 5.1 or higher
+* Tests up to WordPress 7.0
+
 
 ### 1.8.5
 * Updated build environment
@@ -185,6 +213,15 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 ## Upgrade Notice ##
 
+### 2.0.0 ###
+
+This is a major release with some breaking changes.
+
+JavaScript based tracking is now using a WP REST API endpoint instead of AJAX. Please make sure you allow access for regular users, if there area any custom restrictions configured.
+
+Minimum system requirements are now WordPress 5.1 and PHP 7.4.
+
+
 ### 1.8.4 ###
 This is a maintenance release targeting WordPress 6.1 and PHP 8.1 compatibility. It is recommended for all users.
 
@@ -205,3 +242,6 @@ Some minor improvements. The most important one: This version offers to deactiva
 1. Statify dashboard widget
 2. Statify dashboard widget settings
 3. Statify settings page
+4. Statify tracking configuration
+5. Monthly views per year
+6. Top referrers for last week

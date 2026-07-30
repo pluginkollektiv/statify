@@ -24,7 +24,7 @@ class Statify_Deactivate {
 	 * @since    1.4.0
 	 * @version  1.4.0
 	 */
-	public static function init() {
+	public static function init(): void {
 
 		// Delete transients.
 		delete_transient( 'statify_data' );

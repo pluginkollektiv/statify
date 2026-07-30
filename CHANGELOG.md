@@ -1,6 +1,50 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.0
+
+### Breaking
+
+* Requires PHP 7.4 or higher
+* Requires WordPress 5.1 or higher
+* Removed XML-RPC integration (#275)
+
+### Features
+
+* Integrated additional dashboards from _Extended Evaluation for Statify_ (#257)
+* Visibility of statistics can now be configured for different roles (#106) (#248)
+* It is now possible to exclude administrators from tracking (#229) (#236)
+* Added feature to reset all statistics (#262) (#305)
+
+### Improvements
+
+* JavaScript tracking now uses WP REST API instead of AJAX (#219) (#226)
+* Show post titles instead of URLs in widget (#78) (#336)
+* Improvements for bot detection (#217) (#247)
+* Use WordPress admin theme colors in the dashboard widgets (#312)
+* Improved the field explanation for "Disallowed Comment Keys" (#245) (#255)
+* Updated deprecated WordPress hooks (#252) (#258) (#259)
+* Use wp-i18n for frontend translation (#280)
+* Order of top targets/referrers is now consistent if the number of visits is equal (#246) (#250)
+* Added localized number format to charts and tables (#319) (#321)
+* Make widget title translatable (#338)
+* Tests up to WordPress 7.0
+
+### Removals
+
+* Remove refresh button (#332) (#333)
+* Remove "amp/" suffix from target URLs (#183) (#335)
+* Removed deprecated `statify_skip_tracking` filter (#285)
+
+### Fixes
+
+* Prevent layout shift when showing tooltips in the dashboard widget (#277)
+* Fixed user role error on saving settings (#278) (#279)
+* Fixed RTL layout in the dashboard widget (#263) (#264)
+* Fix dashboard widget for days without visitors (#314)
+
+----
+
 ## 1.8.5
 * Updated build environment
 * Minor code style corrections
@@ -49,7 +93,7 @@ All notable changes to this project will be documented in this file. This projec
 * Update tooltip library (containing a bugfix in IE 11) (#156)
 
 ## 1.7.0
-* Fix JavaScript embedding when bots visit before caching (#84) (#86) 
+* Fix JavaScript embedding when bots visit before caching (#84) (#86)
 * Fix offset in visitor reporting due to different timezones between PHP and database (#117, props @sophiehuiberts)
 * Fix untranslatable support link (#122) (#126, props @arkonisus)
 * Add separate settings page and reduced widget backview to widget settings only (#111)

@@ -16,7 +16,7 @@
 	<file>tests</file>
 
 	<!-- WordPress coding standards -->
-	<config name="minimum_supported_wp_version" value="4.7"/>
+	<config name="minimum_supported_wp_version" value="5.1"/>
 	<rule ref="WordPress">
 		<exclude name="WordPress.Security"/>
 		<exclude name="WordPress.DB.DirectDatabaseQuery.DirectQuery"/>
@@ -24,6 +24,6 @@
 	</rule>
 
 	<!-- Include sniffs for PHP cross-version compatibility. -->
-	<config name="testVersion" value="5.6-"/>
+	<config name="testVersion" value="7.2-"/>
 	<rule ref="PHPCompatibility"/>
 </ruleset>
