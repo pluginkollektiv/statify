@@ -449,6 +449,12 @@
 		);
 
 		// Replace default points with hollow circles, add "pageview(s) to value and append date (label) as metadata.
+		chart.on('created', () => {
+			if (root.scrollWidth > root.clientWidth) {
+				root.scrollLeft = root.scrollWidth - root.clientWidth;
+			}
+		});
+
 		chart.on('draw', (d) => {
 			let circle;
 			if ('point' === d.type) {
