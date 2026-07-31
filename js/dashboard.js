@@ -35,7 +35,7 @@
 	};
 
 	// Initialize number format.
-	const lang = wp.i18n.getLocaleData()['']?.lang || 'en';
+	const lang = (wp.i18n.getLocaleData()['']?.lang || 'en').replace(/_/g, '-');
 	const numberFormat = new Intl.NumberFormat(lang);
 	const numberFormatPercent = new Intl.NumberFormat(lang, {
 		style: 'percent',
