@@ -35,7 +35,7 @@
 	};
 
 	// Initialize number format.
-	const lang = wp.i18n.getLocaleData()['']?.lang || 'en';
+	const lang = getUserLanguage();
 	const numberFormat = new Intl.NumberFormat(lang);
 	const numberFormatPercent = new Intl.NumberFormat(lang, {
 		style: 'percent',
@@ -52,6 +52,25 @@
 		month: 'short',
 	});
 	const dateFormatM = new Intl.DateTimeFormat(lang, { month: 'short' });
+
+	/**
+	 * Get user language from WP i18n, converted to BCP-47 notation.
+	 *
+	 * @return {string|undefined} BCP-47 language tag, if valid and supported.
+	 */
+	function getUserLanguage() {
+		let lc = wp.i18n.getLocaleData()['']?.lang || '';
+
+		try {
+			// Get supported value - automatically sanitizes capitalization if necessary.
+			lc = Intl.NumberFormat.supportedLocalesOf(lc.replace('_', '-'))[0];
+		} catch {
+			// Invalid or unsupported language — let Intl fall back to the browser default.
+			lc = undefined;
+		}
+
+		return lc;
+	}
 
 	/* ------------------------------------------------------------------ */
 
