@@ -3,7 +3,7 @@
  * Plugin Name:       Statify
  * Plugin URI:        https://statify.pluginkollektiv.org/
  * Description:       Compact, easy-to-use and privacy-compliant stats plugin for WordPress.
- * Version:           2.0.0
+ * Version:           2.0.1
  * Requires at least: 5.1
  * Requires PHP:      7.4
  * Author:            pluginkollektiv
@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
 define( 'STATIFY_FILE', __FILE__ );
 define( 'STATIFY_DIR', __DIR__ );
 define( 'STATIFY_BASE', plugin_basename( __FILE__ ) );
-define( 'STATIFY_VERSION', '2.0.0' );
+define( 'STATIFY_VERSION', '2.0.1' );
 
 /* Hooks */
 add_action( 'plugins_loaded', array( 'Statify', 'init' ) );

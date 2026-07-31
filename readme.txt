@@ -5,7 +5,7 @@
 * Requires at least: 5.1
 * Tested up to:      7.0
 * Requires PHP:      7.4
-* Stable tag:        2.0.0
+* Stable tag:        2.0.1
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -120,6 +120,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+### 2.0.1
+* Fixed an issue that prevented loading dashboard widgets on region-specific locales
+* Restored automatic scrolling to the latest data point in the dashboard widget
+
 ### 2.0.0
 * JavaScript tracking now uses WP REST API instead of AJAX
 * Integrated additional dashboards from _Extended Evaluation for Statify_
@@ -213,6 +217,12 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 ## Upgrade Notice ##
 
+### 2.0.1 ###
+
+This release fixes dashboard rendering issues after updating to Statify 2.0.0.
+Recommended for all users.
+
+
 ### 2.0.0 ###
 
 This is a major release with some breaking changes.
@@ -220,23 +230,6 @@ This is a major release with some breaking changes.
 JavaScript based tracking is now using a WP REST API endpoint instead of AJAX. Please make sure you allow access for regular users, if there area any custom restrictions configured.
 
 Minimum system requirements are now WordPress 5.1 and PHP 7.4.
-
-
-### 1.8.4 ###
-This is a maintenance release targeting WordPress 6.1 and PHP 8.1 compatibility. It is recommended for all users.
-
-### 1.8.3 ###
-This is a bugfix with corrections for the dashboard widget and PHP 8 issues on multisite. It is recommended for all users.
-
-### 1.8.2 ###
-This is a maintenance release with minor changes in the dashboard widget. Compatible with WordPress 5.7.
-
-### 1.8.1 ###
-This is a bugfix release improving AMP compatibility and excluding native sitemaps as of WordPress 5.5. It is recommended for all users.
-
-### 1.8.0 ###
-Some minor improvements. The most important one: This version offers to deactivate the nonce check for JavaScript tracking (recommend if a caching plugin with a long caching time is used).
-
 
 ## Screenshots ##
 1. Statify dashboard widget

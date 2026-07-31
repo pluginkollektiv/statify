@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.1
+
+### Fixes
+
+* Fixed an issue that prevented loading dashboard widgets on region-specific locales (#345) (#347)
+* Restored automatic scrolling to the latest data point in the dashboard widget (#348) (#349)
+
+
 ## 2.0.0
 
 ### Breaking
