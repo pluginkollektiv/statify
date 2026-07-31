@@ -45,14 +45,29 @@
 			return 'en';
 		}
 
-		try {
-			return Intl.getCanonicalLocales(normalized)?.[0] || 'en';
-		} catch (_) {
-			const parts = normalized.split('-');
-			return (
-				`${parts[0].toLowerCase()}${parts[1] ? `-${parts[1].toUpperCase()}` : ''}`
-			);
+		const candidateLocales = [];
+		const [lang = '', region = ''] = normalized.split('-');
+		candidateLocales.push(normalized);
+		if (lang) {
+			const normalizedLang = lang.toLowerCase();
+			candidateLocales.push(normalizedLang);
+			if (region) {
+				candidateLocales.push(`${normalizedLang}-${region.toUpperCase()}`);
+			}
 		}
+
+		for (const candidate of candidateLocales) {
+			try {
+				const canonical = Intl.getCanonicalLocales(candidate)?.[0];
+				if (canonical) {
+					return canonical;
+				}
+			} catch (_) {
+				// Intentionally ignore and keep trying lower-priority fallbacks.
+			}
+		}
+
+		return 'en';
 	};
 	const lang = resolveLocale(rawLocale);
 	const numberFormat = new Intl.NumberFormat(lang);
