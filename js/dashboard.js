@@ -36,14 +36,25 @@
 
 	// Initialize number format.
 	const rawLocale = wp.i18n.getLocaleData()['']?.lang || 'en';
-	const lang = (() => {
-		const normalized = String(rawLocale).replace(/_/g, '-');
+	const resolveLocale = (locale) => {
+		const normalized = String(locale)
+			.trim()
+			.replace(/_/g, '-')
+			.replace(/[^a-zA-Z0-9-]/g, '');
+		if (!normalized) {
+			return 'en';
+		}
+
 		try {
 			return Intl.getCanonicalLocales(normalized)?.[0] || 'en';
 		} catch (_) {
-			return normalized.split(/[-_]/)[0] || 'en';
+			const parts = normalized.split('-');
+			return (
+				`${parts[0].toLowerCase()}${parts[1] ? `-${parts[1].toUpperCase()}` : ''}`
+			);
 		}
-	})();
+	};
+	const lang = resolveLocale(rawLocale);
 	const numberFormat = new Intl.NumberFormat(lang);
 	const numberFormatPercent = new Intl.NumberFormat(lang, {
 		style: 'percent',
