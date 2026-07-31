@@ -351,7 +351,7 @@ class Statify_Settings {
 			<option value="2" <?php selected( Statify::$options['skip']['logged_in'], 2 ); ?>><?php esc_html_e( 'Skip administrators', 'statify' ); ?></option>
 		</select>
 		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Skip all users', 'statify' ); ?>)
-		<p class="description"><?php esc_html_e( 'This option specified whether logged-in users and/or administrators should be excluded from tracking.', 'statify' ); ?></p>
+		<p class="description"><?php esc_html_e( 'This option specifies whether logged-in users and/or administrators should be excluded from tracking.', 'statify' ); ?></p>
 		<?php
 	}
 
