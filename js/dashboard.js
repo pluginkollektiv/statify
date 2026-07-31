@@ -35,7 +35,15 @@
 	};
 
 	// Initialize number format.
-	const lang = (wp.i18n.getLocaleData()['']?.lang || 'en').replace(/_/g, '-');
+	const rawLocale = wp.i18n.getLocaleData()['']?.lang || 'en';
+	const lang = (() => {
+		const normalized = String(rawLocale).replace(/_/g, '-');
+		try {
+			return Intl.getCanonicalLocales(normalized)?.[0] || 'en';
+		} catch (_) {
+			return normalized.split(/[-_]/)[0] || 'en';
+		}
+	})();
 	const numberFormat = new Intl.NumberFormat(lang);
 	const numberFormatPercent = new Intl.NumberFormat(lang, {
 		style: 'percent',
