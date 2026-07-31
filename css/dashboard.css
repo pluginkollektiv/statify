@@ -1,6 +1,9 @@
 /* @group Front page */
 
 .statify-chart {
+	direction: ltr;
+	display: flex;
+	flex-direction: row-reverse;
 	color: #a7aaad;
 	flex: 0 0 100%;
 	height: 140px;
@@ -11,16 +14,12 @@
 }
 
 .statify-chart * {
-	direction: ltr;
-}
-
-body.rtl .statify-chart * {
-	direction: rtl;
+	flex-shrink: 0;
 }
 
 .statify-chart .spinner {
 	float: none;
-	margin: 1em;
+	margin: auto;
 }
 
 .statify-chart .ct-line {
@@ -207,6 +206,19 @@ body.rtl .statify-chart * {
 .statify-subnav li:not(:last-child)::after {
 	content: "|";
 	margin: 0 0.2em;
+}
+
+body.rtl .statify-chart {
+	transform: scaleX(-1);
+}
+
+body.rtl .statify-chart .ct-label {
+	transform: scaleX(-1);
+	transform-origin: center;
+}
+
+body.rtl .statify-chart * {
+	direction: rtl;
 }
 
 /* @end group */
