@@ -273,6 +273,7 @@ class Statify {
 				'sitename' => sanitize_key( get_bloginfo( 'name' ) ),
 			)
 		);
+		wp_set_script_translations( 'statify_chart_js', 'statify' );
 	}
 
 	/**
