@@ -222,3 +222,14 @@ body.rtl .statify-chart * {
 }
 
 /* @end group */
+
+
+/* Fix table layout with long URLs */
+
+#statify-table-posts td {
+  overflow-wrap: anywhere;
+}
+
+#statify-table-posts tfoot td {
+  white-space: nowrap;
+}
