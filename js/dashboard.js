@@ -387,6 +387,9 @@
 		// Determine maximum value for scaling.
 		const maxValue = Math.max(...values);
 
+		// Use a wider Y axis on the extended Statify dashboard.
+		const axisYOffset = root.closest('.statify-chart-container') ? 64 : 30;
+
 		// Draw chart.
 		const chart = new Chartist.LineChart(
 			root,
@@ -418,7 +421,7 @@
 						Math.round((maxValue * 3) / 4),
 						maxValue,
 					],
-					offset: 30,
+					offset: axisYOffset,
 					labelInterpolationFnc: (v) => numberFormat.format(v),
 				},
 				plugins: [
@@ -520,6 +523,7 @@
 					showLabel: true,
 					low: 0,
 					onlyInteger: true,
+					offset: 64,
 					labelInterpolationFnc: (v) => numberFormat.format(v),
 				},
 				plugins: [
