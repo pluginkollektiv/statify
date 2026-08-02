@@ -468,11 +468,7 @@ class Statify_Evaluation extends Statify {
 			if ( 0 === $post_id ) {
 				$title = esc_url( $url );
 			} else {
-				$title = html_entity_decode(
-					wp_strip_all_tags( get_the_title( $post_id ) ),
-					ENT_QUOTES | ENT_HTML5,
-					get_bloginfo( 'charset' )
-				);
+				$title = get_the_title( $post_id );
 			}
 		}
 
