@@ -138,6 +138,16 @@
 	line-height: 1.4;
 }
 
+/* Fix table layout with long URLs */
+
+#statify-table-posts td {
+	overflow-wrap: anywhere;
+}
+
+#statify-table-posts tfoot td {
+	white-space: nowrap;
+}
+
 #statify_dashboard tr.placeholder td {
 	background-color: #f5f5f5;
 	border-radius: 1em;
@@ -222,14 +232,3 @@ body.rtl .statify-chart * {
 }
 
 /* @end group */
-
-
-/* Fix table layout with long URLs */
-
-#statify-table-posts td {
-  overflow-wrap: anywhere;
-}
-
-#statify-table-posts tfoot td {
-  white-space: nowrap;
-}
