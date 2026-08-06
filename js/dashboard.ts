@@ -1,3 +1,5 @@
+import { FlatSeries } from 'chartist';
+
 {
 	// Initialize DOM elements.
 	const charts = {
@@ -12,26 +14,40 @@
 	};
 	const tables = {
 		// Dashboard Widget.
-		referrer: document.querySelector(
+		referrer: document.querySelector<HTMLTableSectionElement>(
 			'#statify_dashboard .table.referrer table tbody'
 		),
-		target: document.querySelector(
+		target: document.querySelector<HTMLTableSectionElement>(
 			'#statify_dashboard .table.target table tbody'
 		),
-		totals: document.querySelector(
+		totals: document.querySelector<HTMLTableSectionElement>(
 			'#statify_dashboard .table.total table tbody'
 		),
 		// Extended Evaluation.
-		yearly: document.getElementById('statify-table-yearly'),
-		daily: document.getElementById('statify-table-daily'),
-		content: document.getElementById('statify-table-posts'),
-		referrers: document.getElementById('statify-table-referrer'),
+		yearly: document.getElementById(
+			'statify-table-yearly'
+		) as HTMLTableElement,
+		daily: document.getElementById(
+			'statify-table-daily'
+		) as HTMLTableElement,
+		content: document.getElementById(
+			'statify-table-posts'
+		) as HTMLTableElement,
+		referrers: document.getElementById(
+			'statify-table-referrer'
+		) as HTMLTableElement,
 	};
 	const controls = {
 		// Extended Evaluation.
-		postInput: document.getElementById('statify-dashboard-post'),
-		postList: document.getElementById('statify-dashboard-posts'),
-		dateRangeSelect: document.getElementById('statify-content-daterange'),
+		postInput: document.getElementById(
+			'statify-dashboard-post'
+		) as HTMLInputElement,
+		postList: document.getElementById(
+			'statify-dashboard-posts'
+		) as HTMLInputElement,
+		dateRangeSelect: document.getElementById(
+			'statify-content-daterange'
+		) as HTMLSelectElement,
 	};
 
 	// Initialize number format.
@@ -56,10 +72,10 @@
 	/**
 	 * Get user language from WP i18n, converted to BCP-47 notation.
 	 *
-	 * @return {string|undefined} BCP-47 language tag, if valid and supported.
+	 * @return BCP-47 language tag, if valid and supported.
 	 */
-	function getUserLanguage() {
-		let lc = wp.i18n.getLocaleData()['']?.lang || '';
+	function getUserLanguage(): string | undefined {
+		let lc = (wp.i18n.getLocaleData()[''] as any)?.lang || '';
 
 		try {
 			// Get supported value - automatically sanitizes capitalization if necessary.
@@ -76,8 +92,8 @@
 
 	// Render available charts and tables.
 	if (charts.daily) {
-		loadDaily(charts.daily.dataset.year).then((data) => {
-			renderDaily(charts.daily, data);
+		loadDaily(charts.daily.dataset.year!).then((data) => {
+			renderDaily(charts.daily!, data);
 
 			if (charts.monthly) {
 				renderMonthly(charts.monthly, dailyToMonthly(data), false);
@@ -90,7 +106,7 @@
 	} else if (charts.monthly) {
 		loadMonthly()
 			.then((data) => {
-				renderMonthly(charts.monthly, data);
+				renderMonthly(charts.monthly!, data);
 
 				if (charts.yearly) {
 					renderYearly(charts.yearly, data);
@@ -103,7 +119,7 @@
 			.catch(() => {
 				// Failed to load.
 				msg(
-					charts.monthly,
+					charts.monthly!,
 					wp.i18n.__('Error loading data.', 'statify')
 				);
 			});
@@ -124,7 +140,7 @@
 			if (charts.referrer) {
 				// Limit number of records.
 				data = data.slice(0, 24);
-				const labels = data.map((d) => d.host);
+				const labels = data.map((d) => d.host || '');
 				const values = data.map((d) => d.count);
 				renderBarChart(charts.referrer, labels, values, true);
 			}
@@ -133,12 +149,12 @@
 
 	// Augment available controls.
 	if (controls.postInput && controls.postList) {
-		fetchData('posts').then((data) =>
+		fetchData<PostStats[]>('posts').then((data) =>
 			data.forEach((post) => {
 				const opt = document.createElement('option');
 				opt.value = post.url;
 				opt.textContent = post.title;
-				controls.postList.appendChild(opt);
+				controls.postList!.appendChild(opt);
 			})
 		);
 	}
@@ -152,16 +168,16 @@
 	/**
 	 * Update the dashboard widget
 	 *
-	 * @param {boolean} refresh Force refresh.
+	 * @param refresh Force refresh.
 	 */
-	function updateDashboard(refresh) {
+	function updateDashboard(refresh: boolean): void {
 		// Load data from API.
-		fetchData('stats', refresh ? 'refresh=1' : null)
+		fetchData<DashboardStats>('stats', refresh ? 'refresh=1' : undefined)
 			.then((data) => {
 				const labels = Object.keys(data.visits);
 				const values = Object.values(data.visits);
 
-				render(charts.dashboard, labels, values, false, (date) =>
+				render(charts.dashboard!, labels, values, false, (date) =>
 					dateFormatYMD.format(new Date(date))
 				);
 
@@ -179,7 +195,7 @@
 			})
 			.catch(() => {
 				msg(
-					charts.dashboard,
+					charts.dashboard!,
 					wp.i18n.__('Error loading data.', 'statify')
 				);
 			});
@@ -188,53 +204,53 @@
 	/**
 	 * Load daily statistics.
 	 *
-	 * @param {number} year Year to load data for.
+	 * @param year Year to load data for.
 	 *
-	 * @return {Promise<{[key: string]: number}>} Data promise from API.
+	 * @return Data promise from API.
 	 */
-	function loadDaily(year) {
-		return fetchData('stats/extended', { scope: 'day', year });
+	function loadDaily(year: string): Promise<DailyStats> {
+		return fetchData<DailyStats>('stats/extended', { scope: 'day', year });
 	}
 
 	/**
 	 * Load monthly statistics.
 	 *
-	 * @return {Promise<{visits: {[key: string]: {[key: string]: number}}}>} Data promise from API.
+	 * @return Data promise from API.
 	 */
-	function loadMonthly() {
-		const param = { scope: 'month' };
+	function loadMonthly(): Promise<MonthlyStats> {
+		const param = { scope: 'month' } as Record<string, string>;
 		const post = new URLSearchParams(window.location.search).get('post');
 		if (post) {
 			param.post = post;
 		}
-		return fetchData('stats/extended', param);
+		return fetchData<MonthlyStats>('stats/extended', param);
 	}
 
 	/**
 	 * Load statistics per post.
 	 *
-	 * @return {Promise<Array<{count: number, title: string, type: string, typeName: string, url: string}>>} Data promise from API.
+	 * @return Data promise from API.
 	 */
-	function loadPerPost() {
-		const param = new URLSearchParams();
+	function loadPerPost(): Promise<PostStats[]> {
+		const param: Record<string, string> = {};
 		const search = new URLSearchParams(window.location.search);
 		['type', 'start', 'end'].forEach((p) => {
 			const v = search.get(p);
 			if (v) {
-				param.set(p, v);
+				param[p] = v;
 			}
 		});
 
-		return fetchData('stats/posts', param);
+		return fetchData<PostStats[]>('stats/posts', param);
 	}
 
 	/**
 	 * Load statistics per referrer.
 	 *
-	 * @return {Promise<Array<{count: number, host: string, url: string}>>} Data promise from API.
+	 * @return Data promise from API.
 	 */
-	function loadPerReferrer() {
-		const param = {};
+	function loadPerReferrer(): Promise<TopStats[]> {
+		const param: Record<string, string> = {};
 		const search = new URLSearchParams(window.location.search);
 		['post', 'start', 'end'].forEach((p) => {
 			const v = search.get(p);
@@ -243,16 +259,16 @@
 			}
 		});
 
-		return fetchData('stats/referrers', param);
+		return fetchData<TopStats[]>('stats/referrers', param);
 	}
 
 	/**
 	 * Render daily statistics.
 	 *
-	 * @param {HTMLElement}             root Root element.
-	 * @param {{[key: string]: number}} data Data from API.
+	 * @param root Root element.
+	 * @param data Data from API.
 	 */
-	function renderDaily(root, data) {
+	function renderDaily(root: HTMLElement, data: DailyStats): void {
 		const labels = Object.keys(data);
 		const values = Object.values(data);
 		const usedLabels = new Set();
@@ -278,17 +294,21 @@
 	/**
 	 * Render monthly statistics.
 	 *
-	 * @param {HTMLElement}                                        root     Root element.
-	 * @param {{visits: {[key: string]: {[key: string]: number}}}} data     Data from API.
-	 * @param {boolean}                                            showYear Show year in label? (default: true)
+	 * @param root     Root element.
+	 * @param data     Data from API.
+	 * @param showYear Show year in label? (default: true)
 	 */
-	function renderMonthly(root, data, showYear = true) {
+	function renderMonthly(
+		root: HTMLElement,
+		data: MonthlyStats,
+		showYear: boolean = true
+	): void {
 		const values = Object.values(data.visits).flatMap((y) =>
 			Object.values(y)
 		);
 
-		let labelFunc = (l) => l;
-		let metaFunc = (l) => l;
+		let labelFunc = (l: string) => l;
+		let metaFunc = (l: string) => l;
 		let labels = Object.keys(data.visits);
 		if (showYear) {
 			if (labels.length > 2) {
@@ -300,10 +320,10 @@
 				/**
 				 * Interpolate labels by year if we show more than 2 years.
 				 *
-				 * @param {string} date Date string
-				 * @return {string} Year string
+				 * @param date Date string
+				 * @return Year string
 				 */
-				labelFunc = (date) => {
+				labelFunc = (date: string): string => {
 					const d = new Date(date);
 					const m = d.getMonth();
 					if (m === 0) {
@@ -315,14 +335,14 @@
 			} else {
 				labels = labels.flatMap((y) =>
 					Object.keys(data.visits[y]).map((m) =>
-						dateFormatYM.format(new Date(y, m - 1))
+						dateFormatYM.format(new Date(Number(y), Number(m) - 1))
 					)
 				);
 			}
 		} else {
 			labels = labels.flatMap((y) =>
 				Object.keys(data.visits[y]).map((m) =>
-					dateFormatM.format(new Date(y, m - 1))
+					dateFormatM.format(new Date(Number(y), Number(m) - 1))
 				)
 			);
 		}
@@ -333,10 +353,10 @@
 	/**
 	 * Render yearly statistics.
 	 *
-	 * @param {HTMLElement}                                        root Root element.
-	 * @param {{visits: {[key: string]: {[key: string]: number}}}} data Data from API.
+	 * @param root Root element.
+	 * @param data Data from API.
 	 */
-	function renderYearly(root, data) {
+	function renderYearly(root: HTMLElement, data: MonthlyStats): void {
 		const labels = Object.keys(data.visits);
 		const values = Object.values(data.visits).map((y) =>
 			Object.values(y).reduce((a, b) => a + b, 0)
@@ -348,21 +368,21 @@
 	/**
 	 * Render statistics chart.
 	 *
-	 * @param {HTMLElement}             root                  Root element.
-	 * @param {string[]}                labels                Labels.
-	 * @param {number[]}                values                Values.
-	 * @param {boolean}                 showAxis              Show X axis? (default: true)
-	 * @param {function(string):string} labelToMetaFunc       Meta data (tooltip label) function. (optional)
-	 * @param {function(string):string} labelInterpolationFnc Label interpolation function. (optional)
+	 * @param root                  Root element.
+	 * @param labels                Labels.
+	 * @param values                Values.
+	 * @param showAxis              Show X axis? (default: true)
+	 * @param labelToMetaFunc       Meta data (tooltip label) function. (optional)
+	 * @param labelInterpolationFnc Label interpolation function. (optional)
 	 */
 	function render(
-		root,
-		labels,
-		values,
-		showAxis = true,
-		labelToMetaFunc = (l) => l,
-		labelInterpolationFnc = (l) => l
-	) {
+		root: HTMLElement,
+		labels: string[],
+		values: number[],
+		showAxis: boolean = true,
+		labelToMetaFunc: (s: string) => string = (l) => l,
+		labelInterpolationFnc: (s: string) => string = (l) => l
+	): void {
 		// Remove the loading content or existing chart.
 		root.innerHTML = '';
 
@@ -419,7 +439,8 @@
 						maxValue,
 					],
 					offset: axisYOffset,
-					labelInterpolationFnc: (v) => numberFormat.format(v),
+					labelInterpolationFnc: (v: number) =>
+						numberFormat.format(v),
 				},
 				plugins: [
 					[
@@ -448,10 +469,10 @@
 							wp.i18n._n(
 								'%s view',
 								'%s views',
-								d.value.y,
+								(d.value as any)?.y,
 								'statify'
 							),
-							numberFormat.format(d.value.y)
+							numberFormat.format((d.value as any)?.y)
 						),
 						'ct:meta': labelToMetaFunc(labels[d.index]),
 					},
@@ -465,12 +486,17 @@
 	/**
 	 * Render bar chart.
 	 *
-	 * @param {HTMLElement} root          Root element.
-	 * @param {string[]}    labels        Labels.
-	 * @param {number[]}    values        Values.
-	 * @param {boolean}     numericLabels Transform labels into numbers and add legend? (default: false)
+	 * @param root          Root element.
+	 * @param labels        Labels.
+	 * @param values        Values.
+	 * @param numericLabels Transform labels into numbers and add legend? (default: false)
 	 */
-	function renderBarChart(root, labels, values, numericLabels = false) {
+	function renderBarChart(
+		root: HTMLElement,
+		labels: string[],
+		values: number[],
+		numericLabels: boolean = false
+	): void {
 		// Remove the loading content.
 		root.innerHTML = '';
 
@@ -485,27 +511,29 @@
 		// Generate dynamic offset roughly depending on the label length
 		const axisYOffset = Math.max(String(maxValue).length * 8, 24);
 
+		let series: number[] | FlatSeries = values;
+
 		if (numericLabels) {
 			const container = root.parentElement;
-			let legend = container.querySelector('.statify-legend');
+			let legend = container!.querySelector('.statify-legend');
 			if (legend) {
 				legend.innerHTML = '';
 			} else {
-				legend = document.createElement('OL');
+				legend = document.createElement('ol');
 				legend.classList.add('statify-legend');
-				container.appendChild(legend);
+				container!.appendChild(legend);
 			}
 
 			labels.forEach((l) => {
-				const li = document.createElement('LI');
+				const li = document.createElement('li');
 				li.textContent = l;
 				legend.appendChild(li);
 			});
 
-			values = values.map((v, i) => {
+			series = values.map((v, i) => {
 				return { meta: labels[i], value: v };
 			});
-			labels = labels.map((l, i) => i + 1);
+			labels = labels.map((l, i) => String(i + 1));
 		}
 
 		// Draw chart.
@@ -513,7 +541,7 @@
 			root,
 			{
 				labels,
-				series: [values],
+				series: [series],
 			},
 			{
 				low: 0,
@@ -526,7 +554,8 @@
 					low: 0,
 					onlyInteger: true,
 					offset: axisYOffset,
-					labelInterpolationFnc: (v) => numberFormat.format(v),
+					labelInterpolationFnc: (v) =>
+						numberFormat.format(Number(v)),
 				},
 				plugins: [
 					[
@@ -535,7 +564,7 @@
 							appendToBody: true,
 							anchorToPoint: true,
 							class: 'statify-chartist-tooltip',
-							transformTooltipTextFnc(y) {
+							transformTooltipTextFnc(y: number): string {
 								return wp.i18n.sprintf(
 									/* translators: %s: Number of page views. */
 									wp.i18n._n(
@@ -557,21 +586,24 @@
 	/**
 	 * Render top list table.
 	 *
-	 * @param {HTMLTableElement}                                              table Table element.
-	 * @param {{count: number, url: string, host: ?string, title: ?string}[]} data  Data to display.
+	 * @param table Table element.
+	 * @param data  Data to display.
 	 */
-	function renderTopList(table, data) {
+	function renderTopList(
+		table: HTMLTableSectionElement,
+		data: TopStats[]
+	): void {
 		const rows = data.map((r) => {
-			const row = document.createElement('TR');
-			let col = document.createElement('TD');
+			const row = document.createElement('tr');
+			let col = document.createElement('td');
 			col.classList.add('b');
 			col.textContent = numberFormat.format(r.count);
 			row.appendChild(col);
-			col = document.createElement('TD');
+			col = document.createElement('td');
 			col.classList.add('t');
 			const label = r.title || r.host || r.url;
 			if (/^((https?:)?\/)?\//i.test(r.url)) {
-				const link = document.createElement('A');
+				const link = document.createElement('a');
 				link.href = r.url;
 				link.target = '_blank';
 				link.rel = 'noopener noreferrer';
@@ -590,26 +622,29 @@
 	/**
 	 * Render totals table.
 	 *
-	 * @param {HTMLTableElement}                                table Table element.
-	 * @param {{alltime: number, since: string, today: number}} data  Totals data.
+	 * @param table Table element.
+	 * @param data  Totals data.
 	 */
-	function renderTotals(table, data) {
-		const rowToday = document.createElement('TR');
-		let col = document.createElement('TD');
+	function renderTotals(
+		table: HTMLTableSectionElement,
+		data: TotalStats
+	): void {
+		const rowToday = document.createElement('tr');
+		let col = document.createElement('td');
 		col.classList.add('b');
 		col.textContent = numberFormat.format(data.today);
 		rowToday.appendChild(col);
-		col = document.createElement('TD');
+		col = document.createElement('td');
 		col.classList.add('t');
 		col.textContent = wp.i18n.__('today', 'statify');
 		rowToday.appendChild(col);
 
-		const rowAll = document.createElement('TR');
-		col = document.createElement('TD');
+		const rowAll = document.createElement('tr');
+		col = document.createElement('td');
 		col.classList.add('b');
 		col.textContent = numberFormat.format(data.alltime);
 		rowAll.appendChild(col);
-		col = document.createElement('TD');
+		col = document.createElement('td');
 		col.classList.add('t');
 		col.textContent = wp.i18n.sprintf(
 			/* translators: %s: Date. */
@@ -624,24 +659,27 @@
 	/**
 	 * Render yearly table.
 	 *
-	 * @param {HTMLElement} table Root element.
-	 * @param {any}         data  Data from API.
+	 * @param table Root element.
+	 * @param data  Data from API.
 	 */
-	function renderYearlyTable(table, data) {
-		const tbody = table.querySelector('tbody');
+	function renderYearlyTable(
+		table: HTMLTableElement,
+		data: MonthlyStats
+	): void {
+		const tbody = table.querySelector('tbody')!;
 
 		tbody.innerHTML = '';
 
 		for (const year in data.visits) {
-			const row = document.createElement('TR');
-			let col = document.createElement('TH');
+			const row = document.createElement('tr');
+			let col = document.createElement('th');
 			let sum = 0;
 			col.scope = 'row';
 			col.textContent = year;
 			row.appendChild(col);
 
 			for (let month = 1; month <= 12; month++) {
-				col = document.createElement('TD');
+				col = document.createElement('td');
 				col.classList.add('right');
 				if (month in data.visits[year]) {
 					col.dataset.raw = String(data.visits[year][month]);
@@ -656,7 +694,7 @@
 				sum += data.visits[year][month] || 0;
 			}
 
-			col = document.createElement('TD');
+			col = document.createElement('td');
 			col.classList.add('statify-table-sum', 'right');
 			col.dataset.raw = String(sum);
 			col.textContent = numberFormat.format(sum);
@@ -671,13 +709,13 @@
 	/**
 	 * Render yearly table.
 	 *
-	 * @param {HTMLTableElement} table Root element.
-	 * @param {any}              data  Data from API.
+	 * @param table Root element.
+	 * @param data  Data from API.
 	 */
-	function renderDailyTable(table, data) {
+	function renderDailyTable(table: HTMLTableElement, data: DailyStats): void {
 		const rows = Array.from(table.querySelectorAll('tbody > tr'));
 		const cols = rows.map((row) => Array.from(row.querySelectorAll('td')));
-		let out = cols.slice(0, 31);
+		// let out = cols.slice(0, 31);
 
 		const sum = new Array(12).fill(0);
 		const vls = new Array(12).fill(0);
@@ -691,11 +729,11 @@
 			++vls[m];
 			min[m] = Math.min(min[m], count);
 			max[m] = Math.max(max[m], count);
-			out[d.getDate() - 1][m].dataset.raw = String(count);
-			out[d.getDate() - 1][m].textContent = numberFormat.format(count);
+			cols[d.getDate() - 1][m].dataset.raw = String(count);
+			cols[d.getDate() - 1][m].textContent = numberFormat.format(count);
 		}
 
-		out =
+		let out =
 			cols[
 				rows.findIndex((row) =>
 					row.classList.contains('statify-table-sum')
@@ -765,38 +803,42 @@
 	/**
 	 * Render content table.
 	 *
-	 * @param {HTMLTableElement}                                                                   table Root element.
-	 * @param {Array<{count: number, title: string, type: string, typeName: string, url: string}>} data  Data from API.
+	 * @param table Root element.
+	 * @param data  Data from API.
 	 */
-	function renderContentTable(table, data) {
+	function renderContentTable(
+		table: HTMLTableElement,
+		data: PostStats[]
+	): void {
 		const tbody = table.querySelector('tbody');
-		const sumRow = table.querySelectorAll('tfoot > tr > td');
+		const sumRow =
+			table.querySelectorAll<HTMLTableCellElement>('tfoot > tr > td');
 		const showType = table.querySelectorAll('thead > tr > th').length > 4;
 
 		const total = data.map((d) => d.count).reduce((a, b) => a + b, 0);
 
 		const rows = data.map((d) => {
-			const row = document.createElement('TR');
-			let col = document.createElement('TD');
-			const link = document.createElement('A');
+			const row = document.createElement('tr');
+			let col = document.createElement('td');
+			const link = document.createElement('a');
 			link.href = d.url;
 			link.textContent = d.title;
 			col.append(link);
 			row.appendChild(col);
-			col = document.createElement('TD');
+			col = document.createElement('td');
 			col.textContent = d.url;
 			row.appendChild(col);
 			if (showType) {
-				col = document.createElement('TD');
+				col = document.createElement('td');
 				col.textContent = d.typeName;
 				row.appendChild(col);
 			}
-			col = document.createElement('TD');
+			col = document.createElement('td');
 			col.classList.add('right');
 			col.dataset.raw = String(d.count);
 			col.textContent = numberFormat.format(d.count);
 			row.appendChild(col);
-			col = document.createElement('TD');
+			col = document.createElement('td');
 			col.classList.add('right');
 			col.dataset.raw = String(
 				Math.round((d.count / total) * 10000) / 100
@@ -807,7 +849,7 @@
 			return row;
 		});
 
-		updateTable(tbody, rows);
+		updateTable(tbody!, rows);
 
 		sumRow[sumRow.length - 2].dataset.raw = String(total);
 		sumRow[sumRow.length - 2].textContent = numberFormat.format(total);
@@ -820,28 +862,34 @@
 	/**
 	 * Render referrers table.
 	 *
-	 * @param {HTMLTableElement}                                  table Root element.
-	 * @param {Array<{count: number, host: string, url: string}>} data  Data from API.
+	 * @param table Root element.
+	 * @param data  Data from API.
 	 */
-	function renderReferrersTable(table, data) {
+	function renderReferrersTable(
+		table: HTMLTableElement,
+		data: TopStats[]
+	): void {
 		const tbody = table.querySelector('tbody');
+		if (!tbody) {
+			return;
+		}
 		const sumRow = table.querySelectorAll('tfoot > tr > td');
 
 		const total = data.map((d) => d.count).reduce((a, b) => a + b, 0);
 
 		const rows = data.map((d) => {
-			const row = document.createElement('TR');
-			let col = document.createElement('TD');
-			const link = document.createElement('A');
+			const row = document.createElement('tr');
+			let col = document.createElement('td');
+			const link = document.createElement('a');
 			link.href = d.url;
 			link.textContent = d.host;
 			col.append(link);
 			row.appendChild(col);
-			col = document.createElement('TD');
+			col = document.createElement('td');
 			col.classList.add('right');
 			col.textContent = numberFormat.format(d.count);
 			row.appendChild(col);
-			col = document.createElement('TD');
+			col = document.createElement('td');
 			col.classList.add('right');
 			col.textContent = numberFormatPercent.format(d.count / total);
 			row.appendChild(col);
@@ -859,10 +907,13 @@
 	/**
 	 * Replace or append table rows.
 	 *
-	 * @param {HTMLTableElement|HTMLTableSectionElement} table   Target table or table body.
-	 * @param {HTMLTableRowElement[]}                    newRows New row elements.
+	 * @param table   Target table or table body.
+	 * @param newRows New row elements.
 	 */
-	function updateTable(table, newRows) {
+	function updateTable(
+		table: HTMLTableElement | HTMLTableSectionElement,
+		newRows: HTMLTableRowElement[]
+	): void {
 		const existingRows = table.querySelectorAll('tr');
 
 		// Replace existing rows
@@ -883,11 +934,11 @@
 	/**
 	 * Convert daily to monthly data.
 	 *
-	 * @param {{[key: string]: number}} data Daily data.
-	 * @return {{visits: {[key: string]: {[key: string]: number}}}} Monthly data.
+	 * @param data Daily data.
+	 * @return Monthly data.
 	 */
-	function dailyToMonthly(data) {
-		const monthly = { visits: {} };
+	function dailyToMonthly(data: DailyStats): MonthlyStats {
+		const monthly = { visits: {} } as MonthlyStats;
 		for (const [day, count] of Object.entries(data)) {
 			const date = new Date(day);
 			const year = date.getFullYear();
@@ -911,11 +962,11 @@
 	/**
 	 * Add a CSV export button to a table.
 	 *
-	 * @param {HTMLTableElement} table Table to process
+	 * @param table Table to process
 	 */
-	function addExportButton(table) {
+	function addExportButton(table: HTMLTableElement): void {
 		const exportBtn = document.createElement('a');
-		let csvUrl = null;
+		let csvUrl: string | null = null;
 		exportBtn.classList.add('button');
 		exportBtn.href = '#';
 
@@ -923,12 +974,12 @@
 		exportBtn.download =
 			statifyDashboard.sitename +
 			'-' +
-			table.caption.innerText.replaceAll(/\s+/g, '_') +
+			table.caption?.innerText.replace(/\s+/g, '_') +
 			'-export-' +
 			new Date()
 				.toISOString()
 				.replace('T', '_')
-				.replaceAll(':', '-')
+				.replace(':', '-')
 				.substring(0, 16) +
 			'.csv';
 
@@ -965,79 +1016,86 @@
 	 * Fill start/end based on selected range and revert to "custom" when changed manually.
 	 */
 	function augmentDateRangeControls() {
-		const start = document.getElementById('statify-content-datestart');
-		const end = document.getElementById('statify-content-dateend');
+		const start = document.getElementById(
+			'statify-content-datestart'
+		) as HTMLInputElement;
+		const end = document.getElementById(
+			'statify-content-dateend'
+		) as HTMLInputElement;
 		if (start && end) {
-			const isoDate = (y, m, d) =>
+			const isoDate = (y: number, m: number, d: number): string =>
 				new Date(Date.UTC(y, m, d)).toISOString().split('T')[0];
 
-			controls.dateRangeSelect.addEventListener('change', (evt) => {
-				const now = new Date(),
-					y = now.getFullYear(),
-					m = now.getMonth(),
-					d = now.getDate(),
-					day = now.getDay(),
-					monday = d - day + (day === 0 ? -6 : 1);
+			controls.dateRangeSelect.addEventListener(
+				'change',
+				(evt: Event) => {
+					const now = new Date(),
+						y = now.getFullYear(),
+						m = now.getMonth(),
+						d = now.getDate(),
+						day = now.getDay(),
+						monday = d - day + (day === 0 ? -6 : 1);
 
-				switch (evt.target.value) {
-					case '':
-						start.value = '';
-						end.value = '';
-						break;
-					case 'lastYear':
-						start.value = isoDate(y - 1, 0, 1);
-						end.value = isoDate(y - 1, 11, 31);
-						break;
-					case 'lastWeek':
-						start.value = isoDate(y, m, monday - 7);
-						end.value = isoDate(y, m, monday - 1);
-						break;
-					case 'yesterday':
-						start.value = isoDate(y, m, d - 1);
-						end.value = isoDate(y, m, d - 1);
-						break;
-					case 'today':
-						start.value = isoDate(y, m, d);
-						end.value = isoDate(y, m, d);
-						break;
-					case 'thisWeek':
-						start.value = isoDate(y, m, monday);
-						end.value = isoDate(y, m, monday + 6);
-						break;
-					case 'last28days':
-						start.value = isoDate(y, m, d - 27);
-						end.value = isoDate(y, m, d);
-						break;
-					case 'lastMonth':
-						start.value = isoDate(y, m - 1, 1);
-						end.value = isoDate(y, m, 0);
-						break;
-					case 'thisMonth':
-						start.value = isoDate(y, m, 1);
-						end.value = isoDate(y, m + 1, 0);
-						break;
-					case '1stQuarter':
-						start.value = isoDate(y, 0, 1);
-						end.value = isoDate(y, 2, 31);
-						break;
-					case '2ndQuarter':
-						start.value = isoDate(y, 3, 1);
-						end.value = isoDate(y, 5, 30);
-						break;
-					case '3rdQuarter':
-						start.value = isoDate(y, 6, 1);
-						end.value = isoDate(y, 8, 30);
-						break;
-					case '4thQuarter':
-						start.value = isoDate(y, 9, 1);
-						end.value = isoDate(y, 11, 31);
-						break;
-					case 'thisYear':
-						start.value = isoDate(y, 0, 1);
-						end.value = isoDate(y, 11, 31);
-						break;
+					switch ((evt.target as HTMLSelectElement)?.value) {
+						case '':
+							start.value = '';
+							end.value = '';
+							break;
+						case 'lastYear':
+							start.value = isoDate(y - 1, 0, 1);
+							end.value = isoDate(y - 1, 11, 31);
+							break;
+						case 'lastWeek':
+							start.value = isoDate(y, m, monday - 7);
+							end.value = isoDate(y, m, monday - 1);
+							break;
+						case 'yesterday':
+							start.value = isoDate(y, m, d - 1);
+							end.value = isoDate(y, m, d - 1);
+							break;
+						case 'today':
+							start.value = isoDate(y, m, d);
+							end.value = isoDate(y, m, d);
+							break;
+						case 'thisWeek':
+							start.value = isoDate(y, m, monday);
+							end.value = isoDate(y, m, monday + 6);
+							break;
+						case 'last28days':
+							start.value = isoDate(y, m, d - 27);
+							end.value = isoDate(y, m, d);
+							break;
+						case 'lastMonth':
+							start.value = isoDate(y, m - 1, 1);
+							end.value = isoDate(y, m, 0);
+							break;
+						case 'thisMonth':
+							start.value = isoDate(y, m, 1);
+							end.value = isoDate(y, m + 1, 0);
+							break;
+						case '1stQuarter':
+							start.value = isoDate(y, 0, 1);
+							end.value = isoDate(y, 2, 31);
+							break;
+						case '2ndQuarter':
+							start.value = isoDate(y, 3, 1);
+							end.value = isoDate(y, 5, 30);
+							break;
+						case '3rdQuarter':
+							start.value = isoDate(y, 6, 1);
+							end.value = isoDate(y, 8, 30);
+							break;
+						case '4thQuarter':
+							start.value = isoDate(y, 9, 1);
+							end.value = isoDate(y, 11, 31);
+							break;
+						case 'thisYear':
+							start.value = isoDate(y, 0, 1);
+							end.value = isoDate(y, 11, 31);
+							break;
+					}
 				}
-			});
+			);
 
 			start.addEventListener('change', () => {
 				controls.dateRangeSelect.value = 'custom';
@@ -1051,12 +1109,15 @@
 	/**
 	 * Fetch data from Statify API.
 	 *
-	 * @param {string}                                             path  Relative API path.
-	 * @param {string|Record<string, string>|URLSearchParams|null} param Parameters (optional).
-	 * @return {Promise<any>} Response promise.
+	 * @param path  Relative API path.
+	 * @param param Parameters (optional).
+	 * @return Response promise.
 	 */
-	function fetchData(path, param = undefined) {
-		return wp.apiFetch({
+	function fetchData<Type>(
+		path: string,
+		param?: string | Record<string, string> | URLSearchParams
+	): Promise<Type> {
+		return wp.apiFetch<Type>({
 			path: `/statify/v1/${path}${param ? '?' + new URLSearchParams(param) : ''}`,
 		});
 	}
@@ -1064,11 +1125,11 @@
 	/**
 	 * Show a text message.
 	 *
-	 * @param {HTMLElement} element Element to add the message to.
-	 * @param {string}      text    Text message.
+	 * @param element Element to add the message to.
+	 * @param text    Text message.
 	 * @private
 	 */
-	function msg(element, text) {
+	function msg(element: HTMLElement, text: string): void {
 		const p = document.createElement('p');
 		p.textContent = text;
 		element.innerHTML = '';
