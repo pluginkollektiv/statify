@@ -4,8 +4,7 @@
 coverage
 dist/
 css/*.min.css
-js/*.min.js
-js/*.min.js.map
+js/*.js
 lib
 phpunit.*.xml
 vendor/

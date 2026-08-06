@@ -5,25 +5,31 @@
     "@stklcode/chartist-plugin-tooltips": "^2.0.1"
   },
   "devDependencies": {
+    "@types/node": "^24.19.2",
+    "@wordpress/api-fetch": "^8.1.0",
     "@wordpress/eslint-plugin": "^28.1.0",
+    "@wordpress/i18n": "^7.1.0",
     "@wordpress/stylelint-config": "^27.1.0",
     "esbuild": "^0.28.2",
     "eslint": "^10.14.0",
     "nise": "^6.1.5",
     "nyc": "^18.0.0",
     "stylelint": "^17.16.0",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
     "vendor-copy": "^3.0.1"
   },
   "scripts": {
     "build": "npm run copy-assets && npm run minify",
+    "check": "tsc --noEmit",
     "copy-assets": "vendor-copy",
     "minify": "npm run minify:js && npm run minify:css",
     "minify:css": "esbuild css/dashboard.css css/settings.css --minify --outdir=css --outbase=. --entry-names=[name].min",
-    "minify:js": "esbuild js/dashboard.js js/settings.js js/snippet.js --minify --outdir=js --outbase=js --entry-names=[name].min",
-    "lint": "npm run lint-css && npm run lint-js",
+    "minify:js": "esbuild js/dashboard.ts js/settings.ts js/snippet.ts --minify --outdir=js --outbase=js",
+    "lint": "npm run lint-css && npm run lint-ts",
     "lint-css": "stylelint css/dashboard.css css/settings.css",
-    "lint-js": "eslint js/dashboard.js js/settings.js js/snippet.js",
-    "test": "nyc --reporter=text node --test tests/js/*.test.js"
+    "lint-ts": "eslint js/*.ts",
+    "test": "nyc --reporter=text tsx --test tests/js/*.test.ts"
   },
   "allowScripts": {
     "esbuild": true,
