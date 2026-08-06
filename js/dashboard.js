@@ -482,6 +482,12 @@
 			return;
 		}
 
+		// Determine maximum value for scaling.
+		const maxValue = Math.max(...values);
+
+		// Generate dynamic offset roughly depending on the label length
+		const axisYOffset = Math.max(String(maxValue).length * 8, 24);
+
 		if (numericLabels) {
 			const container = root.parentElement;
 			let legend = container.querySelector('.statify-legend');
@@ -523,7 +529,7 @@
 					showLabel: true,
 					low: 0,
 					onlyInteger: true,
-					offset: 64,
+					offset: axisYOffset,
 					labelInterpolationFnc: (v) => numberFormat.format(v),
 				},
 				plugins: [
