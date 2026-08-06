@@ -29,3 +29,4 @@
 /phpunit.coverage.xml export-ignore
 /phpunit.report.xml export-ignore
 /README.md export-ignore
+/tsconfig.json export-ignore

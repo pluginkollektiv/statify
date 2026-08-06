@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "isolatedModules": true,
+    "lib": [
+      "DOM",
+      "ES2021"
+    ],
+    "module": "ESNext",
+    "moduleDetection": "legacy",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2021"
+  },
+  "include": [
+    "js/*.ts"
+  ]
+}

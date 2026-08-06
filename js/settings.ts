@@ -1,7 +1,5 @@
-(function () {
-	'use strict';
-
-	function initResetButton() {
+{
+	function initResetButton(): void {
 		const resetButton = document.getElementById('statify-reset-data');
 
 		if (!resetButton) {
@@ -11,7 +9,7 @@
 		resetButton.addEventListener('click', (e) => {
 			e.preventDefault();
 
-			const button = e.currentTarget;
+			const button = e.currentTarget as HTMLButtonElement;
 			if (button.disabled) {
 				return;
 			}
@@ -32,7 +30,7 @@
 			button.disabled = true;
 			button.textContent = wp.i18n.__('Resetting…', 'statify');
 
-			wp.apiFetch({
+			wp.apiFetch<ResetResponse>({
 				path: '/statify/v1/reset',
 				method: 'POST',
 			})
@@ -52,4 +50,4 @@
 	}
 
 	document.addEventListener('DOMContentLoaded', initResetButton);
-})();
+}
