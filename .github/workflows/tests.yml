@@ -53,6 +53,8 @@ jobs:
         run: composer test
       - name: PHP unit tests (multisite)
         run: composer test-multisite
+      - name: Check TypeScript
+        run: npm run check
       - name: JS unit tests
         run: npm run test
   quality:
