@@ -387,8 +387,8 @@
 		// Determine maximum value for scaling.
 		const maxValue = Math.max(...values);
 
-		// Use a wider Y axis on the extended Statify dashboard.
-		const axisYOffset = root.closest('.statify-chart-container') ? 64 : 30;
+		// Generate dynamic offset roughly depending on the label length
+		const axisYOffset = Math.max(String(maxValue).length * 8, 24);
 
 		// Draw chart.
 		const chart = new Chartist.LineChart(
