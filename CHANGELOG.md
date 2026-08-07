@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixes
 
+* Translatable texts in JS-generated content now work as expected (#353)
+* Special characters in post titles are now displayed correctly (#355) (#356)
+* Break long URLs to prevent scrollbar in content table (#358) (#359)
+* Y-axis labels in charts are no longer truncated on higher numbers (#346) (#357)
+
+
+## 2.0.1
+
+### Fixes
+
 * Fixed an issue that prevented loading dashboard widgets on region-specific locales (#345) (#347)
 * Restored automatic scrolling to the latest data point in the dashboard widget (#348) (#349)
 

@@ -5,7 +5,7 @@
 * Requires at least: 5.1
 * Tested up to:      7.0
 * Requires PHP:      7.4
-* Stable tag:        2.0.1
+* Stable tag:        2.0.2
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -120,6 +120,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+### 2.0.2
+* Translatable texts in JS-generated content now work as expected
+* Special characters in post titles are now displayed correctly
+* Break long URLs to prevent scrollbar in content table
+* Y-axis labels in charts are no longer truncated on higher numbers
+
 ### 2.0.1
 * Fixed an issue that prevented loading dashboard widgets on region-specific locales
 * Restored automatic scrolling to the latest data point in the dashboard widget
@@ -217,11 +223,14 @@ For the complete changelog, check out our [GitHub repository](https://github.com
 
 ## Upgrade Notice ##
 
+### 2.0.2 ###
+
+Bugfix release which resolves issues with translations and table contents.
+
 ### 2.0.1 ###
 
 This release fixes dashboard rendering issues after updating to Statify 2.0.0.
 Recommended for all users.
-
 
 ### 2.0.0 ###
 
