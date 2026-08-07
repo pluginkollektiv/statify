@@ -387,6 +387,9 @@
 		// Determine maximum value for scaling.
 		const maxValue = Math.max(...values);
 
+		// Generate dynamic offset roughly depending on the label length
+		const axisYOffset = Math.max(String(maxValue).length * 8, 24);
+
 		// Draw chart.
 		const chart = new Chartist.LineChart(
 			root,
@@ -418,7 +421,7 @@
 						Math.round((maxValue * 3) / 4),
 						maxValue,
 					],
-					offset: 30,
+					offset: axisYOffset,
 					labelInterpolationFnc: (v) => numberFormat.format(v),
 				},
 				plugins: [
@@ -479,6 +482,12 @@
 			return;
 		}
 
+		// Determine maximum value for scaling.
+		const maxValue = Math.max(...values);
+
+		// Generate dynamic offset roughly depending on the label length
+		const axisYOffset = Math.max(String(maxValue).length * 8, 24);
+
 		if (numericLabels) {
 			const container = root.parentElement;
 			let legend = container.querySelector('.statify-legend');
@@ -520,6 +529,7 @@
 					showLabel: true,
 					low: 0,
 					onlyInteger: true,
+					offset: axisYOffset,
 					labelInterpolationFnc: (v) => numberFormat.format(v),
 				},
 				plugins: [
