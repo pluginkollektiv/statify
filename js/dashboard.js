@@ -520,7 +520,6 @@
 			},
 			{
 				low: 0,
-				showArea: true,
 				axisX: {
 					showGrid: false,
 				},
