@@ -13,6 +13,7 @@
     "target": "ES2021"
   },
   "include": [
-    "js/*.ts"
+    "js/*.ts",
+    "js/**/*.ts"
   ]
 }
