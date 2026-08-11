@@ -440,9 +440,9 @@
 				circle = new Chartist.Svg(
 					'circle',
 					{
-						cx: [d.x],
-						cy: [d.y],
-						r: [pointRadius],
+						cx: d.x,
+						cy: d.y,
+						r: pointRadius,
 						'ct:value': wp.i18n.sprintf(
 							/* translators: %s: Number of page views. */
 							wp.i18n._n(
