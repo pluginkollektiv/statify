@@ -52,22 +52,44 @@ import { FlatSeries } from 'chartist';
 
 	// Initialize number format.
 	const lang = getUserLanguage();
-	const numberFormat = new Intl.NumberFormat(lang);
-	const numberFormatPercent = new Intl.NumberFormat(lang, {
-		style: 'percent',
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2,
-	});
-	const dateFormatYMD = new Intl.DateTimeFormat(lang, {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-	});
-	const dateFormatYM = new Intl.DateTimeFormat(lang, {
-		year: 'numeric',
-		month: 'short',
-	});
-	const dateFormatM = new Intl.DateTimeFormat(lang, { month: 'short' });
+	const fmt = {
+		number: new Intl.NumberFormat(lang),
+		numberPercent: new Intl.NumberFormat(lang, {
+			style: 'percent',
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2,
+		}),
+		dateYMD: new Intl.DateTimeFormat(lang, {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+		}),
+		dateYM: new Intl.DateTimeFormat(lang, {
+			year: 'numeric',
+			month: 'short',
+		}),
+		dateM: new Intl.DateTimeFormat(lang, { month: 'short' }),
+
+		formatNumber(num: number): string {
+			return this.number.format(num);
+		},
+
+		formatPercent(num: number): string {
+			return this.numberPercent.format(num);
+		},
+
+		formatDateYMD(date: Date): string {
+			return this.dateYMD.format(date);
+		},
+
+		formatDateYM(date: Date): string {
+			return this.dateYM.format(date);
+		},
+
+		formatDateM(date: Date): string {
+			return this.dateM.format(date);
+		},
+	};
 
 	/**
 	 * Get user language from WP i18n, converted to BCP-47 notation.
@@ -178,7 +200,7 @@ import { FlatSeries } from 'chartist';
 				const values = Object.values(data.visits);
 
 				render(charts.dashboard!, labels, values, false, (date) =>
-					dateFormatYMD.format(new Date(date))
+					fmt.formatDateYMD(new Date(date))
 				);
 
 				// Render top lists.
@@ -278,7 +300,7 @@ import { FlatSeries } from 'chartist';
 			labels,
 			values,
 			true,
-			(date) => dateFormatYMD.format(new Date(date)),
+			(date) => fmt.formatDateYMD(new Date(date)),
 			(day) => {
 				const date = new Date(day);
 				const mon = date.getMonth();
@@ -286,7 +308,7 @@ import { FlatSeries } from 'chartist';
 					return '';
 				}
 				usedLabels.add(mon);
-				return dateFormatM.format(date);
+				return fmt.formatDateM(date);
 			}
 		);
 	}
@@ -331,18 +353,18 @@ import { FlatSeries } from 'chartist';
 					}
 					return '';
 				};
-				metaFunc = (date) => dateFormatYM.format(new Date(date));
+				metaFunc = (date) => fmt.formatDateYM(new Date(date));
 			} else {
 				labels = labels.flatMap((y) =>
 					Object.keys(data.visits[y]).map((m) =>
-						dateFormatYM.format(new Date(Number(y), Number(m) - 1))
+						fmt.formatDateYM(new Date(Number(y), Number(m) - 1))
 					)
 				);
 			}
 		} else {
 			labels = labels.flatMap((y) =>
 				Object.keys(data.visits[y]).map((m) =>
-					dateFormatM.format(new Date(Number(y), Number(m) - 1))
+					fmt.formatDateM(new Date(Number(y), Number(m) - 1))
 				)
 			);
 		}
@@ -439,8 +461,7 @@ import { FlatSeries } from 'chartist';
 						maxValue,
 					],
 					offset: axisYOffset,
-					labelInterpolationFnc: (v: number) =>
-						numberFormat.format(v),
+					labelInterpolationFnc: (v: number) => fmt.formatNumber(v),
 				},
 				plugins: [
 					[
@@ -472,7 +493,7 @@ import { FlatSeries } from 'chartist';
 								(d.value as any)?.y,
 								'statify'
 							),
-							numberFormat.format((d.value as any)?.y)
+							fmt.formatNumber((d.value as any)?.y)
 						),
 						'ct:meta': labelToMetaFunc(labels[d.index]),
 					},
@@ -554,8 +575,7 @@ import { FlatSeries } from 'chartist';
 					low: 0,
 					onlyInteger: true,
 					offset: axisYOffset,
-					labelInterpolationFnc: (v) =>
-						numberFormat.format(Number(v)),
+					labelInterpolationFnc: (v) => fmt.formatNumber(Number(v)),
 				},
 				plugins: [
 					[
@@ -573,7 +593,7 @@ import { FlatSeries } from 'chartist';
 										y,
 										'statify'
 									),
-									numberFormat.format(y)
+									fmt.formatNumber(y)
 								);
 							},
 						},
@@ -597,7 +617,7 @@ import { FlatSeries } from 'chartist';
 			const row = document.createElement('tr');
 			let col = document.createElement('td');
 			col.classList.add('b');
-			col.textContent = numberFormat.format(r.count);
+			col.textContent = fmt.formatNumber(r.count);
 			row.appendChild(col);
 			col = document.createElement('td');
 			col.classList.add('t');
@@ -632,7 +652,7 @@ import { FlatSeries } from 'chartist';
 		const rowToday = document.createElement('tr');
 		let col = document.createElement('td');
 		col.classList.add('b');
-		col.textContent = numberFormat.format(data.today);
+		col.textContent = fmt.formatNumber(data.today);
 		rowToday.appendChild(col);
 		col = document.createElement('td');
 		col.classList.add('t');
@@ -642,14 +662,14 @@ import { FlatSeries } from 'chartist';
 		const rowAll = document.createElement('tr');
 		col = document.createElement('td');
 		col.classList.add('b');
-		col.textContent = numberFormat.format(data.alltime);
+		col.textContent = fmt.formatNumber(data.alltime);
 		rowAll.appendChild(col);
 		col = document.createElement('td');
 		col.classList.add('t');
 		col.textContent = wp.i18n.sprintf(
 			/* translators: %s: Date. */
 			wp.i18n.__('since %s', 'statify'),
-			dateFormatYMD.format(new Date(data.since))
+			fmt.formatDateYMD(new Date(data.since))
 		);
 		rowAll.appendChild(col);
 
@@ -683,7 +703,7 @@ import { FlatSeries } from 'chartist';
 				col.classList.add('right');
 				if (month in data.visits[year]) {
 					col.dataset.raw = String(data.visits[year][month]);
-					col.textContent = numberFormat.format(
+					col.textContent = fmt.formatNumber(
 						data.visits[year][month]
 					);
 				} else {
@@ -697,7 +717,7 @@ import { FlatSeries } from 'chartist';
 			col = document.createElement('td');
 			col.classList.add('statify-table-sum', 'right');
 			col.dataset.raw = String(sum);
-			col.textContent = numberFormat.format(sum);
+			col.textContent = fmt.formatNumber(sum);
 			row.appendChild(col);
 
 			tbody.insertBefore(row, tbody.firstChild);
@@ -730,7 +750,7 @@ import { FlatSeries } from 'chartist';
 			min[m] = Math.min(min[m], count);
 			max[m] = Math.max(max[m], count);
 			cols[d.getDate() - 1][m].dataset.raw = String(count);
-			cols[d.getDate() - 1][m].textContent = numberFormat.format(count);
+			cols[d.getDate() - 1][m].textContent = fmt.formatNumber(count);
 		}
 
 		let out =
@@ -748,11 +768,9 @@ import { FlatSeries } from 'chartist';
 		for (const [m, s] of sum.entries()) {
 			if (vls[m] > 0) {
 				out[m].dataset.raw = String(s);
-				out[m].textContent = numberFormat.format(s);
+				out[m].textContent = fmt.formatNumber(s);
 				avg[m].dataset.raw = String(Math.round(s / vls[m]));
-				avg[m].textContent = numberFormat.format(
-					Math.round(s / vls[m])
-				);
+				avg[m].textContent = fmt.formatNumber(Math.round(s / vls[m]));
 			} else {
 				out[m].dataset.raw = '';
 				out[m].textContent = '-';
@@ -770,7 +788,7 @@ import { FlatSeries } from 'chartist';
 		for (const [m, s] of min.entries()) {
 			if (vls[m] > 0) {
 				out[m].dataset.raw = String(s);
-				out[m].textContent = numberFormat.format(s);
+				out[m].textContent = fmt.formatNumber(s);
 			} else {
 				out[m].dataset.raw = '';
 				out[m].textContent = '-';
@@ -786,7 +804,7 @@ import { FlatSeries } from 'chartist';
 		for (const [m, s] of max.entries()) {
 			if (vls[m] > 0) {
 				out[m].dataset.raw = vls[m];
-				out[m].textContent = numberFormat.format(s);
+				out[m].textContent = fmt.formatNumber(s);
 			} else {
 				out[m].dataset.raw = '';
 				out[m].textContent = '-';
@@ -836,14 +854,14 @@ import { FlatSeries } from 'chartist';
 			col = document.createElement('td');
 			col.classList.add('right');
 			col.dataset.raw = String(d.count);
-			col.textContent = numberFormat.format(d.count);
+			col.textContent = fmt.formatNumber(d.count);
 			row.appendChild(col);
 			col = document.createElement('td');
 			col.classList.add('right');
 			col.dataset.raw = String(
 				Math.round((d.count / total) * 10000) / 100
 			);
-			col.textContent = numberFormatPercent.format(d.count / total);
+			col.textContent = fmt.formatPercent(d.count / total);
 			row.appendChild(col);
 
 			return row;
@@ -852,9 +870,9 @@ import { FlatSeries } from 'chartist';
 		updateTable(tbody!, rows);
 
 		sumRow[sumRow.length - 2].dataset.raw = String(total);
-		sumRow[sumRow.length - 2].textContent = numberFormat.format(total);
+		sumRow[sumRow.length - 2].textContent = fmt.formatNumber(total);
 		sumRow[sumRow.length - 1].dataset.raw = '1';
-		sumRow[sumRow.length - 1].textContent = numberFormatPercent.format(1);
+		sumRow[sumRow.length - 1].textContent = fmt.formatPercent(1);
 
 		addExportButton(table);
 	}
@@ -887,19 +905,19 @@ import { FlatSeries } from 'chartist';
 			row.appendChild(col);
 			col = document.createElement('td');
 			col.classList.add('right');
-			col.textContent = numberFormat.format(d.count);
+			col.textContent = fmt.formatNumber(d.count);
 			row.appendChild(col);
 			col = document.createElement('td');
 			col.classList.add('right');
-			col.textContent = numberFormatPercent.format(d.count / total);
+			col.textContent = fmt.formatPercent(d.count / total);
 			row.appendChild(col);
 			return row;
 		});
 
 		updateTable(tbody, rows);
 
-		sumRow[sumRow.length - 2].textContent = numberFormat.format(total);
-		sumRow[sumRow.length - 1].textContent = numberFormatPercent.format(1);
+		sumRow[sumRow.length - 2].textContent = fmt.formatNumber(total);
+		sumRow[sumRow.length - 1].textContent = fmt.formatPercent(1);
 
 		addExportButton(table);
 	}
