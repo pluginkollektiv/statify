@@ -193,10 +193,7 @@
 	 * @return {Promise<{[key: string]: number}>} Data promise from API.
 	 */
 	function loadDaily(year) {
-		return fetchData(
-			'stats/extended',
-			new URLSearchParams({ scope: 'day', year })
-		);
+		return fetchData('stats/extended', { scope: 'day', year });
 	}
 
 	/**
@@ -237,12 +234,12 @@
 	 * @return {Promise<Array<{count: number, host: string, url: string}>>} Data promise from API.
 	 */
 	function loadPerReferrer() {
-		const param = new URLSearchParams();
+		const param = {};
 		const search = new URLSearchParams(window.location.search);
 		['post', 'start', 'end'].forEach((p) => {
 			const v = search.get(p);
 			if (v) {
-				param.set(p, v);
+				param[p] = v;
 			}
 		});
 
