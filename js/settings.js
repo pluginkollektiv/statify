@@ -11,6 +11,11 @@
 		resetButton.addEventListener('click', (e) => {
 			e.preventDefault();
 
+			const button = e.currentTarget;
+			if (button.disabled) {
+				return;
+			}
+
 			if (
 				// eslint-disable-next-line no-alert
 				!confirm(
@@ -23,9 +28,7 @@
 				return;
 			}
 
-			const button = this;
 			const originalText = button.textContent;
-
 			button.disabled = true;
 			button.textContent = wp.i18n.__('Resetting…', 'statify');
 
@@ -36,12 +39,12 @@
 				.then((data) => {
 					// eslint-disable-next-line no-alert
 					alert(data.message);
-					button.textContent = originalText;
-					button.disabled = false;
 				})
 				.catch((error) => {
 					// eslint-disable-next-line no-alert
 					alert(wp.i18n.__('Error:', 'statify') + error.message);
+				})
+				.finally(() => {
 					button.disabled = false;
 					button.textContent = originalText;
 				});
