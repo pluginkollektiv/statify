@@ -76,6 +76,9 @@ class Statify {
 		// Cron.
 		add_action( 'statify_cleanup', array( 'Statify_Cron', 'cleanup_data' ) );
 
+		// REST API.
+		add_action( 'rest_api_init', array( 'Statify_Api', 'init' ) );
+
 		if ( is_admin() ) {   // Backend.
 			add_action( 'wp_initialize_site', array( 'Statify_Install', 'init_site' ) );
 			add_action( 'wp_uninitialize_site', array( 'Statify_Uninstall', 'init_site' ) );
@@ -96,8 +99,6 @@ class Statify {
 				add_filter( 'amp_analytics_entries', array( 'Statify_Frontend', 'amp_analytics_entries' ) );
 				add_filter( 'amp_post_template_analytics', array( 'Statify_Frontend', 'amp_post_template_analytics' ) );
 			}
-			// Initialize REST API.
-			add_action( 'rest_api_init', array( 'Statify_Api', 'init' ) );
 		}
 	}
 
