@@ -190,8 +190,8 @@ class Test_Settings extends WP_UnitTestCase {
 			Statify::$options = $original_options;
 		}
 
-		self::assertStringContainsString(
-			'>Redakteur</label>',
+		self::assertMatchesRegularExpression(
+			'/>Redakteur\s*<\/label>/',
 			$html,
 			'built-in role display names should be localized via translate_user_role'
 		);
