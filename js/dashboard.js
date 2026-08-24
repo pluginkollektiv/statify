@@ -898,6 +898,33 @@
 	if (charts.dashboard) {
 		// Initial update.
 		updateDashboard(false);
+
+		// Optional auto-refresh while the tab is visible.
+		if (statifyDashboard.autoRefresh) {
+			const refreshIntervalMs = 15 * 60 * 1000;
+			const autoRefresh = statifyAutoRefresh.createAutoRefresh({
+				intervalMs: refreshIntervalMs,
+				refresh: () => updateDashboard(true),
+			});
+
+			if (!document.hidden) {
+				autoRefresh.start();
+			}
+
+			document.addEventListener('visibilitychange', () => {
+				if (document.hidden) {
+					autoRefresh.stop();
+				} else {
+					autoRefresh.start();
+					updateDashboard(true);
+				}
+			});
+
+			window.addEventListener('focus', () => {
+				autoRefresh.start();
+				updateDashboard(true);
+			});
+		}
 	}
 
 	/**

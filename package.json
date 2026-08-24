@@ -19,10 +19,10 @@
     "copy-assets": "vendor-copy",
     "minify": "npm run minify:js && npm run minify:css",
     "minify:css": "esbuild css/dashboard.css css/settings.css --minify --outdir=css --outbase=. --entry-names=[name].min",
-    "minify:js": "esbuild js/dashboard.js js/settings.js js/snippet.js --minify --outdir=js --outbase=js --entry-names=[name].min",
+    "minify:js": "esbuild js/auto-refresh.js js/dashboard.js js/settings.js js/snippet.js --minify --outdir=js --outbase=js --entry-names=[name].min",
     "lint": "npm run lint-css && npm run lint-js",
     "lint-css": "stylelint css/dashboard.css css/settings.css",
-    "lint-js": "eslint js/dashboard.js js/settings.js js/snippet.js",
+    "lint-js": "eslint js/auto-refresh.js js/dashboard.js js/settings.js js/snippet.js",
     "test": "nyc --reporter=text node --test tests/js/*.test.js"
   },
   "vendorCopy": [

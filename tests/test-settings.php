@@ -24,6 +24,7 @@ class Test_Settings extends WP_UnitTestCase {
 			'today'             => 0,
 			'snippet'           => 0,
 			'blacklist'         => 0,
+			'auto_refresh'      => 0,
 			'show_totals'       => 0,
 			'show_widget_roles' => null,
 			'skip'              => array(
@@ -33,12 +34,13 @@ class Test_Settings extends WP_UnitTestCase {
 
 		self::assertSame(
 			array(
-				'days'        => 14,
-				'days_show'   => 14,
-				'limit'       => 3,
-				'today'       => 0,
-				'blacklist'   => 0,
-				'show_totals' => 0,
+				'days'         => 14,
+				'days_show'    => 14,
+				'limit'        => 3,
+				'today'        => 0,
+				'blacklist'    => 0,
+				'auto_refresh' => 0,
+				'show_totals'  => 0,
 			),
 			Statify_Settings::sanitize_options( array() ),
 			'unexpected results for empty input'
@@ -46,21 +48,23 @@ class Test_Settings extends WP_UnitTestCase {
 
 		self::assertSame(
 			array(
-				'days'        => 15,
-				'days_show'   => 13,
-				'limit'       => 4,
-				'today'       => 1,
-				'blacklist'   => 0,
-				'show_totals' => 1,
+				'days'         => 15,
+				'days_show'    => 13,
+				'limit'        => 4,
+				'today'        => 1,
+				'blacklist'    => 0,
+				'auto_refresh' => 1,
+				'show_totals'  => 1,
 			),
 			Statify_Settings::sanitize_options(
 				array(
-					'days'        => '15',
-					'days_show'   => '13',
-					'limit'       => '4',
-					'today'       => '1',
-					'blacklist'   => 5,
-					'show_totals' => '1',
+					'days'         => '15',
+					'days_show'    => '13',
+					'limit'        => '4',
+					'today'        => '1',
+					'blacklist'    => 5,
+					'auto_refresh' => '1',
+					'show_totals'  => '1',
 				)
 			),
 			'string values should be sanitized to numbers or 1/0 for boolean flags'
@@ -68,12 +72,13 @@ class Test_Settings extends WP_UnitTestCase {
 
 		self::assertSame(
 			array(
-				'days'        => 14,
-				'days_show'   => 14,
-				'limit'       => 100,
-				'today'       => 0,
-				'blacklist'   => 0,
-				'show_totals' => 0,
+				'days'         => 14,
+				'days_show'    => 14,
+				'limit'        => 100,
+				'today'        => 0,
+				'blacklist'    => 0,
+				'auto_refresh' => 0,
+				'show_totals'  => 0,
 			),
 			Statify_Settings::sanitize_options( array( 'limit' => 101 ) ),
 			'limit was not capped at 100'
@@ -81,14 +86,15 @@ class Test_Settings extends WP_UnitTestCase {
 
 		self::assertSame(
 			array(
-				'days'        => 14,
-				'days_show'   => 14,
-				'limit'       => 3,
-				'snippet'     => 1,
-				'today'       => 0,
-				'blacklist'   => 0,
-				'show_totals' => 0,
-				'skip'        => array(
+				'days'         => 14,
+				'days_show'    => 14,
+				'limit'        => 3,
+				'snippet'      => 1,
+				'today'        => 0,
+				'blacklist'    => 0,
+				'auto_refresh' => 0,
+				'show_totals'  => 0,
+				'skip'         => array(
 					'logged_in' => 0,
 				),
 			),
@@ -105,12 +111,13 @@ class Test_Settings extends WP_UnitTestCase {
 
 		self::assertSame(
 			array(
-				'days'        => 14,
-				'days_show'   => 14,
-				'limit'       => 3,
-				'today'       => 0,
-				'blacklist'   => 0,
-				'show_totals' => 0,
+				'days'         => 14,
+				'days_show'    => 14,
+				'limit'        => 3,
+				'today'        => 0,
+				'blacklist'    => 0,
+				'auto_refresh' => 0,
+				'show_totals'  => 0,
 			),
 			Statify_Settings::sanitize_options(
 				array(
@@ -128,6 +135,7 @@ class Test_Settings extends WP_UnitTestCase {
 				'limit'             => 3,
 				'today'             => 0,
 				'blacklist'         => 0,
+				'auto_refresh'      => 0,
 				'show_totals'       => 0,
 				'show_widget_roles' => array( 'administrator', 'author' ),
 			),
@@ -137,6 +145,24 @@ class Test_Settings extends WP_UnitTestCase {
 				)
 			),
 			'unknown widget roles should have been removed'
+		);
+
+		self::assertSame(
+			array(
+				'days'         => 14,
+				'days_show'    => 14,
+				'limit'        => 3,
+				'today'        => 0,
+				'blacklist'    => 0,
+				'auto_refresh' => 0,
+				'show_totals'  => 0,
+			),
+			Statify_Settings::sanitize_options(
+				array(
+					'auto_refresh' => '2',
+				)
+			),
+			'bogus auto_refresh value should be coerced to 0'
 		);
 	}
 }

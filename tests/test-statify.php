@@ -52,4 +52,42 @@ class Test_Statify extends WP_UnitTestCase {
 		);
 		self::assertFalse( Statify::user_can_see_stats(), 'Anonymous must not see stats with hook override' );
 	}
+
+	/**
+	 * Test that the dashboard script localize payload exposes the auto-refresh flag.
+	 */
+	public function test_localize_auto_refresh() {
+		// Default: option absent => autoRefresh false.
+		Statify::$options['auto_refresh'] = 0;
+		Statify::add_js();
+		$registered = wp_scripts()->registered['statify_chart_js'] ?? null;
+		self::assertNotNull( $registered, 'statify_chart_js should be registered' );
+		$extra_data = $registered->extra['data'] ?? '';
+		self::assertNotEmpty( $extra_data, 'extra[data] should be set after add_js' );
+		self::assertStringContainsString( 'statifyDashboard', $extra_data, 'localize var should be present' );
+		preg_match( '/var\s+statifyDashboard\s*=\s*(\{.*?\});/', $extra_data, $matches );
+		self::assertArrayHasKey( 1, $matches, 'statifyDashboard object should be in data' );
+		$payload = json_decode( $matches[1], true );
+		self::assertIsArray( $payload, 'localized payload should decode to an array' );
+		self::assertArrayHasKey( 'autoRefresh', $payload, 'autoRefresh key should be present' );
+		// wp_localize_script casts booleans to strings ('1'/''), so we
+		// assert on the JS-side truthy/falsy semantics rather than the
+		// PHP value type.
+		self::assertEmpty( $payload['autoRefresh'], 'autoRefresh should be falsy when option is off' );
+
+		// Reset for second pass.
+		wp_deregister_script( 'statify_chart_js' );
+
+		// Enabled: option set => autoRefresh true.
+		Statify::$options['auto_refresh'] = 1;
+		Statify::add_js();
+		$registered = wp_scripts()->registered['statify_chart_js'] ?? null;
+		self::assertNotNull( $registered, 'statify_chart_js should be registered when enabled' );
+		$extra_data = $registered->extra['data'] ?? '';
+		self::assertNotEmpty( $extra_data, 'extra[data] should be set when enabled' );
+		preg_match( '/var\s+statifyDashboard\s*=\s*(\{.*?\});/', $extra_data, $matches );
+		self::assertArrayHasKey( 1, $matches, 'statifyDashboard object should be in data when enabled' );
+		$payload = json_decode( $matches[1], true );
+		self::assertNotEmpty( $payload['autoRefresh'], 'autoRefresh should be truthy when option is on' );
+	}
 }

@@ -5,7 +5,7 @@
 * Requires at least: 5.1
 * Tested up to:      7.0
 * Requires PHP:      7.4
-* Stable tag:        2.0.2
+* Stable tag:        2.0.3
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -119,6 +119,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
+
+### 2.0.3
+* Add opt-in auto-refresh for the dashboard widget chart and lists
 
 ### 2.0.2
 * Translatable texts in JS-generated content now work as expected
