@@ -305,7 +305,7 @@ class Statify_Settings {
 				esc_html( $name ),
 				checked( in_array( $role, $saved_roles, true ), true, false )
 			);
-			echo esc_html( $role_object['name'] );
+			echo esc_html( translate_user_role( $role_object['name'] ) );
 			?>
 			</label></p>
 			<?php
