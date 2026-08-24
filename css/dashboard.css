@@ -68,11 +68,20 @@
 	color: var(--wp-admin-theme-color-darker-20, #3582c4);
 }
 
+.statify-chart .ct-weekend {
+	fill: var(--wp-admin-theme-color, #3582c4);
+	opacity: 0.14;
+}
+
 
 .statify-table th,
 .statify-table tr.statify-table-sum td,
 .statify-table td.statify-table-sum {
 	font-weight: 700;
+}
+
+.statify-table td.statify-table-weekend {
+	background-color: rgba(0, 0, 0, 0.055);
 }
 
 .statify-table tr.placeholder {

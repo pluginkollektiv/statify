@@ -42,7 +42,8 @@
 		minimumFractionDigits: 2,
 		maximumFractionDigits: 2,
 	});
-	const dateFormatYMD = new Intl.DateTimeFormat(lang, {
+	const dateFormatYMDW = new Intl.DateTimeFormat(lang, {
+		weekday: 'short',
 		year: 'numeric',
 		month: '2-digit',
 		day: '2-digit',
@@ -161,8 +162,12 @@
 				const labels = Object.keys(data.visits);
 				const values = Object.values(data.visits);
 
-				render(charts.dashboard, labels, values, false, (date) =>
-					dateFormatYMD.format(new Date(date))
+				render(
+					charts.dashboard,
+					labels,
+					values,
+					false,
+					formatWeekdayDate
 				);
 
 				// Render top lists.
@@ -254,18 +259,19 @@
 	 *
 	 * @param {HTMLElement}             root Root element.
 	 * @param {{[key: string]: number}} data Data from API.
+	 * @return {Object} The rendered chart.
 	 */
 	function renderDaily(root, data) {
 		const labels = Object.keys(data);
 		const values = Object.values(data);
 		const usedLabels = new Set();
 
-		render(
+		const chart = render(
 			root,
 			labels,
 			values,
 			true,
-			(date) => dateFormatYMD.format(new Date(date)),
+			formatWeekdayDate,
 			(day) => {
 				const date = new Date(day);
 				const mon = date.getMonth();
@@ -276,6 +282,121 @@
 				return dateFormatM.format(date);
 			}
 		);
+
+		highlightWeekendColumns(root, chart, labels);
+
+		return chart;
+	}
+
+	/**
+	 * Parse a date-only string as a local calendar date.
+	 *
+	 * Dates are served as "YYYY-MM-DD" without a timezone. Building a Date
+	 * from the string directly interprets it as UTC, which shifts the day in
+	 * negative-offset regions. Split and rebuild so the local getters match
+	 * the calendar date shown.
+	 *
+	 * @param {string} date Date-only string.
+	 * @return {Date} Local date.
+	 */
+	function parseLocalDate(date) {
+		const [y, m, d] = date.split('-').map(Number);
+		return new Date(y, m - 1, d);
+	}
+
+	/**
+	 * Whether the given date falls on a weekend.
+	 *
+	 * @param {string|Date} date Date-only string or already parsed local date.
+	 * @return {boolean} Whether the date is a Saturday or Sunday.
+	 */
+	function isWeekend(date) {
+		const day = date instanceof Date ? date : parseLocalDate(date);
+		const dow = day.getDay();
+		return 0 === dow || 6 === dow;
+	}
+
+	/**
+	 * Format a date-only string with a weekday prefix.
+	 *
+	 * @param {string} date Date-only string.
+	 * @return {string} Localized weekday and date.
+	 */
+	function formatWeekdayDate(date) {
+		return dateFormatYMDW.format(parseLocalDate(date));
+	}
+
+	/**
+	 * Highlight the weekend columns of a daily chart.
+	 *
+	 * The daily chart is a line chart without native per-column styling, so
+	 * translucent bands are drawn behind the weekend datapoints. Fails silently
+	 * if the Chartist internals change, keeping the weekday labels intact.
+	 *
+	 * @param {HTMLElement} root   Root element of the chart.
+	 * @param {Object}      chart  Chart to enhance.
+	 * @param {string[]}    labels ISO date labels in chart order.
+	 */
+	function highlightWeekendColumns(root, chart, labels) {
+		if (!chart) {
+			return;
+		}
+
+		try {
+			// Collect the x position of every weekend datapoint.
+			const xs = [];
+			chart.on('draw', (d) => {
+				if ('point' !== d.type) {
+					return;
+				}
+				if (isWeekend(labels[d.index])) {
+					xs.push(d.x);
+				}
+			});
+
+			// Insert a translucent band behind each weekend column once the SVG is laid out.
+			chart.on('created', (t) => {
+				const rect = t.chartRect;
+				if (!rect || 0 === xs.length) {
+					return;
+				}
+
+				const svg =
+					root.querySelector('.ct-chart-line') ||
+					root.querySelector('svg');
+				if (!svg) {
+					return;
+				}
+
+				// Insert before the first series so the bands layer behind the datapoints.
+				const series = svg.querySelector('.ct-series');
+
+				const band =
+					xs.length > 1 && xs[1] !== xs[0]
+						? Math.round((xs[1] - xs[0]) * 0.5)
+						: Math.round(rect.width * 0.012);
+
+				xs.forEach((x) => {
+					const rectEl = new Chartist.Svg(
+						'rect',
+						{
+							x: Math.round(x - band / 2),
+							y: rect.y1,
+							width: band,
+							height: Math.max(rect.height, 1),
+						},
+						'ct-weekend'
+					)._node;
+					if (series) {
+						svg.insertBefore(rectEl, series);
+					} else {
+						svg.appendChild(rectEl);
+					}
+				});
+			});
+		} catch {
+			// Weekend highlight is decorative, ignore on failure.
+		}
 	}
 
 	/**
@@ -351,6 +472,7 @@
 	/**
 	 * Render statistics chart.
 	 *
+	 * @return {Object|undefined} The rendered chart, or undefined when no data.
 	 * @param {HTMLElement}             root                  Root element.
 	 * @param {string[]}                labels                Labels.
 	 * @param {number[]}                values                Values.
@@ -463,6 +585,8 @@
 				d.element.replace(circle);
 			}
 		});
+
+		return chart;
 	}
 
 	/**
@@ -617,7 +741,7 @@
 		col.textContent = wp.i18n.sprintf(
 			/* translators: %s: Date. */
 			wp.i18n.__('since %s', 'statify'),
-			dateFormatYMD.format(new Date(data.since))
+			formatWeekdayDate(data.since)
 		);
 		rowAll.appendChild(col);
 
@@ -681,20 +805,27 @@
 		const cols = rows.map((row) => Array.from(row.querySelectorAll('td')));
 		let out = cols.slice(0, 31);
 
+		// Clear weekend highlights from cells and collect the month columns.
+		const cells = cols.flat();
+		cells.forEach((cell) => cell.classList.remove('statify-table-weekend'));
 		const sum = new Array(12).fill(0);
 		const vls = new Array(12).fill(0);
 		const min = new Array(12).fill(Number.MAX_SAFE_INTEGER);
 		const max = new Array(12).fill(0);
 
 		for (const [day, count] of Object.entries(data)) {
-			const d = new Date(day);
+			const d = parseLocalDate(day);
 			const m = d.getMonth();
 			sum[m] += count;
 			++vls[m];
 			min[m] = Math.min(min[m], count);
 			max[m] = Math.max(max[m], count);
-			out[d.getDate() - 1][m].dataset.raw = String(count);
-			out[d.getDate() - 1][m].textContent = numberFormat.format(count);
+			const cell = out[d.getDate() - 1][m];
+			cell.dataset.raw = String(count);
+			cell.textContent = numberFormat.format(count);
+			if (isWeekend(d)) {
+				cell.classList.add('statify-table-weekend');
+			}
 		}
 
 		out =
