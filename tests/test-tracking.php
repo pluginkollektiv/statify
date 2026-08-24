@@ -185,6 +185,31 @@ class Test_Tracking extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test tracking 404 pages when the new opt-in setting is disabled.
+	 */
+	public function test_track_404_opt_in() {
+		global $_SERVER;
+		global $wp_query;
+
+		// Opt-in: do not skip 404 calls.
+		$this->init_statify_tracking( Statify_Frontend::TRACKING_METHOD_DEFAULT, Statify::SKIP_USERS_ALL, false, false );
+
+		$_SERVER['REQUEST_URI']     = '/this-page-does-not-exist/';
+		$_SERVER['HTTP_REFERER']    = 'https://statify.pluginkollektiv.org/';
+		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36';
+
+		$wp_query->is_404 = true;
+		Statify_Frontend::track_visit();
+		$wp_query->is_404 = false;
+
+		$stats = $this->get_stats();
+		$this->assertNotEmpty( $stats['target'], '404 should be tracked when skip_404 is disabled.' );
+		$this->assertCount( 1, $stats['target'], 'Exactly one target expected for the tracked 404 request.' );
+		$this->assertSame( '/this-page-does-not-exist', $stats['target'][0]['url'] );
+		$this->assertSame( 1, (int) $stats['target'][0]['count'] );
+	}
+
+	/**
 	 * Test tracking exclusions for bots.
 	 */
 	public function test_bot_tracking() {
