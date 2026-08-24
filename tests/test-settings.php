@@ -139,4 +139,61 @@ class Test_Settings extends WP_UnitTestCase {
 			'unknown widget roles should have been removed'
 		);
 	}
+
+	/**
+	 * Test localization of built-in user role names in the roles list.
+	 */
+	public function test_show_roles_list_translates_names() {
+		$original_options = Statify::$options;
+
+		Statify::$options = array(
+			'days'              => 14,
+			'days_show'         => 14,
+			'limit'             => 3,
+			'today'             => 0,
+			'snippet'           => 0,
+			'blacklist'         => 0,
+			'show_totals'       => 0,
+			'show_widget_roles' => array( 'editor' ),
+			'skip'              => array(
+				'logged_in' => Statify::SKIP_USERS_ALL,
+			),
+		);
+
+		$roles_callback = static function () {
+			return array(
+				'editor' => array(
+					'name'         => 'Editor',
+					'capabilities' => array(),
+				),
+			);
+		};
+		add_filter( 'statify__available_roles', $roles_callback );
+
+		// Force a translated name for the built-in "Editor" role.
+		$translate_callback = static function ( $translation, $text, $context, $domain ) {
+			if ( 'Editor' === $text && 'User role' === $context && 'default' === $domain ) {
+				return 'Redakteur';
+			}
+
+			return $translation;
+		};
+		add_filter( 'gettext_with_context', $translate_callback, 10, 4 );
+
+		try {
+			ob_start();
+			Statify_Settings::options_show_widget_roles();
+			$html = ob_get_clean();
+		} finally {
+			remove_filter( 'statify__available_roles', $roles_callback );
+			remove_filter( 'gettext_with_context', $translate_callback, 10, 4 );
+			Statify::$options = $original_options;
+		}
+
+		self::assertMatchesRegularExpression(
+			'/>Redakteur\s*<\/label>/',
+			$html,
+			'built-in role display names should be localized via translate_user_role'
+		);
+	}
 }
