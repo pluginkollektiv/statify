@@ -117,8 +117,8 @@ if ( ! empty( $date_start ) && ! empty( $date_end ) && $date_start !== $date_end
 			<thead>
 			<tr>
 				<th scope="col"><?php esc_html_e( 'Referring Domain', 'statify' ); ?></th>
-				<th scope="col"><?php esc_html_e( 'Views', 'statify' ); ?></th>
-				<th scope="col"><?php esc_html_e( 'Proportion', 'statify' ); ?></th>
+				<th scope="col" class="right"><?php esc_html_e( 'Views', 'statify' ); ?></th>
+				<th scope="col" class="right"><?php esc_html_e( 'Proportion', 'statify' ); ?></th>
 			</tr>
 			</thead>
 			<tbody>
