@@ -733,8 +733,13 @@
 				)
 			];
 		for (const [m, s] of min.entries()) {
-			out[m].dataset.raw = String(s);
-			out[m].textContent = vls[m] > 0 ? numberFormat.format(s) : '-';
+			if (vls[m] > 0) {
+				out[m].dataset.raw = String(s);
+				out[m].textContent = numberFormat.format(s);
+			} else {
+				out[m].dataset.raw = '';
+				out[m].textContent = '-';
+			}
 		}
 
 		out =
@@ -744,8 +749,13 @@
 				)
 			];
 		for (const [m, s] of max.entries()) {
-			out[m].dataset.raw = vls[m];
-			out[m].textContent = vls[m] > 0 ? numberFormat.format(s) : '-';
+			if (vls[m] > 0) {
+				out[m].dataset.raw = vls[m];
+				out[m].textContent = numberFormat.format(s);
+			} else {
+				out[m].dataset.raw = '';
+				out[m].textContent = '-';
+			}
 		}
 
 		for (const row of rows) {
