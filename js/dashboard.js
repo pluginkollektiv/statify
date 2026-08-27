@@ -908,6 +908,7 @@
 	 */
 	function addExportButton(table) {
 		const exportBtn = document.createElement('a');
+		let csvUrl = null;
 		exportBtn.classList.add('button');
 		exportBtn.href = '#';
 
@@ -927,19 +928,27 @@
 		// Generate CSV on demand.
 		exportBtn.textContent = wp.i18n.__('Export (CSV)', 'statify');
 		exportBtn.addEventListener('click', () => {
-			exportBtn.href =
-				'data:text/csv;charset=utf-8,' +
-				Array.from(table.rows)
-					.map((row) =>
-						Array.from(row.cells)
-							.map(
-								(col) =>
-									col.dataset.raw ??
-									`"${col.innerText.replaceAll('"', '""')}"`
-							)
-							.join(',')
-					)
-					.join('\r\n');
+			if (csvUrl) {
+				URL.revokeObjectURL(csvUrl);
+				csvUrl = null;
+			}
+
+			const csv = Array.from(table.rows)
+				.map((row) =>
+					Array.from(row.cells)
+						.map(
+							(col) =>
+								col.dataset.raw ??
+								`"${col.innerText.replaceAll('"', '""')}"`
+						)
+						.join(',')
+				)
+				.join('\r\n');
+
+			csvUrl = URL.createObjectURL(
+				new Blob([csv], { type: 'text/csv;charset=utf-8' })
+			);
+			exportBtn.href = csvUrl;
 		});
 		table.after(exportBtn);
 	}
