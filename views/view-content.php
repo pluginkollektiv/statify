@@ -147,8 +147,8 @@ if ( ! empty( $date_start ) && ! empty( $date_end ) && $date_start !== $date_end
 				<?php if ( 'popular' === $selected_type ) : ?>
 				<th scope="col"><?php esc_html_e( 'Post Type', 'statify' ); ?></th>
 				<?php endif; ?>
-				<th scope="col"><?php esc_html_e( 'Views', 'statify' ); ?></th>
-				<th scope="col"><?php esc_html_e( 'Proportion', 'statify' ); ?></th>
+				<th scope="col" class="right"><?php esc_html_e( 'Views', 'statify' ); ?></th>
+				<th scope="col" class="right"><?php esc_html_e( 'Proportion', 'statify' ); ?></th>
 			</tr>
 			</thead>
 			<tbody>

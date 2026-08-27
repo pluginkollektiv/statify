@@ -127,7 +127,7 @@ if ( isset( $_GET['post'] ) ) {
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Year', 'statify' ); ?></th>
 					<?php for ( $mon = 1; $mon <= 12; $mon++ ) : ?>
-					<th scope="col"><?php echo esc_html( date_i18n( 'M', strtotime( '1970-' . $mon . '-01' ) ) ); ?></th>
+					<th scope="col" class="right"><?php echo esc_html( date_i18n( 'M', strtotime( '1970-' . $mon . '-01' ) ) ); ?></th>
 					<?php endfor; ?>
 					<th scope="col" class="right sum"><?php esc_html_e( 'Sum', 'statify' ); ?></th>
 				</tr>
@@ -179,7 +179,7 @@ if ( isset( $_GET['post'] ) ) {
 			<tr>
 				<th><?php esc_html_e( 'Day', 'statify' ); ?></th>
 				<?php for ( $mon = 1; $mon <= 12; $mon++ ) : ?>
-					<th scope="col"><?php echo esc_html( date_i18n( 'M', strtotime( '0000-' . $mon . '-01' ) ) ); ?></th>
+					<th scope="col" class="right"><?php echo esc_html( date_i18n( 'M', strtotime( '0000-' . $mon . '-01' ) ) ); ?></th>
 				<?php endfor; ?>
 			</tr>
 			</thead>
@@ -187,79 +187,79 @@ if ( isset( $_GET['post'] ) ) {
 			<?php for ( $d = 1; $d <= 31; $d++ ) : ?>
 			<tr class="placeholder">
 				<th scope="col"><?php echo esc_html( $d ); ?></th>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
 			</tr>
 			<?php endfor; ?>
 			<tr class="placeholder statify-table-sum">
 				<th scope="col"><?php esc_html_e( 'Sum', 'statify' ); ?></th>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
 			</tr>
 			<tr class="placeholder statify-table-avg">
 				<th scope="col"><?php esc_html_e( 'Average', 'statify' ); ?></th>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
 			</tr>
 			<tr class="placeholder statify-table-min">
 				<th scope="col"><?php esc_html_e( 'Minimum', 'statify' ); ?></th>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
 			</tr>
 			<tr class="placeholder statify-table-max">
 				<th scope="col"><?php esc_html_e( 'Maximum', 'statify' ); ?></th>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
-				<td><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
+				<td class="right"><span>&nbsp;</span></td>
 			</tr>
 			</tbody>
 		</table>

@@ -645,6 +645,7 @@
 
 			for (let month = 1; month <= 12; month++) {
 				col = document.createElement('TD');
+				col.classList.add('right');
 				if (month in data.visits[year]) {
 					col.dataset.raw = String(data.visits[year][month]);
 					col.textContent = numberFormat.format(
@@ -659,7 +660,7 @@
 			}
 
 			col = document.createElement('TD');
-			col.classList.add('statify-table-sum');
+			col.classList.add('statify-table-sum', 'right');
 			col.dataset.raw = String(sum);
 			col.textContent = numberFormat.format(sum);
 			row.appendChild(col);
