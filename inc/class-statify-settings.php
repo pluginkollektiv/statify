@@ -415,7 +415,7 @@ class Statify_Settings {
 	 */
 	public static function action_update_options( array $old_value, array $value ): void {
 		// Delete transient.
-		delete_transient( 'statify_data' );
+		Statify_Api::delete_data_transients();
 
 		// Clear Cachify cache, if JS settings have changed.
 		if ( $old_value['snippet'] !== $value['snippet'] && has_action( 'cachify_flush_cache' ) ) {

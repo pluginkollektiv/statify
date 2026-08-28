@@ -22,14 +22,15 @@ class Statify_Api extends Statify {
 	 *
 	 * @var    string
 	 */
-	const REST_NAMESPACE             = 'statify/v1';
-	const REST_ROUTE_TRACK           = 'track';
-	const REST_ROUTE_STATS           = 'stats';
-	const REST_ROUTE_RESET           = 'reset';
-	const REST_ROUTE_STATS_EXTENDED  = 'stats/extended';
-	const REST_ROUTE_STATS_POSTS     = 'stats/posts';
-	const REST_ROUTE_STATS_REFERRERS = 'stats/referrers';
-	const REST_ROUTE_POSTS           = 'posts';
+	const REST_NAMESPACE              = 'statify/v1';
+	const REST_ROUTE_TRACK            = 'track';
+	const REST_ROUTE_STATS            = 'stats';
+	const REST_ROUTE_RESET            = 'reset';
+	const REST_ROUTE_STATS_EXTENDED   = 'stats/extended';
+	const REST_ROUTE_STATS_POSTS      = 'stats/posts';
+	const REST_ROUTE_STATS_REFERRERS  = 'stats/referrers';
+	const REST_ROUTE_STATS_TAXONOMIES = 'stats/taxonomies';
+	const REST_ROUTE_POSTS            = 'posts';
 
 	/**
 	 * Initialize REST API routes.
@@ -88,6 +89,16 @@ class Statify_Api extends Statify {
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( __CLASS__, 'get_stats_posts' ),
+				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE_STATS_TAXONOMIES,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( __CLASS__, 'get_stats_taxonomies' ),
 				'permission_callback' => array( __CLASS__, 'user_can_see_stats' ),
 			)
 		);
@@ -229,7 +240,7 @@ class Statify_Api extends Statify {
 			);
 		}
 
-		delete_transient( 'statify_data' );
+		self::delete_data_transients();
 
 		return new WP_REST_Response(
 			array(
@@ -426,6 +437,34 @@ class Statify_Api extends Statify {
 	}
 
 	/**
+	 * Get stats per taxonomy terms.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return WP_REST_Response The response.
+	 *
+	 * @since 2.0.3
+	 */
+	public static function get_stats_taxonomies( WP_REST_Request $request ): WP_REST_Response {
+		$taxonomy   = $request->get_param( 'taxonomy' ) ?? 'category';
+		$taxonomies = Statify_Evaluation::get_taxonomies();
+		if ( ! isset( $taxonomies[ $taxonomy ] ) ) {
+			return new WP_REST_Response( array( 'error' => 'invalid taxonomy' ), 400 );
+		}
+		$start = self::get_date( $request, 'start' );
+		$end   = self::get_date( $request, 'end' );
+		$cache = empty( $start ) && empty( $end );
+		$data  = $cache ? self::from_cache( 'taxonomies', $taxonomy ) : false;
+		if ( ! $data ) {
+			$data = Statify_Evaluation::get_views_for_taxonomies( $taxonomy, $start, $end );
+			if ( $cache ) {
+				self::update_cache( 'taxonomies', $taxonomy, $data );
+			}
+		}
+		return new WP_REST_Response( $data );
+	}
+
+	/**
 	 * Get stats per referrers.
 	 *
 	 * @param WP_REST_Request $request The request.
@@ -457,6 +496,15 @@ class Statify_Api extends Statify {
 		}
 
 		return new WP_REST_Response( $data );
+	}
+
+	/**
+	 * Delete Statify data transients.
+	 */
+	public static function delete_data_transients(): void {
+		delete_transient( 'statify_data' );
+		delete_transient( 'statify_data_taxonomies_category' );
+		delete_transient( 'statify_data_taxonomies_post_tag' );
 	}
 
 	/**

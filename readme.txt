@@ -122,6 +122,7 @@ You can find the full changelog in [our GitHub repository](https://github.com/pl
 
 ### 2.0.3
 * Add opt-in auto-refresh for the dashboard widget chart and lists
+* Add a Taxonomies evaluation tab showing views per category and tag (#298)
 
 ### 2.0.2
 * Translatable texts in JS-generated content now work as expected

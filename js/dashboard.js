@@ -26,6 +26,7 @@
 		daily: document.getElementById('statify-table-daily'),
 		content: document.getElementById('statify-table-posts'),
 		referrers: document.getElementById('statify-table-referrer'),
+		taxonomies: document.getElementById('statify-table-taxonomies'),
 	};
 	const controls = {
 		// Extended Evaluation.
@@ -107,6 +108,10 @@
 					wp.i18n.__('Error loading data.', 'statify')
 				);
 			});
+	} else if (tables.taxonomies) {
+		loadPerTaxonomies().then((data) =>
+			renderTaxonomiesTable(tables.taxonomies, data)
+		);
 	} else if (tables.content) {
 		loadPerPost().then((data) => {
 			renderContentTable(tables.content, data);
@@ -232,10 +237,47 @@
 	}
 
 	/**
-	 * Load statistics per referrer.
+	 * Load statistics per taxonomy term.
 	 *
-	 * @return {Promise<Array<{count: number, host: string, url: string}>>} Data promise from API.
+	 * @return {Promise<Array<{count: number, id: number, taxonomy: string, slug: string, name: string}>>} Data promise from API.
 	 */
+	function loadPerTaxonomies() {
+		const search = new URLSearchParams(window.location.search);
+		const param = new URLSearchParams();
+		['taxonomy', 'start', 'end'].forEach((p) => {
+			const value = search.get(p);
+			if (value) {
+				param.set(p, value);
+			}
+		});
+		return fetchData('stats/taxonomies', param);
+	}
+
+	function renderTaxonomiesTable(table, data) {
+		const total = data.reduce((sum, item) => sum + item.count, 0);
+		const rows = data.map((item) => {
+			const row = document.createElement('TR');
+			[
+				item.name,
+				item.slug,
+				numberFormat.format(item.count),
+				numberFormatPercent.format(total ? item.count / total : 0),
+			].forEach((value) => {
+				const col = document.createElement('TD');
+				col.textContent = value;
+				row.appendChild(col);
+			});
+			return row;
+		});
+		updateTable(table.querySelector('tbody'), rows);
+		const sumRow = table.querySelectorAll('tfoot > tr > td');
+		sumRow[sumRow.length - 2].dataset.raw = String(total);
+		sumRow[sumRow.length - 2].textContent = numberFormat.format(total);
+		sumRow[sumRow.length - 1].dataset.raw = '1';
+		sumRow[sumRow.length - 1].textContent = numberFormatPercent.format(1);
+		addExportButton(table);
+	}
+
 	function loadPerReferrer() {
 		const param = new URLSearchParams();
 		const search = new URLSearchParams(window.location.search);
