@@ -69,6 +69,18 @@ If you've problems or think you’ve found a bug (e.g. you’re experiencing une
 
 This behavior can be modified with the `statify__skip_tracking` hook.
 
+### Why are some sources missing in the dashboard widget? ###
+*Statify* determines the source of a visit from the [Referer](https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Referer) request header (or, with JavaScript tracking enabled, from `document.referrer`). The browser only sends this information when the originating site allows it via the [`Referrer-Policy`](https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Referrer-Policy) header, so the originating site controls whether Statify receives a source at all.
+
+A few common reasons why a Referer is missing:
+
+* the originating site sends `Referrer-Policy: no-referrer` or `same-origin` (the latter is the default on many Fediverse instances, including Mastodon)
+* the link uses `rel="noreferrer"` or `rel="noopener noreferrer"`
+* the link goes from an HTTPS page to an HTTP page, which most browsers strip
+* the visitor uses a browser extension that suppresses Referer headers
+
+When the browser does not send a Referer, *Statify* has no data to record. There is no workaround on the receiving end, because the privacy decision is made by the browser on the originating site. If you are linking from your own site and want the link to be tracked, use a plain `<a href="…">` link without `rel="noreferrer"`.
+
 ### Can further visitor data be recorded? ###
 Some plugin users want to capture additional visitor data, e.g. name of the device and resolution.
 *Statify* counts exclusively page views and no visitors, the desired data acquisition is not a question.
