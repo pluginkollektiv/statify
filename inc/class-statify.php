@@ -83,6 +83,7 @@ class Statify {
 			add_action( 'wp_initialize_site', array( 'Statify_Install', 'init_site' ) );
 			add_action( 'wp_uninitialize_site', array( 'Statify_Uninstall', 'init_site' ) );
 			add_action( 'wp_dashboard_setup', array( 'Statify_Dashboard', 'init' ) );
+			add_action( 'admin_enqueue_scripts', array( 'Statify', 'maybe_init_api_fetch_polyfill' ), 0 );
 			add_filter( 'plugin_row_meta', array( 'Statify_Backend', 'add_meta_link' ), 10, 2 );
 			add_filter( 'plugin_action_links_' . STATIFY_BASE, array( 'Statify_Backend', 'add_action_link' ) );
 			add_action( 'admin_init', array( 'Statify_Settings', 'register_settings' ) );
@@ -275,6 +276,45 @@ class Statify {
 			)
 		);
 		wp_set_script_translations( 'statify_chart_js', 'statify' );
+	}
+
+	/**
+	 * Replace the wp-api-fetch handle with a small plugin polyfill on ClassicPress.
+	 *
+	 * ClassicPress does not ship a working wp.apiFetch, so the dashboard widget and
+	 * the settings reset option fail. Registering the polyfill under the same handle
+	 * keeps every existing script dependency resolving without any further changes.
+	 *
+	 * @return void
+	 *
+	 * @since 2.0.3
+	 */
+	public static function maybe_init_api_fetch_polyfill(): void {
+		// Only ClassicPress needs the polyfill; WordPress uses the core script.
+		if ( ! function_exists( 'classicpress_version' ) ) {
+			return;
+		}
+
+		// Replace the broken core handle with the plugin polyfill.
+		wp_dequeue_script( 'wp-api-fetch' );
+		wp_deregister_script( 'wp-api-fetch' );
+
+		wp_register_script(
+			'wp-api-fetch',
+			plugins_url( 'js/api-fetch-polyfill.min.js', STATIFY_FILE ),
+			array(),
+			self::get_version(),
+			false // Load in head so it runs before the scripts that depend on it.
+		);
+		wp_localize_script(
+			'wp-api-fetch',
+			'statifyApiFetchConfig',
+			array(
+				'url'   => esc_url_raw( rest_url() ),
+				'nonce' => (string) wp_create_nonce( 'wp_rest' ),
+			)
+		);
+		wp_enqueue_script( 'wp-api-fetch' );
 	}
 
 	/**
