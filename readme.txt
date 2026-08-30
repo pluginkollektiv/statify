@@ -123,7 +123,6 @@ has to be added to the theme's `functions.php`. The condition has modified such 
 
 ### How to extend this plugin? ###
 
-* [Statify - Extended Evaluation](https://wordpress.org/plugins/extended-evaluation-for-statify/) for a more detailed evaluation and export function
 * [Statify Widget](https://wordpress.org/plugins/statify-widget/) to display most popular content
 * [Statify Blacklist](https://wordpress.org/plugins/statify-blacklist/) to define a customized blacklist for referrer spam
 
