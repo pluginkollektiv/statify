@@ -120,6 +120,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
 
+### Unreleased
+* Show the weekday in date labels and highlight weekend days in the dashboard (#284)
+
 ### 2.0.2
 * Translatable texts in JS-generated content now work as expected
 * Special characters in post titles are now displayed correctly
