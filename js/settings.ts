@@ -1,7 +1,5 @@
-(function () {
-	'use strict';
-
-	function initResetButton() {
+{
+	function initResetButton(): void {
 		const resetButton = document.getElementById('statify-reset-data');
 
 		if (!resetButton) {
@@ -10,6 +8,11 @@
 
 		resetButton.addEventListener('click', (e) => {
 			e.preventDefault();
+
+			const button = e.currentTarget as HTMLButtonElement;
+			if (button.disabled) {
+				return;
+			}
 
 			if (
 				// eslint-disable-next-line no-alert
@@ -23,25 +26,23 @@
 				return;
 			}
 
-			const button = this;
 			const originalText = button.textContent;
-
 			button.disabled = true;
 			button.textContent = wp.i18n.__('Resetting…', 'statify');
 
-			wp.apiFetch({
+			wp.apiFetch<ResetResponse>({
 				path: '/statify/v1/reset',
 				method: 'POST',
 			})
 				.then((data) => {
 					// eslint-disable-next-line no-alert
 					alert(data.message);
-					button.textContent = originalText;
-					button.disabled = false;
 				})
 				.catch((error) => {
 					// eslint-disable-next-line no-alert
 					alert(wp.i18n.__('Error:', 'statify') + error.message);
+				})
+				.finally(() => {
 					button.disabled = false;
 					button.textContent = originalText;
 				});
@@ -49,4 +50,4 @@
 	}
 
 	document.addEventListener('DOMContentLoaded', initResetButton);
-})();
+}

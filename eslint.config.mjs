@@ -4,8 +4,11 @@ import globals from 'globals';
 export default [
 	...wordpress.configs.recommended.map((config) => ({
 		...config,
-		files: ['js/**.js', 'tests/js/*.test.js'],
-		ignores: ['js/snippet.js'],
+		files: ['js/*.ts', 'js/**/*.ts', 'tests/js/*.test.ts'],
+	})),
+	...wordpress.configs.recommended.map((config) => ({
+		...config,
+		files: ['tests/js/*.test.js'],
 	})),
 	...wordpress.configs.es5.map((config) => ({
 		...config,

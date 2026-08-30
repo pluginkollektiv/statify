@@ -29,3 +29,6 @@
 /phpunit.coverage.xml
 /phpunit.report.xml
 /README.md
+/js/dashboard
+/js/**.ts
+/tsconfig.json
