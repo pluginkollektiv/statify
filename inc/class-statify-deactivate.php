@@ -27,7 +27,7 @@ class Statify_Deactivate {
 	public static function init(): void {
 
 		// Delete transients.
-		delete_transient( 'statify_data' );
+		Statify_Api::delete_data_transients();
 
 		// Delete cron event.
 		wp_clear_scheduled_hook( 'statify_cleanup' );

@@ -68,7 +68,7 @@ class Statify_Install {
 	private static function apply(): void {
 
 		// Cleanup any leftover transients.
-		delete_transient( 'statify_data' );
+		Statify_Api::delete_data_transients();
 
 		// Set up the cron event.
 		if ( ! wp_next_scheduled( 'statify_cleanup' ) ) {

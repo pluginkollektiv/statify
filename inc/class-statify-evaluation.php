@@ -65,9 +65,10 @@ class Statify_Evaluation extends Statify {
 	 */
 	public static function show_navigation( string $current ): void {
 		$pages = array(
-			'dashboard' => __( 'Overview', 'statify' ),
-			'content'   => __( 'Content', 'statify' ),
-			'referrers' => __( 'Referrers', 'statify' ),
+			'dashboard'  => __( 'Overview', 'statify' ),
+			'content'    => __( 'Content', 'statify' ),
+			'referrers'  => __( 'Referrers', 'statify' ),
+			'taxonomies' => __( 'Taxonomies', 'statify' ),
 		);
 		// phpcs:disable Universal.WhiteSpace.PrecisionAlignment.Found
 		?>
@@ -118,7 +119,7 @@ class Statify_Evaluation extends Statify {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET['view'] ) ) {
 			$view = sanitize_key( wp_unslash( $_GET['view'] ) );
-			if ( ! in_array( $view, array( 'dashboard', 'content', 'referrers' ), true ) ) {
+			if ( ! in_array( $view, array( 'dashboard', 'content', 'referrers', 'taxonomies' ), true ) ) {
 				$view = 'dashboard';
 			}
 		}
@@ -449,6 +450,91 @@ class Statify_Evaluation extends Statify {
 		);
 
 		return array_merge( array( 'post', 'page' ), get_post_types( $types_args ) );
+	}
+
+	/**
+	 * Get views grouped by taxonomy term.
+	 *
+	 * @param string $taxonomy Taxonomy slug.
+	 * @param string $start    Start date.
+	 * @param string $end      End date.
+	 *
+	 * @return array Term view counts.
+	 *
+	 * @since 2.0.3
+	 */
+	public static function get_views_for_taxonomies( string $taxonomy = 'category', string $start = '', string $end = '' ): array {
+		global $wpdb;
+
+		$query = 'SELECT COUNT(`target`) AS `count`, `target` AS `url`' . " FROM `$wpdb->statify` WHERE `target` IS NOT NULL";
+		$args  = array();
+		if ( ! empty( $start ) && ! empty( $end ) ) {
+			$query .= ' AND `created` BETWEEN %s AND %s';
+			$args   = array( $start, $end );
+		}
+		$query .= ' GROUP BY `target` ORDER BY `count` DESC';
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Query contains no user input.
+			$results = empty( $args ) ? $wpdb->get_results( $query, ARRAY_A ) : $wpdb->get_results( $wpdb->prepare( $query, $args ), ARRAY_A );
+		$terms       = array();
+			$urls    = array();
+
+		foreach ( $results as $result ) {
+			$url          = $result['url'];
+			$count        = (int) $result['count'];
+			$post_id      = isset( $urls[ $url ] ) ? $urls[ $url ] : url_to_postid( $url );
+			$urls[ $url ] = $post_id;
+
+			if ( 0 === $post_id || ! get_post( $post_id ) ) {
+				continue;
+			}
+
+			$post_terms = wp_get_post_terms( $post_id, $taxonomy );
+			if ( is_wp_error( $post_terms ) ) {
+				continue;
+			}
+			foreach ( $post_terms as $term ) {
+				$key = (int) $term->term_taxonomy_id;
+				if ( ! isset( $terms[ $key ] ) ) {
+					$terms[ $key ] = array(
+						'count'    => 0,
+						'id'       => (int) $term->term_id,
+						'taxonomy' => $taxonomy,
+						'slug'     => $term->slug,
+						'name'     => $term->name,
+					);
+				}
+				$terms[ $key ]['count'] += $count;
+			}
+		}
+
+		$terms = array_values( $terms );
+		usort(
+			$terms,
+			static function ( $a, $b ) {
+				if ( $b['count'] !== $a['count'] ) {
+					return $b['count'] <=> $a['count'];
+				}
+				return strcasecmp( $a['name'], $b['name'] );
+			}
+		);
+
+		return $terms;
+	}
+
+	/**
+	 * Get public taxonomies supported by Statify evaluation.
+	 *
+	 * @return array Taxonomy slugs and labels.
+	 */
+	public static function get_taxonomies(): array {
+		$taxonomies = array();
+		foreach ( array( 'category', 'post_tag' ) as $taxonomy ) {
+			$object = get_taxonomy( $taxonomy );
+			if ( $object && $object->public ) {
+				$taxonomies[ $taxonomy ] = $object->labels->name;
+			}
+		}
+		return $taxonomies;
 	}
 
 	/**

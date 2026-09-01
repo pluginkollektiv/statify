@@ -10,3 +10,5 @@ lib
 phpunit.*.xml
 vendor/
 node_modules/
+
+.commandcode/

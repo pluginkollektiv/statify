@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.3
+
+### Features
+
+* Add opt-in auto-refresh for the dashboard widget chart and lists. Once enabled under Settings > Statify, the chart and top lists update every 15 minutes while the dashboard tab is visible, and immediately on focus or returning to the tab (#267)
+* Add a Taxonomies evaluation tab showing views per category and tag (#298)
+
+
 ## 2.0.2
 
 ### Fixes

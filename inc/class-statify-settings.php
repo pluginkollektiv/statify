@@ -97,6 +97,14 @@ class Statify_Settings {
 			'statify',
 			'statify-dashboard'
 		);
+		add_settings_field(
+			'statify-auto-refresh',
+			__( 'Auto-refresh dashboard widget', 'statify' ),
+			array( __CLASS__, 'options_auto_refresh' ),
+			'statify',
+			'statify-dashboard',
+			array( 'label_for' => 'statify-auto-refresh' )
+		);
 
 		// Exclusion settings.
 		add_settings_section(
@@ -256,6 +264,19 @@ class Statify_Settings {
 	}
 
 	/**
+	 * Option for automatically refreshing the dashboard widget.
+	 *
+	 * @return void
+	 */
+	public static function options_auto_refresh(): void {
+		?>
+		<input id="statify-auto-refresh" type="checkbox" name="statify[auto_refresh]" value="1" <?php checked( Statify::$options['auto_refresh'], 1 ); ?>>
+		<p class="description"><?php esc_html_e( 'Automatically update the chart and lists while the dashboard is open.', 'statify' ); ?></p>
+		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'No', 'statify' ); ?>)
+		<?php
+	}
+
+	/**
 	 * Option for excluding roles from seeing the dashboard widget.
 	 *
 	 * @wp-hook array  statify__available_roles
@@ -394,7 +415,7 @@ class Statify_Settings {
 	 */
 	public static function action_update_options( array $old_value, array $value ): void {
 		// Delete transient.
-		delete_transient( 'statify_data' );
+		Statify_Api::delete_data_transients();
 
 		// Clear Cachify cache, if JS settings have changed.
 		if ( $old_value['snippet'] !== $value['snippet'] && has_action( 'cachify_flush_cache' ) ) {
@@ -441,7 +462,7 @@ class Statify_Settings {
 		}
 
 		// Get checkbox values.
-		foreach ( array( 'today', 'blacklist', 'show_totals' ) as $o ) {
+		foreach ( array( 'today', 'blacklist', 'auto_refresh', 'show_totals' ) as $o ) {
 			$res[ $o ] = isset( $options[ $o ] ) && 1 === (int) $options[ $o ] ? 1 : 0;
 		}
 

@@ -65,6 +65,7 @@ class Statify {
 				'today'             => 0,
 				'snippet'           => 0,
 				'blacklist'         => 0,
+				'auto_refresh'      => 0,
 				'show_totals'       => 0,
 				'show_widget_roles' => null, // Just for documentation, the default is calculated later.
 				'skip'              => array(
@@ -259,9 +260,16 @@ class Statify {
 			true
 		);
 		wp_register_script(
+			'statify_auto_refresh_js',
+			plugins_url( 'js/auto-refresh.min.js', STATIFY_FILE ),
+			array(),
+			self::get_version(),
+			true
+		);
+		wp_register_script(
 			'statify_chart_js',
 			plugins_url( 'js/dashboard.min.js', STATIFY_FILE ),
-			array( 'wp-api-fetch', 'chartist_tooltip_js' ),
+			array( 'wp-api-fetch', 'chartist_tooltip_js', 'statify_auto_refresh_js' ),
 			self::get_version(),
 			true
 		);
@@ -271,7 +279,8 @@ class Statify {
 			'statify_chart_js',
 			'statifyDashboard',
 			array(
-				'sitename' => sanitize_key( get_bloginfo( 'name' ) ),
+				'sitename'    => sanitize_key( get_bloginfo( 'name' ) ),
+				'autoRefresh' => (bool) self::$options['auto_refresh'],
 			)
 		);
 		wp_set_script_translations( 'statify_chart_js', 'statify' );
