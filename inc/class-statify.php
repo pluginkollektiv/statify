@@ -86,6 +86,7 @@ class Statify {
 			add_filter( 'plugin_row_meta', array( 'Statify_Backend', 'add_meta_link' ), 10, 2 );
 			add_filter( 'plugin_action_links_' . STATIFY_BASE, array( 'Statify_Backend', 'add_action_link' ) );
 			add_action( 'admin_init', array( 'Statify_Settings', 'register_settings' ) );
+			add_action( 'admin_init', array( 'Statify_Counter_Column', 'init' ) );
 			add_action( 'admin_menu', array( 'Statify_Settings', 'add_admin_menu' ) );
 			add_action( 'admin_init', array( 'Statify_Evaluation', 'add_capability' ) );
 			add_action( 'admin_menu', array( 'Statify_Evaluation', 'add_menu' ) );
