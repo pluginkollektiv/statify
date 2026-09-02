@@ -67,6 +67,7 @@ class Statify {
 				'blacklist'         => 0,
 				'show_totals'       => 0,
 				'show_widget_roles' => null, // Just for documentation, the default is calculated later.
+				'skip_404'          => 1,
 				'skip'              => array(
 					'logged_in' => self::SKIP_USERS_ALL,
 				),
@@ -397,7 +398,8 @@ class Statify {
 	 */
 	protected static function is_internal(): bool {
 		// Skip for preview, 404 calls, feed, search, favicon and sitemap access.
-		return is_preview() || is_404() || is_feed() || is_search()
+		// 404 calls are only skipped if the opt-in "skip_404" setting is active.
+		return ( 1 === self::$options['skip_404'] && is_404() ) || is_preview() || is_feed() || is_search()
 			|| ( function_exists( 'is_favicon' ) && is_favicon() )
 			|| '' !== get_query_var( 'sitemap' ) || '' !== get_query_var( 'sitemap-stylesheet' );
 	}

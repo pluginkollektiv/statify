@@ -114,6 +114,14 @@ class Statify_Settings {
 			array( 'label_for' => 'statify-skip-referrer' )
 		);
 		add_settings_field(
+			'statify-skip_404',
+			__( 'Error pages (404)', 'statify' ),
+			array( __CLASS__, 'options_skip_404' ),
+			'statify',
+			'statify-skip',
+			array( 'label_for' => 'statify-skip_404' )
+		);
+		add_settings_field(
 			'statify-skip-logged_in',
 			__( 'Logged in users', 'statify' ),
 			array( __CLASS__, 'options_skip_logged_in' ),
@@ -339,6 +347,19 @@ class Statify_Settings {
 	}
 
 	/**
+	 * Option to skip tracking for error pages.
+	 *
+	 * @return void
+	 */
+	public static function options_skip_404(): void {
+		?>
+		<input id="statify-skip_404" type="checkbox" name="statify[skip_404]" value="1"<?php checked( Statify::$options['skip_404'] ); ?>>
+		(<?php esc_html_e( 'Default', 'statify' ); ?>: <?php esc_html_e( 'Yes', 'statify' ); ?>)
+		<p class="description"><?php esc_html_e( 'Uncheck to track requests that end on an error page (404).', 'statify' ); ?></p>
+		<?php
+	}
+
+	/**
 	 * Option to skip tracking for logged in uses.
 	 *
 	 * @return void
@@ -441,7 +462,7 @@ class Statify_Settings {
 		}
 
 		// Get checkbox values.
-		foreach ( array( 'today', 'blacklist', 'show_totals' ) as $o ) {
+		foreach ( array( 'today', 'blacklist', 'show_totals', 'skip_404' ) as $o ) {
 			$res[ $o ] = isset( $options[ $o ] ) && 1 === (int) $options[ $o ] ? 1 : 0;
 		}
 
