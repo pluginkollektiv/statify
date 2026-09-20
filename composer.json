@@ -19,7 +19,7 @@
     "myclabs/deep-copy": "1.13.4",
     "phpcompatibility/phpcompatibility-wp": "^2.1",
     "phpstan/extension-installer": "^1.4",
-    "phpstan/phpstan": "^2.1",
+    "phpstan/phpstan": "^2.2",
     "phpunit/phpunit": "^9",
     "slowprog/composer-copy-file": "^0.3",
     "squizlabs/php_codesniffer": "^3.13",
