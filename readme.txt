@@ -5,7 +5,7 @@
 * Requires at least: 5.1
 * Tested up to:      7.1
 * Requires PHP:      7.4
-* Stable tag:        2.0.2
+* Stable tag:        2.0.3
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -132,6 +132,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
+
+### 2.0.3
+* Make REST API endpoints visible to control and security plugins
+* Properly encode CSV data for download
+* Localize built-in user role names on settings page
+* Right-align numbers in tables
+* Minor dashboard JavaScript improvements
+* Tested up to WordPress 7.1
 
 ### 2.0.2
 * Translatable texts in JS-generated content now work as expected

@@ -26,7 +26,7 @@
     "test": "nyc --reporter=text node --test tests/js/*.test.js"
   },
   "allowScripts": {
-    "esbuild": false,
+    "esbuild": true,
     "core-js": false,
     "unrs-resolver": false
   },

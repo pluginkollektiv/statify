@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.3
+
+### Fixes
+
+* Make REST API endpoints visible to control and security plugins (#364)
+* Properly encode CSV data for download (#372) (#373)
+
+### Improvements
+* Localize built-in user role names on settings page (#361) (#366)
+* Right-align numbers in tables (#371)
+* Minor dashboard JavaScript improvements
+* Tested up to WordPress 7.1
+
+
 ## 2.0.2
 
 ### Fixes
