@@ -17,8 +17,9 @@ trait Statify_Test_Support {
 	 * @param integer $method         Configure tracking method (default: 0).
 	 * @param integer $skip_logged_in Configure tracking for logged-in users (default: 1).
 	 * @param boolean $blacklist      Configure blacklist usage (default: false).
+	 * @param boolean $skip_404       Configure 404 tracking (default: true).
 	 */
-	protected function init_statify_tracking( $method = 0, $skip_logged_in = 1, $blacklist = false ) {
+	protected function init_statify_tracking( $method = 0, $skip_logged_in = 1, $blacklist = false, $skip_404 = true ) {
 		$this->init_statify(
 			array(
 				'snippet'   => $method,
@@ -26,6 +27,7 @@ trait Statify_Test_Support {
 					'logged_in' => $skip_logged_in,
 				),
 				'blacklist' => $blacklist ? 1 : 0,
+				'skip_404'  => $skip_404 ? 1 : 0,
 			)
 		);
 	}

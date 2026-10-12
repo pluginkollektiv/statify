@@ -26,6 +26,7 @@ class Test_Settings extends WP_UnitTestCase {
 			'blacklist'         => 0,
 			'show_totals'       => 0,
 			'show_widget_roles' => null,
+			'skip_404'          => 1,
 			'skip'              => array(
 				'logged_in' => Statify::SKIP_USERS_ALL,
 			),
@@ -39,6 +40,7 @@ class Test_Settings extends WP_UnitTestCase {
 				'today'       => 0,
 				'blacklist'   => 0,
 				'show_totals' => 0,
+				'skip_404'    => 0,
 			),
 			Statify_Settings::sanitize_options( array() ),
 			'unexpected results for empty input'
@@ -52,6 +54,7 @@ class Test_Settings extends WP_UnitTestCase {
 				'today'       => 1,
 				'blacklist'   => 0,
 				'show_totals' => 1,
+				'skip_404'    => 1,
 			),
 			Statify_Settings::sanitize_options(
 				array(
@@ -61,6 +64,7 @@ class Test_Settings extends WP_UnitTestCase {
 					'today'       => '1',
 					'blacklist'   => 5,
 					'show_totals' => '1',
+					'skip_404'    => '1',
 				)
 			),
 			'string values should be sanitized to numbers or 1/0 for boolean flags'
@@ -74,6 +78,7 @@ class Test_Settings extends WP_UnitTestCase {
 				'today'       => 0,
 				'blacklist'   => 0,
 				'show_totals' => 0,
+				'skip_404'    => 0,
 			),
 			Statify_Settings::sanitize_options( array( 'limit' => 101 ) ),
 			'limit was not capped at 100'
@@ -88,6 +93,7 @@ class Test_Settings extends WP_UnitTestCase {
 				'today'       => 0,
 				'blacklist'   => 0,
 				'show_totals' => 0,
+				'skip_404'    => 0,
 				'skip'        => array(
 					'logged_in' => 0,
 				),
@@ -111,6 +117,7 @@ class Test_Settings extends WP_UnitTestCase {
 				'today'       => 0,
 				'blacklist'   => 0,
 				'show_totals' => 0,
+				'skip_404'    => 0,
 			),
 			Statify_Settings::sanitize_options(
 				array(
@@ -129,6 +136,7 @@ class Test_Settings extends WP_UnitTestCase {
 				'today'             => 0,
 				'blacklist'         => 0,
 				'show_totals'       => 0,
+				'skip_404'          => 0,
 				'show_widget_roles' => array( 'administrator', 'author' ),
 			),
 			Statify_Settings::sanitize_options(
