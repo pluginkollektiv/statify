@@ -174,7 +174,7 @@
 				}
 
 				if (tables.totals) {
-					renderTotals(tables.totals, data.totals);
+					renderTotals(tables.totals, data.totals, values);
 				}
 			})
 			.catch(() => {
@@ -590,10 +590,11 @@
 	/**
 	 * Render totals table.
 	 *
-	 * @param {HTMLTableElement}                                table Table element.
-	 * @param {{alltime: number, since: string, today: number}} data  Totals data.
+	 * @param {HTMLTableElement}                                table  Table element.
+	 * @param {{alltime: number, since: string, today: number}} data   Totals data.
+	 * @param {number[]}                                        visits Daily visits of the displayed period.
 	 */
-	function renderTotals(table, data) {
+	function renderTotals(table, data, visits) {
 		const rowToday = document.createElement('TR');
 		let col = document.createElement('TD');
 		col.classList.add('b');
@@ -604,6 +605,22 @@
 		col.textContent = wp.i18n.__('today', 'statify');
 		rowToday.appendChild(col);
 
+		const rowPeriod = document.createElement('TR');
+		col = document.createElement('TD');
+		col.classList.add('b');
+		col.textContent = numberFormat.format(
+			visits.reduce((a, b) => a + b, 0)
+		);
+		rowPeriod.appendChild(col);
+		col = document.createElement('TD');
+		col.classList.add('t');
+		col.textContent = wp.i18n.sprintf(
+			/* translators: %d: Number of days. */
+			wp.i18n._n('last %d day', 'last %d days', visits.length, 'statify'),
+			visits.length
+		);
+		rowPeriod.appendChild(col);
+
 		const rowAll = document.createElement('TR');
 		col = document.createElement('TD');
 		col.classList.add('b');
@@ -612,13 +629,13 @@
 		col = document.createElement('TD');
 		col.classList.add('t');
 		col.textContent = wp.i18n.sprintf(
-			/* translators: %s: Date. */
-			wp.i18n.__('since %s', 'statify'),
+			/* translators: %s: Date of the oldest stored entry. */
+			wp.i18n.__('all stored, since %s', 'statify'),
 			dateFormatYMD.format(new Date(data.since))
 		);
 		rowAll.appendChild(col);
 
-		updateTable(table, [rowToday, rowAll]);
+		updateTable(table, [rowToday, rowPeriod, rowAll]);
 	}
 
 	/**
