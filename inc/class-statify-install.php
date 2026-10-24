@@ -33,11 +33,8 @@ class Statify_Install {
 
 			// Create tables for each site in a network.
 			foreach ( $sites as $site ) {
-				switch_to_blog( $site );
-				self::apply();
+				self::apply_for_site( $site );
 			}
-
-			restore_current_blog();
 		} else {
 			self::apply();
 		}
@@ -51,12 +48,7 @@ class Statify_Install {
 	 * @param WP_Site $new_site Site object.
 	 */
 	public static function init_site( WP_Site $new_site ): void {
-
-		switch_to_blog( (int) $new_site->blog_id );
-
-		self::apply();
-
-		restore_current_blog();
+		self::apply_for_site( (int) $new_site->blog_id );
 	}
 
 	/**
@@ -82,5 +74,19 @@ class Statify_Install {
 		// Create the actual tables.
 		Statify_Table::init();
 		Statify_Table::create();
+	}
+
+	/**
+	 * Apply the installation routine on a specific site.
+	 *
+	 * @param int $site_id Site ID.
+	 */
+	private static function apply_for_site( int $site_id ): void {
+		switch_to_blog( $site_id );
+		try {
+			self::apply();
+		} finally {
+			restore_current_blog();
+		}
 	}
 }

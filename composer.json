@@ -47,13 +47,17 @@
       "phpcs --standard=phpcs.xml -s"
     ],
     "lint-tests": [
-      "phpcs --standard=tests/phpcs.xml tests"
+      "phpcs --standard=tests/phpcs.xml tests/*.php"
     ],
     "phpstan": [
       "phpstan analyse --memory-limit=1G"
     ],
     "test": [
-      "phpunit"
+      "phpunit --exclude-group ms-required"
+    ],
+    "test-multisite": [
+      "@putenv WP_MULTISITE=1",
+      "phpunit --group ms-required"
     ]
   },
   "extra": {

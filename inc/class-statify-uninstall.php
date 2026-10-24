@@ -26,15 +26,11 @@ class Statify_Uninstall {
 	 */
 	public static function init(): void {
 		if ( is_multisite() ) {
-			$old   = get_current_blog_id();
 			$sites = get_sites( array( 'fields' => 'ids' ) );
 
 			foreach ( $sites as $site ) {
-				switch_to_blog( $site );
-				self::apply();
+				self::apply_for_site( $site );
 			}
-
-			switch_to_blog( $old );
 		}
 
 		self::apply();
@@ -48,12 +44,7 @@ class Statify_Uninstall {
 	 * @param WP_Site $old_site Site object.
 	 */
 	public static function init_site( WP_Site $old_site ): void {
-
-		switch_to_blog( (int) $old_site->blog_id );
-
-		self::apply();
-
-		restore_current_blog();
+		self::apply_for_site( (int) $old_site->blog_id );
 	}
 
 	/**
@@ -72,5 +63,19 @@ class Statify_Uninstall {
 
 		// Delete table.
 		Statify_Table::drop();
+	}
+
+	/**
+	 * Apply the uninstallation routine on a specific site.
+	 *
+	 * @param int $site_id Site ID.
+	 */
+	private static function apply_for_site( int $site_id ): void {
+		switch_to_blog( $site_id );
+		try {
+			self::apply();
+		} finally {
+			restore_current_blog();
+		}
 	}
 }
