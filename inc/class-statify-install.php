@@ -52,7 +52,7 @@ class Statify_Install {
 	 */
 	public static function init_site( WP_Site $new_site ): void {
 
-		switch_to_blog( (int) $new_site->site_id );
+		switch_to_blog( (int) $new_site->blog_id );
 
 		self::apply();
 

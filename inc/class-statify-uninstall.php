@@ -49,7 +49,7 @@ class Statify_Uninstall {
 	 */
 	public static function init_site( WP_Site $old_site ): void {
 
-		switch_to_blog( (int) $old_site->site_id );
+		switch_to_blog( (int) $old_site->blog_id );
 
 		self::apply();
 
