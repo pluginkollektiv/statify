@@ -12,6 +12,13 @@ defined( 'ABSPATH' ) || exit;
 
 $limit       = (int) Statify::$options['limit'];
 $show_totals = (int) Statify::$options['show_totals'];
+
+if ( Statify::$options['today'] ) {
+	$timeframe = __( 'today', 'statify' );
+} else {
+	/* translators: %d: Number of days. */
+	$timeframe = sprintf( _n( 'last %d day', 'last %d days', (int) Statify::$options['days_show'], 'statify' ), (int) Statify::$options['days_show'] );
+}
 ?>
 
 	<div id="statify_chart" class="statify-chart">
@@ -21,7 +28,15 @@ $show_totals = (int) Statify::$options['show_totals'];
 <?php if ( $limit > 0 ) : ?>
 
 	<div class="table referrer">
-		<p class="sub"><?php esc_html_e( 'Top referrers', 'statify' ); ?></p>
+		<p class="sub">
+			<?php
+			printf(
+				/* translators: %s: timeframe, e.g. "last 14 days" */
+				esc_html__( 'Top referrers (%s)', 'statify' ),
+				esc_html( $timeframe )
+			);
+			?>
+		</p>
 		<table>
 			<tbody>
 				<?php for ( $i = 0; $i < $limit; $i++ ) { ?>
@@ -34,7 +49,15 @@ $show_totals = (int) Statify::$options['show_totals'];
 	</div>
 
 	<div class="table target">
-		<p class="sub"><?php esc_html_e( 'Top targets', 'statify' ); ?></p>
+		<p class="sub">
+			<?php
+			printf(
+				/* translators: %s: timeframe, e.g. "last 14 days" */
+				esc_html__( 'Top targets (%s)', 'statify' ),
+				esc_html( $timeframe )
+			);
+			?>
+		</p>
 		<table>
 			<tbody>
 				<?php for ( $i = 0; $i < $limit; $i++ ) { ?>
@@ -49,6 +72,7 @@ $show_totals = (int) Statify::$options['show_totals'];
 		<p class="sub"><?php esc_html_e( 'Totals', 'statify' ); ?></p>
 		<table>
 			<tbody>
+				<tr class="placeholder"><td colspan="2">&nbsp;</td></tr>
 				<tr class="placeholder"><td colspan="2">&nbsp;</td></tr>
 				<tr class="placeholder"><td colspan="2">&nbsp;</td></tr>
 		</table>
