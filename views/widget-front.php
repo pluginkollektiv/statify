@@ -28,7 +28,15 @@ if ( Statify::$options['today'] ) {
 <?php if ( $limit > 0 ) : ?>
 
 	<div class="table referrer">
-		<p class="sub"><?php esc_html_e( 'Top referrers', 'statify' ); ?> (<?php echo esc_html( $timeframe ); ?>)</p>
+		<p class="sub">
+			<?php
+			printf(
+				/* translators: %s: timeframe, e.g. "last 14 days" */
+				esc_html__( 'Top referrers (%s)', 'statify' ),
+				esc_html( $timeframe )
+			);
+			?>
+		</p>
 		<table>
 			<tbody>
 				<?php for ( $i = 0; $i < $limit; $i++ ) { ?>
@@ -41,7 +49,15 @@ if ( Statify::$options['today'] ) {
 	</div>
 
 	<div class="table target">
-		<p class="sub"><?php esc_html_e( 'Top targets', 'statify' ); ?> (<?php echo esc_html( $timeframe ); ?>)</p>
+		<p class="sub">
+			<?php
+			printf(
+				/* translators: %s: timeframe, e.g. "last 14 days" */
+				esc_html__( 'Top targets (%s)', 'statify' ),
+				esc_html( $timeframe )
+			);
+			?>
+		</p>
 		<table>
 			<tbody>
 				<?php for ( $i = 0; $i < $limit; $i++ ) { ?>

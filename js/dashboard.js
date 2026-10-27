@@ -629,8 +629,8 @@
 		col = document.createElement('TD');
 		col.classList.add('t');
 		col.textContent = wp.i18n.sprintf(
-			/* translators: %s: Date of the oldest stored entry. */
-			wp.i18n.__('all stored, since %s', 'statify'),
+			/* translators: %s: Date. */
+			wp.i18n.__('since %s', 'statify'),
 			dateFormatYMD.format(new Date(data.since))
 		);
 		rowAll.appendChild(col);
