@@ -764,7 +764,7 @@
 			];
 		for (const [m, s] of max.entries()) {
 			if (vls[m] > 0) {
-				out[m].dataset.raw = vls[m];
+				out[m].dataset.raw = String(s);
 				out[m].textContent = numberFormat.format(s);
 			} else {
 				out[m].dataset.raw = '';
