@@ -1,6 +1,14 @@
-import { FlatSeries } from 'chartist';
+import {
+	barChart,
+	ChartPlugin,
+	fixedScaleAxis,
+	FlatSeries,
+	lineChart,
+	node,
+} from 'chartist';
 import Formats from './formats';
 import { msg } from './util';
+import { TooltipItem, tooltips } from '@chartist-js/tooltips';
 
 /**
  * Render daily statistics.
@@ -160,16 +168,45 @@ export function render(
 	// Generate dynamic offset roughly depending on the label length
 	const axisYOffset = Math.max(String(maxValue).length * 8, 24);
 
+	const series: FlatSeries = values.map((v, i) => {
+		return {
+			meta: labelToMetaFunc(labels[i]),
+			value: v,
+		};
+	});
+
+	/**
+	 * Replace default points with hollow circles, add "pageview(s) to value and append date (label) as metadata.
+	 */
+	const customPoints = (): ChartPlugin => ({
+		name: 'statify-points',
+		install(chart) {
+			chart.on('compose', (el) => {
+				if (el.role !== 'point') {
+					return;
+				}
+				const { x, y } = el.ctx;
+				return node(
+					'circle',
+					{ cx: x, cy: y, r: pointRadius },
+					'ct-point',
+					{ role: el.role, ctx: el.ctx }
+				);
+			});
+		},
+	});
+
 	// Draw chart.
-	const chart = new Chartist.LineChart(
+	lineChart(
 		root,
 		{
 			labels,
-			series: [values],
+			series: [series],
 		},
 		{
 			low: 0,
 			showArea: true,
+			showPoint: true,
 			fullWidth,
 			width: fullWidth ? undefined : 5 * labels.length,
 			axisX: {
@@ -181,7 +218,7 @@ export function render(
 			axisY: {
 				showGrid: true,
 				showLabel: true,
-				type: Chartist.FixedScaleAxis,
+				type: fixedScaleAxis(),
 				low: 0,
 				high: maxValue + 1,
 				ticks: [
@@ -195,44 +232,13 @@ export function render(
 				labelInterpolationFnc: (v: number) => fmt.formatNumber(v),
 			},
 			plugins: [
-				[
-					ChartistPluginTooltip,
-					{
-						appendToBody: true,
-						class: 'statify-chartist-tooltip',
-					},
-				],
+				customPoints(),
+				tooltips({
+					render: renderTooltip(fmt),
+				}),
 			],
 		}
 	);
-
-	// Replace default points with hollow circles, add "pageview(s) to value and append date (label) as metadata.
-	chart.on('draw', (d) => {
-		let circle;
-		if ('point' === d.type) {
-			circle = new Chartist.Svg(
-				'circle',
-				{
-					cx: d.x,
-					cy: d.y,
-					r: pointRadius,
-					'ct:value': wp.i18n.sprintf(
-						/* translators: %s: Number of page views. */
-						wp.i18n._n(
-							'%s view',
-							'%s views',
-							(d.value as any)?.y,
-							'statify'
-						),
-						fmt.formatNumber((d.value as any)?.y)
-					),
-					'ct:meta': labelToMetaFunc(labels[d.index]),
-				},
-				'ct-point'
-			);
-			d.element.replace(circle);
-		}
-	});
 }
 
 /**
@@ -294,7 +300,7 @@ export function renderBarChart(
 	}
 
 	// Draw chart.
-	new Chartist.BarChart(
+	barChart(
 		root,
 		{
 			labels,
@@ -314,22 +320,37 @@ export function renderBarChart(
 				labelInterpolationFnc: (v) => fmt.formatNumber(Number(v)),
 			},
 			plugins: [
-				[
-					ChartistPluginTooltip,
-					{
-						appendToBody: true,
-						anchorToPoint: true,
-						class: 'statify-chartist-tooltip',
-						transformTooltipTextFnc(y: number): string {
-							return wp.i18n.sprintf(
-								/* translators: %s: Number of page views. */
-								wp.i18n._n('%s view', '%s views', y, 'statify'),
-								fmt.formatNumber(y)
-							);
-						},
-					},
-				],
+				tooltips({
+					render: renderTooltip(fmt),
+				}),
 			],
 		}
 	);
+}
+
+/**
+ * Create tooltip render function.
+ *
+ * @param fmt Number and date formats.
+ */
+function renderTooltip(fmt: Formats) {
+	/**
+	 * Adjust title and value format for tooltips.
+	 *
+	 * @param content Tooltip container element.
+	 * @param item    Tooltip item.
+	 */
+	return (content: HTMLElement, item: TooltipItem) => {
+		const title = document.createElement('span');
+		title.classList.add('ct-tooltip-title');
+		title.textContent = item.meta as string;
+		const value = document.createElement('span');
+		value.classList.add('ct-tooltip-value');
+		value.textContent = wp.i18n.sprintf(
+			/* translators: %s: Number of page views. */
+			wp.i18n._n('%s view', '%s views', item.value as number, 'statify'),
+			fmt.formatNumber(item.value as number)
+		);
+		content.append(title, value);
+	};
 }
