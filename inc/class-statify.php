@@ -245,23 +245,9 @@ class Statify {
 	public static function add_js(): void {
 		// Register JS.
 		wp_register_script(
-			'chartist_js',
-			plugins_url( 'js/chartist.min.js', STATIFY_FILE ),
-			array(),
-			self::get_version(),
-			true
-		);
-		wp_register_script(
-			'chartist_tooltip_js',
-			plugins_url( 'js/chartist-plugin-tooltip.min.js', STATIFY_FILE ),
-			array( 'chartist_js' ),
-			self::get_version(),
-			true
-		);
-		wp_register_script(
 			'statify_chart_js',
 			plugins_url( 'js/dashboard.min.js', STATIFY_FILE ),
-			array( 'wp-api-fetch', 'chartist_tooltip_js' ),
+			array( 'wp-api-fetch' ),
 			self::get_version(),
 			true
 		);
@@ -293,7 +279,7 @@ class Statify {
 		);
 		wp_register_style(
 			'chartist_tooltip_css',
-			plugins_url( '/css/chartist-plugin-tooltip.min.css', STATIFY_FILE ),
+			plugins_url( '/css/chartist-tooltips.min.css', STATIFY_FILE ),
 			array(),
 			self::get_version()
 		);
