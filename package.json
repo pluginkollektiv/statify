@@ -1,8 +1,8 @@
 {
   "private": true,
   "dependencies": {
-    "chartist": "^1.5.0",
-    "@stklcode/chartist-plugin-tooltips": "^2.0.1"
+    "chartist": "^2.2.0",
+    "@chartist-js/tooltips": "^2.2.0"
   },
   "devDependencies": {
     "@wordpress/api-fetch": "^7.57.0",
@@ -40,16 +40,8 @@
       "to": "css/chartist.min.css"
     },
     {
-      "from": "node_modules/chartist/dist/index.umd.js",
-      "to": "js/chartist.min.js"
-    },
-    {
-      "from": "node_modules/@stklcode/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css",
-      "to": "css/chartist-plugin-tooltip.min.css"
-    },
-    {
-      "from": "node_modules/@stklcode/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.umd.js",
-      "to": "js/chartist-plugin-tooltip.min.js"
+      "from": "node_modules/@chartist-js/tooltips/dist/styles.css",
+      "to": "css/chartist-tooltips.min.css"
     }
   ]
 }
