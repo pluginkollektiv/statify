@@ -60,9 +60,7 @@ if ( isset( $_GET['post'] ) ) {
 		?>
 		<label for="statify-dashboard-post"><?php esc_html_e( 'Post/Page', 'statify' ); ?></label>
 		<input id="statify-dashboard-post" name="post" type="text" list="statify-dashboard-posts" value="<?php echo esc_attr( $selected_post ); ?>">
-		<datalist id="statify-dashboard-posts">
-			<option value=""></option>
-		</datalist>
+		<datalist id="statify-dashboard-posts"></datalist>
 		<button type="submit" class="button-secondary"><?php esc_html_e( 'Select post/page', 'statify' ); ?></button>
 	</form>
 
