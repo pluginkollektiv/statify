@@ -5,7 +5,7 @@
 * Requires at least: 5.1
 * Tested up to:      7.1
 * Requires PHP:      7.4
-* Stable tag:        2.0.3
+* Stable tag:        2.0.4
 * License:           GPLv3 or later
 * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -132,6 +132,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## Changelog ##
 You can find the full changelog in [our GitHub repository](https://github.com/pluginkollektiv/statify/blob/master/CHANGELOG.md).
+
+### 2.0.4
+* Clarify timeframes in the dashboard widget
+* Resolve issues with new and deleted sites in Multisite environments
+* Use correct numbers for "maximum" rows in CSV exports
+* Remove empty option in post lists markup
 
 ### 2.0.3
 * Make REST API endpoints visible to control and security plugins

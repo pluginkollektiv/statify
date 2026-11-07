@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.4
+
+### Fixes
+
+* Resolve issues with new and deleted sites in Multisite environments (#383) (#384)
+* Use correct numbers for "maximum" rows in CSV exports (#385)
+* Remove empty option in post lists markup (#387)
+
+### Improvements
+
+* Clarify timeframes in the dashboard widget (#382)
+
+
 ## 2.0.3
 
 ### Fixes
