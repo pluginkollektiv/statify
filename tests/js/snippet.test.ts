@@ -3,25 +3,31 @@ const assert = require('node:assert/strict');
 const fakeXhr = require('nise').fakeXhr;
 
 describe('Statify Snippet', () => {
-	let requests = [];
-	let xhrMock;
+	let requests: (typeof fakeXhr.useFakeXMLHttpRequest)[] = [];
+	let xhrMock: typeof fakeXhr.useFakeXMLHttpRequest;
 
 	beforeEach(() => {
-		global.statifyAjax = {
-			url: 'https://wp.example.com/wp-json/statify/v1/track',
-			nonce: '0123456789',
-		};
-		global.document = {
-			referrer: 'https://referrer.example.com/some/page/',
-		};
-		global.location = {
-			pathname: '/my/page/',
-			search: '?arg=value',
-		};
+		Object.defineProperty(global, 'statifyAjax', {
+			value: {
+				url: 'https://wp.example.com/wp-json/statify/v1/track',
+				nonce: '0123456789',
+			},
+		});
+		Object.defineProperty(global, 'document', {
+			value: {
+				referrer: 'https://referrer.example.com/some/page/',
+			},
+		});
+		Object.defineProperty(global, 'location', {
+			value: {
+				pathname: '/my/page/',
+				search: '?arg=value',
+			},
+		});
 
 		xhrMock = fakeXhr.useFakeXMLHttpRequest();
 		requests = [];
-		xhrMock.onCreate = (xhr) => requests.push(xhr);
+		xhrMock.onCreate = (xhr: XMLHttpRequest) => requests.push(xhr);
 		global.XMLHttpRequest = xhrMock;
 	});
 

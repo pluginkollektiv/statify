@@ -260,7 +260,7 @@ class Statify {
 		);
 		wp_register_script(
 			'statify_chart_js',
-			plugins_url( 'js/dashboard.min.js', STATIFY_FILE ),
+			plugins_url( 'js/dashboard.js', STATIFY_FILE ),
 			array( 'wp-api-fetch', 'chartist_tooltip_js' ),
 			self::get_version(),
 			true
