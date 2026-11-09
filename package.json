@@ -1,51 +1,33 @@
 {
   "private": true,
   "dependencies": {
-    "chartist": "^1.5.0",
-    "@stklcode/chartist-plugin-tooltips": "^2.0.1"
+    "chartist": "^2.2.0",
+    "@chartist-js/tooltips": "^2.2.0"
   },
   "devDependencies": {
+    "@wordpress/api-fetch": "^8.1.0",
     "@wordpress/eslint-plugin": "^28.1.0",
+    "@wordpress/i18n": "^7.1.0",
     "@wordpress/stylelint-config": "^27.1.0",
     "esbuild": "^0.28.2",
     "eslint": "^10.14.0",
     "nise": "^6.1.5",
     "nyc": "^18.0.0",
     "stylelint": "^17.16.0",
-    "vendor-copy": "^3.0.1"
+    "typescript": "^6.0.3"
   },
   "scripts": {
-    "build": "npm run copy-assets && npm run minify",
-    "copy-assets": "vendor-copy",
+    "build": "npm run minify",
+    "check": "tsc --noEmit",
     "minify": "npm run minify:js && npm run minify:css",
-    "minify:css": "esbuild css/dashboard.css css/settings.css --minify --outdir=css --outbase=. --entry-names=[name].min",
-    "minify:js": "esbuild js/dashboard.js js/settings.js js/snippet.js --minify --outdir=js --outbase=js --entry-names=[name].min",
+    "minify:css": "esbuild css/dashboard.css css/settings.css --bundle --minify --outdir=css --outbase=. --entry-names=[name].min",
+    "minify:js": "esbuild js/dashboard.ts js/settings.ts js/snippet.js --bundle --minify --outdir=js --outbase=js --entry-names=[name].min",
     "lint": "npm run lint-css && npm run lint-js",
     "lint-css": "stylelint css/dashboard.css css/settings.css",
-    "lint-js": "eslint js/dashboard.js js/settings.js js/snippet.js",
+    "lint-js": "eslint js/*.ts js/**/*.ts js/snippet.js",
     "test": "nyc --reporter=text node --test tests/js/*.test.js"
   },
   "allowScripts": {
-    "esbuild": true,
-    "core-js": false,
-    "unrs-resolver": false
-  },
-  "vendorCopy": [
-    {
-      "from": "node_modules/chartist/dist/index.css",
-      "to": "css/chartist.min.css"
-    },
-    {
-      "from": "node_modules/chartist/dist/index.umd.js",
-      "to": "js/chartist.min.js"
-    },
-    {
-      "from": "node_modules/@stklcode/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css",
-      "to": "css/chartist-plugin-tooltip.min.css"
-    },
-    {
-      "from": "node_modules/@stklcode/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.umd.js",
-      "to": "js/chartist-plugin-tooltip.min.js"
-    }
-  ]
+    "esbuild": true
+  }
 }
